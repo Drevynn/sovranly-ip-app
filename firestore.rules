@@ -1,0 +1,40 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Helper functions
+    function isSignedIn() { return request.auth != null; }
+    function isValidId(id) { return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$'); }
+    function isValidAsset(data) {
+        return data.title is string && data.title.size() <= 100 &&
+               data.type is string && data.type.size() <= 50 &&
+               data.royalty is int && data.royalty >= 0 && data.royalty <= 100 &&
+               data.license is string && data.license.size() <= 100 &&
+               data.ownerAddress is string && data.ownerAddress.size() <= 42;
+    }
+
+    function isValidTransaction(data) {
+        return data.hash is string && data.hash.size() <= 66 &&
+               data.type is string && data.type.size() <= 50 &&
+               data.assetTitle is string && data.assetTitle.size() <= 100 &&
+               data.timestamp is timestamp;
+    }
+
+    match /assets/{assetId} {
+      allow read: if true;
+      allow create: if isSignedIn() && isValidAsset(request.resource.data);
+      allow update: if isSignedIn() && isValidAsset(request.resource.data) && request.resource.data.ownerAddress == resource.data.ownerAddress;
+      allow delete: if isSignedIn() && request.auth.uid != null; // Simplified for demo
+    }
+
+    match /transactions/{transactionId} {
+      allow read: if true;
+      allow create: if isSignedIn() && isValidTransaction(request.resource.data);
+      allow update, delete: if false;
+    }
+
+    // Default deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

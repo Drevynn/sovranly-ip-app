@@ -1,0 +1,82 @@
+'use client';
+import { useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { ExternalLink, Mail } from 'lucide-react';
+
+export default function LandingPage() {
+  const [submitted, setSubmitted] = useState(false);
+
+  return (
+    <div className="min-h-screen bg-[#050505] text-zinc-100 p-8">
+      <header className="flex justify-between items-center mb-16">
+        <h1 className="text-3xl font-bold text-white tracking-tighter">SOVRANLY IP</h1>
+        <div className="space-x-4">
+          <a href="/faq" className="text-zinc-400 hover:text-white transition-colors">FAQ</a>
+          <a href="/wiki" className="text-zinc-400 hover:text-white transition-colors">Wiki</a>
+          <Button variant="outline" className="border-zinc-700 bg-transparent text-white hover:bg-zinc-800" onClick={() => window.location.href = '/'}>Launch App</Button>
+        </div>
+      </header>
+
+      <main className="max-w-4xl mx-auto space-y-16">
+        <section className="text-center space-y-6">
+          <h2 className="text-5xl font-extrabold tracking-tighter text-white">Sovereign Asset Management</h2>
+          <p className="text-xl text-zinc-400">Secure, blockchain-based IP management for visionary creators.</p>
+        </section>
+
+        <section className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <Card className="bg-zinc-900 border border-zinc-800">
+            <CardHeader><CardTitle className="text-white">Need Help?</CardTitle></CardHeader>
+            <CardContent className="space-y-4"> 
+              <p className="text-zinc-400">Explore our knowledge base to learn more about our platform.</p>
+              <Button asChild variant="secondary" className="w-full">
+                <a href="/wiki" target="_blank" rel="noopener noreferrer">Visit Help Wiki <ExternalLink className="ml-2 w-4 h-4"/></a>
+              </Button>
+            </CardContent>
+          </Card>
+          
+          <Card className="bg-zinc-900 border border-zinc-800">
+            <CardHeader><CardTitle className="text-white">Community</CardTitle></CardHeader>
+            <CardContent className="space-y-4">
+              <p className="text-zinc-400">Check out our frequently asked questions.</p>
+              <Button asChild variant="secondary" className="w-full">
+                <a href="/faq" target="_blank" rel="noopener noreferrer">Read FAQ <ExternalLink className="ml-2 w-4 h-4"/></a>
+              </Button>
+            </CardContent>
+          </Card>
+        </section>
+
+        <section className="bg-zinc-900 rounded-xl p-8 border border-zinc-800">
+          <h3 className="text-2xl font-bold text-white mb-6 flex items-center gap-2"><Mail className="text-cyan-500"/> Contact Support</h3>
+          {!submitted ? (
+            <form onSubmit={(e) => { e.preventDefault(); setSubmitted(true); }} className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label className="text-zinc-400">Name</Label>
+                  <Input className="bg-zinc-950 border-zinc-700 text-white" required />
+                </div>
+                <div className="space-y-2">
+                  <Label className="text-zinc-400">Email</Label>
+                  <Input type="email" className="bg-zinc-950 border-zinc-700 text-white" required />
+                </div>
+              </div>
+              <div className="space-y-2">
+                <Label className="text-zinc-400">Message</Label>
+                <Textarea className="bg-zinc-950 border-zinc-700 text-white" rows={4} required />
+              </div>
+              <Button type="submit" className="bg-cyan-600 hover:bg-cyan-700 text-white">Send Message</Button>
+            </form>
+          ) : (
+            <div className="text-center p-8 bg-zinc-950 rounded-lg">
+              <p className="text-white text-lg font-semibold">Thank you for contacting us.</p>
+              <p className="text-zinc-400">We will get back to you shortly at contact@sovranlyip.com</p>
+            </div>
+          )}
+        </section>
+      </main>
+    </div>
+  );
+}
