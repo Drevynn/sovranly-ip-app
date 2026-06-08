@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { motion, AnimatePresence } from 'motion/react';
+import Image from 'next/image';
 import { 
   Activity, 
   RefreshCw, 
@@ -121,6 +122,17 @@ export default function Overview() {
 
   return (
     <div className="space-y-8">
+      {/* Hero */}
+      <div className="relative rounded-3xl overflow-hidden border border-zinc-800 bg-zinc-900">
+        <div className="absolute inset-0 z-0">
+          <Image src="/sovranly-logo.png" alt="Hero" fill className="object-cover opacity-20" />
+        </div>
+        <div className="relative z-10 p-12 flex flex-col items-center justify-center text-center space-y-4">
+          <h2 className="text-4xl font-bold tracking-tighter text-white">Welcome to Sovranly IP</h2>
+          <p className="text-zinc-400 max-w-lg">Zero Trust Sovereign IP Management System for Creators. Secure, track, and license your assets with blockchain transparency.</p>
+        </div>
+      </div>
+
       {/* Overview Metric Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {cards.map((card, i) => (

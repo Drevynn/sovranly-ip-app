@@ -1,13 +1,14 @@
 'use client';
 
 import { Gauge, BarChart3, Wallet, User, FileText } from 'lucide-react';
+import Image from 'next/image';
 
 export default function Sidebar({ activePage, setActivePage, walletStatus }: { activePage: number, setActivePage: (id: number) => void, walletStatus: string }) {
   return (
     <div className="w-72 bg-zinc-950 border-r border-zinc-900 flex flex-col h-screen">
       <div className="p-8 border-b border-zinc-900">
         <div className="flex items-center gap-3 mb-2">
-          <div className="w-10 h-10 bg-gradient-to-tr from-cyan-500 to-violet-500 rounded-2xl flex items-center justify-center text-zinc-950 font-bold text-lg shadow-lg shadow-cyan-950/20">S</div>
+          <Image src="/sovranly-logo.png" alt="Sovranly" width={40} height={40} referrerPolicy="no-referrer" />
           <span className="font-bold tracking-tighter text-white text-2xl uppercase">SOVRANLY</span>
         </div>
         <p className="text-emerald-400 text-[10px] uppercase tracking-widest mt-1">Sovereign IP Authority</p>
