@@ -1,11 +1,20 @@
 'use client';
 import { createContext, useContext, useEffect, useState } from 'react';
 import { getFirebaseAuth } from '@/lib/firebase';
-import { onAuthStateChanged, User } from 'firebase/auth';
+import { onAuthStateChanged, User, signInWithPopup, GoogleAuthProvider, signOut } from 'firebase/auth';
 
-const AuthContext = createContext<{ user: User | null; loading: boolean }>({
+interface AuthContextType {
+  user: User | null;
+  loading: boolean;
+  signInWithGoogle: () => Promise<void>;
+  logout: () => Promise<void>;
+}
+
+const AuthContext = createContext<AuthContextType>({
   user: null,
   loading: true,
+  signInWithGoogle: async () => {},
+  logout: async () => {},
 });
 
 export function FirebaseProvider({ children }: { children: React.ReactNode }) {
@@ -21,8 +30,20 @@ export function FirebaseProvider({ children }: { children: React.ReactNode }) {
     return () => unsubscribe();
   }, []);
 
+  const signInWithGoogle = async () => {
+    const auth = getFirebaseAuth();
+    const provider = new GoogleAuthProvider();
+    provider.setCustomParameters({ prompt: 'select_account' });
+    await signInWithPopup(auth, provider);
+  };
+
+  const logout = async () => {
+    const auth = getFirebaseAuth();
+    await signOut(auth);
+  };
+
   return (
-    <AuthContext.Provider value={{ user, loading }}>
+    <AuthContext.Provider value={{ user, loading, signInWithGoogle, logout }}>
       {children}
     </AuthContext.Provider>
   );

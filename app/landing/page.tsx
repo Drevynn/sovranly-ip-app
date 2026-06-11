@@ -1,28 +1,35 @@
 'use client';
 import { useState } from 'react';
+import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ExternalLink, Mail } from 'lucide-react';
+import Link from 'next/link';
 
 export default function LandingPage() {
   const [submitted, setSubmitted] = useState(false);
 
   return (
-    <div className="min-h-screen bg-[#050505] text-zinc-100 p-8">
+    <div className="min-h-screen bg-black text-zinc-100 p-8">
       <header className="flex justify-between items-center mb-16">
-        <h1 className="text-3xl font-bold text-white tracking-tighter">SOVRANLY IP</h1>
+        <Image src="/sovranly-logo-v2.png" alt="Sovranly IP Logo" width={100} height={100} referrerPolicy="no-referrer" />
         <div className="space-x-4">
-          <a href="/faq" className="text-zinc-400 hover:text-white transition-colors">FAQ</a>
-          <a href="/wiki" className="text-zinc-400 hover:text-white transition-colors">Wiki</a>
-          <Button variant="outline" className="border-zinc-700 bg-transparent text-white hover:bg-zinc-800" onClick={() => window.location.href = '/'}>Launch App</Button>
+          <Link href="/faq" className="text-zinc-400 hover:text-white transition-colors">FAQ</Link>
+          <Link href="/wiki" className="text-zinc-400 hover:text-white transition-colors">Wiki</Link>
+          <Button asChild variant="outline" className="border-zinc-700 bg-transparent text-white hover:bg-zinc-800">
+            <Link href="/">Launch App</Link>
+          </Button>
         </div>
       </header>
 
       <main className="max-w-4xl mx-auto space-y-16">
         <section className="text-center space-y-6">
+          <div className="relative w-72 h-72 mx-auto">
+            <Image src="/sovranly-logo-v2.png" alt="Sovranly IP" fill className="object-contain" referrerPolicy="no-referrer" />
+          </div>
           <h2 className="text-5xl font-extrabold tracking-tighter text-white">Sovereign Asset Management</h2>
           <p className="text-xl text-zinc-400">Secure, blockchain-based IP management for visionary creators.</p>
         </section>

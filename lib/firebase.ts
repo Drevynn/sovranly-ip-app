@@ -1,5 +1,5 @@
-import { initializeApp, getApps, getApp } from 'firebase/app';
-import { getFirestore } from 'firebase/firestore';
+import { initializeApp, getApps } from 'firebase/app';
+import { initializeFirestore } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
 import firebaseConfig from '../firebase-applet-config.json';
 
@@ -11,9 +11,15 @@ export function getFirebaseApp() {
   return initializeApp(firebaseConfig);
 }
 
+let db: any = null;
+
 export const getDb = () => {
   const app = getFirebaseApp();
-  const db = getFirestore(app, firebaseConfig.firestoreDatabaseId);
+  if (!db) {
+    db = initializeFirestore(app, {
+      experimentalForceLongPolling: true,
+    }, firebaseConfig.firestoreDatabaseId);
+  }
   return db;
 };
 

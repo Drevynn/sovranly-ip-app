@@ -1,5 +1,6 @@
 import './globals.css';
 import { Metadata, Viewport } from 'next';
+import { FirebaseProvider } from '@/components/auth/FirebaseProvider';
 
 export const metadata: Metadata = {
   title: 'Sovranly IP',
@@ -11,8 +12,8 @@ export const metadata: Metadata = {
     statusBarStyle: 'black-translucent',
   },
   icons: {
-    icon: '/sovranly-logo.png',
-    apple: '/sovranly-logo.png',
+    icon: '/sovranly-logo-v2.png',
+    apple: '/sovranly-logo-v2.png',
   },
 };
 
@@ -27,7 +28,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className="dark">
       <body className="antialiased bg-zinc-950 text-zinc-100 min-h-screen">
-        {children}
+        <FirebaseProvider>
+          {children}
+        </FirebaseProvider>
       </body>
     </html>
   );

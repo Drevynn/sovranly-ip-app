@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -23,16 +24,16 @@ export default function HomePage() {
   const [submitted, setSubmitted] = useState(false);
 
   return (
-    <div className="min-h-screen bg-[#050505] text-zinc-100 font-sans selection:bg-cyan-500/20 selection:text-cyan-300">
+    <div className="min-h-screen bg-black text-zinc-100 font-sans selection:bg-cyan-500/20 selection:text-cyan-300">
       {/* Glow Effects */}
       <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-cyan-500/5 rounded-full blur-[120px] pointer-events-none" />
       <div className="absolute top-1/3 right-1/4 w-[600px] h-[600px] bg-violet-500/5 rounded-full blur-[140px] pointer-events-none" />
 
       {/* Navigation Header */}
-      <header className="relative border-b border-white/10 bg-zinc-950/80 backdrop-blur-md sticky top-0 z-50">
+      <header className="relative border-b border-white/10 bg-black/80 backdrop-blur-md sticky top-0 z-50">
         <div className="flex items-center justify-between p-6 max-w-7xl mx-auto">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 bg-gradient-to-tr from-cyan-500 to-violet-500 rounded-xl flex items-center justify-center text-white font-bold text-base shadow-lg shadow-cyan-950/50">S</div>
+            <Image src="/sovranly-logo-v2.png" alt="Sovranly IP Logo" width={36} height={36} className="rounded-xl shadow-lg shadow-cyan-950/50" referrerPolicy="no-referrer" />
             <Link href="/" className="font-bold tracking-tighter text-white text-xl uppercase">SOVRANLY IP</Link>
           </div>
           <nav className="hidden md:flex items-center gap-8">
@@ -55,6 +56,9 @@ export default function HomePage() {
       {/* Hero Section */}
       <main className="relative max-w-7xl mx-auto px-6 py-16 md:py-28 space-y-32">
         <section className="text-center space-y-8 max-w-4xl mx-auto">
+          <div className="relative w-72 h-72 mx-auto mb-8">
+            <Image src="/sovranly-logo-v2.png" alt="Sovranly IP" fill className="object-contain" referrerPolicy="no-referrer" />
+          </div>
           <div className="inline-flex items-center gap-2 px-3 py-1 bg-zinc-900 border border-zinc-800 rounded-full text-xs text-zinc-400 mb-2">
             <Sparkles className="w-3.5 h-3.5 text-cyan-400" />
             <span>Zero Trust Blockchain Sovereign IP Authority</span>
