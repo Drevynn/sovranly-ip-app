@@ -22,6 +22,7 @@ export default function Overview() {
             alt="Hero" 
             fill 
             className="object-cover opacity-20" 
+            style={{ width: 'auto', height: 'auto' }}
             referrerPolicy="no-referrer"
           />
         </div>

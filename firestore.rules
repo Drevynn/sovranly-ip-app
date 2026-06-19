@@ -19,11 +19,27 @@ service cloud.firestore {
                data.timestamp is timestamp;
     }
 
+    function isValidAgreement(data) {
+        return data.assetId is string && data.assetId.size() <= 128 &&
+               data.assetTitle is string && data.assetTitle.size() <= 100 &&
+               data.royaltyRate is int && data.royaltyRate >= 0 && data.royaltyRate <= 100 &&
+               data.status is string && data.status.size() <= 20 &&
+               data.creatorEmail is string && data.creatorEmail.size() <= 100 &&
+               data.creatorWallet is string && data.creatorWallet.size() <= 42;
+    }
+
     match /assets/{assetId} {
       allow read: if true;
       allow create: if isSignedIn() && isValidAsset(request.resource.data);
       allow update: if isSignedIn() && isValidAsset(request.resource.data) && request.resource.data.ownerAddress == resource.data.ownerAddress;
       allow delete: if isSignedIn() && request.auth.uid != null; // Simplified for demo
+    }
+
+    match /agreements/{agreementId} {
+      allow read: if true;
+      allow create: if isSignedIn() && isValidAgreement(request.resource.data);
+      allow update: if isSignedIn() && isValidAgreement(request.resource.data) && request.resource.data.creatorEmail == resource.data.creatorEmail;
+      allow delete: if isSignedIn() && request.auth.uid != null;
     }
 
     match /transactions/{transactionId} {

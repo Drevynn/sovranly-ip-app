@@ -1,6 +1,8 @@
 import './globals.css';
 import { Metadata, Viewport } from 'next';
 import { FirebaseProvider } from '@/components/auth/FirebaseProvider';
+import { LanguageProvider } from '@/components/LanguageProvider';
+import Script from 'next/script';
 
 export const metadata: Metadata = {
   title: 'Sovranly IP',
@@ -15,6 +17,9 @@ export const metadata: Metadata = {
     icon: '/sovranly-logo-v2.png',
     apple: '/sovranly-logo-v2.png',
   },
+  other: {
+    'google-adsense-account': 'ca-pub-1932505075277502',
+  },
 };
 
 export const viewport: Viewport = {
@@ -27,10 +32,21 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className="dark">
+      <head>
+        <meta name="google-adsense-account" content="ca-pub-1932505075277502" />
+        <Script
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1932505075277502"
+          crossOrigin="anonymous"
+          strategy="afterInteractive"
+          id="google-adsense"
+        />
+      </head>
       <body className="antialiased bg-zinc-950 text-zinc-100 min-h-screen">
-        <FirebaseProvider>
-          {children}
-        </FirebaseProvider>
+        <LanguageProvider>
+          <FirebaseProvider>
+            {children}
+          </FirebaseProvider>
+        </LanguageProvider>
       </body>
     </html>
   );

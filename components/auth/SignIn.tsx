@@ -8,7 +8,7 @@ import { ShieldCheck, Sparkles } from 'lucide-react';
 import Image from 'next/image';
 
 export function SignIn() {
-  const { signInWithGoogle } = useAuth();
+  const { signInWithGoogle, signInWithSandbox } = useAuth();
   const [error, setError] = useState('');
   const [authenticating, setAuthenticating] = useState(false);
 
@@ -19,7 +19,22 @@ export function SignIn() {
       await signInWithGoogle();
     } catch (e: any) {
       console.error('Sign-in error:', e);
-      setError(e.message || 'Authentication sequence failed. Please verify network access.');
+      // Construct a very helpful message about iframe cookie limits
+      setError(
+        e.message || 'Authentication sequence failed. Check browser security filters.'
+      );
+    } finally {
+      setAuthenticating(false);
+    }
+  };
+
+  const handleSandboxSignIn = async () => {
+    setError('');
+    setAuthenticating(true);
+    try {
+      await signInWithSandbox();
+    } catch (e: any) {
+      setError(e.message || 'Sandbox mode activation failed.');
     } finally {
       setAuthenticating(false);
     }
@@ -27,7 +42,7 @@ export function SignIn() {
 
   return (
     <div className="flex items-center justify-center min-h-[70vh] px-4">
-      <Card className="w-full max-w-md bg-zinc-950 border border-zinc-800/80 rounded-3xl p-4 md:p-6 shadow-2xl shadow-cyan-950/20 relative overflow-hidden">
+      <Card className="w-full max-w-md bg-zinc-950 border border-zinc-900 rounded-3xl p-4 md:p-6 shadow-2xl shadow-cyan-950/20 relative overflow-hidden">
         <div className="absolute -top-12 -left-12 w-48 h-48 bg-cyan-500/5 rounded-full blur-[60px] pointer-events-none" />
         <div className="absolute -bottom-12 -right-12 w-48 h-48 bg-violet-500/5 rounded-full blur-[60px] pointer-events-none" />
         
@@ -57,7 +72,7 @@ export function SignIn() {
         </CardHeader>
 
         <CardContent className="space-y-6 pt-4">
-          <div className="bg-zinc-900/50 rounded-2xl p-4 border border-zinc-850 space-y-3">
+          <div className="bg-zinc-900/50 rounded-2xl p-4 border border-zinc-900 space-y-3">
             <div className="flex items-start gap-3">
               <Sparkles className="w-4 h-4 text-violet-400 mt-1 shrink-0" />
               <div className="text-left text-xs text-zinc-400 leading-relaxed">
@@ -67,8 +82,14 @@ export function SignIn() {
           </div>
 
           {error && (
-            <div className="p-4 bg-red-950/20 border border-red-500/20 text-red-400 text-xs rounded-xl text-left select-none animate-pulse">
-              ⚠️ {error}
+            <div className="p-4 bg-red-950/10 border border-red-900/50 text-red-400 text-xs rounded-xl text-left space-y-2 select-none">
+              <p className="font-bold flex items-center gap-1.5">⚠️ Iframe/Sandbox Environment Notice</p>
+              <p className="text-[11px] text-zinc-400 leading-relaxed">
+                Standard Google OAuth utilizes browser popups. Inside cross-origin iframes (like the AI Studio Preview), browser cookie filters may block the popup.
+              </p>
+              <p className="text-[11px] text-zinc-400 leading-relaxed">
+                To fix: Click the <strong className="text-white">“Open app in new tab”</strong> button at the top-right corner to log in with your Google account, or use the instant <strong className="text-emerald-400">“Sovereign Sandbox Pass”</strong> option below.
+              </p>
             </div>
           )}
 
@@ -96,6 +117,22 @@ export function SignIn() {
                 Sign In with Google
               </>
             )}
+          </Button>
+
+          <div className="relative flex py-2 items-center">
+            <div className="flex-grow border-t border-zinc-900" />
+            <span className="flex-shrink mx-4 text-[10px] text-zinc-600 font-mono tracking-widest uppercase">Or</span>
+            <div className="flex-grow border-t border-zinc-900" />
+          </div>
+
+          <Button 
+            className="w-full py-5 rounded-xl border border-zinc-800 bg-zinc-950/40 hover:bg-zinc-900/50 text-zinc-350 font-bold text-xs tracking-wide hover:text-white hover:border-emerald-900/50 transition-all flex items-center justify-center gap-2 relative"
+            onClick={handleSandboxSignIn}
+            disabled={authenticating}
+            type="button"
+          >
+            <ShieldCheck className="w-4 h-4 text-emerald-400" />
+            Bypass with Sovereign Sandbox Pass
           </Button>
         </CardContent>
       </Card>

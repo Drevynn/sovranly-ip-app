@@ -7,13 +7,17 @@ import Overview from '@/components/Overview';
 import Profile from '@/components/Profile';
 import AssetManager from '@/components/AssetManager';
 import Analytics from '@/components/Analytics';
+import LicensingAgreementBuilder from '@/components/LicensingAgreementBuilder';
+import RoyaltySandbox from '@/components/RoyaltySandbox';
 import { useAuth } from '@/components/auth/FirebaseProvider';
+import { useLanguage } from '@/components/LanguageProvider';
 import { SignIn } from '@/components/auth/SignIn';
 import Image from 'next/image';
 import Link from 'next/link';
 
 export default function DashboardPage() {
   const { user, loading } = useAuth();
+  const { t } = useLanguage();
   const [activePage, setActivePage] = useState(0); // Default to Command Center
   const [currentAccount, setCurrentAccount] = useState<string | null>(null);
 
@@ -28,7 +32,7 @@ export default function DashboardPage() {
           <div className="absolute inset-0 border-4 border-cyan-500/10 rounded-full" />
           <div className="absolute inset-0 border-4 border-cyan-400 border-t-transparent rounded-full animate-spin" />
         </div>
-        <p className="text-zinc-650 font-mono text-[9px] uppercase tracking-[0.25em] animate-pulse">Establishing Identity Link...</p>
+        <p className="text-zinc-650 font-mono text-[9px] uppercase tracking-[0.25em] animate-pulse">{t('establishingIdentity')}</p>
       </div>
     );
   }
@@ -45,10 +49,10 @@ export default function DashboardPage() {
           <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
             <div className="flex items-center gap-3">
               <Image src="/sovranly-logo-v2.png" alt="Sovranly IP Logo" width={32} height={32} className="rounded-xl" referrerPolicy="no-referrer" />
-              <span className="font-bold tracking-tighter text-white uppercase text-lg">SOVRANLY IP</span>
+              <span className="font-bold tracking-tighter text-white uppercase text-lg">{t('brandName')}</span>
             </div>
             <Link href="/" className="text-xs text-zinc-500 hover:text-white transition-colors uppercase tracking-wider font-extrabold flex items-center gap-2">
-              ← Return Home
+              {t('returnHome')}
             </Link>
           </div>
         </header>
@@ -60,7 +64,7 @@ export default function DashboardPage() {
 
         {/* Footer */}
         <footer className="border-t border-white/5 py-8 text-center text-zinc-700 text-[9px] font-mono">
-          SECURED GATEWAY • SESSION VALIDATION CONTINUOUS
+          {t('sessionContinuous')}
         </footer>
       </div>
     );
@@ -76,10 +80,12 @@ export default function DashboardPage() {
       <div className="flex-1 flex flex-col overflow-hidden">
         <Header 
           pageTitle={
-            activePage === 0 ? "Command Center" :
-            activePage === 1 ? "User Profile" :
-            activePage === 2 ? "SECURE IP ASSET REGISTRY" : 
-            "ADVANCED BLOCKCHAIN ANALYTICS"
+            activePage === 0 ? t('commandCenter') :
+            activePage === 1 ? t('userProfile') :
+            activePage === 2 ? t('ipAssetRegistry') : 
+            activePage === 3 ? t('analytics') :
+            activePage === 4 ? t('licensingCompacts') :
+            t('royaltySandbox')
           } 
           setWalletAddress={setCurrentAccount} 
           walletAddress={currentAccount} 
@@ -90,6 +96,8 @@ export default function DashboardPage() {
           {activePage === 1 && <Profile />}
           {activePage === 2 && <AssetManager walletAddress={currentAccount} />}
           {activePage === 3 && <Analytics />}
+          {activePage === 4 && <LicensingAgreementBuilder walletAddress={currentAccount} />}
+          {activePage === 5 && <RoyaltySandbox />}
         </main>
       </div>
     </div>

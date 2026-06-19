@@ -1,7 +1,7 @@
 import { MetadataRoute } from 'next';
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = 'https://ais-dev-p6c6v5ndbtu2ax22nqbzvs-186944557149.us-west1.run.app';
+  const baseUrl = process.env.APP_URL || 'https://sovranlyip.com';
   
   return [
     {

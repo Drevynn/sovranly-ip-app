@@ -1,20 +1,22 @@
 'use client';
 
-import { Gauge, BarChart3, User, FileText, LogOut, ShieldAlert } from 'lucide-react';
+import { Gauge, BarChart3, User, FileText, LogOut, ShieldAlert, Scale, Sliders } from 'lucide-react';
 import Image from 'next/image';
 import { useAuth } from './auth/FirebaseProvider';
+import { useLanguage } from './LanguageProvider';
 
 export default function Sidebar({ activePage, setActivePage, walletStatus }: { activePage: number, setActivePage: (id: number) => void, walletStatus: string }) {
   const { user, logout } = useAuth();
+  const { t } = useLanguage();
 
   return (
     <div className="w-72 bg-zinc-950 border-r border-zinc-900 flex flex-col h-screen">
       <div className="p-8 border-b border-zinc-900">
         <div className="flex items-center gap-3 mb-2">
           <Image src="/sovranly-logo-v2.png" alt="Sovranly" width={40} height={40} referrerPolicy="no-referrer" />
-          <span className="font-bold tracking-tighter text-white text-2xl uppercase">SOVRANLY</span>
+          <span className="font-bold tracking-tighter text-white text-2xl uppercase">{t('brandName')}</span>
         </div>
-        <p className="text-emerald-400 text-[10px] uppercase tracking-widest mt-1">Sovereign IP Authority</p>
+        <p className="text-emerald-400 text-[10px] uppercase tracking-widest mt-1">{t('brandSubtitle')}</p>
       </div>
 
       <div className="flex-1 px-5 py-8 space-y-2">
@@ -22,25 +24,37 @@ export default function Sidebar({ activePage, setActivePage, walletStatus }: { a
           onClick={() => setActivePage(0)}
           className={`w-full flex items-center gap-4 px-5 py-4 rounded-2xl text-sm font-semibold transition-all ${activePage === 0 ? 'bg-zinc-900 border border-zinc-800 text-white shadow-xl shadow-zinc-950/50' : 'text-zinc-500 hover:text-zinc-300 hover:bg-zinc-900/30'}`}
         >
-          <Gauge className="w-5 h-5 text-cyan-400" /> Command Center
+          <Gauge className="w-5 h-5 text-cyan-400" /> {t('commandCenter')}
         </button>
         <button 
           onClick={() => setActivePage(1)}
           className={`w-full flex items-center gap-4 px-5 py-4 rounded-2xl text-sm font-semibold transition-all ${activePage === 1 ? 'bg-zinc-900 border border-zinc-800 text-white shadow-xl shadow-zinc-950/50' : 'text-zinc-500 hover:text-zinc-300 hover:bg-zinc-900/30'}`}
         >
-          <User className="w-5 h-5 text-violet-400" /> User Profile
+          <User className="w-5 h-5 text-violet-400" /> {t('userProfile')}
         </button>
         <button 
           onClick={() => setActivePage(2)}
           className={`w-full flex items-center gap-4 px-5 py-4 rounded-2xl text-sm font-semibold transition-all ${activePage === 2 ? 'bg-zinc-900 border border-zinc-800 text-white shadow-xl shadow-zinc-950/50' : 'text-zinc-500 hover:text-zinc-300 hover:bg-zinc-900/30'}`}
         >
-          <FileText className="w-5 h-5 text-emerald-400" /> IP Asset Registry
+          <FileText className="w-5 h-5 text-emerald-400" /> {t('ipAssetRegistry')}
         </button>
         <button 
           onClick={() => setActivePage(3)}
           className={`w-full flex items-center gap-4 px-5 py-4 rounded-2xl text-sm font-semibold transition-all ${activePage === 3 ? 'bg-zinc-900 border border-zinc-800 text-white shadow-xl shadow-zinc-950/50' : 'text-zinc-500 hover:text-zinc-300 hover:bg-zinc-900/30'}`}
         >
-          <BarChart3 className="w-5 h-5 text-amber-400" /> Analytics
+          <BarChart3 className="w-5 h-5 text-amber-400" /> {t('analytics')}
+        </button>
+        <button 
+          onClick={() => setActivePage(4)}
+          className={`w-full flex items-center gap-4 px-5 py-4 rounded-2xl text-sm font-semibold transition-all ${activePage === 4 ? 'bg-zinc-900 border border-zinc-800 text-white shadow-xl shadow-zinc-950/50' : 'text-zinc-500 hover:text-zinc-305 hover:bg-zinc-900/30'}`}
+        >
+          <Scale className="w-5 h-5 text-cyan-400" /> {t('licensingCompacts')}
+        </button>
+        <button 
+          onClick={() => setActivePage(5)}
+          className={`w-full flex items-center gap-4 px-5 py-4 rounded-2xl text-sm font-semibold transition-all ${activePage === 5 ? 'bg-zinc-900 border border-zinc-800 text-white shadow-xl shadow-zinc-950/50' : 'text-zinc-500 hover:text-zinc-300 hover:bg-zinc-900/30'}`}
+        >
+          <Sliders className="w-5 h-5 text-teal-400" /> {t('royaltySandbox')}
         </button>
       </div>
 
@@ -77,16 +91,16 @@ export default function Sidebar({ activePage, setActivePage, walletStatus }: { a
               onClick={() => logout()}
               className="w-full flex items-center justify-center gap-2 px-3 py-2 bg-zinc-950 hover:bg-red-950/20 hover:text-red-400 hover:border-red-500/20 text-zinc-400 text-xs font-bold border border-zinc-800/80 rounded-xl transition-all"
             >
-              <LogOut className="w-3.5 h-3.5" /> Terminate Session
+              <LogOut className="w-3.5 h-3.5" /> {t('terminateSession')}
             </button>
           </div>
         )}
 
         <div className="bg-zinc-905 rounded-2xl p-4 border border-zinc-850/60">
           <p className="text-[10px] uppercase tracking-widest text-zinc-500 mb-2 font-black flex items-center gap-1.5">
-            <ShieldAlert className="w-3 h-3 text-cyan-400" /> Wallet Identity
+            <ShieldAlert className="w-3 h-3 text-cyan-400" /> {t('walletIdentity')}
           </p>
-          <p className="text-xs font-mono text-cyan-400 truncate">{walletStatus}</p>
+          <p className="text-xs font-mono text-cyan-400 truncate">{walletStatus === 'Disconnected' ? t('disconnected') : walletStatus}</p>
         </div>
       </div>
     </div>

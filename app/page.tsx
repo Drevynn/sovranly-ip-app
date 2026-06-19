@@ -19,9 +19,13 @@ import {
   Sparkles
 } from 'lucide-react';
 import Link from 'next/link';
+import GoogleAd from '@/components/GoogleAd';
+import { useLanguage } from '@/components/LanguageProvider';
+import LanguageSelector from '@/components/LanguageSelector';
 
 export default function HomePage() {
   const [submitted, setSubmitted] = useState(false);
+  const { t } = useLanguage();
 
   return (
     <div className="min-h-screen bg-black text-zinc-100 font-sans selection:bg-cyan-500/20 selection:text-cyan-300">
@@ -34,48 +38,60 @@ export default function HomePage() {
         <div className="flex items-center justify-between p-6 max-w-7xl mx-auto">
           <div className="flex items-center gap-3">
             <Image src="/sovranly-logo-v2.png" alt="Sovranly IP Logo" width={36} height={36} className="rounded-xl shadow-lg shadow-cyan-950/50" referrerPolicy="no-referrer" />
-            <Link href="/" className="font-bold tracking-tighter text-white text-xl uppercase">SOVRANLY IP</Link>
+            <Link href="/" className="font-bold tracking-tighter text-white text-xl uppercase">{t('brandName')}</Link>
           </div>
           <nav className="hidden md:flex items-center gap-8">
-            <Link href="/dashboard" className="text-sm text-zinc-400 hover:text-white transition-colors">Command Center</Link>
-            <Link href="/marketplace" className="text-sm text-zinc-400 hover:text-white transition-colors">Marketplace</Link>
-            <Link href="/onboarding" className="text-sm text-zinc-400 hover:text-white transition-colors">AI Onboarding</Link>
-            <Link href="/wiki" className="text-sm text-zinc-400 hover:text-white transition-colors">Wiki / Help</Link>
+            <Link href="/dashboard" className="text-sm text-zinc-400 hover:text-white transition-colors">{t('commandCenter')}</Link>
+            <Link href="/pricing" className="text-sm text-zinc-400 hover:text-white transition-colors">Pricing Plan</Link>
+            <Link href="/marketplace" className="text-sm text-zinc-400 hover:text-white transition-colors">{t('marketplace')}</Link>
+            <Link href="/onboarding" className="text-sm text-zinc-400 hover:text-white transition-colors">{t('chatHelp')}</Link>
+            <Link href="/wiki" className="text-sm text-zinc-400 hover:text-white transition-colors">{t('wiki')}</Link>
+            <Link href="/faq" className="text-sm text-zinc-400 hover:text-white transition-colors">{t('faq')}</Link>
           </nav>
           <div className="flex items-center gap-4">
+            <LanguageSelector />
             <Button asChild variant="outline" className="border-zinc-800 bg-transparent text-white hover:bg-zinc-900 transition-all rounded-full hidden sm:inline-flex">
-              <Link href="/marketplace">Marketplace</Link>
+              <Link href="/marketplace">{t('marketplace')}</Link>
             </Button>
             <Button asChild className="bg-gradient-to-r from-cyan-500 to-violet-500 hover:brightness-110 text-white font-medium shadow-lg shadow-cyan-950/40 rounded-full">
-              <Link href="/dashboard">Launch Console</Link>
+              <Link href="/dashboard">{t('launchConsole')}</Link>
             </Button>
           </div>
         </div>
       </header>
 
       {/* Hero Section */}
-      <main className="relative max-w-7xl mx-auto px-6 py-16 md:py-28 space-y-32">
-        <section className="text-center space-y-8 max-w-4xl mx-auto">
-          <div className="relative w-72 h-72 mx-auto mb-8">
-            <Image src="/sovranly-logo-v2.png" alt="Sovranly IP" fill className="object-contain" referrerPolicy="no-referrer" />
+      <main className="relative max-w-7xl mx-auto px-6 py-24 md:py-40 space-y-44">
+        <section className="text-center space-y-12 max-w-6xl mx-auto">
+          {/* Enhanced Massive Logo Canvas */}
+          <div className="relative w-80 h-80 md:w-[440px] md:h-[440px] mx-auto mb-12 animate-pulse [animation-duration:8s]">
+            {/* Absolute Ambient backplate glow behind the logo */}
+            <div className="absolute inset-0 bg-cyan-500/10 rounded-full blur-[80px] pointer-events-none scale-125" />
+            <div className="absolute inset-0 bg-violet-600/5 rounded-full blur-[100px] pointer-events-none scale-150" />
+            <Image src="/sovranly-logo-v2.png" alt="Sovranly IP" fill className="object-contain relative z-10" referrerPolicy="no-referrer" />
           </div>
-          <div className="inline-flex items-center gap-2 px-3 py-1 bg-zinc-900 border border-zinc-800 rounded-full text-xs text-zinc-400 mb-2">
-            <Sparkles className="w-3.5 h-3.5 text-cyan-400" />
-            <span>Zero Trust Blockchain Sovereign IP Authority</span>
+          
+          <div className="inline-flex items-center gap-2.5 px-4 py-2 bg-zinc-900 border border-zinc-800 rounded-full text-xs sm:text-sm text-zinc-400 mb-2">
+            <Sparkles className="w-4 h-4 text-cyan-400" />
+            <span className="font-mono tracking-wider uppercase text-[10px] sm:text-xs">{t('zeroTrustTag')}</span>
           </div>
-          <h2 className="text-5xl md:text-7xl font-extrabold tracking-tighter text-white leading-none">
-            Secure Intellectual Property <br />
-            <span className="bg-gradient-to-r from-cyan-400 to-violet-400 bg-clip-text text-transparent">Powering the Creator Economy</span>
+          
+          {/* Double Scale Typography */}
+          <h2 className="text-5xl sm:text-7xl md:text-[84px] lg:text-[108px] font-extrabold tracking-tighter text-white leading-none">
+            {t('heroMainTitle1')} <br className="hidden lg:inline" /> {t('heroMainTitle2')} <br />
+            <span className="bg-gradient-to-r from-cyan-400 via-sky-400 to-violet-400 bg-clip-text text-transparent">{t('heroMainTitleSub')}</span>
           </h2>
-          <p className="text-lg md:text-xl text-zinc-400 max-w-3xl mx-auto leading-relaxed">
-            Sovranly IP brings robust, Zero Trust Architecture to intellectual property. Register, license, and seamlessly commercialize your assets with automated smart contracts and immutable proof of ownership.
+          
+          <p className="text-xl sm:text-2xl md:text-3xl text-zinc-400 max-w-5xl mx-auto leading-relaxed font-light">
+            {t('heroDescription')}
           </p>
-          <div className="flex flex-col sm:flex-row justify-center items-center gap-4 pt-6">
-            <Button asChild size="lg" className="w-full sm:w-auto px-8 py-6 rounded-full bg-gradient-to-r from-cyan-500 to-violet-500 text-white font-bold text-base hover:brightness-110 shadow-lg shadow-cyan-950/50 transition">
-              <Link href="/dashboard">Deploy IP Asset <ArrowRight className="ml-2 h-4 w-4" /></Link>
+          
+          <div className="flex flex-col sm:flex-row justify-center items-center gap-6 pt-10">
+            <Button asChild size="lg" className="w-full sm:w-auto px-10 py-8 rounded-full bg-gradient-to-r from-cyan-500 to-violet-500 text-white font-bold text-lg hover:brightness-110 shadow-xl shadow-cyan-950/60 transition duration-300">
+              <Link href="/dashboard">{t('deployIpBtn')} <ArrowRight className="ml-2 h-5 w-5" /></Link>
             </Button>
-            <Button asChild size="lg" variant="outline" className="w-full sm:w-auto px-8 py-6 rounded-full border-zinc-800 bg-zinc-950 text-white hover:bg-zinc-900 font-bold text-base transition">
-              <Link href="/marketplace">Explore Marketplace</Link>
+            <Button asChild size="lg" variant="outline" className="w-full sm:w-auto px-10 py-8 rounded-full border-zinc-800 bg-zinc-950 text-white hover:bg-zinc-900 font-bold text-lg transition duration-300">
+              <Link href="/marketplace">{t('exploreMarketplaceBtn')}</Link>
             </Button>
           </div>
         </section>
@@ -83,25 +99,25 @@ export default function HomePage() {
         {/* Feature Highlights Grid */}
         <section className="space-y-12">
           <div className="text-center space-y-4">
-            <h3 className="text-3xl font-extrabold tracking-tight text-white">Trust Nothing. Authenticate Everything.</h3>
-            <p className="text-zinc-400 max-w-lg mx-auto">We secure the creator economy through robust technological structures.</p>
+            <h3 className="text-3xl font-extrabold tracking-tight text-white">{t('trustNoone')}</h3>
+            <p className="text-zinc-400 max-w-lg mx-auto">{t('featureSubtitle')}</p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
               { 
                 icon: ShieldCheck, 
-                title: "Zero Trust Governance", 
-                desc: "Continuously validated, cryptographically secure permissions system protecting access and viewing rights for sensitive media and data." 
+                title: t('feat1Title'), 
+                desc: t('feat1Desc') 
               },
               { 
                 icon: Zap, 
-                title: "Automated Royalty Splits", 
-                desc: "Self-executing smart contract layers dispatch direct peer-to-peer micro-licensing fees and royalty fractions instantly on-chain." 
+                title: t('feat2Title'), 
+                desc: t('feat2Desc') 
               },
               { 
                 icon: Lock, 
-                title: "Immutable Digital Fingerprint", 
-                desc: "Permanent timestamp registry storing high-fidelity cryptographic hashes of media files, offering ironclad courtroom proof of authorship." 
+                 title: t('feat3Title'), 
+                desc: t('feat3Desc') 
               },
             ].map((feature, i) => (
               <div key={i} className="group p-8 bg-zinc-900/40 border border-zinc-800/60 rounded-3xl text-left hover:border-zinc-700/80 transition-all duration-300 shadow-xl shadow-zinc-950/20 backdrop-blur-sm">
@@ -122,13 +138,13 @@ export default function HomePage() {
               <div className="inline-flex p-3 bg-cyan-950/30 border border-cyan-800/30 rounded-2xl mb-6">
                 <MessageSquare className="h-6 w-6 text-cyan-400" />
               </div>
-              <h4 className="text-2xl font-bold text-white mb-2">Smart AI Onboarding</h4>
+              <h4 className="text-2xl font-bold text-white mb-2">{t('aiHubTitle')}</h4>
               <p className="text-sm text-zinc-400 leading-relaxed max-w-sm mb-6">
-                Have questions about registering your copyright, smart-licensing, or setting up your wallet? Our continuous AI companion is ready to guide you.
+                {t('aiHubDesc')}
               </p>
             </div>
             <Button asChild variant="secondary" className="w-full bg-zinc-800 hover:bg-zinc-700 text-zinc-100 rounded-xl py-5">
-              <Link href="/onboarding">Launch AI Chat Help <ExternalLink className="ml-2 w-4 h-4"/></Link>
+              <Link href="/onboarding">{t('aiHubBtn')} <ExternalLink className="ml-2 w-4 h-4"/></Link>
             </Button>
           </Card>
           
@@ -137,13 +153,13 @@ export default function HomePage() {
               <div className="inline-flex p-3 bg-violet-950/30 border border-violet-800/30 rounded-2xl mb-6">
                 <BookOpen className="h-6 w-6 text-violet-400" />
               </div>
-              <h4 className="text-2xl font-bold text-white mb-2">Wiki & FAQ Center</h4>
+              <h4 className="text-2xl font-bold text-white mb-2">{t('wikiHubTitle')}</h4>
               <p className="text-sm text-zinc-400 leading-relaxed max-w-sm mb-6">
-                Dive deep into documentation, regulatory compliance checklists, and technical blueprints describing how Sovranly IP works.
+                {t('wikiHubDesc')}
               </p>
             </div>
             <Button asChild variant="secondary" className="w-full bg-zinc-800 hover:bg-zinc-700 text-zinc-100 rounded-xl py-5">
-              <Link href="/wiki">Browse Sovranly Wiki <ExternalLink className="ml-2 w-4 h-4"/></Link>
+              <Link href="/wiki">{t('wikiHubBtn')} <ExternalLink className="ml-2 w-4 h-4"/></Link>
             </Button>
           </Card>
         </section>
@@ -155,45 +171,50 @@ export default function HomePage() {
           <div className="max-w-2xl mx-auto space-y-8">
             <div className="text-center space-y-3">
               <h3 className="text-3xl font-extrabold text-white tracking-tight flex justify-center items-center gap-3">
-                <Mail className="text-cyan-400 w-8 h-8"/> Contact Developer Support
+                <Mail className="text-cyan-400 w-8 h-8"/> {t('contactSupportTitle')}
               </h3>
-              <p className="text-zinc-400 max-w-md mx-auto">Ready to customize or have questions? Get in touch with our team directly.</p>
+              <p className="text-zinc-400 max-w-md mx-auto">{t('contactSupportDesc')}</p>
             </div>
 
             {!submitted ? (
               <form onSubmit={(e) => { e.preventDefault(); setSubmitted(true); }} className="space-y-6">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                   <div className="space-y-2">
-                    <Label className="text-zinc-400 text-xs font-semibold uppercase tracking-wider">Name</Label>
-                    <Input className="bg-zinc-950/60 border-zinc-800 text-white rounded-xl py-5 px-4 focus-visible:ring-cyan-500" required placeholder="e.g., Jane Doe" />
+                    <Label className="text-zinc-400 text-xs font-semibold uppercase tracking-wider">{t('formName')}</Label>
+                    <Input className="bg-zinc-950/60 border-zinc-800 text-white rounded-xl py-5 px-4 focus-visible:ring-cyan-500" required placeholder={t('formNamePlaceholder')} />
                   </div>
                   <div className="space-y-2">
-                    <Label className="text-zinc-400 text-xs font-semibold uppercase tracking-wider">Email Address</Label>
-                    <Input type="email" className="bg-zinc-950/60 border-zinc-800 text-white rounded-xl py-5 px-4 focus-visible:ring-cyan-500" required placeholder="create@sovranlyip.com" />
+                    <Label className="text-zinc-400 text-xs font-semibold uppercase tracking-wider">{t('formEmail')}</Label>
+                    <Input type="email" className="bg-zinc-950/60 border-zinc-800 text-white rounded-xl py-5 px-4 focus-visible:ring-cyan-500" required placeholder={t('formEmailPlaceholder')} />
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <Label className="text-zinc-400 text-xs font-semibold uppercase tracking-wider">Inquiry Details</Label>
-                  <Textarea className="bg-zinc-950/60 border-zinc-800 text-white rounded-xl p-4 focus-visible:ring-cyan-500" rows={5} required placeholder="Describe what you want to achieve or any questions you have about the architecture..." />
+                  <Label className="text-zinc-400 text-xs font-semibold uppercase tracking-wider">{t('formDetails')}</Label>
+                  <Textarea className="bg-zinc-950/60 border-zinc-800 text-white rounded-xl p-4 focus-visible:ring-cyan-500" rows={5} required placeholder={t('formDetailsPlaceholder')} />
                 </div>
                 <Button type="submit" className="w-full py-6 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-bold transition-all shadow-md shadow-cyan-950/20">
-                  Send Support Message
+                  {t('submitBtn')}
                 </Button>
               </form>
             ) : (
               <div className="text-center py-12 px-6 bg-zinc-950/80 rounded-2xl border border-emerald-500/20 shadow-xl">
                 <div className="w-12 h-12 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 rounded-full flex items-center justify-center text-xl mx-auto mb-4">✓</div>
-                <p className="text-white text-lg font-bold mb-2">Message Dispatched Securely</p>
-                <p className="text-zinc-400 text-sm">We have received your request and will follow up with you at <span className="font-semibold text-zinc-300">create@sovranlyip.com</span> shortly.</p>
+                <p className="text-white text-lg font-bold mb-2">{t('dispatchedTitle')}</p>
+                <p className="text-zinc-400 text-sm">{t('dispatchedDesc')} <span className="font-semibold text-zinc-300">create@sovranlyip.com</span></p>
               </div>
             )}
           </div>
         </section>
       </main>
 
+      {/* Public Sponsor Allocation Banner */}
+      <div className="max-w-7xl mx-auto px-6 mb-12">
+        <GoogleAd slot="8519201081" />
+      </div>
+
       {/* Footer */}
       <footer className="border-t border-white/5 py-12 bg-zinc-950/40 relative z-10 text-center text-zinc-600 text-xs">
-        <p>© 2026 Sovranly IP. Sovereign Management and Zero Trust Blockchain Protection. All work protected on-chain.</p>
+        <p>{t('copyright')}</p>
       </footer>
     </div>
   );

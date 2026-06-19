@@ -1,5 +1,13 @@
-import { initializeApp, cert, getApps } from 'firebase-admin/app';
+import * as admin from 'firebase-admin';
 import { getFirestore } from 'firebase-admin/firestore';
+import firebaseConfig from '../firebase-applet-config.json';
 
-const app = getApps().length === 0 ? initializeApp() : getApps()[0];
-export const db = getFirestore(app);
+const app = admin.apps.length 
+  ? (admin.apps[0] as any) 
+  : admin.initializeApp({
+      credential: admin.credential.applicationDefault(),
+      projectId: firebaseConfig.projectId,
+    });
+
+export const db = getFirestore(app, firebaseConfig.firestoreDatabaseId);
+export const auth = admin.auth();

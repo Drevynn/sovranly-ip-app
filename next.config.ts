@@ -2,7 +2,11 @@ import type {NextConfig} from 'next';
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
-  allowedDevOrigins: ['ais-dev-p6c6v5ndbtu2ax22nqbzvs-186944557149.us-west1.run.app'],
+  allowedDevOrigins: [
+    'ais-dev-p6c6v5ndbtu2ax22nqbzvs-186944557149.us-west1.run.app',
+    'sovranlyip.com',
+    'www.sovranlyip.com'
+  ],
   typescript: {
     ignoreBuildErrors: false,
   },
@@ -14,6 +18,12 @@ const nextConfig: NextConfig = {
         hostname: 'picsum.photos',
         port: '',
         pathname: '/**', // This allows any path under the hostname
+      },
+      {
+        protocol: 'https',
+        hostname: 'lh3.googleusercontent.com',
+        port: '',
+        pathname: '/**',
       },
     ],
   },
