@@ -56,16 +56,26 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           }}
         />
         <Script
-          id="CookieDeclaration"
-          src="https://consent.cookiebot.com/cfbebce2-7f31-4955-8610-97a311edd2af/cd.js"
+          id="cookiebot-loader"
           strategy="afterInteractive"
-        />
-        <Script
-          id="Cookiebot"
-          src="https://consent.cookiebot.com/uc.js"
-          data-cbid="cfbebce2-7f31-4955-8610-97a311edd2af"
-          data-blockingmode="auto"
-          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                var host = window.location.hostname;
+                // Only load Cookiebot on the authorized production domain to prevent ugly "Domain not authorized" errors in development or preview/sandbox environments.
+                if (host.includes('sovranlyip.com')) {
+                  var s = document.createElement('script');
+                  s.id = 'Cookiebot';
+                  s.src = 'https://consent.cookiebot.com/uc.js';
+                  s.setAttribute('data-cbid', 'cfbebce2-7f31-4955-8610-97a311edd2af');
+                  s.setAttribute('data-blockingmode', 'auto');
+                  s.type = 'text/javascript';
+                  s.async = true;
+                  document.head.appendChild(s);
+                }
+              })();
+            `,
+          }}
         />
       </head>
       <body className="antialiased bg-zinc-950 text-zinc-100 min-h-screen">

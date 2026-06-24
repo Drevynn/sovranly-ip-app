@@ -2,6 +2,7 @@
 
 import { Lock, FileText, ArrowLeft, Terminal, ShieldAlert } from 'lucide-react';
 import Link from 'next/link';
+import Script from 'next/script';
 
 export default function PrivacyPolicy() {
   const lastUpdated = "June 24, 2026";
@@ -88,6 +89,42 @@ export default function PrivacyPolicy() {
               </p>
             </div>
           ))}
+        </div>
+
+        {/* Dynamic Cookiebot Declaration */}
+        <div id="cookie-declaration-container" className="p-8 bg-zinc-900/20 border border-zinc-800/60 rounded-2xl space-y-4">
+          <div className="flex items-center gap-2 text-white font-bold">
+            <FileText className="w-5 h-5 text-violet-400" />
+            <h3>Cookie Audit & Declaration</h3>
+          </div>
+          <p className="text-sm text-zinc-400 leading-relaxed">
+            Below is the dynamically synchronized list of cookies and tracking components detected across the Sovranly IP protocol.
+          </p>
+          <div className="text-zinc-400 text-sm overflow-x-auto pt-2" id="cookiebot-declaration-wrapper">
+            {/* The cookie table is injected here conditionally */}
+          </div>
+          <Script
+            id="cookie-declaration-loader"
+            strategy="afterInteractive"
+            dangerouslySetInnerHTML={{
+              __html: `
+                (function() {
+                  var host = window.location.hostname;
+                  var wrapper = document.getElementById('cookiebot-declaration-wrapper');
+                  if ((host.includes('sovranlyip.com')) && wrapper) {
+                    var s = document.createElement('script');
+                    s.id = 'CookieDeclaration';
+                    s.src = 'https://consent.cookiebot.com/cfbebce2-7f31-4955-8610-97a311edd2af/cd.js';
+                    s.type = 'text/javascript';
+                    s.async = true;
+                    wrapper.appendChild(s);
+                  } else if (wrapper) {
+                    wrapper.innerHTML = '<p class="text-xs text-zinc-500 font-mono italic">Cookiebot declaration is active on the production domain (sovranlyip.com). Sandbox and development environments are exempt from tracker synchronization to safeguard development throughput and keep layouts clean.</p>';
+                  }
+                })();
+              `
+            }}
+          />
         </div>
 
         {/* Footer Note */}
