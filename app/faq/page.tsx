@@ -22,7 +22,7 @@ import {
   UserCheck
 } from 'lucide-react';
 import Link from 'next/link';
-import GoogleAd from '@/components/GoogleAd';
+import LanguageSelector from '@/components/LanguageSelector';
 
 type FAQItem = {
   id: string;
@@ -430,13 +430,9 @@ export default function FAQPage() {
 
       </main>
 
-      {/* Public Sponsor Allocation footer ad banner */}
-      <div className="max-w-7xl mx-auto px-6 mb-12">
-        <GoogleAd slot="8519201083" />
-      </div>
-
       {/* Footer Element */}
-      <footer className="border-t border-zinc-900/60 py-12 text-center text-zinc-600 text-xs bg-zinc-950/50 mt-16">
+      <footer className="border-t border-zinc-900/60 py-12 flex flex-col items-center justify-center gap-6 text-center text-zinc-600 text-xs bg-zinc-950/50 mt-16">
+        <LanguageSelector />
         <p>© 2026 Creative Sovereignty LLC • Sovereign Legal Registry & On-Chain Licensing mechanics. Trust Nothing, Authenticate Everything.</p>
       </footer>
 

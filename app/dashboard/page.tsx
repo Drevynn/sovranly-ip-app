@@ -9,9 +9,11 @@ import AssetManager from '@/components/AssetManager';
 import Analytics from '@/components/Analytics';
 import LicensingAgreementBuilder from '@/components/LicensingAgreementBuilder';
 import RoyaltySandbox from '@/components/RoyaltySandbox';
+import Inbox from '@/components/Inbox';
 import { useAuth } from '@/components/auth/FirebaseProvider';
 import { useLanguage } from '@/components/LanguageProvider';
 import { SignIn } from '@/components/auth/SignIn';
+import LanguageSelector from '@/components/LanguageSelector';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -20,6 +22,7 @@ export default function DashboardPage() {
   const { t } = useLanguage();
   const [activePage, setActivePage] = useState(0); // Default to Command Center
   const [currentAccount, setCurrentAccount] = useState<string | null>(null);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const walletStatus = currentAccount 
     ? `${currentAccount.slice(0, 6)}...${currentAccount.slice(-4)}` 
@@ -63,21 +66,24 @@ export default function DashboardPage() {
         </div>
 
         {/* Footer */}
-        <footer className="border-t border-white/5 py-8 text-center text-zinc-700 text-[9px] font-mono">
-          {t('sessionContinuous')}
+        <footer className="border-t border-white/5 py-8 flex flex-col items-center justify-center gap-4 text-center text-zinc-700 text-[9px] font-mono">
+          <LanguageSelector />
+          <span>{t('sessionContinuous')}</span>
         </footer>
       </div>
     );
   }
 
   return (
-    <div className="flex h-screen bg-[#050505] text-[#e0e0e0] font-sans">
+    <div className="flex h-screen bg-[#050505] text-[#e0e0e0] font-sans relative">
       <Sidebar 
         activePage={activePage} 
         setActivePage={setActivePage} 
         walletStatus={walletStatus} 
+        isOpen={sidebarOpen}
+        onClose={() => setSidebarOpen(false)}
       />
-      <div className="flex-1 flex flex-col overflow-hidden">
+      <div className="flex-1 flex flex-col overflow-hidden w-full">
         <Header 
           pageTitle={
             activePage === 0 ? t('commandCenter') :
@@ -85,10 +91,12 @@ export default function DashboardPage() {
             activePage === 2 ? t('ipAssetRegistry') : 
             activePage === 3 ? t('analytics') :
             activePage === 4 ? t('licensingCompacts') :
-            t('royaltySandbox')
+            activePage === 5 ? t('royaltySandbox') :
+            t('creatorInbox') || 'Creator Inbox'
           } 
           setWalletAddress={setCurrentAccount} 
           walletAddress={currentAccount} 
+          onToggleSidebar={() => setSidebarOpen(!sidebarOpen)}
         />
 
         <main className="flex-1 overflow-auto p-8 bg-[#09090b]">
@@ -98,6 +106,7 @@ export default function DashboardPage() {
           {activePage === 3 && <Analytics />}
           {activePage === 4 && <LicensingAgreementBuilder walletAddress={currentAccount} />}
           {activePage === 5 && <RoyaltySandbox />}
+          {activePage === 6 && <Inbox walletAddress={currentAccount} />}
         </main>
       </div>
     </div>

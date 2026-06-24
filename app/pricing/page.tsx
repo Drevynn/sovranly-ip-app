@@ -21,7 +21,6 @@ import {
 import Link from 'next/link';
 import { useLanguage } from '@/components/LanguageProvider';
 import LanguageSelector from '@/components/LanguageSelector';
-import GoogleAd from '@/components/GoogleAd';
 
 export default function PricingPage() {
   const { t } = useLanguage();
@@ -109,7 +108,6 @@ export default function PricingPage() {
             <Link href="/faq" className="text-sm text-zinc-400 hover:text-white transition-colors">{t('faq')}</Link>
           </nav>
           <div className="flex items-center gap-4">
-            <LanguageSelector />
             <Button asChild variant="outline" className="border-zinc-800 bg-transparent text-white hover:bg-zinc-900 transition-all rounded-full hidden sm:inline-flex">
               <Link href="/marketplace">{t('marketplace')}</Link>
             </Button>
@@ -297,13 +295,9 @@ export default function PricingPage() {
 
       </main>
 
-      {/* Ad Sponsor Slot */}
-      <div className="max-w-7xl mx-auto px-6 mb-12">
-        <GoogleAd slot="8519201081" />
-      </div>
-
       {/* Public Page Footer */}
-      <footer className="border-t border-white/5 py-12 bg-zinc-950/45 text-center text-zinc-650 text-xs">
+      <footer className="border-t border-white/5 py-12 bg-zinc-950/45 flex flex-col items-center justify-center gap-6 text-center text-zinc-650 text-xs">
+        <LanguageSelector />
         <p>{t('copyright')}</p>
       </footer>
     </div>

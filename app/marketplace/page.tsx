@@ -24,7 +24,8 @@ import {
   ShieldAlert,
   ArrowRightLeft,
   CheckCircle,
-  HelpCircle
+  HelpCircle,
+  Mail
 } from 'lucide-react';
 import { ethers } from 'ethers';
 import Image from 'next/image';
@@ -78,6 +79,12 @@ export default function MarketplacePage() {
     creatorRoyalty: number;
     platformFee: number;
   } | null>(null);
+
+  // Secure Creator Inquiry messaging states
+  const [inquiryAsset, setInquiryAsset] = useState<Asset | null>(null);
+  const [inquiryForm, setInquiryForm] = useState({ senderName: '', senderContact: '', subject: '', message: '' });
+  const [sendingInquiry, setSendingInquiry] = useState(false);
+  const [inquiryStatus, setInquiryStatus] = useState<'idle' | 'success' | 'error'>('idle');
 
   useEffect(() => {
     let ignore = false;
@@ -256,6 +263,40 @@ export default function MarketplacePage() {
       setDemoProgress(100);
       setDemoStep('complete');
       setIsDemoRunning(false);
+    }
+  };
+
+  const handleSubmitInquiry = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!inquiryAsset) return;
+    setSendingInquiry(true);
+    setInquiryStatus('idle');
+    try {
+      const res = await fetch('/api/messages', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          assetId: inquiryAsset.id,
+          assetTitle: inquiryAsset.title,
+          senderName: inquiryForm.senderName,
+          senderContact: inquiryForm.senderContact,
+          subject: inquiryForm.subject,
+          message: inquiryForm.message,
+          recipientAddress: inquiryAsset.ownerAddress || '0x0000000000000000000000000000000000000000'
+        })
+      });
+
+      if (res.ok) {
+        setInquiryStatus('success');
+        setInquiryForm({ senderName: '', senderContact: '', subject: '', message: '' });
+      } else {
+        setInquiryStatus('error');
+      }
+    } catch (err) {
+      console.error('Inquiry dispatch error:', err);
+      setInquiryStatus('error');
+    } finally {
+      setSendingInquiry(false);
     }
   };
 
@@ -444,6 +485,23 @@ export default function MarketplacePage() {
                             <span className="text-[10px] uppercase font-mono tracking-wider text-zinc-650">
                               Not Listed for Sale
                             </span>
+                          </div>
+                        )}
+
+                        {!isOwner && (
+                          <div className="pt-2">
+                            <Button
+                              onClick={() => {
+                                setInquiryStatus('idle');
+                                setInquiryForm({ senderName: '', senderContact: '', subject: '', message: '' });
+                                setInquiryAsset(asset);
+                              }}
+                              variant="outline"
+                              className="w-full rounded-full border-zinc-850 bg-zinc-950 text-zinc-400 hover:bg-zinc-900 hover:text-white text-xs h-9 flex items-center justify-center gap-1.5"
+                            >
+                              <Mail className="w-3.5 h-3.5 text-purple-400" />
+                              Contact Creator Securely
+                            </Button>
                           </div>
                         )}
                       </div>
@@ -706,6 +764,121 @@ export default function MarketplacePage() {
             >
               Close Receipt
             </Button>
+
+          </div>
+        </div>
+      )}
+
+      {/* Contact Creator Inquiry Modal */}
+      {inquiryAsset && (
+        <div className="fixed inset-0 bg-black/85 backdrop-blur-md z-50 flex items-center justify-center p-4">
+          <div className="bg-zinc-950 border border-zinc-850 rounded-3xl p-8 max-w-lg w-full relative space-y-6 shadow-2xl animate-in fade-in zoom-in duration-200 text-left">
+            
+            <div className="text-center space-y-2">
+              <div className="w-12 h-12 bg-purple-950/40 border border-purple-500/20 rounded-full flex items-center justify-center mx-auto mb-2">
+                <Mail className="w-6 h-6 text-purple-400" />
+              </div>
+              <h3 className="text-lg font-bold text-white tracking-tight uppercase tracking-wider font-mono">Contact Creator Securely</h3>
+              <p className="text-xs text-zinc-400 max-w-sm mx-auto leading-relaxed">
+                Send an inquiry about <strong className="text-purple-400">&quot;{inquiryAsset.title}&quot;</strong>. 
+                Your message is cryptographically sealed and delivered to the creator&apos;s Web3 wallet address anonymously.
+              </p>
+            </div>
+
+            {inquiryStatus === 'success' ? (
+              <div className="space-y-6 py-4">
+                <div className="bg-emerald-950/20 border border-emerald-500/15 rounded-2xl p-5 text-center space-y-2">
+                  <CheckCircle className="w-8 h-8 text-emerald-400 mx-auto" />
+                  <p className="text-sm font-bold text-emerald-400">Inquiry Cryptographically Sealed & Delivered!</p>
+                  <p className="text-xs text-zinc-500 max-w-[320px] mx-auto leading-relaxed font-sans">
+                    Message committed securely under matching creator coordinates. They have been secured in their private dashboard inbox instantly.
+                  </p>
+                </div>
+                <Button
+                  onClick={() => setInquiryAsset(null)}
+                  className="w-full rounded-2xl bg-zinc-900 hover:bg-zinc-850 border border-zinc-800 text-white font-bold h-11 uppercase font-mono text-xs"
+                >
+                  Return to Marketplace
+                </Button>
+              </div>
+            ) : (
+              <form onSubmit={handleSubmitInquiry} className="space-y-4">
+                {inquiryStatus === 'error' && (
+                  <div className="p-3 bg-red-950/25 border border-red-500/10 rounded-xl text-center text-xs text-red-400 font-semibold">
+                    Delivery pipeline returned a temporary sync failure. Please retry.
+                  </div>
+                )}
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-1.5 text-left">
+                    <label className="text-[10px] uppercase font-mono tracking-wider text-zinc-500 font-bold block">Your Name / Alias ID</label>
+                    <input 
+                      required
+                      placeholder="e.g. Paramount Labs"
+                      value={inquiryForm.senderName}
+                      onChange={(e) => setInquiryForm({ ...inquiryForm, senderName: e.target.value })}
+                      className="w-full rounded-xl bg-zinc-900 border border-zinc-800 px-3 py-2 text-xs text-white focus:outline-none focus:border-purple-500 transition-colors h-9"
+                    />
+                  </div>
+                  <div className="space-y-1.5 text-left">
+                    <label className="text-[10px] uppercase font-mono tracking-wider text-zinc-500 font-bold block">Contact Coordination</label>
+                    <input 
+                      required
+                      placeholder="e.g. licensed@paramount.com"
+                      value={inquiryForm.senderContact}
+                      onChange={(e) => setInquiryForm({ ...inquiryForm, senderContact: e.target.value })}
+                      className="w-full rounded-xl bg-zinc-900 border border-zinc-800 px-3 py-2 text-xs text-white focus:outline-none focus:border-purple-500 transition-colors h-9"
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-1.5 text-left">
+                  <label className="text-[10px] uppercase font-mono tracking-wider text-zinc-500 font-bold block">Subject Line</label>
+                  <input 
+                    required
+                    placeholder="e.g. Exclusive licensing request of master stems"
+                    value={inquiryForm.subject}
+                    onChange={(e) => setInquiryForm({ ...inquiryForm, subject: e.target.value })}
+                    className="w-full rounded-xl bg-zinc-900 border border-zinc-800 px-3 py-2 text-xs text-white focus:outline-none focus:border-purple-500 transition-colors h-9"
+                  />
+                </div>
+
+                <div className="space-y-1.5 text-left">
+                  <label className="text-[10px] uppercase font-mono tracking-wider text-zinc-500 font-bold block">Inquiry Payload Details</label>
+                  <textarea 
+                    required
+                    rows={4}
+                    placeholder="Provide specific terms, offer size (ETH), or details about your distribution model..."
+                    value={inquiryForm.message}
+                    onChange={(e) => setInquiryForm({ ...inquiryForm, message: e.target.value })}
+                    className="w-full rounded-xl bg-zinc-900 border border-zinc-800 p-3 text-xs text-white focus:outline-none focus:border-purple-500 transition-colors resize-none leading-relaxed"
+                  />
+                </div>
+
+                {/* Actions */}
+                <div className="flex gap-4 pt-2">
+                  <Button 
+                    type="button"
+                    onClick={() => setInquiryAsset(null)}
+                    variant="outline"
+                    className="flex-1 rounded-2xl border-zinc-800 bg-zinc-950 text-zinc-400 hover:text-white text-xs h-11 uppercase font-bold tracking-wider"
+                  >
+                    Cancel
+                  </Button>
+                  <Button 
+                    type="submit"
+                    disabled={sendingInquiry}
+                    className="flex-1 rounded-2xl bg-gradient-to-r from-purple-500 to-violet-600 hover:brightness-110 text-white font-bold text-xs uppercase tracking-wider h-11"
+                  >
+                    {sendingInquiry ? 'Sealing Tunnel...' : 'Send Sealed Message'}
+                  </Button>
+                </div>
+              </form>
+            )}
+
+            <div className="text-center pt-1 border-t border-zinc-900">
+              <span className="text-[8px] uppercase font-mono text-zinc-650 tracking-[0.2em] block font-black">SOVRANLY ZERO TRUST TUNNEL ACTIVE</span>
+            </div>
 
           </div>
         </div>

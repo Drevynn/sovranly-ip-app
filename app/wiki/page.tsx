@@ -14,28 +14,38 @@ import {
   Cpu, 
   Scale, 
   Coins, 
-  ArrowLeft,
-  Flame,
-  Milestone,
-  CheckCircle,
-  Clock,
-  ExternalLink,
-  ChevronDown,
-  Send,
-  Bot,
-  User,
-  HelpCircle,
-  RefreshCw,
-  Sparkles,
-  Calculator,
-  Laptop
+  ArrowLeft, 
+  Flame, 
+  Milestone, 
+  CheckCircle, 
+  Clock, 
+  ExternalLink, 
+  ChevronDown, 
+  Send, 
+  Bot, 
+  User, 
+  HelpCircle, 
+  RefreshCw, 
+  Sparkles, 
+  Calculator, 
+  Laptop, 
+  Terminal, 
+  Code, 
+  Key, 
+  Copy, 
+  Eye, 
+  EyeOff, 
+  AlertCircle, 
+  Check,
+  Activity
 } from 'lucide-react';
 import Link from 'next/link';
-import GoogleAd from '@/components/GoogleAd';
+import LanguageSelector from '@/components/LanguageSelector';
+import { useAuth } from '@/components/auth/FirebaseProvider';
 
 type BlueprintSection = {
   id: string;
-  category: 'vision' | 'economics' | 'legal' | 'manifesto';
+  category: 'vision' | 'economics' | 'legal' | 'manifesto' | 'api';
   title: string;
   subtitle: string;
   icon: any;
@@ -44,14 +54,374 @@ type BlueprintSection = {
   checklist?: string[];
 };
 
+export function APIsUsageDashboard() {
+  const [currentUsage, setCurrentUsage] = useState(128);
+  const [responseTime, setResponseTime] = useState(38);
+
+  const handleTestCall = () => {
+    setCurrentUsage((prev) => Math.min(prev + 1, 2000));
+    setResponseTime(Math.floor(Math.random() * 10) + 32);
+  };
+
+  const handleTestBurst = () => {
+    setCurrentUsage((prev) => Math.min(prev + 120, 2000));
+    setResponseTime(Math.floor(Math.random() * 25) + 45);
+  };
+
+  const handleReset = () => {
+    setCurrentUsage(0);
+    setResponseTime(35);
+  };
+
+  const limitCap = 2000;
+  const fillRatio = currentUsage / limitCap;
+  const percentage = Math.min(fillRatio * 100, 100).toFixed(1);
+
+  return (
+    <div id="api-usage-monitor" className="mt-8 pt-8 border-t border-zinc-900 space-y-5">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <h4 className="text-xs font-black text-white uppercase tracking-wider flex items-center gap-2">
+            <Activity className="w-4 h-4 text-cyan-400" /> Rate Limit and Quota Monitor
+          </h4>
+          <p className="text-zinc-500 text-xs mt-1 leading-relaxed">
+            Track and monitor the request allocation bound to your developer key. 
+            Limits are enforced globally per creator account.
+          </p>
+        </div>
+        <div className="flex flex-wrap items-center gap-2">
+          <Button
+            id="btn-test-request"
+            size="sm"
+            variant="outline"
+            onClick={handleTestCall}
+            className="border-zinc-800 hover:bg-zinc-900 font-mono text-[10px] text-zinc-300 font-bold uppercase tracking-wider px-3 py-1.5 h-8 select-none"
+          >
+            Send Test Request (+1)
+          </Button>
+          <Button
+            id="btn-test-burst"
+            size="sm"
+            variant="outline"
+            onClick={handleTestBurst}
+            className="border-zinc-800 hover:bg-zinc-900 font-mono text-[10px] text-zinc-300 font-bold uppercase tracking-wider px-3 py-1.5 h-8 select-none"
+          >
+            Send Test Burst (+120)
+          </Button>
+          <Button
+            id="btn-reset-stats"
+            size="sm"
+            variant="ghost"
+            onClick={handleReset}
+            className="text-[10px] text-zinc-500 hover:text-zinc-300 font-mono uppercase tracking-wider h-8 select-none"
+          >
+            Reset Count
+          </Button>
+        </div>
+      </div>
+
+      <div className="space-y-2">
+        <div className="flex justify-between items-baseline text-xs font-mono">
+          <div className="space-y-0.5">
+            <span className="text-[10px] text-zinc-500 uppercase tracking-widest">Minute Limit Progress</span>
+            <div className="flex items-baseline gap-1">
+              <span className="text-sm font-bold text-white">{currentUsage.toLocaleString()}</span>
+              <span className="text-zinc-500">/</span>
+              <span className="text-zinc-350 font-bold">2,000</span>
+              <span className="text-zinc-500 text-[10px]">Requests</span>
+            </div>
+          </div>
+          <div className="text-right space-y-0.5">
+            <span className="text-[10px] text-zinc-500 uppercase tracking-widest">Rate Ratio</span>
+            <div className="text-sm font-bold text-cyan-400">{percentage}%</div>
+          </div>
+        </div>
+
+        {/* Progress bar container */}
+        <div className="relative w-full h-3 bg-zinc-950 rounded-full overflow-hidden border border-zinc-900">
+          <div
+            style={{ width: `${percentage}%` }}
+            className={`h-full rounded-full transition-all duration-300 relative ${
+              fillRatio > 0.85 
+                ? 'bg-gradient-to-r from-amber-500 via-rose-500 to-rose-600' 
+                : fillRatio > 0.5 
+                  ? 'bg-gradient-to-r from-cyan-500 to-amber-500' 
+                  : 'bg-gradient-to-r from-teal-500 to-cyan-500'
+            }`}
+          >
+            <div className="absolute inset-0 bg-white/5" />
+          </div>
+        </div>
+
+        {fillRatio > 0.85 && (
+          <div className="flex items-center gap-1.5 text-[10px] text-rose-400 font-mono uppercase bg-rose-950/15 border border-rose-900/20 p-2.5 rounded-xl">
+            <AlertCircle className="w-4 h-4 shrink-0" /> Warning: Approaching the 2,000 requests per minute maximum threshold. Slowing further requests may trigger client-side backoff.
+          </div>
+        )}
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
+        <div className="p-4 bg-zinc-900/35 border border-zinc-900 rounded-xl space-y-1">
+          <span className="text-[9px] uppercase font-mono text-zinc-500 tracking-wider block">Remaining Quota</span>
+          <span className="font-mono text-xs font-bold text-white block">
+            {Math.max(limitCap - currentUsage, 0).toLocaleString()} Requests
+          </span>
+        </div>
+
+        <div className="p-4 bg-zinc-900/35 border border-zinc-900 rounded-xl space-y-1">
+          <span className="text-[9px] uppercase font-mono text-zinc-500 tracking-wider block">Average Response Latency</span>
+          <span className="font-mono text-xs font-bold text-teal-400 block">
+            {currentUsage > 0 ? `${responseTime} ms` : 'N/A'}
+          </span>
+        </div>
+
+        <div className="p-4 bg-zinc-900/35 border border-zinc-900 rounded-xl space-y-1">
+          <span className="text-[9px] uppercase font-mono text-zinc-500 tracking-wider block">Limit reset schedule</span>
+          <span className="font-mono text-xs font-bold text-zinc-400 block">
+            Every 60 Seconds
+          </span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export function DeveloperKeyPortal() {
+  const { user, loading } = useAuth();
+  const [keyStatus, setKeyStatus] = useState<{ hasKey: boolean; maskedKey?: string; rotatedAt?: string } | null>(null);
+  const [isRotating, setIsRotating] = useState(false);
+  const [newlyCreatedKey, setNewlyCreatedKey] = useState<string | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [copied, setCopied] = useState(false);
+
+  useEffect(() => {
+    let active = true;
+    if (user?.uid) {
+      fetch(`/api/developer/key?uid=${user.uid}`)
+        .then((res) => {
+          if (res.ok) return res.json();
+          throw new Error('Failed to get key status');
+        })
+        .then((data) => {
+          if (active) {
+            setKeyStatus(data);
+          }
+        })
+        .catch((e) => {
+          console.error('Failed to load developer key status:', e);
+        });
+    } else {
+      setTimeout(() => {
+        if (active) {
+          setKeyStatus(null);
+        }
+      }, 0);
+    }
+    return () => {
+      active = false;
+    };
+  }, [user?.uid]);
+
+  const handleGenerateOrRotate = async () => {
+    if (!user) return;
+    setIsRotating(true);
+    try {
+      const res = await fetch('/api/developer/rotate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ uid: user.uid, email: user.email }),
+      });
+      if (!res.ok) throw new Error('Rotation call failed');
+      const data = await res.json();
+      if (data.success) {
+        setNewlyCreatedKey(data.key);
+        setKeyStatus({
+          hasKey: true,
+          maskedKey: data.maskedKey,
+          rotatedAt: data.rotatedAt,
+        });
+        setIsModalOpen(true);
+      }
+    } catch (e) {
+      console.error('API key rotation failed:', e);
+    } finally {
+      setIsRotating(false);
+    }
+  };
+
+  const handleCopy = () => {
+    if (newlyCreatedKey) {
+      navigator.clipboard.writeText(newlyCreatedKey);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2005);
+    }
+  };
+
+  if (loading || (user && keyStatus === null)) {
+    return (
+      <div className="bg-zinc-950 p-6 rounded-2xl border border-zinc-900 flex items-center justify-center gap-2">
+        <RefreshCw className="w-4 h-4 text-cyan-400 animate-spin" />
+        <span className="text-zinc-500 font-mono text-xs">Continuous Identity Validation...</span>
+      </div>
+    );
+  }
+
+  if (!user) {
+    return (
+      <div className="bg-zinc-950/80 p-6 rounded-2xl border border-dashed border-zinc-900 flex flex-col items-center text-center space-y-4">
+        <div className="p-3 bg-zinc-900 border border-zinc-800 rounded-2xl text-cyan-500">
+          <Key className="w-6 h-6 animate-pulse" />
+        </div>
+        <div>
+          <h4 className="text-sm font-bold text-white uppercase tracking-wider">Authentication Required</h4>
+          <p className="text-zinc-500 text-xs mt-1 max-w-md leading-relaxed">
+            API keys must be strictly bound to authenticated creator accounts. Activate your Sovereign Sandbox credentials or login from our portal options to obtain programmatic access.
+          </p>
+        </div>
+        <div className="text-xs text-cyan-500 font-mono uppercase bg-cyan-950/20 border border-cyan-800/15 px-3 py-1.5 rounded-full">
+          Secure Sandbox environment enabled
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="bg-zinc-950 border border-zinc-900 p-6 rounded-2xl space-y-5 relative overflow-hidden">
+      <div className="absolute top-0 right-0 w-32 h-32 bg-cyan-500/5 rounded-full blur-2xl pointer-events-none" />
+      
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div className="flex items-start gap-3">
+          <div className="p-2.5 bg-zinc-900 border border-zinc-850 rounded-xl text-cyan-400 shrink-0">
+            <Key className="w-5 h-5 animate-pulse" />
+          </div>
+          <div>
+            <h4 className="text-sm font-extrabold text-white uppercase tracking-wider flex items-center gap-1.5 leading-snug">
+              Sovereign API Suite
+              <span className="w-1.5 h-1.5 bg-cyan-500 rounded-full animate-ping" />
+            </h4>
+            <p className="text-zinc-500 text-xs mt-0.5 leading-relaxed">
+              Generate or rotate high-security developer credentials directly embedded in your creation account.
+            </p>
+          </div>
+        </div>
+
+        <Button
+          disabled={isRotating}
+          onClick={handleGenerateOrRotate}
+          className="bg-white hover:bg-zinc-200 text-zinc-950 font-mono text-[10px] font-black uppercase tracking-widest px-4.5 py-4.5 h-auto rounded-xl shrink-0 shadow-lg transition duration-200"
+        >
+          {isRotating ? (
+            <span className="flex items-center gap-1.5">
+              <RefreshCw className="w-3.5 h-3.5 animate-spin" /> Rotating...
+            </span>
+          ) : keyStatus?.hasKey ? (
+            'Rotate API Key'
+          ) : (
+            'Generate Developer Key'
+          )}
+        </Button>
+      </div>
+
+      {keyStatus?.hasKey ? (
+        <>
+          <div className="p-4 bg-zinc-900/40 border border-zinc-900 rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+            <div className="space-y-1">
+              <p className="text-[10px] uppercase font-mono text-zinc-500 tracking-wider">Active Credentials</p>
+              <div className="font-mono text-cyan-400 font-bold bg-zinc-950/60 border border-zinc-900/60 px-3 py-1.5 rounded-lg w-fit text-[11px] select-all">
+                {keyStatus.maskedKey}
+              </div>
+            </div>
+            {keyStatus.rotatedAt && (
+              <div className="text-right text-[10px] font-mono text-zinc-500 space-y-0.5">
+                <p className="uppercase tracking-wide text-zinc-600">Last Refreshed</p>
+                <p className="text-zinc-400">
+                  {new Date(keyStatus.rotatedAt).toLocaleDateString(undefined, {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                  })}
+                </p>
+              </div>
+            )}
+          </div>
+          
+          <APIsUsageDashboard />
+        </>
+      ) : (
+        <div className="p-4 bg-zinc-900/20 border border-dashed border-zinc-900 rounded-xl text-center text-xs text-zinc-500">
+          No active API Key recorded. Click the button above to provision credentials safely.
+        </div>
+      )}
+
+      {/* Confirmation Modal */}
+      {isModalOpen && (
+        <div className="fixed inset-0 bg-black/85 backdrop-blur-sm flex items-center justify-center p-4 z-50 animate-fade-in">
+          <div className="bg-[#09090b] border border-cyan-500/20 max-w-md w-full rounded-2xl p-6 shadow-2xl relative overflow-hidden space-y-5 select-none text-left">
+            <div className="absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-cyan-500/55 to-transparent" />
+            
+            <div className="flex items-center gap-3">
+              <div className="p-2.5 bg-cyan-950/35 border border-cyan-500/15 text-cyan-400 rounded-xl">
+                <Sparkles className="w-5 h-5 animate-pulse" />
+              </div>
+              <div>
+                <h3 className="text-sm font-black uppercase tracking-widest text-white leading-tight">Secure key provisioned</h3>
+                <p className="text-[10px] uppercase font-mono text-cyan-500 tracking-wider">Zero-Trust developer credentials</p>
+              </div>
+            </div>
+
+            <div className="bg-amber-950/20 border border-amber-500/20 p-3.5 rounded-xl text-amber-500 text-xs leading-relaxed space-y-1">
+              <p className="font-extrabold uppercase tracking-wide text-[10px] flex items-center gap-1.5">
+                <AlertCircle className="w-4 h-4 shrink-0" /> Important security notice
+              </p>
+              <p className="text-[11px] font-mono leading-relaxed">
+                Save this key immediately. Under our compliance and Zero-Trust defense systems, we do not store private developer keys unhashed, so this secret will not be presented again.
+              </p>
+            </div>
+
+            <div className="space-y-1.5">
+              <span className="text-[10px] font-extrabold text-zinc-500 uppercase tracking-widest font-mono">YOUR DEVELOPER API KEY</span>
+              <div className="flex items-center gap-2">
+                <div className="flex-1 bg-zinc-950 border border-zinc-850 p-2.5 rounded-xl font-mono text-[11px] text-cyan-400 select-all break-all shadow-inner overflow-hidden">
+                  {newlyCreatedKey}
+                </div>
+                <Button
+                  size="icon"
+                  variant="outline"
+                  onClick={handleCopy}
+                  className="w-10 h-10 border-zinc-800 bg-zinc-900 shrink-0 hover:bg-zinc-800"
+                >
+                  {copied ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4 text-zinc-400" />}
+                </Button>
+              </div>
+            </div>
+
+            <Button
+              onClick={() => {
+                setIsModalOpen(false);
+                setNewlyCreatedKey(null);
+              }}
+              className="w-full bg-cyan-500 hover:bg-cyan-600 text-zinc-950 font-mono text-[10px] font-extrabold uppercase tracking-widest py-4 rounded-xl h-auto"
+            >
+              Copy & Accept Guidelines
+            </Button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
 export default function WikiPage() {
   const [searchQuery, setSearchQuery] = useState('');
-  const [activeTab, setActiveTab] = useState<'all' | 'vision' | 'economics' | 'legal' | 'manifesto'>('all');
+  const [activeTab, setActiveTab] = useState<'all' | 'vision' | 'economics' | 'legal' | 'manifesto' | 'api'>('all');
   const [openSections, setOpenSections] = useState<Record<string, boolean>>({
     'exec-summary': true,
     'royalty-splits': true,
     'legal-protection': true,
-    'vla-resources': true
+    'vla-resources': true,
+    'api-overview': true
   });
 
   // Chat agent states
@@ -276,6 +646,64 @@ export default function WikiPage() {
         "List licensing pricing in ETH and configure usage limits freely",
         "Accept automated buyer purchase payments directly into local ledger address"
       ]
+    },
+    {
+      id: 'api-overview',
+      category: 'api',
+      title: '8. Programmatic API Integration & Gateway',
+      subtitle: 'Integrate external creator tools, DAOs, and custom media players with the Sovranly IP Registry.',
+      icon: Terminal,
+      content: [
+        "Sovranly IP provides high-security developer endpoints to register, manage, and verify creative works programmatically. Through authenticated channels, development teams can anchor asset metadata, schedule automated divisions, and query on-chain licenses.",
+        "We enforce a rigid Zero-Trust Developer Guideline: all external write requests must present a valid cryptographically signed request header correlating directly with an authorized registry builder key."
+      ],
+      bulletPoints: [
+        { label: "Base Endpoint", text: "Production API Server root: https://api.sovranlyip.com/v1" },
+        { label: "Authentication", text: "Pass dynamic bearer tokens: Authorization: Bearer <SOVRANLY_DEVELOPER_KEY>" },
+        { label: "Rate Limits", text: "2,000 requests per minute on standard sandbox tier; infinite scalability on Dedicated Zero-Trust Nodes." }
+      ],
+      checklist: [
+        "Generate developer API key from Sovranly console settings",
+        "Configure CORS headers to allow connection from specified origins",
+        "Sign Web3 payloads client-side prior to gateway transit"
+      ]
+    },
+    {
+      id: 'api-register',
+      category: 'api',
+      title: '9. POST /v1/assets/register - Register Creative Work',
+      subtitle: 'Programmatically register media assets, specify metadata schemas, and index ownership records.',
+      icon: Code,
+      content: [
+        "Register a creative piece with the global registry. This operation queues an off-chain metadata fingerprint and triggers isomorphous on-chain tracking. The body payload expects standard JSON adhering strictly to creative metadata specifications.",
+        "Our endpoint automatically normalizes title casings, validates standard content formats, and creates a pre-signed blueprint package optimized for instantaneous Web3 wallet approvals."
+      ],
+      bulletPoints: [
+        { label: "Request Path", text: "POST /v1/assets/register" },
+        { label: "Required Fields", text: "title (string), creatorAddress (hex), royaltySplit (percentage object), description (string)" },
+        { label: "Response Object", text: "Returns an encrypted tracking ID, content hash (IPFS/Arweave format), and ready-state transaction payload." }
+      ],
+      checklist: [
+        "Confirm the 'creatorAddress' corresponds to an active hex format",
+        "Assert the 'royaltySplit.creator' is defined at exactly 85%",
+        "Validate the media asset file hash using standard SHA-256 tools"
+      ]
+    },
+    {
+      id: 'api-licensing',
+      category: 'api',
+      title: '10. GET /v1/assets/:id/licensing - Query Programmatic Status',
+      subtitle: 'Dynamically query active, expired, and pending licensing agreements of specific media assets.',
+      icon: Key,
+      content: [
+        "Query the exact states, duration constraints, and territorial bounds of dynamic license documents programmatically. Perfect for custom media widgets, music streamers, and digital journals.",
+        "Responses are compiled straight from the distributed ledger, updating instantly as peer-to-peer licenses execute inside the marketplace environment."
+      ],
+      bulletPoints: [
+        { label: "Request Path", text: "GET /v1/assets/:id/licensing" },
+        { label: "Parameters", text: ":id (string) - Unique tracking ID or on-chain registration token ID." },
+        { label: "Response Fields", text: "licensee (hex), expirationTimestamp (UTC epoch), allowedUses (string list), and status ('ACTIVE' | 'REVOKED')." }
+      ]
     }
   ];
 
@@ -371,7 +799,8 @@ export default function WikiPage() {
               { id: 'vision', label: 'Vision & Tech' },
               { id: 'economics', label: 'Royalty Splits' },
               { id: 'legal', label: 'Trademark & Pro Bono' },
-              { id: 'manifesto', label: 'Creator Manuals' }
+              { id: 'manifesto', label: 'Creator Manuals' },
+              { id: 'api', label: 'Developer API' }
             ].map(tab => (
               <Button 
                 key={tab.id}
@@ -465,6 +894,12 @@ export default function WikiPage() {
                                 </div>
                               ))}
                             </div>
+                          </div>
+                        )}
+
+                        {sec.id === 'api-overview' && (
+                          <div className="mt-6 pt-6 border-t border-zinc-900/80">
+                            <DeveloperKeyPortal />
                           </div>
                         )}
 
@@ -592,9 +1027,6 @@ export default function WikiPage() {
 
             </Card>
 
-            {/* Structured Google Sponsor unit */}
-            <GoogleAd slot="8519201080" />
-
             {/* Micro Royalty Simulator panel */}
             <Card className="bg-zinc-950 border border-zinc-900 p-6 shadow-md rounded-2xl">
               <CardTitle className="text-xs font-bold text-white tracking-widest uppercase mb-4 flex items-center justify-between font-mono">
@@ -699,7 +1131,8 @@ export default function WikiPage() {
       </main>
 
       {/* Footer Element */}
-      <footer className="border-t border-zinc-900/60 py-12 text-center text-zinc-600 text-xs relative z-15 mt-16 bg-zinc-950/50">
+      <footer className="border-t border-zinc-900/60 py-12 flex flex-col items-center justify-center gap-6 text-center text-zinc-600 text-xs relative z-15 mt-16 bg-zinc-950/50">
+        <LanguageSelector />
         <p>© 2026 Creative Sovereignty LLC • Sovereign Legal Registry & On-Chain Licensing mechanics. Trust Nothing, Authenticate Everything.</p>
       </footer>
 

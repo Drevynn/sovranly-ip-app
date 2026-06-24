@@ -84,6 +84,16 @@ export default function LandingPage() {
           )}
         </section>
       </main>
+
+      {/* Footer */}
+      <footer className="mt-24 border-t border-zinc-900 py-12 text-center text-zinc-600 text-xs space-y-4">
+        <div className="flex justify-center items-center gap-4 text-zinc-500">
+          <Link href="/terms" className="hover:text-cyan-400 transition-colors">Terms of Service</Link>
+          <span>•</span>
+          <Link href="/privacy" className="hover:text-cyan-400 transition-colors">Privacy Policy</Link>
+        </div>
+        <p>© 2026 Sovranly IP. All sovereign rights reserved.</p>
+      </footer>
     </div>
   );
 }

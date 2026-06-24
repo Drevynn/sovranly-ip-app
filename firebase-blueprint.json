@@ -1,0 +1,101 @@
+{
+  "entities": {
+    "Asset": {
+      "title": "Asset",
+      "description": "Creative artwork or media asset registered on Sovranly IP",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string", "description": "Title of the asset" },
+        "type": { "type": "string", "description": "Category or type of asset" },
+        "royalty": { "type": "integer", "description": "Owner royalty division percentage" },
+        "license": { "type": "string", "description": "Standardized license type" },
+        "ownerAddress": { "type": "string", "description": "Sovereign address of owner" },
+        "createdAt": { "type": "string", "description": "Sovereign ledger timestamp" },
+        "fileName": { "type": "string", "description": "Name of attached media file" },
+        "fileSize": { "type": "string", "description": "Secure file byte-size metric" },
+        "fileType": { "type": "string", "description": "MIME type of uploaded container" },
+        "fileUrl": { "type": "string", "description": "P2P decentralization node path" },
+        "ipfsHash": { "type": "string", "description": "IPFS cryptographic fingerprint hash" }
+      },
+      "required": ["title", "type", "royalty", "license", "ownerAddress"]
+    },
+    "Agreement": {
+      "title": "Agreement",
+      "description": "Smart contract covenant or legal license agreement",
+      "type": "object",
+      "properties": {
+        "assetId": { "type": "string" },
+        "assetTitle": { "type": "string" },
+        "royaltyRate": { "type": "integer" },
+        "status": { "type": "string" },
+        "creatorEmail": { "type": "string" },
+        "creatorWallet": { "type": "string" }
+      },
+      "required": ["assetId", "assetTitle", "royaltyRate", "status", "creatorEmail", "creatorWallet"]
+    },
+    "Transaction": {
+      "title": "Transaction",
+      "description": "A payment or mint transaction on the decentralized ledger",
+      "type": "object",
+      "properties": {
+        "hash": { "type": "string" },
+        "type": { "type": "string" },
+        "assetTitle": { "type": "string" },
+        "timestamp": { "type": "string", "format": "date-time" }
+      },
+      "required": ["hash", "type", "assetTitle", "timestamp"]
+    },
+    "DeveloperKey": {
+      "title": "DeveloperKey",
+      "description": "Crytographically secure key used for external system integrations",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "email": { "type": "string" },
+        "maskedKey": { "type": "string" },
+        "hashedKey": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "rotatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "email", "maskedKey", "hashedKey", "createdAt", "rotatedAt"]
+    },
+    "Inquiry": {
+      "title": "Inquiry",
+      "description": "Privacy-preserving secure messaging inquiry sent to an IP asset creator",
+      "type": "object",
+      "properties": {
+        "assetId": { "type": "string", "description": "The target asset database ID" },
+        "assetTitle": { "type": "string", "description": "The title of the targeted IP asset" },
+        "senderName": { "type": "string", "description": "Display name or alias of the interested party" },
+        "senderContact": { "type": "string", "description": "Secure pseudonym or contact details provided by sender" },
+        "subject": { "type": "string", "description": "Subject line of inquiry" },
+        "message": { "type": "string", "description": "Body message detailing the nature of the licensing or partnership request" },
+        "recipientAddress": { "type": "string", "description": "Sovereign wallet address of the IP creator receiving the inquiry" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Secure temporal creation timestamp" }
+      },
+      "required": ["assetId", "assetTitle", "senderName", "senderContact", "subject", "message", "recipientAddress", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/assets/{assetId}": {
+      "schema": "Asset",
+      "description": "Collection of all public creative works"
+    },
+    "/agreements/{agreementId}": {
+      "schema": "Agreement",
+      "description": "On-chain and pro-bono licensing covenants"
+    },
+    "/transactions/{transactionId}": {
+      "schema": "Transaction",
+      "description": "Immediate payments split ledger audits"
+    },
+    "/developer_keys/{userId}": {
+      "schema": "DeveloperKey",
+      "description": "Highly isolated developer secrets"
+    },
+    "/inquiries/{inquiryId}": {
+      "schema": "Inquiry",
+      "description": "Secure private channel context for communications"
+    }
+  }
+}

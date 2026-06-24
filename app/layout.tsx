@@ -17,9 +17,6 @@ export const metadata: Metadata = {
     icon: '/sovranly-logo-v2.png',
     apple: '/sovranly-logo-v2.png',
   },
-  other: {
-    'google-adsense-account': 'ca-pub-1932505075277502',
-  },
 };
 
 export const viewport: Viewport = {
@@ -33,12 +30,42 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className="dark">
       <head>
-        <meta name="google-adsense-account" content="ca-pub-1932505075277502" />
         <Script
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1932505075277502"
-          crossOrigin="anonymous"
+          id="cookie-consent-ignore"
+          data-cookieconsent="ignore"
+          strategy="beforeInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag() {
+                  dataLayer.push(arguments);
+              }
+              gtag("consent", "default", {
+                  ad_personalization: "denied",
+                  ad_storage: "denied",
+                  ad_user_data: "denied",
+                  analytics_storage: "denied",
+                  functionality_storage: "denied",
+                  personalization_storage: "denied",
+                  security_storage: "granted",
+                  wait_for_update: 500,
+              });
+              gtag("set", "ads_data_redaction", true);
+              gtag("set", "url_passthrough", false);
+            `,
+          }}
+        />
+        <Script
+          id="CookieDeclaration"
+          src="https://consent.cookiebot.com/cfbebce2-7f31-4955-8610-97a311edd2af/cd.js"
           strategy="afterInteractive"
-          id="google-adsense"
+        />
+        <Script
+          id="Cookiebot"
+          src="https://consent.cookiebot.com/uc.js"
+          data-cbid="cfbebce2-7f31-4955-8610-97a311edd2af"
+          data-blockingmode="auto"
+          strategy="afterInteractive"
         />
       </head>
       <body className="antialiased bg-zinc-950 text-zinc-100 min-h-screen">
@@ -51,3 +78,4 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     </html>
   );
 }
+
