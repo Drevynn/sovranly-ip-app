@@ -10,6 +10,8 @@ interface AuthContextType {
   signInWithSandbox: () => Promise<void>;
   logout: () => Promise<void>;
   isSandboxMode: boolean;
+  accessToken: string | null;
+  setAccessToken: (token: string | null) => void;
 }
 
 const AuthContext = createContext<AuthContextType>({
@@ -19,12 +21,15 @@ const AuthContext = createContext<AuthContextType>({
   signInWithSandbox: async () => {},
   logout: async () => {},
   isSandboxMode: false,
+  accessToken: null,
+  setAccessToken: () => {},
 });
 
 export function FirebaseProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [isSandboxMode, setIsSandboxMode] = useState(false);
+  const [accessToken, setAccessToken] = useState<string | null>(null);
 
   useEffect(() => {
     const auth = getFirebaseAuth();
@@ -37,6 +42,7 @@ export function FirebaseProvider({ children }: { children: React.ReactNode }) {
         setTimeout(() => {
           setUser(parsed);
           setIsSandboxMode(true);
+          setAccessToken('sandbox-token-123');
           setLoading(false);
         }, 0);
         return;
@@ -52,6 +58,7 @@ export function FirebaseProvider({ children }: { children: React.ReactNode }) {
         setIsSandboxMode(false);
       } else {
         setUser(null);
+        setAccessToken(null);
       }
       setLoading(false);
     });
@@ -64,8 +71,17 @@ export function FirebaseProvider({ children }: { children: React.ReactNode }) {
     const provider = new GoogleAuthProvider();
     provider.setCustomParameters({ prompt: 'select_account' });
     
+    // Google Slides and Google Drive scopes requested by the applet
+    provider.addScope('https://www.googleapis.com/auth/drive.file');
+    provider.addScope('https://www.googleapis.com/auth/presentations');
+    provider.addScope('https://www.googleapis.com/auth/spreadsheets');
+    
     try {
       const result = await signInWithPopup(auth, provider);
+      const credential = GoogleAuthProvider.credentialFromResult(result);
+      if (credential?.accessToken) {
+        setAccessToken(credential.accessToken);
+      }
       setUser(result.user);
       setIsSandboxMode(false);
     } catch (e: any) {
@@ -90,6 +106,7 @@ export function FirebaseProvider({ children }: { children: React.ReactNode }) {
     }
     setUser(fakeUser);
     setIsSandboxMode(true);
+    setAccessToken('sandbox-token-123');
   };
 
   const logout = async () => {
@@ -99,11 +116,12 @@ export function FirebaseProvider({ children }: { children: React.ReactNode }) {
     }
     setUser(null);
     setIsSandboxMode(false);
+    setAccessToken(null);
     await signOut(auth);
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, signInWithGoogle, signInWithSandbox, logout, isSandboxMode }}>
+    <AuthContext.Provider value={{ user, loading, signInWithGoogle, signInWithSandbox, logout, isSandboxMode, accessToken, setAccessToken }}>
       {children}
     </AuthContext.Provider>
   );

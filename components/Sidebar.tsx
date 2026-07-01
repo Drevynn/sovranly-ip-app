@@ -1,6 +1,6 @@
 'use client';
 
-import { Gauge, BarChart3, User, FileText, LogOut, ShieldAlert, Scale, Sliders, Mail, X } from 'lucide-react';
+import { Gauge, BarChart3, User, FileText, LogOut, ShieldAlert, Scale, Sliders, Mail, X, Presentation, Rocket, Shield, Building2, Brain } from 'lucide-react';
 import Image from 'next/image';
 import { useAuth } from './auth/FirebaseProvider';
 import { useLanguage } from './LanguageProvider';
@@ -21,7 +21,12 @@ export default function Sidebar({
   onClose: () => void 
 }) {
   const { user, logout } = useAuth();
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
+
+  const slidesTitle = language === 'es' ? 'Pasarela de Google Slides' : 
+                      language === 'ja' ? 'Google Slides ゲートウェイ' : 
+                      language === 'fr' ? 'Passerelle Google Slides' : 
+                      'Google Slides Gateway';
 
   return (
     <AnimatePresence>
@@ -103,6 +108,36 @@ export default function Sidebar({
                 className={`w-full flex items-center gap-4 px-5 py-4 rounded-2xl text-sm font-semibold transition-all cursor-pointer ${activePage === 6 ? 'bg-zinc-900 border border-zinc-800 text-white shadow-xl shadow-zinc-950/50' : 'text-zinc-500 hover:text-zinc-300 hover:bg-zinc-900/30'}`}
               >
                 <Mail className="w-5 h-5 text-purple-400" /> {t('creatorInbox') || 'Creator Inbox'}
+              </button>
+              <button 
+                onClick={() => { setActivePage(7); onClose(); }}
+                className={`w-full flex items-center gap-4 px-5 py-4 rounded-2xl text-sm font-semibold transition-all cursor-pointer ${activePage === 7 ? 'bg-zinc-900 border border-zinc-800 text-white shadow-xl shadow-zinc-950/50' : 'text-zinc-500 hover:text-zinc-300 hover:bg-zinc-900/30'}`}
+              >
+                <Presentation className="w-5 h-5 text-cyan-400" /> {slidesTitle}
+              </button>
+              <button 
+                onClick={() => { setActivePage(8); onClose(); }}
+                className={`w-full flex items-center gap-4 px-5 py-4 rounded-2xl text-sm font-semibold transition-all cursor-pointer ${activePage === 8 ? 'bg-zinc-900 border border-zinc-800 text-white shadow-xl shadow-zinc-950/50' : 'text-zinc-500 hover:text-zinc-300 hover:bg-zinc-900/30'}`}
+              >
+                <Rocket className="w-5 h-5 text-pink-400" /> {t('launchPlanner') || 'Launch Planner'}
+              </button>
+              <button 
+                onClick={() => { setActivePage(9); onClose(); }}
+                className={`w-full flex items-center gap-4 px-5 py-4 rounded-2xl text-sm font-semibold transition-all cursor-pointer ${activePage === 9 ? 'bg-zinc-900 border border-zinc-800 text-white shadow-xl shadow-zinc-950/50' : 'text-zinc-500 hover:text-zinc-300 hover:bg-zinc-900/30'}`}
+              >
+                <Shield className="w-5 h-5 text-emerald-400" /> {t('techStackLedger') || 'Tech Stack Ledger'}
+              </button>
+              <button 
+                onClick={() => { setActivePage(10); onClose(); }}
+                className={`w-full flex items-center gap-4 px-5 py-4 rounded-2xl text-sm font-semibold transition-all cursor-pointer ${activePage === 10 ? 'bg-zinc-900 border border-zinc-800 text-white shadow-xl shadow-zinc-950/50' : 'text-zinc-500 hover:text-zinc-300 hover:bg-zinc-900/30'}`}
+              >
+                <Building2 className="w-5 h-5 text-amber-400" /> {t('aboutInvestors') || 'About & Investors'}
+              </button>
+              <button 
+                onClick={() => { setActivePage(11); onClose(); }}
+                className={`w-full flex items-center gap-4 px-5 py-4 rounded-2xl text-sm font-semibold transition-all cursor-pointer ${activePage === 11 ? 'bg-zinc-900 border border-zinc-800 text-white shadow-xl shadow-zinc-950/50' : 'text-zinc-500 hover:text-zinc-300 hover:bg-zinc-900/30'}`}
+              >
+                <Brain className="w-5 h-5 text-cyan-400" /> {t('aiLicensing') || 'AI Training Vault'}
               </button>
             </div>
 

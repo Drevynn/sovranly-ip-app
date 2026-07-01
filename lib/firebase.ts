@@ -18,7 +18,7 @@ export const getDb = () => {
   if (!db) {
     db = initializeFirestore(app, {
       experimentalForceLongPolling: true,
-    }, firebaseConfig.firestoreDatabaseId);
+    }, (firebaseConfig as any).firestoreDatabaseId);
   }
   return db;
 };

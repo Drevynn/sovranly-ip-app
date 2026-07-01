@@ -14,6 +14,7 @@ Sovranly IP is a blockchain-based marketplace dedicated to revolutionizing how a
 * **Artists**: Visual artists, digital creators, photographers, and sculptors.
 * **Musicians**: Independent musicians, composers, and bands.
 * **Writers**: Authors, poets, screenwriters, and journalists.
+* **Software Developers**: Independent software engineers, open-source contributors, game developers, and tech builders looking to license codebases, modules, custom algorithms, or training weights.
 
 ## 4. Technology Stack (Proposed)
 * **Blockchain/Smart Contracts**: EVM compatible (e.g., Polygon, Ethereum). Solidity.

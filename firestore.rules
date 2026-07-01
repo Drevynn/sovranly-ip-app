@@ -43,6 +43,12 @@ service cloud.firestore {
                data.createdAt is string;
     }
 
+    function isValidFavorite(data) {
+        return data.userId is string && data.userId == request.auth.uid &&
+               data.assetId is string && data.assetId.size() <= 128 &&
+               data.createdAt is timestamp;
+    }
+
     match /assets/{assetId} {
       allow read: if true;
       allow create: if isSignedIn() && isValidAsset(request.resource.data);
@@ -72,6 +78,12 @@ service cloud.firestore {
       allow read: if isSignedIn();
       allow create: if isValidInquiry(request.resource.data);
       allow update, delete: if false;
+    }
+
+    match /favorites/{favoriteId} {
+      allow read: if isSignedIn() && resource.data.userId == request.auth.uid;
+      allow create: if isSignedIn() && isValidFavorite(request.resource.data);
+      allow delete: if isSignedIn() && resource.data.userId == request.auth.uid;
     }
 
     // Default deny

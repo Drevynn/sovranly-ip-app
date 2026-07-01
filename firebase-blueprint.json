@@ -74,6 +74,17 @@
         "createdAt": { "type": "string", "format": "date-time", "description": "Secure temporal creation timestamp" }
       },
       "required": ["assetId", "assetTitle", "senderName", "senderContact", "subject", "message", "recipientAddress", "createdAt"]
+    },
+    "Favorite": {
+      "title": "Favorite",
+      "description": "An asset favorited by a user",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "description": "The Firebase UID of the user who favorited the asset" },
+        "assetId": { "type": "string", "description": "The database ID of the favorited asset" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Creation timestamp" }
+      },
+      "required": ["userId", "assetId", "createdAt"]
     }
   },
   "firestore": {
@@ -96,6 +107,10 @@
     "/inquiries/{inquiryId}": {
       "schema": "Inquiry",
       "description": "Secure private channel context for communications"
+    },
+    "/favorites/{favoriteId}": {
+      "schema": "Favorite",
+      "description": "User-saved favorite assets for quick filter matching"
     }
   }
 }

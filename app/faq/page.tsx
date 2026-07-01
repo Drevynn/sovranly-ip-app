@@ -34,6 +34,14 @@ type FAQItem = {
 };
 
 export default function FAQPage() {
+  const categories = [
+    { id: 'all', label: 'All Questions', desc: 'Browse entire knowledge catalog', icon: HelpCircle },
+    { id: 'splits', label: 'Payments & Splits', desc: 'On-chain splits & transaction fee', icon: Coins },
+    { id: 'legal', label: 'Trademark & Legal', desc: 'Class 42 details & VLA pro-bono', icon: Scale },
+    { id: 'dashboard', label: 'Onboarding & Dashboard', desc: 'Registry and marketplace guides', icon: UserCheck },
+    { id: 'security', label: 'Security & Zero Trust', desc: 'Keys, signatures, and cold wallets', icon: ShieldCheck }
+  ] as const;
+
   const [searchQuery, setSearchQuery] = useState('');
   const [activeCategory, setActiveCategory] = useState<'all' | 'splits' | 'legal' | 'dashboard' | 'security'>('all');
   const [openItems, setOpenItems] = useState<Record<string, boolean>>({
@@ -242,48 +250,69 @@ export default function FAQPage() {
           </p>
         </div>
 
-        {/* Dynamic Category chip selectors & Search Input */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-center mb-8 pb-6 border-b border-zinc-900">
-          <div className="flex gap-2 flex-wrap">
-            {[
-              { id: 'all', label: 'All Questions' },
-              { id: 'splits', label: 'Royalty Splits' },
-              { id: 'legal', label: 'Trademark & Pro Bono' },
-              { id: 'dashboard', label: 'Using Dashboard' },
-              { id: 'security', label: 'Zero Trust Security' }
-            ].map(cat => (
-              <Button 
-                key={cat.id}
-                onClick={() => setActiveCategory(cat.id as any)}
-                variant="outline"
-                className={`rounded-full px-4 h-9 text-xs transition duration-200 ${
-                  activeCategory === cat.id 
-                    ? 'border-cyan-500 text-cyan-400 bg-cyan-950/20' 
-                    : 'border-zinc-850 text-zinc-400 bg-transparent hover:bg-zinc-900 hover:text-white'
-                }`}
-              >
-                {cat.label}
-              </Button>
-            ))}
-          </div>
-
-          <div className="relative">
-            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
-            <Input 
-              type="text" 
-              placeholder="Search knowledge parameters..." 
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="bg-zinc-950/85 border-zinc-850 text-white rounded-full pl-10 text-xs focus-visible:ring-cyan-500"
-            />
-          </div>
-        </div>
-
-        {/* Interactive Layout Area */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+        {/* Interactive 3-Column Layout Area */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           
-          {/* Collapsible FAQ Accordion Column */}
-          <div className="lg:col-span-2 space-y-4">
+          {/* 1. Left Sidebar - Pill-Based Navigation for Filtering Category */}
+          <div className="lg:col-span-3 space-y-4 lg:sticky lg:top-24">
+            <div className="bg-zinc-950 border border-zinc-900 rounded-3xl p-5 shadow-xl space-y-4">
+              <span className="text-[10px] uppercase font-mono tracking-widest text-zinc-500 font-bold block select-none">
+                Category Filters
+              </span>
+              
+              {/* Pill navigation container: lists vertically on desktop, scrolls horizontally on mobile */}
+              <div className="flex lg:flex-col gap-2 overflow-x-auto lg:overflow-x-visible pb-2 lg:pb-0 scrollbar-none">
+                {categories.map(cat => {
+                  const Icon = cat.icon;
+                  const isActive = activeCategory === cat.id;
+                  const count = faqs.filter(f => cat.id === 'all' || f.category === cat.id).length;
+                  
+                  return (
+                    <button
+                      key={cat.id}
+                      onClick={() => setActiveCategory(cat.id as any)}
+                      className={`text-left px-4 py-3 rounded-2xl border transition-all duration-200 cursor-pointer flex items-center justify-between gap-3 min-w-[210px] lg:min-w-0 flex-shrink-0 ${
+                        isActive
+                          ? 'bg-cyan-950/25 border-cyan-500/40 text-cyan-400 shadow-lg shadow-cyan-950/10'
+                          : 'bg-transparent border-transparent text-zinc-400 hover:text-white hover:bg-zinc-900/40'
+                      }`}
+                    >
+                      <div className="flex items-center gap-3 overflow-hidden">
+                        <div className={`p-2 rounded-xl flex-shrink-0 ${isActive ? 'bg-cyan-950 text-cyan-400' : 'bg-zinc-900 text-zinc-500'}`}>
+                          <Icon className="w-4 h-4" />
+                        </div>
+                        <div className="overflow-hidden">
+                          <span className="block text-xs font-bold leading-none truncate">{cat.label}</span>
+                          <span className="block text-[9px] text-zinc-500 leading-normal truncate mt-1">{cat.desc}</span>
+                        </div>
+                      </div>
+                      <span className={`text-[9px] font-mono font-bold px-1.5 py-0.5 rounded-md ${
+                        isActive ? 'bg-cyan-500/20 text-cyan-400' : 'bg-zinc-900 text-zinc-500'
+                      }`}>
+                        {count}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+
+          {/* 2. Middle Column: FAQ Accordion list & Search Box */}
+          <div className="lg:col-span-6 space-y-4">
+            
+            {/* Search Input Box */}
+            <div className="relative mb-5">
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
+              <Input 
+                type="text" 
+                placeholder="Search knowledge parameters..." 
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="bg-zinc-950/85 border-zinc-850 text-white rounded-2xl pl-11 text-xs focus-visible:ring-cyan-500 h-11"
+              />
+            </div>
+
             {filteredFaqs.length === 0 ? (
               <div className="text-center py-16 bg-[#09090b] rounded-2xl border border-zinc-900 border-dashed">
                 <HelpCircle className="w-8 h-8 text-cyan-500/30 mx-auto mb-3" />
@@ -356,8 +385,8 @@ export default function FAQPage() {
 
           </div>
 
-          {/* Interactive Tools Sidebar column */}
-          <div className="space-y-6">
+          {/* 3. Right Column: Interactive Tools Sidebar column */}
+          <div className="lg:col-span-3 space-y-6">
             
             {/* Live Interactive Payout Calculator */}
             <Card className="bg-zinc-950 border border-zinc-900 p-6 rounded-2xl shadow-xl">

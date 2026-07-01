@@ -81,8 +81,13 @@ export function APIsUsageDashboard() {
     <div id="api-usage-monitor" className="mt-8 pt-8 border-t border-zinc-900 space-y-5">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h4 className="text-xs font-black text-white uppercase tracking-wider flex items-center gap-2">
+          <h4 className="text-xs font-black text-white uppercase tracking-wider flex flex-wrap items-center gap-2">
             <Activity className="w-4 h-4 text-cyan-400" /> Rate Limit and Quota Monitor
+            {currentUsage >= 1800 && (
+              <span className="inline-flex items-center gap-1 bg-rose-950/60 text-rose-400 border border-rose-500/30 text-[9px] font-mono font-black uppercase px-2 py-0.5 rounded animate-pulse">
+                <AlertCircle className="w-3 h-3 text-rose-400 animate-bounce" /> 90%+ limit reached
+              </span>
+            )}
           </h4>
           <p className="text-zinc-500 text-xs mt-1 leading-relaxed">
             Track and monitor the request allocation bound to your developer key. 
@@ -153,11 +158,21 @@ export function APIsUsageDashboard() {
           </div>
         </div>
 
-        {fillRatio > 0.85 && (
+        {currentUsage >= 1800 ? (
+          <div className="flex items-start gap-3 text-xs text-rose-300 font-mono bg-rose-950/40 border border-rose-500 p-4 rounded-2xl shadow-lg shadow-rose-950/20 animate-pulse">
+            <AlertCircle className="w-5 h-5 text-rose-400 shrink-0 mt-0.5 animate-bounce" />
+            <div className="space-y-1">
+              <span className="block font-black uppercase text-rose-400 text-xs">CRITICAL LIMIT WARNING EXCEEDED 90%</span>
+              <p className="text-[11px] text-rose-300/80 leading-relaxed uppercase">
+                Active volume is currently at {currentUsage.toLocaleString()} / 2,000 RPM ({percentage}%). Automated Zero-Trust Rate Limiting is about to engage. Please optimize API requests or switch to a Dedicated Sovereign Node to avoid request throttling.
+              </p>
+            </div>
+          </div>
+        ) : fillRatio > 0.85 ? (
           <div className="flex items-center gap-1.5 text-[10px] text-rose-400 font-mono uppercase bg-rose-950/15 border border-rose-900/20 p-2.5 rounded-xl">
             <AlertCircle className="w-4 h-4 shrink-0" /> Warning: Approaching the 2,000 requests per minute maximum threshold. Slowing further requests may trigger client-side backoff.
           </div>
-        )}
+        ) : null}
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">

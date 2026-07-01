@@ -9,5 +9,5 @@ const app = admin.apps.length
       projectId: firebaseConfig.projectId,
     });
 
-export const db = getFirestore(app, firebaseConfig.firestoreDatabaseId);
+export const db = getFirestore(app, (firebaseConfig as any).firestoreDatabaseId);
 export const auth = admin.auth();

@@ -10,6 +10,11 @@ import Analytics from '@/components/Analytics';
 import LicensingAgreementBuilder from '@/components/LicensingAgreementBuilder';
 import RoyaltySandbox from '@/components/RoyaltySandbox';
 import Inbox from '@/components/Inbox';
+import GoogleSlidesManager from '@/components/GoogleSlidesManager';
+import LaunchPlanner from '@/components/LaunchPlanner';
+import TechStackLedger from '@/components/TechStackLedger';
+import AboutUs from '@/components/AboutUs';
+import AiLicensingCenter from '@/components/AiLicensingCenter';
 import { useAuth } from '@/components/auth/FirebaseProvider';
 import { useLanguage } from '@/components/LanguageProvider';
 import { SignIn } from '@/components/auth/SignIn';
@@ -92,7 +97,12 @@ export default function DashboardPage() {
             activePage === 3 ? t('analytics') :
             activePage === 4 ? t('licensingCompacts') :
             activePage === 5 ? t('royaltySandbox') :
-            t('creatorInbox') || 'Creator Inbox'
+            activePage === 6 ? (t('creatorInbox') || 'Creator Inbox') :
+            activePage === 7 ? 'Google Slides Gateway' :
+            activePage === 8 ? (t('launchPlanner') || 'Launch Planner') :
+            activePage === 9 ? (t('techStackLedger') || 'Tech Stack Ledger') :
+            activePage === 10 ? (t('aboutInvestors') || 'About & Investors') :
+            t('aiLicensing') || 'AI Training Vault'
           } 
           setWalletAddress={setCurrentAccount} 
           walletAddress={currentAccount} 
@@ -107,6 +117,11 @@ export default function DashboardPage() {
           {activePage === 4 && <LicensingAgreementBuilder walletAddress={currentAccount} />}
           {activePage === 5 && <RoyaltySandbox />}
           {activePage === 6 && <Inbox walletAddress={currentAccount} />}
+          {activePage === 7 && <GoogleSlidesManager />}
+          {activePage === 8 && <LaunchPlanner />}
+          {activePage === 9 && <TechStackLedger />}
+          {activePage === 10 && <AboutUs />}
+          {activePage === 11 && <AiLicensingCenter />}
         </main>
       </div>
     </div>
