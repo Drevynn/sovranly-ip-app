@@ -6,8 +6,8 @@ import { NotificationProvider } from '@/components/NotificationProvider';
 import Script from 'next/script';
 
 export const metadata: Metadata = {
-  title: 'Sovranly IP',
-  description: 'Sovereign IP Management System',
+  title: 'Sovranly IP | Sovereign Intellectual Property & Automated Royalty Distribution',
+  description: 'Sovereign control center for creators to manage intellectual property assets, configure secure license agreements, and automate real-time royalty distribution with Zero-Trust security.',
   manifest: '/manifest.json',
   appleWebApp: {
     capable: true,

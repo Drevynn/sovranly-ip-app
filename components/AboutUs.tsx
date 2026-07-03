@@ -30,6 +30,7 @@ import {
   Flame
 } from 'lucide-react';
 import Image from 'next/image';
+import corporateSeal from '@/src/assets/images/creative_sovereignty_seal_1783058547625.jpg';
 
 interface TeamMember {
   name: string;
@@ -132,16 +133,37 @@ export default function AboutUs() {
       <div className="border-b border-zinc-900 pb-8 relative overflow-hidden">
         <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-bl from-cyan-500/5 via-transparent to-transparent pointer-events-none" />
         
-        <div className="max-w-3xl space-y-4">
-          <span className="text-[10px] uppercase font-mono tracking-widest text-cyan-400 font-black flex items-center gap-1.5">
-            <Building2 className="w-3.5 h-3.5" /> Corporate Vision & Investor Portal
-          </span>
-          <h1 className="text-3xl md:text-4xl font-black text-white tracking-tight uppercase leading-none">
-            Sovereign Intellectual Property Governance
-          </h1>
-          <p className="text-sm text-zinc-400 leading-relaxed max-w-2xl">
-            <strong>Sovranly IP</strong> builds highly-secure, Zero Trust Architecture designed to automate digital asset registration, compliance workflows, and on-chain royalty settlements. We empower creators to manage their IP without middlemen while offering institutional investors a highly yield-generative infrastructure platform.
-          </p>
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+          <div className="lg:col-span-8 space-y-4">
+            <span className="text-[10px] uppercase font-mono tracking-widest text-cyan-400 font-black flex items-center gap-1.5">
+              <Building2 className="w-3.5 h-3.5" /> Corporate Vision & Investor Portal
+            </span>
+            <h1 className="text-3xl md:text-4xl font-black text-white tracking-tight uppercase leading-none">
+              Sovereign Intellectual Property Governance
+            </h1>
+            <p className="text-sm text-zinc-400 leading-relaxed max-w-2xl">
+              <strong>Sovranly IP</strong> builds highly-secure, Zero Trust Architecture designed to automate digital asset registration, compliance workflows, and on-chain royalty settlements. We empower creators to manage their IP without middlemen while offering institutional investors a highly yield-generative infrastructure platform.
+            </p>
+          </div>
+          <div className="lg:col-span-4 flex flex-col items-center justify-center">
+            <div className="relative group overflow-hidden rounded-2xl border border-zinc-800 bg-zinc-950/40 p-2 shadow-2xl transition-all duration-500 hover:border-cyan-500/30">
+              {/* Outer glow effect */}
+              <div className="absolute inset-0 bg-cyan-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-xl pointer-events-none" />
+              <div className="relative w-48 h-64 md:w-52 md:h-68 rounded-xl overflow-hidden shadow-lg">
+                <Image 
+                  src={corporateSeal} 
+                  alt="Corporate Seal for Creative Sovereignty" 
+                  fill 
+                  className="object-cover transition-transform duration-700 group-hover:scale-105" 
+                  priority
+                  referrerPolicy="no-referrer"
+                />
+              </div>
+            </div>
+            <span className="mt-3 text-[10px] font-mono uppercase text-zinc-500 tracking-wider text-center">
+              🔒 Creative Sovereignty Corporate Seal
+            </span>
+          </div>
         </div>
       </div>
 
@@ -484,6 +506,87 @@ export default function AboutUs() {
             )}
           </motion.div>
         </AnimatePresence>
+      </div>
+
+      {/* 3.8 The Smart Contract Advantage & Strategic Ledger */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        
+        {/* The Smart Contract Advantage */}
+        <div className="bg-zinc-950 border border-zinc-900 rounded-3xl p-6 md:p-8 space-y-6 relative overflow-hidden shadow-xl">
+          <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-bl from-violet-500/5 via-transparent to-transparent pointer-events-none" />
+          <div className="space-y-1.5 pb-4 border-b border-zinc-900">
+            <span className="text-[10px] uppercase font-mono tracking-widest text-violet-400 font-black flex items-center gap-1.5">
+              <FileCheck className="w-3.5 h-3.5" /> Core Legal Tech Advantage
+            </span>
+            <h2 className="text-lg font-black text-white uppercase tracking-tight">Smart Contract Terms vs. Statutory Patents</h2>
+            <p className="text-xs text-zinc-500">How programmable blockchain ledgers outperform outdated 20th-century legal protection frameworks.</p>
+          </div>
+
+          <div className="space-y-4">
+            <div className="p-4 rounded-2xl bg-zinc-900/30 border border-zinc-900 space-y-2">
+              <h4 className="text-xs font-mono font-black text-zinc-400 uppercase flex items-center gap-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-red-500" /> Statutory Patents (Legacy Model)
+              </h4>
+              <p className="text-xs text-zinc-500 leading-relaxed">
+                Traditional patents provide a statutory, rigid 20-year temporary monopoly from their filing date before expiring into the public domain. They are geographically limited, expensive to register/enforce, and rely on manual arbitration.
+              </p>
+            </div>
+
+            <div className="p-4 rounded-2xl bg-cyan-950/10 border border-cyan-500/10 space-y-2 relative">
+              <div className="absolute top-3 right-3 text-[8px] font-mono uppercase bg-cyan-950 text-cyan-400 border border-cyan-500/20 px-1.5 py-0.5 rounded font-bold">
+                Programmable
+              </div>
+              <h4 className="text-xs font-mono font-black text-cyan-400 uppercase flex items-center gap-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" /> Sovranly Smart Contracts
+              </h4>
+              <p className="text-xs text-zinc-300 leading-relaxed">
+                Smart contracts on the Pulse platform do not rely on universal statutory lifespans. Instead, they enforce whatever duration, milestones, or conditions you choose to hardcode into them. Your digital licensing parameters can be set for a specific number of years, tied to unique external conditions, or programmed to execute exactly for the lifetime of a companion asset. <strong>You govern the code; the code governs the asset.</strong>
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Investor Relations Strategic Ledger */}
+        <div className="bg-zinc-950 border border-zinc-900 rounded-3xl p-6 md:p-8 space-y-6 relative overflow-hidden shadow-xl">
+          <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-bl from-emerald-500/5 via-transparent to-transparent pointer-events-none" />
+          <div className="space-y-1.5 pb-4 border-b border-zinc-900">
+            <span className="text-[10px] uppercase font-mono tracking-widest text-emerald-400 font-black flex items-center gap-1.5">
+              <TrendingUp className="w-3.5 h-3.5" /> Investor Strategic Ledger
+            </span>
+            <h2 className="text-lg font-black text-white uppercase tracking-tight">Commercial Viability Protocol</h2>
+            <p className="text-xs text-zinc-500">Corporate execution plan and risk management frameworks for VC/Angel validation.</p>
+          </div>
+
+          <div className="overflow-hidden rounded-2xl border border-zinc-900 bg-zinc-950">
+            <div className="grid grid-cols-12 bg-zinc-900/50 border-b border-zinc-900 p-3 text-[9px] font-mono uppercase text-zinc-500 font-bold">
+              <div className="col-span-4">Strategic Aspect</div>
+              <div className="col-span-8">High-Level Execution Roadmap</div>
+            </div>
+            
+            <div className="divide-y divide-zinc-900/60">
+              <div className="grid grid-cols-12 p-3 text-xs items-start">
+                <div className="col-span-4 font-mono font-black text-white text-[10px] uppercase">Mission Statement</div>
+                <div className="col-span-8 text-zinc-400 leading-normal text-[11px]">To empower creators with a transparent, secure platform to manage and monetize their intellectual property.</div>
+              </div>
+              
+              <div className="grid grid-cols-12 p-3 text-xs items-start">
+                <div className="col-span-4 font-mono font-black text-white text-[10px] uppercase">Monetization Model</div>
+                <div className="col-span-8 text-zinc-400 leading-normal text-[11px]">Sustainable transaction fees, platform subscription tiers, and freemium feature models.</div>
+              </div>
+
+              <div className="grid grid-cols-12 p-3 text-xs items-start">
+                <div className="col-span-4 font-mono font-black text-white text-[10px] uppercase">Technical Scalability</div>
+                <div className="col-span-8 text-zinc-400 leading-normal text-[11px]">A secure web interface (React/Node.js) interacting directly with robust blockchain architectures and custom Solidity smart contracts.</div>
+              </div>
+
+              <div className="grid grid-cols-12 p-3 text-xs items-start">
+                <div className="col-span-4 font-mono font-black text-white text-[10px] uppercase">Risk Management</div>
+                <div className="col-span-8 text-zinc-400 leading-normal text-[11px]">Continuous mitigation strategies covering smart contract audits, evolving global cryptocurrency regulations, and data privacy frameworks.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
       </div>
 
       {/* 4. Interactive Investor Room (Pitch & Calculations) */}

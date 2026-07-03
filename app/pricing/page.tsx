@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
+import StripeBuyButton from '@/components/StripeBuyButton';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { 
   ArrowRight, 
@@ -43,7 +44,8 @@ export default function PricingPage() {
       ],
       popular: false,
       color: "border-zinc-800 bg-zinc-950/40",
-      accent: "text-cyan-400"
+      accent: "text-cyan-400",
+      stripeUrl: "https://buy.stripe.com/dRm14h2vCg9vaEG1X53Nm00"
     },
     {
       name: "Growth Studio",
@@ -62,7 +64,8 @@ export default function PricingPage() {
       ],
       popular: true,
       color: "border-emerald-500/30 bg-zinc-950/60 shadow-2xl shadow-emerald-950/20",
-      accent: "text-emerald-400"
+      accent: "text-emerald-400",
+      stripeUrl: "https://buy.stripe.com/28E14hdag4qNeUWdFN3Nm02"
     },
     {
       name: "Enterprise Sovereign",
@@ -81,7 +84,8 @@ export default function PricingPage() {
       ],
       popular: false,
       color: "border-violet-950/60 bg-zinc-950/40",
-      accent: "text-violet-400"
+      accent: "text-violet-400",
+      stripeUrl: "https://buy.stripe.com/eVqdR3gms1eB8wy6dl3Nm03"
     }
   ];
 
@@ -189,17 +193,22 @@ export default function PricingPage() {
                 </ul>
               </CardContent>
 
-              <CardFooter className="p-8 border-t border-zinc-900/30">
-                <Button asChild className={`w-full py-6 rounded-2xl font-bold text-sm tracking-tight transition-all duration-300 ${
-                  plan.popular 
-                    ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-black hover:brightness-110 shadow-lg shadow-emerald-500/10' 
-                    : 'bg-zinc-900 hover:bg-zinc-800 text-white'
-                }`}>
-                  <Link href="/dashboard" className="flex items-center justify-center gap-2">
-                    Activate Plan Console <ArrowRight className="w-4 h-4" />
-                  </Link>
-                </Button>
-              </CardFooter>
+               <CardFooter className="p-8 border-t border-zinc-900/30">
+                 <div className="w-full space-y-3">
+                   <Button asChild className={`w-full py-6 rounded-2xl font-bold text-sm tracking-tight transition-all duration-300 ${
+                     plan.popular 
+                       ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-black hover:brightness-110 shadow-lg shadow-emerald-500/10 cursor-pointer' 
+                       : 'bg-zinc-900 hover:bg-zinc-800 text-white cursor-pointer'
+                   }`}>
+                     <a href={plan.stripeUrl} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2">
+                       Activate Plan Console <ArrowRight className="w-4 h-4" />
+                     </a>
+                   </Button>
+                   <p className="text-[10px] text-center text-zinc-500 font-mono">
+                     🔒 Secure Stripe Checkout Link Synchronized
+                   </p>
+                 </div>
+               </CardFooter>
             </Card>
           ))}
         </section>

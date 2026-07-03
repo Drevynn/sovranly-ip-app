@@ -287,10 +287,10 @@ export default function FAQPage() {
                     <button
                       key={cat.id}
                       onClick={() => setActiveCategory(cat.id as any)}
-                      className={`text-left px-4 py-3 rounded-2xl border transition-all duration-200 cursor-pointer flex items-center justify-between gap-3 min-w-[210px] lg:min-w-0 flex-shrink-0 ${
+                      className={`faq-category-card text-left px-4 py-3 rounded-2xl border transition-all duration-300 transform hover:-translate-y-1 cursor-pointer flex items-center justify-between gap-3 min-w-[210px] lg:min-w-0 flex-shrink-0 ${
                         isActive
-                          ? 'bg-cyan-950/25 border-cyan-500/40 text-cyan-400 shadow-lg shadow-cyan-950/10'
-                          : 'bg-transparent border-transparent text-zinc-400 hover:text-white hover:bg-zinc-900/40'
+                          ? 'bg-cyan-950/25 border-cyan-500/40 text-cyan-400 shadow-xl shadow-cyan-950/30 ring-1 ring-cyan-500/10'
+                          : 'bg-transparent border-transparent text-zinc-400 hover:text-white hover:bg-zinc-900/40 hover:shadow-lg hover:shadow-black/50'
                       }`}
                     >
                       <div className="flex items-center gap-3 overflow-hidden">
