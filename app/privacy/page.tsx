@@ -103,7 +103,8 @@ export default function PrivacyPolicy() {
           <div className="text-zinc-400 text-sm overflow-x-auto pt-2" id="cookiebot-declaration-wrapper">
             {/* The cookie table is injected here conditionally */}
           </div>
-          <Script
+          {/* Cookiebot declaration temporarily disabled due to domain authorization error. */}
+          {/* <Script
             id="cookie-declaration-loader"
             strategy="afterInteractive"
             dangerouslySetInnerHTML={{
@@ -124,7 +125,7 @@ export default function PrivacyPolicy() {
                 })();
               `
             }}
-          />
+          /> */}
         </div>
 
         {/* Footer Note */}

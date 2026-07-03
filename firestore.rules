@@ -49,6 +49,16 @@ service cloud.firestore {
                data.createdAt is timestamp;
     }
 
+    function isValidNotification(data) {
+        return data.userId is string && data.userId == request.auth.uid &&
+               data.type is string && data.type.size() <= 50 &&
+               data.title is string && data.title.size() <= 150 &&
+               data.description is string && data.description.size() <= 500 &&
+               data.read is bool &&
+               (data.createdAt is timestamp || data.createdAt is string) &&
+               (!('details' in data) || data.details is string);
+    }
+
     match /assets/{assetId} {
       allow read: if true;
       allow create: if isSignedIn() && isValidAsset(request.resource.data);
@@ -84,6 +94,13 @@ service cloud.firestore {
       allow read: if isSignedIn() && resource.data.userId == request.auth.uid;
       allow create: if isSignedIn() && isValidFavorite(request.resource.data);
       allow delete: if isSignedIn() && resource.data.userId == request.auth.uid;
+    }
+
+    match /notifications/{notificationId} {
+      allow read, delete: if isSignedIn() && resource.data.userId == request.auth.uid;
+      allow create: if isSignedIn() && isValidNotification(request.resource.data);
+      allow update: if isSignedIn() && resource.data.userId == request.auth.uid && isValidNotification(request.resource.data) &&
+                     request.resource.data.diff(resource.data).affectedKeys().hasOnly(['read']);
     }
 
     // Default deny

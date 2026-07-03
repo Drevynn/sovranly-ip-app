@@ -2,6 +2,7 @@ import './globals.css';
 import { Metadata, Viewport } from 'next';
 import { FirebaseProvider } from '@/components/auth/FirebaseProvider';
 import { LanguageProvider } from '@/components/LanguageProvider';
+import { NotificationProvider } from '@/components/NotificationProvider';
 import Script from 'next/script';
 
 export const metadata: Metadata = {
@@ -55,7 +56,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             `,
           }}
         />
-        <Script
+        {/* Cookiebot script temporarily disabled due to domain authorization error. 
+            Please add sovranlyip.com to the domain group in the Cookiebot Manager to authorize the domain, 
+            then uncomment this script. */}
+        {/* <Script
           id="cookiebot-loader"
           strategy="afterInteractive"
           dangerouslySetInnerHTML={{
@@ -76,7 +80,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               })();
             `,
           }}
-        />
+        /> */}
       </head>
       <body className="antialiased bg-zinc-950 text-zinc-100 min-h-screen">
         <LanguageProvider>

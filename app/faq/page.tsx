@@ -201,6 +201,22 @@ export default function FAQPage() {
     return f.category === activeCategory && matchesSearch;
   });
 
+  const handleExpandAll = () => {
+    setOpenItems(prev => {
+      const newItems = { ...prev };
+      filteredFaqs.forEach(f => { newItems[f.id] = true; });
+      return newItems;
+    });
+  };
+
+  const handleCollapseAll = () => {
+    setOpenItems(prev => {
+      const newItems = { ...prev };
+      filteredFaqs.forEach(f => { newItems[f.id] = false; });
+      return newItems;
+    });
+  };
+
   return (
     <div className="min-h-screen bg-[#050505] text-[#e0e0e0] font-sans selection:bg-cyan-500/20 selection:text-cyan-300">
       
@@ -312,6 +328,28 @@ export default function FAQPage() {
                 className="bg-zinc-950/85 border-zinc-850 text-white rounded-2xl pl-11 text-xs focus-visible:ring-cyan-500 h-11"
               />
             </div>
+
+            {/* Expand/Collapse All Buttons */}
+            {filteredFaqs.length > 0 && (
+              <div className="flex justify-end gap-2 mb-4">
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  onClick={handleExpandAll}
+                  className="text-xs bg-zinc-900 border-zinc-800 text-zinc-300 hover:text-white hover:bg-zinc-800 rounded-full h-8 px-4"
+                >
+                  Expand All
+                </Button>
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  onClick={handleCollapseAll}
+                  className="text-xs bg-zinc-900 border-zinc-800 text-zinc-300 hover:text-white hover:bg-zinc-800 rounded-full h-8 px-4"
+                >
+                  Collapse All
+                </Button>
+              </div>
+            )}
 
             {filteredFaqs.length === 0 ? (
               <div className="text-center py-16 bg-[#09090b] rounded-2xl border border-zinc-900 border-dashed">
