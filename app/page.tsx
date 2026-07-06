@@ -21,6 +21,7 @@ import {
 import Link from 'next/link';
 import { useLanguage } from '@/components/LanguageProvider';
 import LanguageSelector from '@/components/LanguageSelector';
+import SlideStack from '@/components/SlideStack';
 
 export default function HomePage() {
   const [submitted, setSubmitted] = useState(false);
@@ -92,6 +93,15 @@ export default function HomePage() {
               <Link href="/marketplace">{t('exploreMarketplaceBtn')}</Link>
             </Button>
           </div>
+        </section>
+
+        {/* Animated Slide Stack Features */}
+        <section className="py-16 flex flex-col items-center">
+          <div className="text-center mb-8">
+            <h3 className="text-sm font-mono text-cyan-500 uppercase tracking-widest mb-2">Platform Capabilities</h3>
+            <p className="text-zinc-500 text-sm">Click the stack to cycle through features</p>
+          </div>
+          <SlideStack />
         </section>
 
         {/* Feature Highlights Grid */}
@@ -206,14 +216,28 @@ export default function HomePage() {
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-white/5 py-12 bg-zinc-950/40 relative z-10 flex flex-col items-center justify-center gap-6 text-center text-zinc-600 text-xs">
+      <footer className="border-t border-white/5 py-16 bg-zinc-950/40 relative z-10 flex flex-col items-center justify-center gap-8 text-center">
+        <div className="flex flex-col items-center gap-4">
+          <div className="flex items-center gap-6">
+            <Link 
+              href="https://www.tiktok.com/@uscared.me3" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 px-4 py-2 bg-zinc-900 border border-zinc-800 rounded-full text-xs text-zinc-400 hover:text-white hover:border-zinc-700 transition-all"
+            >
+              <Sparkles className="w-4 h-4 text-cyan-400" />
+              Follow our Founder on TikTok
+            </Link>
+          </div>
+        </div>
+        
         <LanguageSelector />
-        <div className="flex items-center gap-4 text-zinc-500">
+        <div className="flex items-center gap-4 text-zinc-500 text-xs">
           <Link href="/terms" className="hover:text-cyan-400 transition-colors">Terms of Service</Link>
           <span>•</span>
           <Link href="/privacy" className="hover:text-cyan-400 transition-colors">Privacy Policy</Link>
         </div>
-        <p>{t('copyright')}</p>
+        <p className="text-zinc-600 text-xs">{t('copyright')}</p>
       </footer>
     </div>
   );

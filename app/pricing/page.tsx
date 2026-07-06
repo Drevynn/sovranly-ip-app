@@ -29,6 +29,24 @@ export default function PricingPage() {
 
   const plans = [
     {
+      name: "Founder Access",
+      price: 0,
+      limit: "Unlimited IP asset registers/mo",
+      description: "Exclusive lifetime access for the visionary founder. Unlimited creation, zero transaction fees.",
+      features: [
+        "Unlimited IP Asset Registrations",
+        "Full Access to Smart Contracts",
+        "0.0% Platform Fee Split",
+        "Advanced Analytics & Ledgers",
+        "Founder Priority Support"
+      ],
+      popular: true,
+      color: "border-emerald-800 bg-emerald-950/20",
+      accent: "text-emerald-400",
+      stripeUrl: "/dashboard",
+      buttonText: "Access Founder Console"
+    },
+    {
       name: "Starter Studio",
       price: billingPeriod === 'monthly' ? 29 : 24,
       limit: "10 IP asset registers/mo",
@@ -200,12 +218,18 @@ export default function PricingPage() {
                        ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-black hover:brightness-110 shadow-lg shadow-emerald-500/10 cursor-pointer' 
                        : 'bg-zinc-900 hover:bg-zinc-800 text-white cursor-pointer'
                    }`}>
-                     <a href={plan.stripeUrl} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2">
-                       Activate Plan Console <ArrowRight className="w-4 h-4" />
-                     </a>
+                     {plan.buttonText ? (
+                       <Link href={plan.stripeUrl} className="flex items-center justify-center gap-2">
+                         {plan.buttonText} <ArrowRight className="w-4 h-4" />
+                       </Link>
+                     ) : (
+                       <a href={plan.stripeUrl} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2">
+                         Activate Plan Console <ArrowRight className="w-4 h-4" />
+                       </a>
+                     )}
                    </Button>
                    <p className="text-[10px] text-center text-zinc-500 font-mono">
-                     🔒 Secure Stripe Checkout Link Synchronized
+                     {plan.buttonText ? "🔓 Founder Priority Enabled" : "🔒 Secure Stripe Checkout Link Synchronized"}
                    </p>
                  </div>
                </CardFooter>

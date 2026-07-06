@@ -8,6 +8,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ExternalLink, Mail } from 'lucide-react';
 import Link from 'next/link';
+import SlideStack from '@/components/SlideStack';
 
 export default function LandingPage() {
   const [submitted, setSubmitted] = useState(false);
@@ -28,10 +29,18 @@ export default function LandingPage() {
       <main className="max-w-4xl mx-auto space-y-16">
         <section className="text-center space-y-6">
           <div className="relative w-72 h-72 mx-auto">
-            <Image src="/sovranly-logo-v2.png" alt="Sovranly IP" fill className="object-contain" referrerPolicy="no-referrer" />
+            <Image src="/src/assets/images/hero_corporate_seal_1783109955500.jpg" alt="Sovranly IP Corporate Seal" fill className="object-contain" referrerPolicy="no-referrer" />
           </div>
           <h2 className="text-5xl font-extrabold tracking-tighter text-white">Sovereign Asset Management</h2>
           <p className="text-xl text-zinc-400">Secure, blockchain-based IP management for visionary creators.</p>
+        </section>
+
+        <section className="py-12">
+          <div className="text-center mb-10">
+            <h3 className="text-sm font-mono text-cyan-500 uppercase tracking-widest mb-2">Platform Capabilities</h3>
+            <p className="text-zinc-500 text-sm">Click to cycle through features</p>
+          </div>
+          <SlideStack />
         </section>
 
         <section className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -86,13 +95,24 @@ export default function LandingPage() {
       </main>
 
       {/* Footer */}
-      <footer className="mt-24 border-t border-zinc-900 py-12 text-center text-zinc-600 text-xs space-y-4">
-        <div className="flex justify-center items-center gap-4 text-zinc-500">
+      <footer className="mt-24 border-t border-zinc-900 py-16 text-center space-y-6">
+        <div className="flex flex-col items-center gap-4">
+          <Link 
+            href="https://www.tiktok.com/@uscared.me3" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="flex items-center gap-2 px-6 py-3 bg-zinc-900 border border-zinc-800 rounded-full text-sm text-zinc-400 hover:text-white hover:border-zinc-700 transition-all shadow-lg"
+          >
+            <ExternalLink className="w-4 h-4 text-cyan-500" />
+            Watch our Founder on TikTok
+          </Link>
+        </div>
+        <div className="flex justify-center items-center gap-4 text-zinc-500 text-xs">
           <Link href="/terms" className="hover:text-cyan-400 transition-colors">Terms of Service</Link>
           <span>•</span>
           <Link href="/privacy" className="hover:text-cyan-400 transition-colors">Privacy Policy</Link>
         </div>
-        <p>© 2026 Sovranly IP. All sovereign rights reserved.</p>
+        <p className="text-zinc-600 text-xs">© 2026 Sovranly IP. All sovereign rights reserved.</p>
       </footer>
     </div>
   );

@@ -67,8 +67,134 @@ interface PlatformMetric {
   icon: React.ReactNode;
 }
 
+interface PitchSlide {
+  slideNum: string;
+  title: string;
+  headline: string;
+  bullets: string[];
+  highlight: string;
+}
+
+const PRE_SEED_SLIDES: PitchSlide[] = [
+  {
+    slideNum: "01",
+    title: "The Genesis",
+    headline: "Democratizing IP Ownership",
+    bullets: [
+      "Securing early creator validation in a $9.5B market.",
+      "Empowering independent creators (musicians, writers, filmmakers) to bypass costly legacy legal firms.",
+      "Proving immediate technical readiness with active Zero-Trust blockchain registry."
+    ],
+    highlight: "Mission: Move industry from reactive litigation to proactive, continuous automated protection."
+  },
+  {
+    slideNum: "02",
+    title: "The Problem",
+    headline: "A $1.8 Trillion Protection Gap",
+    bullets: [
+      "Over $1.8 Trillion lost annually to digital piracy, counterfeiting, and infringement.",
+      "Legacy IP law firms charge $400 - $600 per hour, locking out 95% of independent creators.",
+      "Existing automation is locked behind opaque corporate enterprise contracts."
+    ],
+    highlight: "Opportunity: Deliver institutional-grade protection to the underrepresented creator economy."
+  },
+  {
+    slideNum: "03",
+    title: "The Solution",
+    headline: "Unbreakable Sovereign Registries",
+    bullets: [
+      "Zero-Trust design pattern ensures absolute security for metadata and licensing terms.",
+      "Programmable smart contracts replace slow, geographic statutory patents.",
+      "Direct-to-creator SaaS model makes brand protection highly affordable."
+    ],
+    highlight: "Advantage: You govern the code; the code governs the asset."
+  },
+  {
+    slideNum: "04",
+    title: "Market Traction",
+    headline: "Early Proof of Execution",
+    bullets: [
+      "Over 3,800+ assets secured on-chain during development phase.",
+      "Interactive multi-party royalty sandbox live and operational.",
+      "Founder-aligned creator portfolios active across digital channels (such as TikTok)."
+    ],
+    highlight: "Traction: Over $14.8M in simulated GMV capacity built."
+  },
+  {
+    slideNum: "05",
+    title: "The Ask",
+    headline: "$750K Pre-Seed Allocation",
+    bullets: [
+      "Accelerating the deployment of our automated AI marketplace scraper.",
+      "Expanding smart contract templates for multi-tiered media licensing.",
+      "Targeting 10,000 active creators within 12 months."
+    ],
+    highlight: "Milestone: Establish the gold standard for web3 creative sovereignty."
+  }
+];
+
+const SEED_SLIDES: PitchSlide[] = [
+  {
+    slideNum: "01",
+    title: "The Scale Up",
+    headline: "Capturing a $20.4B Market Opportunity",
+    bullets: [
+      "IP Management Software & Brand Protection scaling past $20.4 Billion by 2032 (11.8% CAGR).",
+      "Transitioning from validation to high-velocity creator acquisition.",
+      "Establishing permanent, automated technical moats around user assets."
+    ],
+    highlight: "Goal: Become the dominant decentralized operating system for global IP."
+  },
+  {
+    slideNum: "02",
+    title: "Unit Economics",
+    headline: "High-Margin SaaS Scalability",
+    bullets: [
+      "Targeting LTV to CAC Ratio of 3:1 or higher through low-cost organic creator networks.",
+      "Monthly logo churn engineered to stay under 2.5% for enterprise and 5% for creators.",
+      "Sustainable fees and subscription tiers driving predictable compounding MRR."
+    ],
+    highlight: "Efficiency: Zero-middlemen automated split routing guarantees continuous cash flow."
+  },
+  {
+    slideNum: "03",
+    title: "The Technical Moat",
+    headline: "Compounding Algorithmic Defense",
+    bullets: [
+      "Decentralized ledger logging creates immutable proof of priority that cannot be forged.",
+      "Automated AI scrapers get smarter with every user asset indexed.",
+      "Network effect: Each new creator asset strengthens the global trademark monitoring grid."
+    ],
+    highlight: "Defensibility: An algorithmically compounding ecosystem that is impossible to replicate."
+  },
+  {
+    slideNum: "04",
+    title: "Competitor Displacement",
+    headline: "Winning the Brand Wars",
+    bullets: [
+      "Disrupting Old Guard (Clarivate, Anaqua) by eliminating manual, clunky attorney fees.",
+      "Outperforming modern rivals (Red Points) by focusing on proactive, day-one sovereign stamps.",
+      "Combining bulletproof security with beautiful, frictionless user experiences."
+    ],
+    highlight: "Moat: Unaltered registry of IP at a fraction of enterprise pricing models."
+  },
+  {
+    slideNum: "05",
+    title: "The Ask",
+    headline: "$2.5M Seed round for Velocity",
+    bullets: [
+      "Scaling sales engineering to onboard mid-market media publishers.",
+      "Upgrading continuous automated monitoring nodes across worldwide web databases.",
+      "Expanding platform capabilities to secure physical-to-digital IP twins."
+    ],
+    highlight: "Target: $5.2M ARR run-rate with 25,000 active sovereign nodes."
+  }
+];
+
 export default function AboutUs() {
   const [activePulseTab, setActivePulseTab] = useState<'musician' | 'writer' | 'developer'>('developer');
+  const [fundingRound, setFundingRound] = useState<'pre-seed' | 'seed'>('pre-seed');
+  const [slideIndex, setSlideIndex] = useState(0);
   // Investor Form States
   const [investorName, setInvestorName] = useState('');
   const [investorEmail, setInvestorEmail] = useState('');
@@ -476,6 +602,26 @@ export default function AboutUs() {
                         Empower micro-donations and pay-per-read splits directly from user wallets to your sovereign key.
                       </p>
                     </div>
+
+                    {/* TikTok Portfolio Integration */}
+                    <div className="bg-zinc-900/40 border border-amber-500/10 p-4 rounded-2xl space-y-2 col-span-1 sm:col-span-2">
+                      <h4 className="text-[10px] font-mono font-black text-amber-400 uppercase flex items-center gap-1.5">
+                        <Activity className="w-3.5 h-3.5" /> Founder&apos;s Portfolio (Live Example)
+                      </h4>
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                        <p className="text-[11px] text-zinc-400 leading-normal max-w-md">
+                          Our founder, a filmmaker and musician, uses Sovranly IP to protect content shared across social channels. Visit the portfolio to see Zero-Trust protection in action.
+                        </p>
+                        <a 
+                          href="https://www.tiktok.com/@uscared.me3" 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className="flex items-center gap-2 px-4 py-2 bg-amber-950/20 border border-amber-500/20 rounded-xl text-[10px] font-mono font-bold text-amber-400 hover:bg-amber-950/40 transition-all uppercase"
+                        >
+                          View TikTok Portfolio <ArrowUpRight className="w-3 h-3" />
+                        </a>
+                      </div>
+                    </div>
                   </div>
                 </div>
 
@@ -508,7 +654,322 @@ export default function AboutUs() {
         </AnimatePresence>
       </div>
 
-      {/* 3.8 The Smart Contract Advantage & Strategic Ledger */}
+      {/* 3.6 HARD MARKET DATA (PITCH DECK NUMBERS) */}
+      <div className="space-y-4">
+        <div className="space-y-1">
+          <span className="text-[10px] uppercase font-mono tracking-widest text-cyan-400 font-black flex items-center gap-1.5">
+            <TrendingUp className="w-3.5 h-3.5" /> Market Validation Ledger
+          </span>
+          <h2 className="text-xl font-black text-white uppercase tracking-tight">Hard Market Economics</h2>
+          <p className="text-xs text-zinc-500">Validated quantitative metrics establishing the Sovranly IP investment thesis.</p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {/* TAM Card */}
+          <div className="bg-[#09090b] border border-zinc-900 p-6 rounded-3xl space-y-4 relative overflow-hidden group hover:border-zinc-800 transition-all shadow-xl">
+            <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-cyan-500/5 via-transparent to-transparent pointer-events-none" />
+            <div className="space-y-1">
+              <span className="text-[9px] font-mono text-cyan-400 uppercase font-bold bg-cyan-950/40 px-2 py-0.5 rounded border border-cyan-900/30 w-fit block">
+                Total Addressable Market (TAM)
+              </span>
+              <h3 className="text-3xl font-black font-mono text-white pt-2">$9.5 Billion</h3>
+              <p className="text-xs text-zinc-400 font-bold">Scaling to $20.4B+ by 2032</p>
+            </div>
+            <p className="text-[11px] text-zinc-500 leading-relaxed">
+              The Global Intellectual Property (IP) Management Software & Brand Protection market is expanding at a compounding annual growth rate (CAGR) of <strong className="text-zinc-300">11.8%</strong>.
+            </p>
+          </div>
+
+          {/* Catalyst Metric Card */}
+          <div className="bg-[#09090b] border border-zinc-900 p-6 rounded-3xl space-y-4 relative overflow-hidden group hover:border-zinc-800 transition-all shadow-xl">
+            <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-amber-500/5 via-transparent to-transparent pointer-events-none" />
+            <div className="space-y-1">
+              <span className="text-[9px] font-mono text-amber-400 uppercase font-bold bg-amber-950/40 px-2 py-0.5 rounded border border-amber-900/30 w-fit block">
+                The Piracy Catalyst
+              </span>
+              <h3 className="text-3xl font-black font-mono text-white pt-2">$1.8 Trillion</h3>
+              <p className="text-xs text-zinc-400 font-bold">Lost annually to global infringements</p>
+            </div>
+            <p className="text-[11px] text-zinc-500 leading-relaxed">
+              Legacy IP counsel costs <strong className="text-zinc-300">$400–$600 per hour</strong>. Independent creators and small-to-medium businesses are completely priced out of traditional brand protection.
+            </p>
+          </div>
+
+          {/* Value Hypothesis Card */}
+          <div className="bg-[#09090b] border border-zinc-900 p-6 rounded-3xl space-y-4 relative overflow-hidden group hover:border-zinc-800 transition-all shadow-xl md:col-span-1">
+            <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-emerald-500/5 via-transparent to-transparent pointer-events-none" />
+            <div className="space-y-1">
+              <span className="text-[9px] font-mono text-emerald-400 uppercase font-bold bg-emerald-950/40 px-2 py-0.5 rounded border border-emerald-900/30 w-fit block">
+                Value Hypothesis
+              </span>
+              <h3 className="text-lg font-black text-white pt-2 uppercase tracking-tight">Democratic Protection</h3>
+              <p className="text-xs text-emerald-400 font-bold">Proactive, automated & continuous</p>
+            </div>
+            <p className="text-[11px] text-zinc-400 leading-relaxed">
+              “Sovranly IP targets the <strong className="text-white">95% of creators and businesses</strong> who cannot afford legacy IP firms by automating asset tracking and sovereign proof-of-ownership at a fraction of the cost.”
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* 3.7 COMPETITOR MATRIX COMPARISON GRID */}
+      <div className="bg-zinc-950 border border-zinc-900 rounded-3xl p-6 md:p-8 space-y-6 relative overflow-hidden shadow-xl">
+        <div className="absolute top-0 right-0 w-80 h-80 bg-gradient-to-bl from-violet-500/5 via-transparent to-transparent pointer-events-none" />
+        
+        <div>
+          <span className="text-[10px] uppercase font-mono tracking-widest text-violet-400 font-black flex items-center gap-1.5">
+            <Layers className="w-3.5 h-3.5" /> Market Differentiation Matrix
+          </span>
+          <h2 className="text-lg font-black text-white uppercase tracking-tight mt-1">Competitor Matrix</h2>
+          <p className="text-xs text-zinc-500">How Sovranly IP democratizes security to outpace legacy firms and enterprise tools.</p>
+        </div>
+
+        <div className="overflow-x-auto rounded-2xl border border-zinc-900 bg-zinc-950/60">
+          <table className="w-full text-left border-collapse min-w-[700px]">
+            <thead>
+              <tr className="bg-zinc-900/50 border-b border-zinc-900 text-[10px] font-mono uppercase text-zinc-500">
+                <th className="p-4 font-bold">Category</th>
+                <th className="p-4 font-bold">Legacy Giants (Old Guard)</th>
+                <th className="p-4 font-bold">Modern Automated Rivals</th>
+                <th className="p-4 font-bold text-cyan-400 bg-cyan-950/10">Sovranly IP (Democratic SaaS)</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-zinc-900 text-[11px] leading-normal text-zinc-400">
+              <tr>
+                <td className="p-4 font-mono font-black text-white text-[10px] uppercase">Core Competitors</td>
+                <td className="p-4">Clarivate (Derwent), Anaqua, CPA Global</td>
+                <td className="p-4">Red Points, MarqVision, PatSnap</td>
+                <td className="p-4 font-bold text-zinc-200 bg-cyan-950/5">Creative Sovereignty Platform</td>
+              </tr>
+              <tr>
+                <td className="p-4 font-mono font-black text-white text-[10px] uppercase">Core Weakness</td>
+                <td className="p-4 text-zinc-500">Built strictly for Fortune 500 legal departments. Manual attorney workloads. Outdated interfaces.</td>
+                <td className="p-4 text-zinc-500">Heavy, high-ticket enterprise-only pricing models. High friction to onboard.</td>
+                <td className="p-4 font-bold text-emerald-400 bg-cyan-950/5">None. Accessible entry tiers starting at $0/mo.</td>
+              </tr>
+              <tr>
+                <td className="p-4 font-mono font-black text-white text-[10px] uppercase">Price Point</td>
+                <td className="p-4">Incredibly expensive. Relies on $400-$600/hr manual attorney retainers.</td>
+                <td className="p-4">High-ticket enterprise subscription models with opaque sales calls.</td>
+                <td className="p-4 text-cyan-300 font-bold bg-cyan-950/5">Transparent creator-first pricing. Zero-trust founder tier.</td>
+              </tr>
+              <tr>
+                <td className="p-4 font-mono font-black text-white text-[10px] uppercase">Security & Tech</td>
+                <td className="p-4">Outdated static databases with high vulnerability and manual document checks.</td>
+                <td className="p-4">AI scraping of marketplaces strictly focused on reactive post-infringement takedowns.</td>
+                <td className="p-4 text-zinc-200 bg-cyan-950/5">Immutable blockchain ledger establishes sovereign priority stamp from day one.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {/* 3.8 UNIT ECONOMICS & TECHNICAL MOAT */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        {/* Key Financial Benchmarks */}
+        <div className="bg-zinc-950 border border-zinc-900 rounded-3xl p-6 md:p-8 space-y-5 relative overflow-hidden shadow-xl">
+          <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-bl from-teal-500/5 via-transparent to-transparent pointer-events-none" />
+          <div className="space-y-1.5 pb-4 border-b border-zinc-900">
+            <span className="text-[10px] uppercase font-mono tracking-widest text-teal-400 font-black flex items-center gap-1.5">
+              <Coins className="w-3.5 h-3.5" /> Unit Economics Benchmarks
+            </span>
+            <h2 className="text-lg font-black text-white uppercase tracking-tight">Operational SaaS Metrics</h2>
+            <p className="text-xs text-zinc-500">Key performance markers targeting institutional investor requirements.</p>
+          </div>
+
+          <div className="space-y-4">
+            <div className="grid grid-cols-2 gap-4">
+              <div className="p-4 rounded-2xl bg-zinc-900/30 border border-zinc-900 space-y-1">
+                <span className="block text-[8px] font-mono uppercase text-zinc-500">LTV to CAC Ratio Target</span>
+                <span className="block text-2xl font-black text-white font-mono">3:1 +</span>
+                <p className="text-[10px] text-zinc-400 leading-normal font-sans">Lifetime Value must exceed marketing Customer Acquisition Cost by threefold.</p>
+              </div>
+
+              <div className="p-4 rounded-2xl bg-zinc-900/30 border border-zinc-900 space-y-1">
+                <span className="block text-[8px] font-mono uppercase text-zinc-500">Target Monthly Logo Churn</span>
+                <span className="block text-2xl font-black text-white font-mono">&lt; 2.5%</span>
+                <p className="text-[10px] text-zinc-400 leading-normal font-sans">Under 2.5% for enterprise clients, and under 5.0% for individual creators.</p>
+              </div>
+            </div>
+
+            <div className="p-4 rounded-2xl bg-teal-950/10 border border-teal-500/10 space-y-1">
+              <h4 className="text-xs font-mono font-black text-teal-400 uppercase">Direct Payment Retention Advantage</h4>
+              <p className="text-xs text-zinc-300 leading-relaxed font-sans">
+                Our platform delivers up to <strong className="text-teal-300">98% direct payment retention</strong> through automated smart contract routing, offering sustainable cash flows.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Technical Defensibility Moat */}
+        <div className="bg-zinc-950 border border-zinc-900 rounded-3xl p-6 md:p-8 space-y-5 relative overflow-hidden shadow-xl">
+          <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-bl from-rose-500/5 via-transparent to-transparent pointer-events-none" />
+          <div className="space-y-1.5 pb-4 border-b border-zinc-900">
+            <span className="text-[10px] uppercase font-mono tracking-widest text-rose-400 font-black flex items-center gap-1.5">
+              <Lock className="w-3.5 h-3.5" /> Defensibility Protocol
+            </span>
+            <h2 className="text-lg font-black text-white uppercase tracking-tight">Our Technical Moat</h2>
+            <p className="text-xs text-zinc-500 font-sans">How our proprietary software architecture prevents copycat replication.</p>
+          </div>
+
+          <div className="space-y-4">
+            <div className="p-4 rounded-2xl bg-zinc-900/30 border border-zinc-900 space-y-2">
+              <h4 className="text-xs font-mono font-black text-rose-400 uppercase flex items-center gap-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-rose-400 animate-pulse" /> Decentrally Compounding Index
+              </h4>
+              <p className="text-xs text-zinc-300 leading-relaxed font-sans">
+                By pairing decentralized ledger logging with continuous machine learning, our automated AI scraping engines get significantly smarter with every user asset indexed. This creates a network effect: as more IP is cataloged, the database’s ability to flag worldwide infringements becomes exponentially harder for competitors to match.
+              </p>
+            </div>
+
+            <div className="p-4 rounded-2xl bg-rose-950/10 border border-rose-500/10 space-y-1.5">
+              <h4 className="text-[10px] font-mono font-black text-rose-300 uppercase">Continuous Zero-Trust Monitoring</h4>
+              <p className="text-[11px] text-zinc-400 leading-normal font-sans">
+                Continuous authentication parameters dynamically protect active licenses from duplication. Your trademark monitor operates on independent, hardened nodes.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* 3.9 INTERACTIVE FOUNDER PITCH DECK BUILDER */}
+      <div className="bg-zinc-950 border border-zinc-900 rounded-3xl p-6 md:p-8 space-y-6 relative overflow-hidden shadow-xl">
+        <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-bl from-cyan-500/5 via-transparent to-transparent pointer-events-none" />
+        
+        <div className="border-b border-zinc-900 pb-4 flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div>
+            <span className="text-[10px] uppercase font-mono tracking-widest text-cyan-400 font-black flex items-center gap-1.5">
+              <Flame className="w-3.5 h-3.5" /> Dynamic Investor Relations Suite
+            </span>
+            <h2 className="text-lg font-black text-white uppercase tracking-tight mt-1">Interactive Investor Pitch Deck Builder</h2>
+            <p className="text-xs text-zinc-500 mt-0.5">Generate and preview our targeted deck outline for prospective funding partners.</p>
+          </div>
+          
+          {/* Round Toggle Selector */}
+          <div className="flex bg-zinc-900 p-1 rounded-2xl border border-zinc-850 self-start md:self-auto">
+            {(['pre-seed', 'seed'] as const).map((round) => (
+              <button
+                key={round}
+                onClick={() => {
+                  setFundingRound(round);
+                  setSlideIndex(0);
+                }}
+                className={`px-4 py-2 text-[10px] font-mono font-bold uppercase rounded-xl transition-all cursor-pointer flex items-center gap-1.5 ${
+                  fundingRound === round
+                    ? 'bg-zinc-950 border border-zinc-800 text-cyan-400 shadow-lg'
+                    : 'text-zinc-500 hover:text-zinc-300'
+                }`}
+              >
+                {round === 'pre-seed' ? '🚀 Pre-Seed Strategy' : '⚡ Seed-Round Scale'}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Dynamic Slide Presentation */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
+          
+          {/* Slides List Selector */}
+          <div className="lg:col-span-4 flex flex-col gap-2">
+            <span className="text-[8px] font-mono uppercase text-zinc-500 font-bold mb-1">Select Presentation Slide</span>
+            {(fundingRound === 'pre-seed' ? PRE_SEED_SLIDES : SEED_SLIDES).map((slide, idx) => (
+              <button
+                key={idx}
+                onClick={() => setSlideIndex(idx)}
+                className={`p-3 rounded-xl border text-left transition-all flex items-center justify-between cursor-pointer ${
+                  slideIndex === idx 
+                    ? 'bg-cyan-950/20 border-cyan-500/30 text-white' 
+                    : 'bg-[#060608] border-zinc-900 text-zinc-400 hover:text-white hover:border-zinc-800'
+                }`}
+              >
+                <div className="space-y-0.5 truncate">
+                  <span className="block text-[8px] font-mono text-zinc-500 uppercase font-sans">Slide {slide.slideNum}</span>
+                  <span className="text-xs font-black uppercase tracking-tight block truncate font-sans">{slide.title}</span>
+                </div>
+                <ChevronRight className={`w-4 h-4 transition-transform ${slideIndex === idx ? 'text-cyan-400 translate-x-1' : 'text-zinc-600'}`} />
+              </button>
+            ))}
+          </div>
+
+          {/* Interactive Slide Canvas */}
+          <div className="lg:col-span-8 bg-[#040406] border border-zinc-900 rounded-2xl p-6 flex flex-col justify-between relative overflow-hidden">
+            {/* Slide watermarks */}
+            <div className="absolute top-4 right-4 font-mono text-2xl font-black text-zinc-900 select-none">
+              {(fundingRound === 'pre-seed' ? PRE_SEED_SLIDES : SEED_SLIDES)[slideIndex].slideNum} / 05
+            </div>
+            
+            <div className="space-y-4">
+              <div>
+                <span className="text-[9px] font-mono text-cyan-500 uppercase tracking-wider font-sans">
+                  {(fundingRound === 'pre-seed' ? 'Pre-Seed Deck' : 'Seed Pitch Deck')} • Slide {(fundingRound === 'pre-seed' ? PRE_SEED_SLIDES : SEED_SLIDES)[slideIndex].slideNum}
+                </span>
+                <h3 className="text-2xl font-black text-white uppercase tracking-tight mt-1">
+                  {(fundingRound === 'pre-seed' ? PRE_SEED_SLIDES : SEED_SLIDES)[slideIndex].title}
+                </h3>
+                <p className="text-xs font-mono text-zinc-400 mt-1 font-bold">
+                  {(fundingRound === 'pre-seed' ? PRE_SEED_SLIDES : SEED_SLIDES)[slideIndex].headline}
+                </p>
+              </div>
+
+              <div className="space-y-2.5 pt-4 border-t border-zinc-900">
+                {(fundingRound === 'pre-seed' ? PRE_SEED_SLIDES : SEED_SLIDES)[slideIndex].bullets.map((bullet, bIdx) => (
+                  <div key={bIdx} className="flex items-start gap-2 text-xs text-zinc-300">
+                    <span className="text-cyan-400 font-mono select-none mt-0.5">•</span>
+                    <p className="leading-relaxed font-sans">{bullet}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="mt-8 pt-4 border-t border-zinc-900 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div className="text-[10px] text-zinc-500 font-sans leading-relaxed max-w-sm">
+                <strong className="text-cyan-400 font-bold uppercase font-mono block mb-0.5 text-[8px]">Key Investor Takeaway</strong>
+                {(fundingRound === 'pre-seed' ? PRE_SEED_SLIDES : SEED_SLIDES)[slideIndex].highlight}
+              </div>
+              
+              <div className="flex gap-2 shrink-0">
+                <button 
+                  onClick={() => {
+                    const textToCopy = `Slide ${(fundingRound === 'pre-seed' ? PRE_SEED_SLIDES : SEED_SLIDES)[slideIndex].slideNum}: ${(fundingRound === 'pre-seed' ? PRE_SEED_SLIDES : SEED_SLIDES)[slideIndex].title}\n` +
+                      `Headline: ${(fundingRound === 'pre-seed' ? PRE_SEED_SLIDES : SEED_SLIDES)[slideIndex].headline}\n` +
+                      (fundingRound === 'pre-seed' ? PRE_SEED_SLIDES : SEED_SLIDES)[slideIndex].bullets.map(b => `- ${b}`).join('\n') +
+                      `\nHighlight: ${(fundingRound === 'pre-seed' ? PRE_SEED_SLIDES : SEED_SLIDES)[slideIndex].highlight}`;
+                    navigator.clipboard.writeText(textToCopy);
+                    alert("Slide content successfully copied to clipboard! Ready to paste into your presentation software.");
+                  }}
+                  className="px-3 py-2 bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-[10px] font-mono text-zinc-300 hover:text-white rounded-xl transition-all cursor-pointer"
+                >
+                  📋 Copy Slide Text
+                </button>
+                <button
+                  onClick={() => {
+                    const deckText = (fundingRound === 'pre-seed' ? PRE_SEED_SLIDES : SEED_SLIDES).map(s => 
+                      `[SLIDE ${s.slideNum}: ${s.title}]\nHeadline: ${s.headline}\n` +
+                      s.bullets.map(b => `- ${b}`).join('\n') +
+                      `\nKey Takeaway: ${s.highlight}\n------------------------\n`
+                    ).join('\n');
+                    
+                    const element = document.createElement("a");
+                    const file = new Blob([deckText], {type: 'text/plain'});
+                    element.href = URL.createObjectURL(file);
+                    element.download = `Sovranly_IP_${fundingRound}_Deck_Outline.txt`;
+                    document.body.appendChild(element);
+                    element.click();
+                    document.body.removeChild(element);
+                  }}
+                  className="px-3 py-2 bg-cyan-950/40 hover:bg-cyan-950/70 border border-cyan-500/20 text-[10px] font-mono text-cyan-400 rounded-xl transition-all cursor-pointer"
+                >
+                  📥 Export Outline
+                </button>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+
+      {/* 3.10 The Smart Contract Advantage & Strategic Ledger */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         
         {/* The Smart Contract Advantage */}
@@ -527,7 +988,7 @@ export default function AboutUs() {
               <h4 className="text-xs font-mono font-black text-zinc-400 uppercase flex items-center gap-2">
                 <span className="w-1.5 h-1.5 rounded-full bg-red-500" /> Statutory Patents (Legacy Model)
               </h4>
-              <p className="text-xs text-zinc-500 leading-relaxed">
+              <p className="text-xs text-zinc-500 leading-relaxed font-sans">
                 Traditional patents provide a statutory, rigid 20-year temporary monopoly from their filing date before expiring into the public domain. They are geographically limited, expensive to register/enforce, and rely on manual arbitration.
               </p>
             </div>
@@ -539,7 +1000,7 @@ export default function AboutUs() {
               <h4 className="text-xs font-mono font-black text-cyan-400 uppercase flex items-center gap-2">
                 <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" /> Sovranly Smart Contracts
               </h4>
-              <p className="text-xs text-zinc-300 leading-relaxed">
+              <p className="text-xs text-zinc-300 leading-relaxed font-sans">
                 Smart contracts on the Pulse platform do not rely on universal statutory lifespans. Instead, they enforce whatever duration, milestones, or conditions you choose to hardcode into them. Your digital licensing parameters can be set for a specific number of years, tied to unique external conditions, or programmed to execute exactly for the lifetime of a companion asset. <strong>You govern the code; the code governs the asset.</strong>
               </p>
             </div>
@@ -566,20 +1027,20 @@ export default function AboutUs() {
             <div className="divide-y divide-zinc-900/60">
               <div className="grid grid-cols-12 p-3 text-xs items-start">
                 <div className="col-span-4 font-mono font-black text-white text-[10px] uppercase">Mission Statement</div>
-                <div className="col-span-8 text-zinc-400 leading-normal text-[11px]">To empower creators with a transparent, secure platform to manage and monetize their intellectual property.</div>
+                <div className="col-span-8 text-zinc-400 leading-normal text-[11px] font-sans">To empower creators with a transparent, secure platform to manage and monetize their intellectual property.</div>
               </div>
               
-              <div className="grid grid-cols-12 p-3 text-xs items-start">
+              <div className="grid grid-cols-12 p-3 text-xs items-start font-sans">
                 <div className="col-span-4 font-mono font-black text-white text-[10px] uppercase">Monetization Model</div>
                 <div className="col-span-8 text-zinc-400 leading-normal text-[11px]">Sustainable transaction fees, platform subscription tiers, and freemium feature models.</div>
               </div>
 
-              <div className="grid grid-cols-12 p-3 text-xs items-start">
+              <div className="grid grid-cols-12 p-3 text-xs items-start font-sans">
                 <div className="col-span-4 font-mono font-black text-white text-[10px] uppercase">Technical Scalability</div>
                 <div className="col-span-8 text-zinc-400 leading-normal text-[11px]">A secure web interface (React/Node.js) interacting directly with robust blockchain architectures and custom Solidity smart contracts.</div>
               </div>
 
-              <div className="grid grid-cols-12 p-3 text-xs items-start">
+              <div className="grid grid-cols-12 p-3 text-xs items-start font-sans">
                 <div className="col-span-4 font-mono font-black text-white text-[10px] uppercase">Risk Management</div>
                 <div className="col-span-8 text-zinc-400 leading-normal text-[11px]">Continuous mitigation strategies covering smart contract audits, evolving global cryptocurrency regulations, and data privacy frameworks.</div>
               </div>
