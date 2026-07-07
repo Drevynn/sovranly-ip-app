@@ -118,7 +118,9 @@ export default function PricingPage() {
       <header className="relative border-b border-white/10 bg-black/80 backdrop-blur-md sticky top-0 z-50">
         <div className="flex items-center justify-between p-6 max-w-7xl mx-auto">
           <div className="flex items-center gap-3">
-            <Image src="/sovranly-logo-v2.png" alt="Sovranly IP Logo" width={36} height={36} className="rounded-xl shadow-lg shadow-cyan-950/50" referrerPolicy="no-referrer" />
+            <div className="w-9 h-9 bg-zinc-950 border border-cyan-500/30 rounded-xl flex items-center justify-center shadow-lg shadow-cyan-950/20">
+              <ShieldCheck className="w-5 h-5 text-cyan-400 drop-shadow-[0_0_8px_rgba(34,211,238,0.4)]" />
+            </div>
             <Link href="/" className="font-bold tracking-tighter text-white text-xl uppercase">{t('brandName')}</Link>
           </div>
           <nav className="hidden md:flex items-center gap-8">

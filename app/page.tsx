@@ -37,7 +37,9 @@ export default function HomePage() {
       <header className="relative border-b border-white/10 bg-black/80 backdrop-blur-md sticky top-0 z-50">
         <div className="flex items-center justify-between p-6 max-w-7xl mx-auto">
           <div className="flex items-center gap-3">
-            <Image src="/sovranly-logo-v2.png" alt="Sovranly IP Logo" width={36} height={36} className="rounded-xl shadow-lg shadow-cyan-950/50" referrerPolicy="no-referrer" />
+            <div className="w-9 h-9 bg-zinc-950 border border-cyan-500/30 rounded-xl flex items-center justify-center shadow-lg shadow-cyan-950/20">
+              <ShieldCheck className="w-5 h-5 text-cyan-400 drop-shadow-[0_0_8px_rgba(34,211,238,0.4)]" />
+            </div>
             <Link href="/" className="font-bold tracking-tighter text-white text-xl uppercase">{t('brandName')}</Link>
           </div>
           <nav className="hidden md:flex items-center gap-8">
@@ -62,12 +64,42 @@ export default function HomePage() {
       {/* Hero Section */}
       <main className="relative max-w-7xl mx-auto px-6 py-24 md:py-40 space-y-44">
         <section className="text-center space-y-12 max-w-6xl mx-auto">
-          {/* Enhanced Massive Logo Canvas */}
-          <div className="relative w-80 h-80 md:w-[440px] md:h-[440px] mx-auto mb-12 animate-pulse [animation-duration:8s]">
-            {/* Absolute Ambient backplate glow behind the logo */}
-            <div className="absolute inset-0 bg-cyan-500/10 rounded-full blur-[80px] pointer-events-none scale-125" />
-            <div className="absolute inset-0 bg-violet-600/5 rounded-full blur-[100px] pointer-events-none scale-150" />
-            <Image src="/sovranly-logo-v2.png" alt="Sovranly IP" fill className="object-contain relative z-10" referrerPolicy="no-referrer" />
+          {/* Futuristic CSS-based Emblem/Shield (Zero-Trust Replacement for Hero Image) */}
+          <div className="relative w-72 h-72 md:w-96 md:h-96 mx-auto mb-12 flex items-center justify-center select-none">
+            {/* Ambient glows */}
+            <div className="absolute inset-0 bg-cyan-500/10 rounded-full blur-[100px] animate-pulse [animation-duration:4s] pointer-events-none" />
+            <div className="absolute inset-4 bg-violet-500/5 rounded-full blur-[80px] animate-pulse [animation-duration:6s] pointer-events-none" />
+            
+            {/* Outer cybernetic ring */}
+            <div className="absolute inset-0 rounded-full border border-cyan-500/25 bg-black/40 backdrop-blur-md flex items-center justify-center animate-spin-slow [animation-duration:25s]">
+              <div className="absolute top-0 left-1/2 -translate-x-1/2 w-2.5 h-2.5 bg-cyan-400 rounded-full shadow-[0_0_10px_#22d3ee]" />
+              <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-2.5 h-2.5 bg-violet-500 rounded-full shadow-[0_0_10px_#a78bfa]" />
+            </div>
+            
+            {/* Inner cybernetic ring */}
+            <div className="absolute inset-8 rounded-full border border-dashed border-violet-500/30 flex items-center justify-center animate-spin-reverse [animation-duration:18s]">
+              <div className="absolute left-0 top-1/2 -translate-y-1/2 w-2 h-2 bg-emerald-400 rounded-full" />
+              <div className="absolute right-0 top-1/2 -translate-y-1/2 w-2 h-2 bg-sky-400 rounded-full" />
+            </div>
+            
+            {/* Core Shield Emblem */}
+            <div className="relative w-40 h-40 md:w-48 md:h-48 rounded-3xl bg-zinc-950/90 border-2 border-cyan-500/40 flex flex-col items-center justify-center shadow-[0_0_50px_rgba(6,182,212,0.15)] overflow-hidden group">
+              {/* Circuit board line accents */}
+              <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-cyan-400 to-transparent" />
+              <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-violet-400 to-transparent" />
+              <div className="absolute inset-y-0 left-0 w-px bg-gradient-to-b from-transparent via-cyan-400 to-transparent" />
+              <div className="absolute inset-y-0 right-0 w-px bg-gradient-to-b from-transparent via-violet-400 to-transparent" />
+              
+              {/* Big central letter or icon */}
+              <div className="flex flex-col items-center gap-1.5 relative z-10 animate-pulse [animation-duration:3s]">
+                <ShieldCheck className="w-16 h-16 md:w-20 md:h-20 text-cyan-400 drop-shadow-[0_0_15px_rgba(6,182,212,0.6)]" />
+                <span className="font-mono text-[9px] md:text-[10px] font-bold tracking-[0.3em] uppercase text-zinc-400">SOVRANLY</span>
+              </div>
+              
+              {/* Tech details corner brackets */}
+              <span className="absolute top-2 left-2 text-[8px] font-mono text-zinc-700 select-none">[0x0]</span>
+              <span className="absolute bottom-2 right-2 text-[8px] font-mono text-zinc-700 select-none">[SEC]</span>
+            </div>
           </div>
           
           <div className="inline-flex items-center gap-2.5 px-4 py-2 bg-zinc-900 border border-zinc-800 rounded-full text-xs sm:text-sm text-zinc-400 mb-2">

@@ -47,15 +47,12 @@ export function SignIn() {
         <div className="absolute -bottom-12 -right-12 w-48 h-48 bg-violet-500/5 rounded-full blur-[60px] pointer-events-none" />
         
         <CardHeader className="text-center space-y-6 pb-2">
-          <div className="mx-auto relative w-28 h-28">
-            <Image 
-              src="/sovranly-logo-v2.png" 
-              alt="Sovranly Crest" 
-              fill 
-              className="object-contain"
-              priority
-              referrerPolicy="no-referrer"
-            />
+          <div className="mx-auto relative w-24 h-24 flex items-center justify-center">
+            {/* Pulsing cyan glow rings */}
+            <div className="absolute inset-0 bg-cyan-500/10 rounded-full blur-xl animate-pulse pointer-events-none" />
+            <div className="relative w-20 h-20 rounded-full border border-cyan-500/30 bg-zinc-950 flex items-center justify-center shadow-lg shadow-cyan-950/40">
+              <ShieldCheck className="w-10 h-10 text-cyan-400 drop-shadow-[0_0_10px_rgba(6,182,212,0.5)]" />
+            </div>
           </div>
           <div className="space-y-2">
             <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-zinc-900 border border-zinc-800 rounded-full text-[10px] text-cyan-400 uppercase tracking-widest mx-auto">

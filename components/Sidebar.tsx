@@ -1,6 +1,6 @@
 'use client';
 
-import { Gauge, BarChart3, User, FileText, LogOut, ShieldAlert, Scale, Sliders, Mail, X, Presentation, Rocket, Shield, Building2, Brain } from 'lucide-react';
+import { Gauge, BarChart3, User, FileText, LogOut, ShieldAlert, Scale, Sliders, Mail, X, Presentation, Rocket, Shield, Building2, Brain, ShieldCheck } from 'lucide-react';
 import Image from 'next/image';
 import { useAuth } from './auth/FirebaseProvider';
 import { useLanguage } from './LanguageProvider';
@@ -52,7 +52,9 @@ export default function Sidebar({
             <div className="p-8 border-b border-zinc-900 flex items-center justify-between">
               <div>
                 <div className="flex items-center gap-3 mb-2">
-                  <Image src="/sovranly-logo-v2.png" alt="Sovranly" width={36} height={36} referrerPolicy="no-referrer" />
+                  <div className="w-9 h-9 bg-zinc-950 border border-cyan-500/30 rounded-xl flex items-center justify-center shadow-lg shadow-cyan-950/20">
+                    <ShieldCheck className="w-5 h-5 text-cyan-400 drop-shadow-[0_0_8px_rgba(34,211,238,0.4)]" />
+                  </div>
                   <span className="font-bold tracking-tighter text-white text-xl uppercase">{t('brandName')}</span>
                 </div>
                 <p className="text-emerald-400 text-[9px] uppercase tracking-widest mt-1 font-mono">{t('brandSubtitle')}</p>

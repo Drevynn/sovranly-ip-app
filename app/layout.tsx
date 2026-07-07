@@ -14,10 +14,6 @@ export const metadata: Metadata = {
     title: 'Sovranly IP',
     statusBarStyle: 'black-translucent',
   },
-  icons: {
-    icon: '/sovranly-logo-v2.png',
-    apple: '/sovranly-logo-v2.png',
-  },
 };
 
 export const viewport: Viewport = {

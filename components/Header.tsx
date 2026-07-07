@@ -1,6 +1,6 @@
 'use client';
 
-import { Shield, Menu } from 'lucide-react';
+import { Shield, Menu, ShieldCheck } from 'lucide-react';
 import WalletConnect from './WalletConnect';
 import Image from 'next/image';
 
@@ -34,16 +34,9 @@ export default function Header({
 
       {/* Center: Centered Logo and Brand */}
       <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 flex items-center gap-2.5 z-10 pointer-events-none">
-        <div className="relative w-8 h-8 flex-shrink-0 animate-pulse [animation-duration:5s]">
-          <div className="absolute inset-x-0 inset-y-0 bg-cyan-400/10 rounded-full blur-md animate-pulse" />
-          <Image 
-            src="/sovranly-logo-v2.png" 
-            alt="Sovranly IP" 
-            width={32} 
-            height={32} 
-            className="rounded-lg object-contain relative z-10" 
-            referrerPolicy="no-referrer" 
-          />
+        <div className="relative w-8 h-8 flex-shrink-0 flex items-center justify-center">
+          <div className="absolute inset-x-0 inset-y-0 bg-cyan-400/20 rounded-full blur-md animate-pulse" />
+          <ShieldCheck className="w-6 h-6 text-cyan-400 relative z-10 drop-shadow-[0_0_8px_rgba(34,211,238,0.5)]" />
         </div>
         <span className="font-bold tracking-widest text-white text-xs uppercase font-mono hidden md:inline-block">
           Sovranly IP

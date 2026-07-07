@@ -742,7 +742,9 @@ export default function WikiPage() {
       <nav className="border-b border-zinc-900 bg-zinc-950/55 backdrop-blur-md sticky top-0 z-30">
         <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <Image src="/sovranly-logo-v2.png" alt="Sovranly IP" width={32} height={32} className="rounded-xl border border-white/5" />
+            <div className="w-8 h-8 bg-zinc-950 border border-cyan-500/30 rounded-xl flex items-center justify-center shadow-lg shadow-cyan-950/20">
+              <ShieldCheck className="w-4.5 h-4.5 text-cyan-400 drop-shadow-[0_0_6px_rgba(34,211,238,0.4)]" />
+            </div>
             <div className="flex flex-col">
               <span className="font-extrabold tracking-tight text-white leading-tight uppercase">SOVRANLY IP</span>
               <span className="text-[10px] uppercase font-mono text-cyan-400 tracking-wider">Blueprint & Wiki Hub</span>

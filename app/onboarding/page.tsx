@@ -24,7 +24,8 @@ import {
   Play,
   Lock,
   Volume1,
-  Activity
+  Activity,
+  ShieldCheck
 } from 'lucide-react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'motion/react';
@@ -557,7 +558,9 @@ export default function OnboardingVoiceAgent() {
       <header className="relative border-b border-zinc-900 bg-black/80 backdrop-blur-md sticky top-0 z-50">
         <div className="flex items-center justify-between p-6 max-w-7xl mx-auto">
           <div className="flex items-center gap-3">
-            <Image src="/sovranly-logo-v2.png" alt="Sovranly IP Logo" width={32} height={32} className="rounded-xl" referrerPolicy="no-referrer" />
+            <div className="w-8 h-8 bg-zinc-950 border border-cyan-500/30 rounded-xl flex items-center justify-center shadow-lg shadow-cyan-950/20">
+              <ShieldCheck className="w-4.5 h-4.5 text-cyan-400 drop-shadow-[0_0_6px_rgba(34,211,238,0.4)]" />
+            </div>
             <Link href="/" className="font-extrabold tracking-tight text-white text-lg uppercase">SOVRANLY IP</Link>
           </div>
           

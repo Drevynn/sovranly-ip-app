@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { ExternalLink, Mail } from 'lucide-react';
+import { ExternalLink, Mail, ShieldCheck } from 'lucide-react';
 import Link from 'next/link';
 import SlideStack from '@/components/SlideStack';
 
@@ -16,7 +16,12 @@ export default function LandingPage() {
   return (
     <div className="min-h-screen bg-black text-zinc-100 p-8">
       <header className="flex justify-between items-center mb-16">
-        <Image src="/sovranly-logo-v2.png" alt="Sovranly IP Logo" width={100} height={100} referrerPolicy="no-referrer" />
+        <div className="flex items-center gap-3">
+          <div className="w-9 h-9 bg-zinc-950 border border-cyan-500/30 rounded-xl flex items-center justify-center shadow-lg shadow-cyan-950/20">
+            <ShieldCheck className="w-5 h-5 text-cyan-400 drop-shadow-[0_0_8px_rgba(34,211,238,0.4)]" />
+          </div>
+          <span className="font-bold tracking-tighter text-white text-xl uppercase">SOVRANLY IP</span>
+        </div>
         <div className="space-x-4">
           <Link href="/faq" className="text-zinc-400 hover:text-white transition-colors">FAQ</Link>
           <Link href="/wiki" className="text-zinc-400 hover:text-white transition-colors">Wiki</Link>
@@ -28,8 +33,30 @@ export default function LandingPage() {
 
       <main className="max-w-4xl mx-auto space-y-16">
         <section className="text-center space-y-6">
-          <div className="relative w-72 h-72 mx-auto">
-            <Image src="/src/assets/images/hero_corporate_seal_1783109955500.jpg" alt="Sovranly IP Corporate Seal" fill className="object-contain" referrerPolicy="no-referrer" />
+          {/* Futuristic CSS-based Emblem/Shield (Zero-Trust Replacement for Hero Image) */}
+          <div className="relative w-72 h-72 md:w-80 md:h-80 mx-auto mb-6 flex items-center justify-center select-none">
+            {/* Ambient glows */}
+            <div className="absolute inset-0 bg-cyan-500/10 rounded-full blur-[100px] animate-pulse [animation-duration:4s] pointer-events-none" />
+            <div className="absolute inset-4 bg-violet-500/5 rounded-full blur-[80px] animate-pulse [animation-duration:6s] pointer-events-none" />
+            
+            {/* Outer cybernetic ring */}
+            <div className="absolute inset-0 rounded-full border border-cyan-500/25 bg-black/40 backdrop-blur-md flex items-center justify-center animate-spin-slow [animation-duration:25s]">
+              <div className="absolute top-0 left-1/2 -translate-x-1/2 w-2 h-2 bg-cyan-400 rounded-full shadow-[0_0_10px_#22d3ee]" />
+              <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-2 h-2 bg-violet-500 rounded-full shadow-[0_0_10px_#a78bfa]" />
+            </div>
+            
+            {/* Core Shield Emblem */}
+            <div className="relative w-36 h-36 md:w-44 md:h-44 rounded-3xl bg-zinc-950/90 border-2 border-cyan-500/40 flex flex-col items-center justify-center shadow-[0_0_50px_rgba(6,182,212,0.15)] overflow-hidden group">
+              {/* Circuit board line accents */}
+              <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-cyan-400 to-transparent" />
+              <div className="absolute inset-y-0 left-0 w-px bg-gradient-to-b from-transparent via-cyan-400 to-transparent" />
+              
+              {/* Big central letter or icon */}
+              <div className="flex flex-col items-center gap-1.5 relative z-10 animate-pulse [animation-duration:3s]">
+                <ShieldCheck className="w-14 h-14 md:w-16 md:h-16 text-cyan-400 drop-shadow-[0_0_15px_rgba(6,182,212,0.6)]" />
+                <span className="font-mono text-[8px] md:text-[9px] font-bold tracking-[0.3em] uppercase text-zinc-400">SOVRANLY</span>
+              </div>
+            </div>
           </div>
           <h2 className="text-5xl font-extrabold tracking-tighter text-white">Sovereign Asset Management</h2>
           <p className="text-xl text-zinc-400">Secure, blockchain-based IP management for visionary creators.</p>

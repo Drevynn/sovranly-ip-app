@@ -42,7 +42,8 @@ import {
   Lock,
   ChevronDown,
   Info,
-  Heart
+  Heart,
+  ShieldCheck
 } from 'lucide-react';
 import { ethers } from 'ethers';
 import Image from 'next/image';
@@ -667,7 +668,9 @@ Secure cryptographic hash tunnel verified by Sovranly IP.`;
       <nav className="border-b border-zinc-900 bg-zinc-950/80 backdrop-blur-md sticky top-0 z-30">
         <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
           <Link href="/dashboard" className="flex items-center gap-3 group">
-            <Image src="/sovranly-logo-v2.png" alt="Sovranly IP" width={34} height={34} className="rounded-xl border border-white/5 group-hover:scale-105 transition-transform" />
+            <div className="w-9 h-9 bg-zinc-950 border border-cyan-500/30 rounded-xl flex items-center justify-center shadow-lg shadow-cyan-950/20 group-hover:scale-105 transition-transform">
+              <ShieldCheck className="w-5 h-5 text-cyan-400 drop-shadow-[0_0_8px_rgba(34,211,238,0.4)]" />
+            </div>
             <div className="flex flex-col">
               <span className="font-extrabold tracking-tight text-white leading-tight">SOVRANLY IP</span>
               <span className="text-[10px] uppercase font-mono text-cyan-400 tracking-wider">Web3 IP Marketplace</span>

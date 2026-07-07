@@ -30,7 +30,6 @@ import {
   Flame
 } from 'lucide-react';
 import Image from 'next/image';
-import corporateSeal from '@/src/assets/images/creative_sovereignty_seal_1783058547625.jpg';
 
 interface TeamMember {
   name: string;
@@ -275,19 +274,21 @@ export default function AboutUs() {
             <div className="relative group overflow-hidden rounded-2xl border border-zinc-800 bg-zinc-950/40 p-2 shadow-2xl transition-all duration-500 hover:border-cyan-500/30">
               {/* Outer glow effect */}
               <div className="absolute inset-0 bg-cyan-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-xl pointer-events-none" />
-              <div className="relative w-48 h-64 md:w-52 md:h-68 rounded-xl overflow-hidden shadow-lg">
-                <Image 
-                  src={corporateSeal} 
-                  alt="Corporate Seal for Creative Sovereignty" 
-                  fill 
-                  className="object-cover transition-transform duration-700 group-hover:scale-105" 
-                  priority
-                  referrerPolicy="no-referrer"
-                />
+              <div className="relative w-48 h-64 md:w-52 md:h-68 rounded-xl bg-zinc-950/90 border border-cyan-500/30 flex flex-col items-center justify-center p-6 text-center select-none shadow-inner overflow-hidden">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-cyan-500/10 rounded-full blur-2xl pointer-events-none" />
+                <div className="absolute bottom-0 left-0 w-32 h-32 bg-violet-500/5 rounded-full blur-2xl pointer-events-none" />
+                <ShieldCheck className="w-16 h-16 text-cyan-400 drop-shadow-[0_0_10px_rgba(6,182,212,0.5)] mb-4 animate-pulse" />
+                <span className="font-mono text-[10px] text-zinc-500 tracking-[0.2em] uppercase mb-1">SOVEREIGN SEAL</span>
+                <span className="text-xs font-bold text-white tracking-wide uppercase">CREATIVE SOVEREIGNTY</span>
+                <div className="mt-4 pt-4 border-t border-zinc-900 w-full text-[8px] font-mono text-zinc-600 space-y-1">
+                  <div>BLOCK ID: #CS-1783058</div>
+                  <div>SECURITY LVL: CLASS-4</div>
+                  <div>STATUS: ACTIVE</div>
+                </div>
               </div>
             </div>
             <span className="mt-3 text-[10px] font-mono uppercase text-zinc-500 tracking-wider text-center">
-              🔒 Creative Sovereignty Corporate Seal
+              🔒 Creative Sovereignty Sovereign Shield
             </span>
           </div>
         </div>
