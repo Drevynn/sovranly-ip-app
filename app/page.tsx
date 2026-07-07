@@ -220,7 +220,7 @@ export default function HomePage() {
         <div className="flex flex-col items-center gap-4">
           <div className="flex items-center gap-6">
             <Link 
-              href="https://www.tiktok.com/@uscared.me3" 
+              href="https://www.tiktok.com/@sovranlyip?lang=en" 
               target="_blank" 
               rel="noopener noreferrer"
               className="flex items-center gap-2 px-4 py-2 bg-zinc-900 border border-zinc-800 rounded-full text-xs text-zinc-400 hover:text-white hover:border-zinc-700 transition-all"

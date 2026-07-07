@@ -74,7 +74,7 @@ export default function TermsOfService() {
             Welcome to <span className="text-white font-semibold">Sovranly IP</span>. By connecting your digital signature, mounting secure file buckets, or building continuous licensure deeds on this platform, you agree to comply with and be bound by the following Terms of Service. Please review these protocols thoroughly.
           </p>
           <div className="mt-4 pt-4 border-t border-zinc-800 text-xs text-zinc-500 leading-relaxed">
-            <strong className="text-zinc-300 font-mono">Brand Identity Disclaimer:</strong> "Pulse" and "Sovranly IP" are active service marks intended for computer software as a service (SaaS) environments providing intellectual property management and automated royalty distribution. <span className="text-zinc-400 font-semibold">Operated by Creative Sovereignty LLC.</span>
+            <strong className="text-zinc-300 font-mono">Brand Identity Disclaimer:</strong> &quot;Pulse&quot; and &quot;Sovranly IP&quot; are active service marks intended for computer software as a service (SaaS) environments providing intellectual property management and automated royalty distribution. <span className="text-zinc-400 font-semibold">Operated by Creative Sovereignty LLC.</span>
           </div>
         </div>
 

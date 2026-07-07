@@ -3,6 +3,7 @@
 import { Card, CardContent } from '@/components/ui/card';
 import Image from 'next/image';
 import ActivityLog from '@/components/ActivityLog';
+import ApiLatencyMonitor from '@/components/ApiLatencyMonitor';
 
 export default function Overview() {
   const cards = [
@@ -43,6 +44,9 @@ export default function Overview() {
           </Card>
         ))}
       </div>
+
+      {/* API Latency Monitor Component */}
+      <ApiLatencyMonitor />
 
       {/* Real-time Activity Log Component */}
       <ActivityLog />

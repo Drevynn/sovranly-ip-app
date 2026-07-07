@@ -45,6 +45,32 @@ export interface NotificationItem {
   details?: string;
 }
 
+// Pure generators defined outside component scope to comply with React Compiler purity rules
+export const generateRandomId = (prefix: string): string => {
+  return prefix + Math.random().toString(36).slice(2, 9);
+};
+
+export const generateSimulationPayload = (type: NotificationType) => {
+  const randId = Math.floor(100 + Math.random() * 900);
+  const mockTxHash = '0x' + Math.random().toString(16).slice(2, 10) + '...' + Math.random().toString(16).slice(2, 10);
+  
+  if (type === 'royalty') {
+    const randEth = (0.05 + Math.random() * 0.3).toFixed(3);
+    return { randId, mockTxHash, randEth };
+  } else if (type === 'license_expiry') {
+    const days = [3, 7, 14][Math.floor(Math.random() * 3)];
+    const assets = ["Aether Synthesizer", "Vaporwave Retro", "Cybernetic Horizon", "Neon Nexus"];
+    const assetName = assets[Math.floor(Math.random() * assets.length)];
+    return { randId, mockTxHash, days, assetName };
+  } else {
+    const randOffer = (0.2 + Math.random() * 0.8).toFixed(2);
+    const assets = ["Retro Synth Wave", "Pixel Cyberpunk NFT", "Aether Drum Loop", "Solana Smart Contract Core"];
+    const assetName = assets[Math.floor(Math.random() * assets.length)];
+    const offerer = '0x' + Math.random().toString(16).slice(2, 10).toUpperCase();
+    return { randId, mockTxHash, randOffer, assetName, offerer };
+  }
+};
+
 export interface ToastMessage {
   id: string;
   type: NotificationType;
@@ -84,7 +110,23 @@ export function NotificationProvider({ children }: { children: React.ReactNode }
   const [toasts, setToasts] = useState<ToastMessage[]>([]);
   const [isClient, setIsClient] = useState(false);
 
+  // Helper to trigger a toast message
+  function triggerToast(type: NotificationType, title: string, description: string) {
+    const id = generateRandomId('toast-');
+    setToasts(prev => [...prev, { id, type, title, description }]);
+    
+    // Auto remove toast after 5 seconds
+    setTimeout(() => {
+      removeToast(id);
+    }, 5000);
+  }
+
+  function removeToast(id: string) {
+    setToasts(prev => prev.filter(t => t.id !== id));
+  }
+
   useEffect(() => {
+    /* eslint-disable-next-line react-hooks/set-state-in-effect */
     setIsClient(true);
   }, []);
 
@@ -207,22 +249,8 @@ export function NotificationProvider({ children }: { children: React.ReactNode }
       console.warn("Notification Firestore connection error. Falling back to local state.", err);
       loadLocalNotifications();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user, isSandboxMode, isClient]);
-
-  // Helper to trigger a toast message
-  const triggerToast = (type: NotificationType, title: string, description: string) => {
-    const id = 'toast-' + Math.random().toString(36).slice(2, 9);
-    setToasts(prev => [...prev, { id, type, title, description }]);
-    
-    // Auto remove toast after 5 seconds
-    setTimeout(() => {
-      removeToast(id);
-    }, 5000);
-  };
-
-  const removeToast = (id: string) => {
-    setToasts(prev => prev.filter(t => t.id !== id));
-  };
 
   // Add a new notification
   const addNotification = async (type: NotificationType, title: string, description: string, details?: string) => {
@@ -240,7 +268,7 @@ export function NotificationProvider({ children }: { children: React.ReactNode }
     };
 
     if (!user || isSandboxMode) {
-      const mockId = 'local-' + Math.random().toString(36).slice(2, 9);
+      const mockId = generateRandomId('local-');
       const newNotification: NotificationItem = {
         id: mockId,
         userId: targetUserId,
@@ -271,7 +299,7 @@ export function NotificationProvider({ children }: { children: React.ReactNode }
       // Firestore subscription automatically triggers toast and list updates!
     } catch (err) {
       console.warn("Failed to write notification to Firestore, falling back locally", err);
-      const mockId = 'local-' + Math.random().toString(36).slice(2, 9);
+      const mockId = generateRandomId('local-');
       const newNotification: NotificationItem = {
         id: mockId,
         userId: targetUserId,
@@ -404,36 +432,28 @@ export function NotificationProvider({ children }: { children: React.ReactNode }
 
   // Trigger one of our 3 core notification event simulations
   const triggerSimulationEvent = async (type: NotificationType) => {
-    const randId = Math.floor(100 + Math.random() * 900);
-    const mockTxHash = '0x' + Math.random().toString(16).slice(2, 10) + '...' + Math.random().toString(16).slice(2, 10);
+    const payload = generateSimulationPayload(type);
 
-    if (type === 'royalty') {
-      const randEth = (0.05 + Math.random() * 0.3).toFixed(3);
+    if (type === 'royalty' && 'randEth' in payload) {
       await addNotification(
         'royalty',
         'Royalty Earnings Claimed',
-        `Sovereign split ledger verified payment of ${randEth} ETH from automatic marketplace streaming licenses.`,
-        JSON.stringify({ amount: `${randEth} ETH`, txHash: mockTxHash })
+        `Sovereign split ledger verified payment of ${payload.randEth} ETH from automatic marketplace streaming licenses.`,
+        JSON.stringify({ amount: `${payload.randEth} ETH`, txHash: payload.mockTxHash })
       );
-    } else if (type === 'license_expiry') {
-      const days = [3, 7, 14][Math.floor(Math.random() * 3)];
-      const assets = ["Aether Synthesizer", "Vaporwave Retro", "Cybernetic Horizon", "Neon Nexus"];
-      const assetName = assets[Math.floor(Math.random() * assets.length)];
+    } else if (type === 'license_expiry' && 'days' in payload && 'assetName' in payload) {
       await addNotification(
         'license_expiry',
         'License Nearing Expiry Warning',
-        `Standard commercial distribution agreement for "${assetName}" is scheduled to expire in exactly ${days} days.`,
-        JSON.stringify({ daysLeft: days, assetTitle: assetName })
+        `Standard commercial distribution agreement for "${payload.assetName}" is scheduled to expire in exactly ${payload.days} days.`,
+        JSON.stringify({ daysLeft: payload.days, assetTitle: payload.assetName })
       );
-    } else if (type === 'offer') {
-      const randOffer = (0.2 + Math.random() * 0.8).toFixed(2);
-      const assets = ["Retro Synth Wave", "Pixel Cyberpunk NFT", "Aether Drum Loop", "Solana Smart Contract Core"];
-      const assetName = assets[Math.floor(Math.random() * assets.length)];
+    } else if (type === 'offer' && 'randOffer' in payload && 'assetName' in payload && 'offerer' in payload) {
       await addNotification(
         'offer',
         'New Marketplace Offer Received',
-        `A decentralized buyer offered ${randOffer} ETH for sync licensing rights on your IP Asset: "${assetName}".`,
-        JSON.stringify({ offerAmount: `${randOffer} ETH`, assetTitle: assetName, offerer: '0x' + Math.random().toString(16).slice(2, 10).toUpperCase() })
+        `A decentralized buyer offered ${payload.randOffer} ETH for sync licensing rights on your IP Asset: "${payload.assetName}".`,
+        JSON.stringify({ offerAmount: `${payload.randOffer} ETH`, assetTitle: payload.assetName, offerer: payload.offerer })
       );
     }
   };

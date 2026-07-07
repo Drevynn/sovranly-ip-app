@@ -98,7 +98,7 @@ export default function LandingPage() {
       <footer className="mt-24 border-t border-zinc-900 py-16 text-center space-y-6">
         <div className="flex flex-col items-center gap-4">
           <Link 
-            href="https://www.tiktok.com/@uscared.me3" 
+            href="https://www.tiktok.com/@sovranlyip?lang=en" 
             target="_blank" 
             rel="noopener noreferrer"
             className="flex items-center gap-2 px-6 py-3 bg-zinc-900 border border-zinc-800 rounded-full text-sm text-zinc-400 hover:text-white hover:border-zinc-700 transition-all shadow-lg"

@@ -613,7 +613,7 @@ export default function AboutUs() {
                           Our founder, a filmmaker and musician, uses Sovranly IP to protect content shared across social channels. Visit the portfolio to see Zero-Trust protection in action.
                         </p>
                         <a 
-                          href="https://www.tiktok.com/@uscared.me3" 
+                          href="https://www.tiktok.com/@sovranlyip?lang=en" 
                           target="_blank" 
                           rel="noopener noreferrer"
                           className="flex items-center gap-2 px-4 py-2 bg-amber-950/20 border border-amber-500/20 rounded-xl text-[10px] font-mono font-bold text-amber-400 hover:bg-amber-950/40 transition-all uppercase"
