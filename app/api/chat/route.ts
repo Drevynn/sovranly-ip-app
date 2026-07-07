@@ -57,11 +57,32 @@ export async function POST(req: Request) {
 
         Tone: Professional, empowering, highly competent, clear, and reassuring. Keep responses beautifully structured using Markdown for readability.`,
         temperature: 0.7,
+        tools: [{ googleSearch: {} }],
       },
     });
 
     const text = response.text || '';
-    return NextResponse.json({ text });
+    
+    // Extract search grounding sources
+    const sources: { title: string; url: string }[] = [];
+    const seenUrls = new Set<string>();
+    const chunks = response.candidates?.[0]?.groundingMetadata?.groundingChunks;
+    if (chunks && Array.isArray(chunks)) {
+      chunks.forEach((chunk: any) => {
+        if (chunk.web && chunk.web.uri) {
+          const url = chunk.web.uri;
+          if (!seenUrls.has(url)) {
+            seenUrls.add(url);
+            sources.push({
+              title: chunk.web.title || 'Sovereign Reference Source',
+              url: url,
+            });
+          }
+        }
+      });
+    }
+
+    return NextResponse.json({ text, sources });
   } catch (error) {
     console.error('Gemini call error:', error);
     return NextResponse.json(

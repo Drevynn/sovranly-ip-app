@@ -440,7 +440,7 @@ export default function WikiPage() {
   });
 
   // Chat agent states
-  const [chatHistory, setChatHistory] = useState<{ role: 'user' | 'model'; text: string }[]>([
+  const [chatHistory, setChatHistory] = useState<{ role: 'user' | 'model'; text: string; sources?: { title: string; url: string }[] }[]>([
     { 
       role: 'model', 
       text: 'Greetings, Creator/Licensee. I am the Sovranly AI Sovereign IP Agent, pre-programmed with our on-chain royalty structures (85%/15% splits), USPTO Trademark Class 42 guidelines, TESS database procedures, and Volunteers for the Arts (VLA) pro-bono resources.\n\nType your query, or click any quick-assistance option below to start!' 
@@ -488,7 +488,11 @@ export default function WikiPage() {
       
       setChatHistory(prev => [
         ...prev, 
-        { role: 'model', text: data.text || 'Apologies, I did not receive a legible cryptographically signed response.' }
+        { 
+          role: 'model', 
+          text: data.text || 'Apologies, I did not receive a legible cryptographically signed response.',
+          sources: data.sources
+        }
       ]);
     } catch (err) {
       console.error(err);
@@ -979,6 +983,28 @@ export default function WikiPage() {
                       }`}
                     >
                       {formatChatText(chat.text)}
+
+                      {chat.sources && chat.sources.length > 0 && (
+                        <div className="mt-3 pt-3 border-t border-cyan-500/10 space-y-2">
+                          <div className="text-[10px] font-bold uppercase tracking-wider text-cyan-400 flex items-center gap-1">
+                            <Sparkles className="w-3 h-3 animate-pulse" /> Verified Search Citations
+                          </div>
+                          <div className="flex flex-wrap gap-1.5">
+                            {chat.sources.map((src, sIdx) => (
+                              <a
+                                key={sIdx}
+                                href={src.url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center gap-1 px-2 py-0.5 bg-zinc-950 border border-cyan-500/20 hover:border-cyan-400/50 rounded text-[10px] text-zinc-300 hover:text-cyan-300 transition-all cursor-pointer shadow-sm"
+                              >
+                                <ExternalLink className="w-2.5 h-2.5 text-cyan-400 flex-shrink-0" />
+                                <span className="max-w-[120px] truncate">{src.title}</span>
+                              </a>
+                            ))}
+                          </div>
+                        </div>
+                      )}
                     </div>
                   </div>
                 ))}

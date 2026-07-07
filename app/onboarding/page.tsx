@@ -35,6 +35,7 @@ type Message = {
   content: string;
   id: string;
   timestamp: string;
+  sources?: { title: string; url: string }[];
 };
 
 type TourStep = {
@@ -307,7 +308,8 @@ export default function OnboardingVoiceAgent() {
           role: 'model',
           content: data.text,
           id: responseId,
-          timestamp: 'Just now'
+          timestamp: 'Just now',
+          sources: data.sources
         };
         setMessages(prev => [...prev, botMsg]);
         setIsThinking(false);
@@ -456,7 +458,8 @@ export default function OnboardingVoiceAgent() {
           role: 'model',
           content: data.text,
           id: responseId,
-          timestamp: 'Just now'
+          timestamp: 'Just now',
+          sources: data.sources
         };
         setMessages(prev => [...prev, tourAIResponse]);
         setIsThinking(false);
@@ -1044,6 +1047,28 @@ export default function OnboardingVoiceAgent() {
                           : 'bg-cyan-950/20 text-cyan-300 border border-cyan-950/50'
                       }`}>
                         {m.content}
+
+                        {m.sources && m.sources.length > 0 && (
+                          <div className="mt-3.5 pt-3.5 border-t border-cyan-500/10 space-y-2">
+                            <div className="text-[10px] font-bold uppercase tracking-wider text-cyan-400/80 flex items-center gap-1.5 font-sans">
+                              <Sparkles className="w-3 h-3 animate-pulse" /> Verified Search Citations
+                            </div>
+                            <div className="flex flex-wrap gap-2">
+                              {m.sources.map((src, sIdx) => (
+                                <a
+                                  key={sIdx}
+                                  href={src.url}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-zinc-950/60 border border-cyan-500/20 hover:border-cyan-400/50 rounded-lg text-[10px] text-zinc-300 hover:text-cyan-300 transition-all font-sans cursor-pointer shadow-sm hover:shadow-cyan-950/20"
+                                >
+                                  <Compass className="w-3 h-3 text-cyan-400 flex-shrink-0" />
+                                  <span className="max-w-[140px] truncate">{src.title}</span>
+                                </a>
+                              ))}
+                            </div>
+                          </div>
+                        )}
                       </div>
                     </div>
                   ))}
