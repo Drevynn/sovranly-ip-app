@@ -1,0 +1,33 @@
+steps:
+  # 1. Build the container image using the Dockerfile
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [
+      'build',
+      '-t', 'gcr.io/$PROJECT_ID/sovranly-ip:$COMMIT_SHA',
+      '-t', 'gcr.io/$PROJECT_ID/sovranly-ip:latest',
+      '.'
+    ]
+
+  # 2. Push the container image to Container Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/$PROJECT_ID/sovranly-ip:$COMMIT_SHA']
+
+  # 3. Push the latest tag too
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/$PROJECT_ID/sovranly-ip:latest']
+
+  # 4. Deploy the image to Cloud Run
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: 'gcloud'
+    args: [
+      'run', 'deploy', 'sovranly-ip',
+      '--image', 'gcr.io/$PROJECT_ID/sovranly-ip:$COMMIT_SHA',
+      '--region', 'us-west1',
+      '--platform', 'managed',
+      '--allow-unauthenticated'
+    ]
+
+options:
+  # Explicitly instruct Cloud Build to stream logs to Cloud Logging only.
+  # This resolves the service account permission/bucket logging constraint error.
+  logging: 'CLOUD_LOGGING_ONLY'

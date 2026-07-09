@@ -1,30 +1,73 @@
 'use client';
 import { useState } from 'react';
+import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { ExternalLink, Mail } from 'lucide-react';
+import { ExternalLink, Mail, ShieldCheck } from 'lucide-react';
+import Link from 'next/link';
+import SlideStack from '@/components/SlideStack';
 
 export default function LandingPage() {
   const [submitted, setSubmitted] = useState(false);
 
   return (
-    <div className="min-h-screen bg-[#050505] text-zinc-100 p-8">
+    <div className="min-h-screen bg-black text-zinc-100 p-8">
       <header className="flex justify-between items-center mb-16">
-        <h1 className="text-3xl font-bold text-white tracking-tighter">SOVRANLY IP</h1>
+        <div className="flex items-center gap-3">
+          <div className="w-9 h-9 bg-zinc-950 border border-cyan-500/30 rounded-xl flex items-center justify-center shadow-lg shadow-cyan-950/20">
+            <ShieldCheck className="w-5 h-5 text-cyan-400 drop-shadow-[0_0_8px_rgba(34,211,238,0.4)]" />
+          </div>
+          <span className="font-bold tracking-tighter text-white text-xl uppercase">SOVRANLY IP</span>
+        </div>
         <div className="space-x-4">
-          <a href="/faq" className="text-zinc-400 hover:text-white transition-colors">FAQ</a>
-          <a href="/wiki" className="text-zinc-400 hover:text-white transition-colors">Wiki</a>
-          <Button variant="outline" className="border-zinc-700 bg-transparent text-white hover:bg-zinc-800" onClick={() => window.location.href = '/'}>Launch App</Button>
+          <Link href="/faq" className="text-zinc-400 hover:text-white transition-colors">FAQ</Link>
+          <Link href="/wiki" className="text-zinc-400 hover:text-white transition-colors">Wiki</Link>
+          <Button asChild variant="outline" className="border-zinc-700 bg-transparent text-white hover:bg-zinc-800">
+            <Link href="/">Launch App</Link>
+          </Button>
         </div>
       </header>
 
       <main className="max-w-4xl mx-auto space-y-16">
         <section className="text-center space-y-6">
+          {/* Futuristic CSS-based Emblem/Shield (Zero-Trust Replacement for Hero Image) */}
+          <div className="relative w-72 h-72 md:w-80 md:h-80 mx-auto mb-6 flex items-center justify-center select-none">
+            {/* Ambient glows */}
+            <div className="absolute inset-0 bg-cyan-500/10 rounded-full blur-[100px] animate-pulse [animation-duration:4s] pointer-events-none" />
+            <div className="absolute inset-4 bg-violet-500/5 rounded-full blur-[80px] animate-pulse [animation-duration:6s] pointer-events-none" />
+            
+            {/* Outer cybernetic ring */}
+            <div className="absolute inset-0 rounded-full border border-cyan-500/25 bg-black/40 backdrop-blur-md flex items-center justify-center animate-spin-slow [animation-duration:25s]">
+              <div className="absolute top-0 left-1/2 -translate-x-1/2 w-2 h-2 bg-cyan-400 rounded-full shadow-[0_0_10px_#22d3ee]" />
+              <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-2 h-2 bg-violet-500 rounded-full shadow-[0_0_10px_#a78bfa]" />
+            </div>
+            
+            {/* Core Shield Emblem */}
+            <div className="relative w-36 h-36 md:w-44 md:h-44 rounded-3xl bg-zinc-950/90 border-2 border-cyan-500/40 flex flex-col items-center justify-center shadow-[0_0_50px_rgba(6,182,212,0.15)] overflow-hidden group">
+              {/* Circuit board line accents */}
+              <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-cyan-400 to-transparent" />
+              <div className="absolute inset-y-0 left-0 w-px bg-gradient-to-b from-transparent via-cyan-400 to-transparent" />
+              
+              {/* Big central letter or icon */}
+              <div className="flex flex-col items-center gap-1.5 relative z-10 animate-pulse [animation-duration:3s]">
+                <ShieldCheck className="w-14 h-14 md:w-16 md:h-16 text-cyan-400 drop-shadow-[0_0_15px_rgba(6,182,212,0.6)]" />
+                <span className="font-mono text-[8px] md:text-[9px] font-bold tracking-[0.3em] uppercase text-zinc-400">SOVRANLY</span>
+              </div>
+            </div>
+          </div>
           <h2 className="text-5xl font-extrabold tracking-tighter text-white">Sovereign Asset Management</h2>
           <p className="text-xl text-zinc-400">Secure, blockchain-based IP management for visionary creators.</p>
+        </section>
+
+        <section className="py-12">
+          <div className="text-center mb-10">
+            <h3 className="text-sm font-mono text-cyan-500 uppercase tracking-widest mb-2">Platform Capabilities</h3>
+            <p className="text-zinc-500 text-sm">Click to cycle through features</p>
+          </div>
+          <SlideStack />
         </section>
 
         <section className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -77,6 +120,27 @@ export default function LandingPage() {
           )}
         </section>
       </main>
+
+      {/* Footer */}
+      <footer className="mt-24 border-t border-zinc-900 py-16 text-center space-y-6">
+        <div className="flex flex-col items-center gap-4">
+          <Link 
+            href="https://www.tiktok.com/@sovranlyip?lang=en" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="flex items-center gap-2 px-6 py-3 bg-zinc-900 border border-zinc-800 rounded-full text-sm text-zinc-400 hover:text-white hover:border-zinc-700 transition-all shadow-lg"
+          >
+            <ExternalLink className="w-4 h-4 text-cyan-500" />
+            Watch our Founder on TikTok
+          </Link>
+        </div>
+        <div className="flex justify-center items-center gap-4 text-zinc-500 text-xs">
+          <Link href="/terms" className="hover:text-cyan-400 transition-colors">Terms of Service</Link>
+          <span>•</span>
+          <Link href="/privacy" className="hover:text-cyan-400 transition-colors">Privacy Policy</Link>
+        </div>
+        <p className="text-zinc-600 text-xs">© 2026 Sovranly IP. All sovereign rights reserved.</p>
+      </footer>
     </div>
   );
 }

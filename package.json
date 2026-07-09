@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "start": "next start",
+    "start": "node server.js",
     "build": "next build",
     "lint": "eslint ."
   },
@@ -22,7 +22,7 @@
     "express": "^4.21.0",
     "express-session": "^1.18.0",
     "firebase": "^12.13.0",
-    "firebase-admin": "^13.9.0",
+    "firebase-admin": "^13.10.0",
     "lucide-react": "^0.400.0",
     "motion": "^12.40.0",
     "next": "^16.3.0-canary.17",
@@ -47,6 +47,8 @@
     "@types/react-dom": "^19.0.0",
     "autoprefixer": "^10.5.0",
     "eslint": "^9.0.0",
+    "eslint-config-next": "^16.3.0-preview.0",
+    "jimp": "^1.6.1",
     "postcss": "^8.0.0",
     "tailwindcss": "^4.0.0",
     "typescript": "^5.0.0"
