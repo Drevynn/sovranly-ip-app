@@ -24,7 +24,7 @@ export async function GET(request: Request) {
       snapshot = await queryRef.get();
     }
     
-    const inquiriesData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    const inquiriesData = snapshot.docs.map((doc: any) => ({ id: doc.id, ...doc.data() }));
     // Sort by newest first
     inquiriesData.sort((a: any, b: any) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
     

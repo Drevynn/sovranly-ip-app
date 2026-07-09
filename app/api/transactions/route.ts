@@ -6,7 +6,7 @@ export async function GET() {
     const transactionsRef = db.collection('transactions');
     const snapshot = await transactionsRef.orderBy('timestamp', 'desc').limit(5).get();
     
-    let txs = snapshot.docs.map(doc => {
+    let txs = snapshot.docs.map((doc: any) => {
       const data = doc.data();
       return {
         id: doc.id,
@@ -71,7 +71,7 @@ export async function GET() {
 
       // Re-fetch sorted list
       const snapshotNew = await transactionsRef.orderBy('timestamp', 'desc').limit(5).get();
-      txs = snapshotNew.docs.map(doc => {
+      txs = snapshotNew.docs.map((doc: any) => {
         const data = doc.data();
         return {
           id: doc.id,

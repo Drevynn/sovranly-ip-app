@@ -265,6 +265,8 @@ export default function HomePage() {
         
         <LanguageSelector />
         <div className="flex items-center gap-4 text-zinc-500 text-xs">
+          <Link href="/about" className="hover:text-cyan-400 transition-colors">About Us</Link>
+          <span>•</span>
           <Link href="/terms" className="hover:text-cyan-400 transition-colors">Terms of Service</Link>
           <span>•</span>
           <Link href="/privacy" className="hover:text-cyan-400 transition-colors">Privacy Policy</Link>

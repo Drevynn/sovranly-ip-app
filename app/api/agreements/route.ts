@@ -5,7 +5,7 @@ export async function GET() {
   try {
     console.log('Fetching agreements...');
     const snapshot = await db.collection('agreements').get();
-    const agreementsData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    const agreementsData = snapshot.docs.map((doc: any) => ({ id: doc.id, ...doc.data() }));
     return NextResponse.json(agreementsData);
   } catch (error) {
     console.error('Error fetching agreements:', error);

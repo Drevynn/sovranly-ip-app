@@ -331,8 +331,15 @@ export default function PricingPage() {
       </main>
 
       {/* Public Page Footer */}
-      <footer className="border-t border-white/5 py-12 bg-zinc-950/45 flex flex-col items-center justify-center gap-6 text-center text-zinc-650 text-xs">
+      <footer className="border-t border-white/5 py-12 bg-zinc-950/45 flex flex-col items-center justify-center gap-6 text-center text-zinc-500 text-xs">
         <LanguageSelector />
+        <div className="flex items-center gap-4 text-zinc-500">
+          <Link href="/about" className="hover:text-cyan-400 transition-colors">About Us</Link>
+          <span>•</span>
+          <Link href="/terms" className="hover:text-cyan-400 transition-colors">Terms of Service</Link>
+          <span>•</span>
+          <Link href="/privacy" className="hover:text-cyan-400 transition-colors">Privacy Policy</Link>
+        </div>
         <p>{t('copyright')}</p>
       </footer>
     </div>

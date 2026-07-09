@@ -15,6 +15,7 @@ import LaunchPlanner from '@/components/LaunchPlanner';
 import TechStackLedger from '@/components/TechStackLedger';
 import AboutUs from '@/components/AboutUs';
 import AiLicensingCenter from '@/components/AiLicensingCenter';
+import DataTokenizationHub from '@/components/DataTokenizationHub';
 import { useAuth } from '@/components/auth/FirebaseProvider';
 import { useLanguage } from '@/components/LanguageProvider';
 import { SignIn } from '@/components/auth/SignIn';
@@ -105,7 +106,8 @@ export default function DashboardPage() {
             activePage === 8 ? (t('launchPlanner') || 'Launch Planner') :
             activePage === 9 ? (t('techStackLedger') || 'Tech Stack Ledger') :
             activePage === 10 ? (t('aboutInvestors') || 'About & Investors') :
-            t('aiLicensing') || 'AI Training Vault'
+            activePage === 11 ? (t('aiLicensing') || 'AI Training Vault') :
+            'Sovereign Tokenizer'
           } 
           setWalletAddress={setCurrentAccount} 
           walletAddress={currentAccount} 
@@ -125,6 +127,7 @@ export default function DashboardPage() {
           {activePage === 9 && <TechStackLedger />}
           {activePage === 10 && <AboutUs />}
           {activePage === 11 && <AiLicensingCenter />}
+          {activePage === 12 && <DataTokenizationHub />}
         </main>
       </div>
     </div>

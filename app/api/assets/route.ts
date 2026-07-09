@@ -76,7 +76,7 @@ export async function GET() {
       querySnapshot = await db.collection('assets').get();
     }
 
-    const assetsData = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    const assetsData = querySnapshot.docs.map((doc: any) => ({ id: doc.id, ...doc.data() }));
     return NextResponse.json(assetsData);
   } catch (error) {
     console.error('Error fetching assets:', error);

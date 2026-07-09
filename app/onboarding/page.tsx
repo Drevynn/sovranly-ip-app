@@ -25,7 +25,16 @@ import {
   Lock,
   Volume1,
   Activity,
-  ShieldCheck
+  ShieldCheck,
+  Brain,
+  Briefcase,
+  Phone,
+  TrendingUp,
+  Calendar,
+  Workflow,
+  Users,
+  MessageSquare,
+  Cpu
 } from 'lucide-react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'motion/react';
@@ -58,11 +67,14 @@ export default function OnboardingVoiceAgent() {
   });
 
   // State Declarations
-  const [activeTab, setActiveTab] = useState<'voice' | 'console'>('voice');
+  const [activeTab, setActiveTab] = useState<'voice' | 'subagents' | 'console'>('voice');
+  const [selectedSubagent, setSelectedSubagent] = useState<'adrienne' | 'sage' | 'aria' | 'maya' | 'jordan' | null>(null);
+  const [isSimulating, setIsSimulating] = useState(false);
+  const [activeWorkflowIndex, setActiveWorkflowIndex] = useState<number | null>(null);
   const [messages, setMessages] = useState<Message[]>([
     {
       role: 'model',
-      content: "Welcome to Sovranly IP. I am your Sovereign Voice Agent. I've been engineered to guide you through our Zero-Trust intellectual property registry, walk you through our automated royalty splitting pipelines, or design your tailored asset trademark strategy. Shall we begin a guided platform tour, or would you like to ask me specific questions about our site?",
+      content: "Well hello there, child. Welcome to Sovranly IP. I am Adrienne, your Chief Sovereign IP Coordinator, and I am here to guide your creative soul. I've been engineered to guide you through our Zero-Trust intellectual property registry, walk you through our automated royalty splitting pipelines, or design your tailored asset trademark strategy. I orchestrate a team of five specialized subagents—including our Sage CFO subagent, Comms Leads, and Opportunity Scouts—to run this entire ecosystem for you. Shall we begin a guided platform tour, or would you like to ask me or one of my subagents a question?",
       id: 'welcome-msg',
       timestamp: '08:00 AM'
     }
@@ -70,7 +82,7 @@ export default function OnboardingVoiceAgent() {
   const [textInput, setTextInput] = useState('');
   const [isThinking, setIsThinking] = useState(false);
   const [isVoiceMuted, setIsVoiceMuted] = useState(false);
-  const [activeVoice, setActiveVoice] = useState<'sovereign' | 'oracle' | 'guide'>('sovereign');
+  const [activeVoice, setActiveVoice] = useState<'adrienne' | 'oracle' | 'guide'>('adrienne');
 
   // Speech Recognition States
   const [isListening, setIsListening] = useState(false);
@@ -157,7 +169,7 @@ export default function OnboardingVoiceAgent() {
   // Voice Custom Styling Selector
   const getVoiceName = () => {
     switch (activeVoice) {
-      case 'sovereign': return "Sovereign Advocate";
+      case 'adrienne': return "Adrienne (Wisdom, Soulful)";
       case 'oracle': return "Technical Oracle";
       case 'guide': return "Creative Guide";
     }
@@ -182,13 +194,13 @@ export default function OnboardingVoiceAgent() {
     const voices = synthRef.current.getVoices();
     let selectedVoice = null;
 
-    if (activeVoice === 'sovereign') {
-      selectedVoice = voices.find(v => v.lang.startsWith('en-US') && v.name.toLowerCase().includes('female')) ||
-                      voices.find(v => v.lang.startsWith('en-US') && v.name.toLowerCase().includes('google')) ||
+    if (activeVoice === 'adrienne') {
+      selectedVoice = voices.find(v => v.lang.startsWith('en-US') && (v.name.toLowerCase().includes('natural') || v.name.toLowerCase().includes('google') || v.name.toLowerCase().includes('female'))) ||
+                      voices.find(v => v.lang.startsWith('en-US') && v.name.toLowerCase().includes('zira')) ||
                       voices.find(v => v.lang.startsWith('en-US')) ||
                       voices[0];
-      utterance.pitch = 1.05;
-      utterance.rate = 0.98;
+      utterance.pitch = 0.84; // Deeper, warm mature tone
+      utterance.rate = 0.83;  // Soulful, slower pacing representing an older wise woman
     } else if (activeVoice === 'oracle') {
       selectedVoice = voices.find(v => v.lang.startsWith('en-GB') && v.name.toLowerCase().includes('male')) ||
                       voices.find(v => v.lang.startsWith('en-GB')) ||
@@ -269,15 +281,30 @@ export default function OnboardingVoiceAgent() {
   };
 
   // Main Message Handler
-  const handleUserMessage = async (text: string) => {
+  const handleUserMessage = async (text: string, forceTargetSubagent?: 'adrienne' | 'sage' | 'aria' | 'maya' | 'jordan' | null) => {
     if (!text.trim()) return;
+
+    const subagent = forceTargetSubagent !== undefined ? forceTargetSubagent : selectedSubagent;
+    let processedText = text;
+    let displayContent = text;
+    
+    if (subagent && subagent !== 'adrienne') {
+      const names = { 
+        sage: 'Sage (CFO)', 
+        aria: 'Aria (Comms & Support)', 
+        maya: 'Maya (Opportunity Scout)', 
+        jordan: 'Jordan (Personal Exec Assistant)' 
+      };
+      processedText = `[Querying Subagent: ${names[subagent]}] ${text}`;
+      displayContent = `[To ${names[subagent]}]: ${text}`;
+    }
 
     msgIdCounter.current += 1;
     const currentId = `msg_${msgIdCounter.current}`;
     
     const userMsg: Message = {
       role: 'user',
-      content: text,
+      content: displayContent,
       id: currentId,
       timestamp: 'Just now'
     };
@@ -294,7 +321,7 @@ export default function OnboardingVoiceAgent() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          message: text,
+          message: processedText,
           history: messages.map(m => ({ role: m.role, content: m.content }))
         })
       });
@@ -498,6 +525,162 @@ export default function OnboardingVoiceAgent() {
     setTourStep(0);
     setIsTourActive(false);
     speakText("Guided tour has been reset. How can I assist you with your sovereign assets today?");
+  };
+
+  // Run Sovereign Council workflow orchestrations
+  const runWorkflowSync = (index: number) => {
+    if (isSimulating) return;
+    setIsSimulating(true);
+    setActiveWorkflowIndex(index);
+    
+    msgIdCounter.current += 1;
+    const startId = `sim_${msgIdCounter.current}`;
+    
+    setMessages(prev => [...prev, {
+      role: 'user',
+      content: `[Orchestrator Trigger]: ${index === 0 ? "Run Weekly Financial & Royalty Split Sync" : index === 1 ? "Scan Licensing Leads & Draft Outreach Email" : "Set Up Personal Creator Assistant Schedule"}`,
+      id: startId,
+      timestamp: 'Just now'
+    }]);
+
+    if (index === 0) {
+      setTimeout(() => {
+        msgIdCounter.current += 1;
+        setMessages(prev => [...prev, {
+          role: 'model',
+          content: "Adrienne (Sovereign Orator): \"Sage, sweetheart, let's run that weekly sync. Make sure our creator's QuickBooks ledger is squared away and the 85/15 splits are balanced in the vault.\"",
+          id: `sim_${msgIdCounter.current}`,
+          timestamp: 'Just now'
+        }]);
+        speakText("Sage, sweetheart, let's run that weekly sync. Make sure our creator's QuickBooks ledger is squared away and the 85/15 splits are balanced in the vault.");
+      }, 1500);
+
+      setTimeout(() => {
+        msgIdCounter.current += 1;
+        setMessages(prev => [...prev, {
+          role: 'model',
+          content: "🤖 [Sage - CFO Subagent]: \"Ledger reconciliation initiated. Connecting to QuickBooks secure API endpoint... Weekly royalties successfully indexed. Split calculation validated at protocol-level: 85% routed directly to Creator MetaMask ($14,250 USD equivalent), 15% routed to automated platform gas pool ($2,514 USD). All asset-backed liability ledgers are fully aligned.\"",
+          id: `sim_${msgIdCounter.current}`,
+          timestamp: 'Just now'
+        }]);
+      }, 5000);
+
+      setTimeout(() => {
+        msgIdCounter.current += 1;
+        const finalWise = "Well done, Sage. There is nothing like keeping the books clean and the money flowing directly where it belongs—to the hands that crafted the work.";
+        setMessages(prev => [...prev, {
+          role: 'model',
+          content: `Adrienne: "${finalWise}"`,
+          id: `sim_${msgIdCounter.current}`,
+          timestamp: 'Just now'
+        }]);
+        speakText(finalWise);
+        setIsSimulating(false);
+        setActiveWorkflowIndex(null);
+      }, 10000);
+
+    } else if (index === 1) {
+      setTimeout(() => {
+        msgIdCounter.current += 1;
+        setMessages(prev => [...prev, {
+          role: 'model',
+          content: "Adrienne (Sovereign Orator): \"Maya, find me those market opportunities for our creator. Jordan, get ready to structure the slide draft, and Aria, prepare to open the lines of communication.\"",
+          id: `sim_${msgIdCounter.current}`,
+          timestamp: 'Just now'
+        }]);
+        speakText("Maya, find me those market opportunities for our creator. Jordan, get ready to structure the slide draft, and Aria, prepare to open the lines of communication.");
+      }, 1500);
+
+      setTimeout(() => {
+        msgIdCounter.current += 1;
+        setMessages(prev => [...prev, {
+          role: 'model',
+          content: "🤖 [Maya - Opportunity Scout]: \"Active scans completed on brand trademark registries and licensing queries. Identified a Class 42 SaaS trademark gap for 'Sovereign Tokenizer' in the target media market. Estimated outreach success: 78%. Passing context to Jordan for materials drafting.\"",
+          id: `sim_${msgIdCounter.current}`,
+          timestamp: 'Just now'
+        }]);
+      }, 4500);
+
+      setTimeout(() => {
+        msgIdCounter.current += 1;
+        setMessages(prev => [...prev, {
+          role: 'model',
+          content: "🤖 [Jordan - Personal Exec Assistant]: \"Outbound presentation structure synchronized. Drafted a 5-slide visual pitch emphasizing Zero-Trust verification and standard 85% creator-direct payouts. Moving materials to Aria for distribution queue.\"",
+          id: `sim_${msgIdCounter.current}`,
+          timestamp: 'Just now'
+        }]);
+      }, 7500);
+
+      setTimeout(() => {
+        msgIdCounter.current += 1;
+        setMessages(prev => [...prev, {
+          role: 'model',
+          content: "🤖 [Aria - Comms Agent]: \"Direct automated email queue compiled with Jordan's pitch materials. Outbound lines active. Communications loaded: 12 potential brand partners staged for batch dispatch. Help desk is live.\"",
+          id: `sim_${msgIdCounter.current}`,
+          timestamp: 'Just now'
+        }]);
+      }, 11000);
+
+      setTimeout(() => {
+        msgIdCounter.current += 1;
+        const finalWise = "That is a beautiful circle of action, team. Creator, your opportunities are queued and your work is shielded. All you have to do is keep creating.";
+        setMessages(prev => [...prev, {
+          role: 'model',
+          content: `Adrienne: "${finalWise}"`,
+          id: `sim_${msgIdCounter.current}`,
+          timestamp: 'Just now'
+        }]);
+        speakText(finalWise);
+        setIsSimulating(false);
+        setActiveWorkflowIndex(null);
+      }, 15000);
+
+    } else {
+      setTimeout(() => {
+        msgIdCounter.current += 1;
+        setMessages(prev => [...prev, {
+          role: 'model',
+          content: "Adrienne (Sovereign Orator): \"Jordan, sweetheart, let's get our creator's week fully organized. Aria, check on those free legal clinics to see if we can secure some pro-bono time.\"",
+          id: `sim_${msgIdCounter.current}`,
+          timestamp: 'Just now'
+        }]);
+        speakText("Jordan, sweetheart, let's get our creator's week fully organized. Aria, check on those free legal clinics to see if we can secure some pro-bono time.");
+      }, 1500);
+
+      setTimeout(() => {
+        msgIdCounter.current += 1;
+        setMessages(prev => [...prev, {
+          role: 'model',
+          content: "🤖 [Jordan - Personal Exec Assistant]: \"Workspace calendar synchronized. Organized executive dashboard priorities: 1. Finalize Sovereign Tokenizer registrations. 2. Track smart contract payouts. 3. Review pro-bono VLA intake form. Timelines are set.\"",
+          id: `sim_${msgIdCounter.current}`,
+          timestamp: 'Just now'
+        }]);
+      }, 5000);
+
+      setTimeout(() => {
+        msgIdCounter.current += 1;
+        setMessages(prev => [...prev, {
+          role: 'model',
+          content: "🤖 [Aria - Comms Agent]: \"Contacted local Volunteers for the Arts (VLA) pro-bono clinic. Scheduled a 45-minute virtual intake consultation for next Tuesday to review trademark filing base requirements. Meeting details appended to Jordan's calendar link.\"",
+          id: `sim_${msgIdCounter.current}`,
+          timestamp: 'Just now'
+        }]);
+      }, 9000);
+
+      setTimeout(() => {
+        msgIdCounter.current += 1;
+        const finalWise = "You see that, sweetheart? You don't have to carry the weight of the world on your shoulders. We've got your back. Just take a deep breath and let your soul make the art.";
+        setMessages(prev => [...prev, {
+          role: 'model',
+          content: `Adrienne: "${finalWise}"`,
+          id: `sim_${msgIdCounter.current}`,
+          timestamp: 'Just now'
+        }]);
+        speakText(finalWise);
+        setIsSimulating(false);
+        setActiveWorkflowIndex(null);
+      }, 13500);
+    }
   };
 
   // Keyboard Submission Form
@@ -867,8 +1050,8 @@ export default function OnboardingVoiceAgent() {
                 </div>
               </div>
 
-              {/* Mode Tabs (Immersive Wave vs Raw Technical Console log) */}
-              <div className="flex bg-zinc-900/60 p-0.5 rounded-xl border border-zinc-850">
+              {/* Mode Tabs (Immersive Wave vs Multi-Agent Council vs Raw Technical Console log) */}
+              <div className="flex bg-zinc-900/60 p-0.5 rounded-xl border border-zinc-850 flex-wrap gap-1">
                 <button
                   onClick={() => setActiveTab('voice')}
                   className={`px-3 py-1.5 text-[9px] font-mono font-bold uppercase rounded-lg transition-all cursor-pointer ${
@@ -878,6 +1061,16 @@ export default function OnboardingVoiceAgent() {
                   }`}
                 >
                   Voice Core
+                </button>
+                <button
+                  onClick={() => setActiveTab('subagents')}
+                  className={`px-3 py-1.5 text-[9px] font-mono font-bold uppercase rounded-lg transition-all cursor-pointer flex items-center gap-1 ${
+                    activeTab === 'subagents' 
+                      ? 'bg-zinc-950 text-cyan-400 border border-zinc-800 shadow' 
+                      : 'text-zinc-500 hover:text-zinc-300'
+                  }`}
+                >
+                  <Brain className="w-3 h-3 text-cyan-400" /> Sovereign Council (5 Subs)
                 </button>
                 <button
                   onClick={() => setActiveTab('console')}
@@ -1028,6 +1221,213 @@ export default function OnboardingVoiceAgent() {
                   </div>
 
                 </div>
+              ) : activeTab === 'subagents' ? (
+                /* 1.5 MULTI-AGENT SOVEREIGN COUNCIL PANEL */
+                <div className="flex-1 flex flex-col space-y-6 text-left">
+                  {/* Council Overview Card */}
+                  <div className="bg-zinc-900/40 border border-zinc-900/80 p-5 rounded-2xl space-y-3 relative overflow-hidden">
+                    <div className="absolute top-0 right-0 p-3 text-cyan-500/10">
+                      <Cpu className="w-16 h-16" />
+                    </div>
+                    <span className="text-[10px] font-mono text-cyan-400 tracking-widest uppercase block">SOVEREIGN EXECUTIVE CIRCLE</span>
+                    <h3 className="text-md font-black text-white uppercase">The Orchestration Council</h3>
+                    <p className="text-xs text-zinc-400 max-w-xl leading-relaxed">
+                      Meet your 5 specialized AI subagents, coordinated by <span className="text-white font-bold">Adrienne</span>. Together, they execute Zero-Trust operations, keep financial ledgers in continuous alignment, manage communications, and scout licensing markets for you.
+                    </p>
+                  </div>
+
+                  {/* 5-Subagent Interactive Grid */}
+                  <div className="grid grid-cols-1 md:grid-cols-5 gap-3">
+                    {[
+                      {
+                        id: 'adrienne',
+                        name: 'Adrienne',
+                        title: 'Sovereign Orator',
+                        role: 'General Coordinator',
+                        status: isSpeaking ? 'Speaking...' : isSimulating ? 'Coordinating...' : 'Listening...',
+                        statusColor: isSpeaking ? 'bg-cyan-500 animate-pulse' : isSimulating ? 'bg-violet-500 animate-spin' : 'bg-emerald-500',
+                        icon: Users,
+                        accent: 'border-cyan-500/30 text-cyan-400',
+                        desc: 'Wise coordinator & onboarding orator.'
+                      },
+                      {
+                        id: 'sage',
+                        name: 'Sage (CFO)',
+                        title: 'CFO Subagent',
+                        role: 'Finance & Splits',
+                        status: isSimulating && activeWorkflowIndex === 0 ? 'Syncing...' : 'QuickBooks Synced',
+                        statusColor: isSimulating && activeWorkflowIndex === 0 ? 'bg-amber-500 animate-ping' : 'bg-emerald-500',
+                        icon: Coins,
+                        accent: 'border-amber-500/30 text-amber-400',
+                        desc: 'Manages money, QuickBooks, & splits.'
+                      },
+                      {
+                        id: 'aria',
+                        name: 'Aria',
+                        title: 'Comms & Help',
+                        role: 'Outbound & Tickets',
+                        status: isSimulating && activeWorkflowIndex === 1 ? 'Dispatching...' : 'Queues Active',
+                        statusColor: isSimulating && activeWorkflowIndex === 1 ? 'bg-rose-500 animate-ping' : 'bg-emerald-500',
+                        icon: Phone,
+                        accent: 'border-rose-500/30 text-rose-400',
+                        desc: 'Directs phones, email pipelines, and support.'
+                      },
+                      {
+                        id: 'maya',
+                        name: 'Maya',
+                        title: 'Opportunity Scout',
+                        role: 'Business Dev',
+                        status: isSimulating && activeWorkflowIndex === 1 ? 'Scanning...' : 'Scans Complete',
+                        statusColor: isSimulating && activeWorkflowIndex === 1 ? 'bg-purple-500 animate-pulse' : 'bg-emerald-500',
+                        icon: TrendingUp,
+                        accent: 'border-purple-500/30 text-purple-400',
+                        desc: 'Scouts licenses, brand gaps, and Class 42.'
+                      },
+                      {
+                        id: 'jordan',
+                        name: 'Jordan',
+                        title: 'Personal Assistant',
+                        role: 'Task Orchestration',
+                        status: isSimulating && activeWorkflowIndex === 2 ? 'Tracking...' : 'Priority Synced',
+                        statusColor: isSimulating && activeWorkflowIndex === 2 ? 'bg-blue-500 animate-pulse' : 'bg-emerald-500',
+                        icon: Calendar,
+                        accent: 'border-blue-500/30 text-blue-400',
+                        desc: 'Handles scheduler, slides, and workspaces.'
+                      }
+                    ].map(sub => {
+                      const Icon = sub.icon;
+                      const isSelected = selectedSubagent === sub.id;
+                      return (
+                        <div
+                          key={sub.id}
+                          onClick={() => {
+                            if (isSimulating) return;
+                            setSelectedSubagent(selectedSubagent === sub.id ? null : sub.id as any);
+                          }}
+                          className={`p-4 rounded-2xl border transition-all duration-300 cursor-pointer flex flex-col justify-between text-left relative overflow-hidden ${
+                            isSelected 
+                              ? 'bg-zinc-900 border-cyan-500/40 shadow-lg shadow-cyan-950/20 scale-102' 
+                              : 'bg-zinc-950/50 border-zinc-900/80 hover:border-zinc-800'
+                          }`}
+                        >
+                          <div className="space-y-2">
+                            <div className="flex justify-between items-start">
+                              <div className={`p-2 rounded-xl bg-zinc-900 border ${sub.accent}`}>
+                                <Icon className="w-4 h-4" />
+                              </div>
+                              <span className="flex items-center gap-1.5 text-[8px] font-mono text-zinc-500">
+                                <span className={`w-1.5 h-1.5 rounded-full ${sub.statusColor}`} />
+                                {sub.status}
+                              </span>
+                            </div>
+                            <div>
+                              <h4 className="text-xs font-black text-white">{sub.name}</h4>
+                              <span className="text-[9px] font-mono text-zinc-500 block">{sub.role}</span>
+                            </div>
+                            <p className="text-[10px] text-zinc-500 leading-normal">{sub.desc}</p>
+                          </div>
+
+                          <div className="pt-3 border-t border-zinc-900/85 mt-3 flex justify-between items-center">
+                            <span className="text-[8px] font-mono text-zinc-500">
+                              {isSelected ? "ACTIVE QUERY TARGET" : "TAP TO ROUTE QUERY"}
+                            </span>
+                            {isSelected && (
+                              <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
+                            )}
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+
+                  {/* Preset Multi-Agent Choreography Simulation Buttons */}
+                  <div className="bg-zinc-950 border border-zinc-900 rounded-2xl p-5 space-y-4">
+                    <div>
+                      <span className="text-[8px] font-mono text-violet-400 tracking-wider uppercase block">COUNCIL ORCHESTRATOR PLAYGROUND</span>
+                      <h4 className="text-xs font-bold text-white uppercase mt-0.5">Preset Agency Workflows</h4>
+                      <p className="text-[11px] text-zinc-500 leading-relaxed">
+                        Trigger multi-agent orchestration flows out loud. Watch Sage, Aria, Maya, Jordan, and Adrienne solve complex tasks live.
+                      </p>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                      {[
+                        {
+                          title: "CFO Split & QuickBooks Sync",
+                          desc: "Sage reconciles weekly ledger and 85/15 splits, with Adrienne's sign-off.",
+                          icon: Coins,
+                          color: "hover:border-amber-500/30"
+                        },
+                        {
+                          title: "Scout Licensing & Queue Outreach",
+                          desc: "Maya finds trademark Class 42 gaps, Jordan drafts pitches, and Aria queues outreach emails.",
+                          icon: Sparkles,
+                          color: "hover:border-purple-500/30"
+                        },
+                        {
+                          title: "Coordinate Executive Assistants",
+                          desc: "Jordan locks calendar dates, Aria schedules Volunteers for the Arts consult, and Adrienne encourages.",
+                          icon: Workflow,
+                          color: "hover:border-blue-500/30"
+                        }
+                      ].map((preset, i) => {
+                        const Icon = preset.icon;
+                        const active = activeWorkflowIndex === i;
+                        return (
+                          <button
+                            key={i}
+                            disabled={isSimulating}
+                            onClick={() => runWorkflowSync(i)}
+                            className={`p-4 rounded-xl border bg-zinc-950 text-left transition-all relative ${preset.color} ${
+                              active 
+                                ? 'border-cyan-500 bg-zinc-900/40 text-white shadow-md shadow-cyan-950/20' 
+                                : isSimulating 
+                                  ? 'opacity-40 border-zinc-950' 
+                                  : 'border-zinc-900 hover:bg-zinc-900/20 hover:border-zinc-850'
+                            } cursor-pointer`}
+                          >
+                            <div className="flex justify-between items-start">
+                              <div className="p-1.5 rounded-lg bg-zinc-900 text-zinc-400">
+                                <Icon className="w-4 h-4 text-cyan-400" />
+                              </div>
+                              {active && (
+                                <span className="text-[8px] font-mono text-cyan-400 uppercase tracking-widest animate-pulse">Running...</span>
+                              )}
+                            </div>
+                            <h5 className="text-xs font-bold text-white mt-3">{preset.title}</h5>
+                            <p className="text-[10px] text-zinc-500 leading-normal mt-1">{preset.desc}</p>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  {/* Active Selection Information banner */}
+                  <div className="bg-zinc-900/20 border border-zinc-900 rounded-xl p-3 text-xs text-zinc-500 flex items-center justify-between">
+                    <div>
+                      {selectedSubagent ? (
+                        <span>
+                          Active target is <strong className="text-white">
+                            {selectedSubagent === 'sage' ? 'Sage (CFO Subagent)' : 
+                             selectedSubagent === 'aria' ? 'Aria (Comms & Support)' : 
+                             selectedSubagent === 'maya' ? 'Maya (Opportunity Scout)' : 
+                             selectedSubagent === 'jordan' ? 'Jordan (Personal Assistant)' : 'Adrienne'}
+                          </strong>. Any message you type in the input bar below will query this subagent directly.
+                        </span>
+                      ) : (
+                        <span>No specific subagent selected. Queries are coordinated broadly by <strong className="text-white">Adrienne</strong>. Click any card to target.</span>
+                      )}
+                    </div>
+                    {selectedSubagent && (
+                      <button 
+                        onClick={() => setSelectedSubagent(null)} 
+                        className="text-[9px] font-mono text-cyan-400 hover:text-white uppercase cursor-pointer animate-pulse"
+                      >
+                        Clear Target
+                      </button>
+                    )}
+                  </div>
+                </div>
               ) : (
                 /* 2. CLASSIC / TECHNICAL CHAT CONSOLE LOGS */
                 <div className="flex-1 bg-black/60 rounded-2xl border border-zinc-900 p-4 font-mono text-xs overflow-y-auto max-h-[460px] space-y-4 scrollbar-none">
@@ -1095,9 +1495,10 @@ export default function OnboardingVoiceAgent() {
                   {/* Select active agent voice persona */}
                   <div className="flex items-center gap-2 bg-zinc-900/60 p-1 rounded-xl border border-zinc-850">
                     <span className="text-[9px] font-mono text-zinc-500 uppercase px-2 select-none">Agent Persona</span>
-                    {(['sovereign', 'oracle', 'guide'] as const).map((voice) => (
+                    {(['adrienne', 'oracle', 'guide'] as const).map((voice) => (
                       <button
                         key={voice}
+                        type="button"
                         onClick={() => {
                           setActiveVoice(voice);
                           if (synthRef.current) synthRef.current.cancel();
@@ -1109,7 +1510,7 @@ export default function OnboardingVoiceAgent() {
                             : 'text-zinc-500 hover:text-zinc-300'
                         }`}
                       >
-                        {voice}
+                        {voice === 'adrienne' ? 'Adrienne (Coordinator)' : voice}
                       </button>
                     ))}
                   </div>
@@ -1117,6 +1518,7 @@ export default function OnboardingVoiceAgent() {
                   {/* Audio Muting Controls & Telemetry status */}
                   <div className="flex items-center gap-3">
                     <button
+                      type="button"
                       onClick={() => {
                         const newMute = !isVoiceMuted;
                         setIsVoiceMuted(newMute);
@@ -1145,7 +1547,13 @@ export default function OnboardingVoiceAgent() {
                 <form onSubmit={handleKeyboardSubmit} className="flex gap-2">
                   <input
                     type="text"
-                    placeholder="Ask the sovereign voice agent a custom query..."
+                    placeholder={
+                      selectedSubagent === 'sage' ? "Query Sage (CFO) about QuickBooks splits, assets, or royalty ledgers..." :
+                      selectedSubagent === 'aria' ? "Ask Aria (Comms) to trace direct lines, email queues, or ticket statuses..." :
+                      selectedSubagent === 'maya' ? "Ask Maya (Opportunity Scout) about active licensing scans or brand gaps..." :
+                      selectedSubagent === 'jordan' ? "Ask Jordan (Personal Exec Assistant) to structure schedules or slide draft..." :
+                      "Ask Adrienne or your active subagent a custom query..."
+                    }
                     value={textInput}
                     onChange={(e) => setTextInput(e.target.value)}
                     className="flex-1 bg-zinc-950 border border-zinc-850 rounded-2xl px-4 py-3.5 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-cyan-500/60 focus:ring-1 focus:ring-cyan-500/30 transition-all h-12"
@@ -1170,6 +1578,8 @@ export default function OnboardingVoiceAgent() {
       {/* Footer */}
       <footer className="border-t border-zinc-900 py-12 mt-12 bg-zinc-950/40 relative z-10 flex flex-col items-center justify-center gap-6 text-center text-zinc-600 text-xs">
         <div className="flex items-center gap-4 text-zinc-500">
+          <Link href="/about" className="hover:text-cyan-400 transition-colors">About Us</Link>
+          <span>•</span>
           <Link href="/terms" className="hover:text-cyan-400 transition-colors">Terms of Service</Link>
           <span>•</span>
           <Link href="/privacy" className="hover:text-cyan-400 transition-colors">Privacy Policy</Link>

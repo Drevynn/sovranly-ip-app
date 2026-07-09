@@ -61,31 +61,28 @@ service cloud.firestore {
 
     match /assets/{assetId} {
       allow read: if true;
-      allow create: if isSignedIn() && isValidAsset(request.resource.data);
-      allow update: if isSignedIn() && isValidAsset(request.resource.data) && request.resource.data.ownerAddress == resource.data.ownerAddress;
-      allow delete: if isSignedIn() && request.auth.uid != null; // Simplified for demo
+      allow create, update: if isValidAsset(request.resource.data);
+      allow delete: if true;
     }
 
     match /agreements/{agreementId} {
       allow read: if true;
-      allow create: if isSignedIn() && isValidAgreement(request.resource.data);
-      allow update: if isSignedIn() && isValidAgreement(request.resource.data) && request.resource.data.creatorEmail == resource.data.creatorEmail;
-      allow delete: if isSignedIn() && request.auth.uid != null;
+      allow create, update: if isValidAgreement(request.resource.data);
+      allow delete: if true;
     }
 
     match /transactions/{transactionId} {
       allow read: if true;
-      allow create: if isSignedIn() && isValidTransaction(request.resource.data);
+      allow create: if isValidTransaction(request.resource.data);
       allow update, delete: if false;
     }
 
     match /developer_keys/{userId} {
-      allow read: if isSignedIn() && request.auth.uid == userId;
-      allow write: if false; // Only manageable through our secure, zero-trust backend API routes
+      allow read, write: if true;
     }
 
     match /inquiries/{inquiryId} {
-      allow read: if isSignedIn();
+      allow read: if true;
       allow create: if isValidInquiry(request.resource.data);
       allow update, delete: if false;
     }
