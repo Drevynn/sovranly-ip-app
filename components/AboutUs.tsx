@@ -27,37 +27,11 @@ import {
   BookOpen,
   Code2,
   Activity,
-  Flame
+  Flame,
+  Sparkles,
+  ExternalLink
 } from 'lucide-react';
 import Image from 'next/image';
-
-interface TeamMember {
-  name: string;
-  role: string;
-  bio: string;
-  signature: string;
-}
-
-const TEAM_MEMBERS: TeamMember[] = [
-  {
-    name: 'Eleanor Vance',
-    role: 'Chief Executive Officer / Founder',
-    bio: 'Former IP Law practice partner and blockchain venture architect. 12+ years optimizing cross-border digital licensing protocols.',
-    signature: '0xe1ca...44bd'
-  },
-  {
-    name: 'Dr. Aaron Chen',
-    role: 'Chief Technology Officer',
-    bio: 'PhD in Cryptography. Specialist in zero-knowledge identity protocols and high-throughput on-chain ledger virtualization.',
-    signature: '0xac92...11ff'
-  },
-  {
-    name: 'Sarah Moreau',
-    role: 'Chief Product Officer',
-    bio: 'Product builder from top-tier Creator Platforms. Dedicated to delivering high-fidelity interfaces without structural complexity.',
-    signature: '0x94fd...a023'
-  }
-];
 
 interface PlatformMetric {
   label: string;
@@ -192,6 +166,7 @@ const SEED_SLIDES: PitchSlide[] = [
 
 export default function AboutUs() {
   const [activePulseTab, setActivePulseTab] = useState<'musician' | 'writer' | 'developer'>('developer');
+  const [evaluatorTab, setEvaluatorTab] = useState<'business' | 'team' | 'product'>('business');
   const [fundingRound, setFundingRound] = useState<'pre-seed' | 'seed'>('pre-seed');
   const [slideIndex, setSlideIndex] = useState(0);
   // Investor Form States
@@ -291,6 +266,310 @@ export default function AboutUs() {
               🔒 Creative Sovereignty Sovereign Shield
             </span>
           </div>
+        </div>
+      </div>
+
+      {/* Google Founders Fund Reviewer Dashboard */}
+      <div className="bg-[#09090b] border border-cyan-500/20 p-6 md:p-8 rounded-3xl relative overflow-hidden shadow-2xl shadow-cyan-950/10">
+        {/* Subtle grid background/glow */}
+        <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-cyan-500/50 via-violet-500/50 to-transparent" />
+        <div className="absolute top-4 right-4 bg-cyan-950/40 border border-cyan-500/20 px-3 py-1 rounded-full flex items-center gap-1.5 backdrop-blur-sm z-10">
+          <Sparkles className="w-3.5 h-3.5 text-cyan-400 animate-pulse" />
+          <span className="text-[10px] font-mono font-black text-cyan-300 uppercase tracking-widest">Google Evaluation Console</span>
+        </div>
+
+        <div className="space-y-6">
+          <div className="space-y-1.5">
+            <h2 className="text-xl font-black text-white uppercase tracking-tight flex items-center gap-2">
+              <Building2 className="w-5 h-5 text-cyan-400" />
+              Sovereign Review Portfolio
+            </h2>
+            <p className="text-xs text-zinc-400 leading-relaxed max-w-3xl">
+              This interactive desk aggregates the core documentation, team architecture, and prototype stages required for the **Google Black Founders Fund** review. Secure, integrated, and verified on-chain.
+            </p>
+          </div>
+
+          {/* Quick-Access Tabs Selector */}
+          <div className="flex flex-wrap gap-2 border-b border-zinc-900 pb-3">
+            {[
+              { id: 'business', label: '1. Business Description', icon: <Briefcase className="w-3.5 h-3.5" /> },
+              { id: 'team', label: '2. The Team & Leadership', icon: <Users className="w-3.5 h-3.5" /> },
+              { id: 'product', label: '3. Product Stages & Demos', icon: <Layers className="w-3.5 h-3.5" /> },
+            ].map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => setEvaluatorTab(tab.id as any)}
+                className={`px-4 py-2 text-xs font-mono font-bold uppercase rounded-xl transition-all cursor-pointer flex items-center gap-1.5 border ${
+                  evaluatorTab === tab.id
+                    ? 'bg-cyan-950/40 border-cyan-500/30 text-cyan-300 shadow-md shadow-cyan-950/20'
+                    : 'bg-zinc-950 border-zinc-900 text-zinc-400 hover:text-zinc-200 hover:border-zinc-850'
+                }`}
+              >
+                {tab.icon}
+                {tab.label}
+              </button>
+            ))}
+          </div>
+
+          {/* Tab Content Display */}
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={evaluatorTab}
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.15 }}
+              className="space-y-6"
+            >
+              {evaluatorTab === 'business' && (
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                  <div className="lg:col-span-7 space-y-4">
+                    <div className="space-y-1">
+                      <span className="text-[10px] font-mono text-cyan-400 uppercase tracking-wider block">Corporate Mandate</span>
+                      <h3 className="text-md font-bold text-white uppercase tracking-tight">Executive Business Summary</h3>
+                    </div>
+                    <p className="text-xs text-zinc-300 leading-relaxed">
+                      <strong>Creative Sovereignty LLC</strong> (operating as <strong>Sovranly IP</strong>) is an advanced Web3 and AI-powered intellectual property management platform designed to automate digital asset registration, legal compliance, and continuous on-chain royalty settlements. We solve the immense protection gap currently facing the rapidly expanding global creator economy by replacing costly, slow legacy legal infrastructure with instant, zero-trust automated registries.
+                    </p>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+                      <div className="p-4 bg-zinc-950 border border-zinc-900 rounded-2xl space-y-2">
+                        <span className="text-[9px] font-mono text-zinc-500 uppercase tracking-widest block font-bold">🎯 Target Audience</span>
+                        <p className="text-xs text-zinc-300">
+                          Independent artists, musicians, filmmakers, writers, software developers, and mid-market media publishers who share content across fragmented digital channels.
+                        </p>
+                      </div>
+                      <div className="p-4 bg-zinc-950 border border-zinc-900 rounded-2xl space-y-2">
+                        <span className="text-[9px] font-mono text-cyan-400 uppercase tracking-widest block font-bold">📈 Industry Context</span>
+                        <p className="text-xs text-zinc-300">
+                          The global creator economy is projected to reach <strong>$480 Billion</strong> by 2027 (Goldman Sachs) and <strong>$2.08 Trillion</strong> by 2035, leaving creators highly vulnerable to $1.8T in annual piracy losses without affordable defense.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="lg:col-span-5 bg-zinc-950/80 border border-zinc-900 p-5 rounded-2xl space-y-4">
+                    <h4 className="text-xs font-mono uppercase font-black text-white tracking-widest border-b border-zinc-900 pb-2">
+                      Problems vs. Sovereign Solutions
+                    </h4>
+                    <div className="space-y-3.5">
+                      <div className="space-y-1">
+                        <span className="text-[10px] font-mono text-red-400 uppercase font-black">❌ The Problem: Legacy Lockout</span>
+                        <p className="text-[11px] text-zinc-400 leading-relaxed">
+                          Traditional IP lawyers charge $400 - $600/hr, locking out 95% of independent creators from active brand protection.
+                        </p>
+                      </div>
+                      <div className="space-y-1">
+                        <span className="text-[10px] font-mono text-cyan-400 uppercase font-black">✓ The Solution: Sovereign Stamps</span>
+                        <p className="text-[11px] text-zinc-400 leading-relaxed">
+                          Sovranly IP offers bulletproof digital asset registering and automated royalty split contracts at a fraction of manual legal costs.
+                        </p>
+                      </div>
+                      <div className="space-y-1">
+                        <span className="text-[10px] font-mono text-red-400 uppercase font-black">❌ The Problem: Fractured Flow</span>
+                        <p className="text-[11px] text-zinc-400 leading-relaxed">
+                          Artists juggle disconnected tools for scheduling, fan lists, distribution, and contracts, causing major data discrepancies.
+                        </p>
+                      </div>
+                      <div className="space-y-1">
+                        <span className="text-[10px] font-mono text-cyan-400 uppercase font-black">✓ The Solution: Integrated Ecosystem</span>
+                        <p className="text-[11px] text-zinc-400 leading-relaxed">
+                          Five tailored, interconnected apps work in absolute synergy, uniting legal registries, video automated marketing, and logistics.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {evaluatorTab === 'team' && (
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                  <div className="lg:col-span-4 flex flex-col items-center justify-center">
+                    <div className="relative w-44 h-44 md:w-52 md:h-52 rounded-2xl overflow-hidden border border-zinc-800 shadow-xl shadow-black/80">
+                      <Image 
+                        src="/duane_portrait.jpg" 
+                        alt="Duane Marcel Abledsoul" 
+                        width={208}
+                        height={208}
+                        className="w-full h-full object-cover"
+                        referrerPolicy="no-referrer"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none" />
+                      <div className="absolute bottom-2.5 left-2.5 right-2.5 flex justify-center">
+                        <span className="bg-cyan-950/90 text-[8px] font-mono font-bold tracking-widest text-cyan-400 px-2 py-0.5 rounded border border-cyan-500/30 uppercase">
+                          U.S. Navy Veteran
+                        </span>
+                      </div>
+                    </div>
+                    
+                    {/* LinkedIn Link and Email buttons */}
+                    <div className="mt-4 flex flex-col w-full max-w-[200px] gap-2">
+                      <a 
+                        href="https://www.linkedin.com/in/duane-abledsoul-9b1a50a1" 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="bg-[#0a66c2]/10 hover:bg-[#0a66c2]/20 border border-[#0a66c2]/30 hover:border-[#0a66c2]/50 text-white rounded-xl py-2 px-3 text-center font-mono text-[10px] uppercase font-bold tracking-wider flex items-center justify-center gap-1.5 transition-all"
+                      >
+                        <ExternalLink className="w-3.5 h-3.5 text-[#0a66c2]" />
+                        Duane&apos;s LinkedIn
+                      </a>
+                      <a 
+                        href="mailto:create@sovranlyip.com"
+                        className="bg-zinc-900 hover:bg-zinc-850 border border-zinc-800 hover:border-zinc-700 text-zinc-300 rounded-xl py-2 px-3 text-center font-mono text-[10px] uppercase font-bold tracking-wider flex items-center justify-center gap-1.5 transition-all"
+                      >
+                        <Mail className="w-3.5 h-3.5 text-cyan-400" />
+                        Contact Founder
+                      </a>
+                    </div>
+                  </div>
+
+                  <div className="lg:col-span-8 space-y-4">
+                    <div className="space-y-1">
+                      <div className="flex items-center gap-2">
+                        <span className="bg-emerald-950/40 text-[9px] font-mono text-emerald-400 px-2 py-0.5 rounded border border-emerald-500/20 uppercase font-black">Veteran-Owned</span>
+                        <span className="bg-cyan-950/40 text-[9px] font-mono text-cyan-400 px-2 py-0.5 rounded border border-cyan-500/20 uppercase font-black">Solo Founder</span>
+                      </div>
+                      <h3 className="text-md font-bold text-white uppercase tracking-tight">Duane Marcel Abledsoul (CEO & Solo Architect)</h3>
+                    </div>
+
+                    <div className="space-y-3 text-xs text-zinc-300 leading-relaxed font-sans">
+                      <p>
+                        Duane is a highly versatile creative entrepreneur, retired U.S. Navy veteran with a 90% service-connected disability, and the sole visionary technical force behind Creative Sovereignty LLC. Holding a <strong>BA in Film & TV</strong> from Columbia College Hollywood paired with an <strong>MBA in Project Management</strong> from American InterContinental University, he possesses a rare fusion of extreme artistic empathy and rigorous strategic project execution.
+                      </p>
+                      <p>
+                        Driven by two decades of firsthand experience in the creative industry (as an extreme metal artist, award-winning filmmaker, and published author), Duane single-handedly designed, conceptualized, and coded the entire interconnected <strong>Sovranly IP</strong> tech ecosystem. By leveraging advanced AI assistants as his virtual development team, he built and launched five live functional prototypes to serve underrepresented creators worldwide.
+                      </p>
+                      <p>
+                        <strong>Startup Experience:</strong> Dedicated California entrepreneur since 2005, when he founded <em>Innerbard Media LLC</em>, laying the extensive foundation for his current creator empowerment networks.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {evaluatorTab === 'product' && (
+                <div className="space-y-6">
+                  {/* Video Walkthrough Embed Section */}
+                  <div className="bg-zinc-950 border border-zinc-900 rounded-3xl p-5 md:p-6 space-y-4">
+                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
+                      <div className="space-y-1">
+                        <span className="text-[9px] font-mono text-cyan-400 uppercase tracking-widest block font-bold flex items-center gap-1.5">
+                          <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
+                          Featured Pitch & Demo
+                        </span>
+                        <h4 className="text-sm font-bold text-white uppercase tracking-tight">
+                          Platform Vision & Technical Walkthrough
+                        </h4>
+                      </div>
+                      <a
+                        href="https://youtu.be/lR-UJRvAZyQ?si=xaf9M8Mn3Pu7OWGd"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="bg-zinc-900 hover:bg-zinc-850 border border-zinc-800 hover:border-zinc-750 text-zinc-300 rounded-xl px-3.5 py-1.5 text-[10px] font-mono uppercase font-black tracking-wider flex items-center gap-1.5 transition-all self-start cursor-pointer"
+                      >
+                        <ExternalLink className="w-3.5 h-3.5 text-cyan-400" />
+                        Watch on YouTube
+                      </a>
+                    </div>
+
+                    {/* Responsive Video Container */}
+                    <div className="relative w-full aspect-video rounded-2xl overflow-hidden border border-zinc-850 shadow-2xl shadow-black">
+                      <iframe
+                        src="https://www.youtube.com/embed/lR-UJRvAZyQ"
+                        title="Sovranly IP Platform Walkthrough & Technical Pitch"
+                        frameBorder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        allowFullScreen
+                        className="absolute inset-0 w-full h-full"
+                      />
+                    </div>
+                    
+                    <p className="text-[11px] text-zinc-400 leading-relaxed font-sans">
+                      A comprehensive walkthrough presented by Founder & CEO **Duane Marcel Abledsoul**, highlighting the strategic design, sovereign infrastructure, and operational synergy of the live multi-app prototypes that constitute the **Sovranly IP** ecosystem.
+                    </p>
+                  </div>
+
+                  <div className="space-y-1 pt-2">
+                    <span className="text-[10px] font-mono text-emerald-400 uppercase tracking-wider block">Development Milestones</span>
+                    <h3 className="text-md font-bold text-white uppercase tracking-tight">Active Core Products & Stage of Development</h3>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {[
+                      { 
+                        name: "Pulse IP / Sovranly", 
+                        desc: "Blockchain-based IP registry enabling artists, musicians, and writers to securely register works, manage rights, and automate royalty splits.",
+                        stage: "Live Functional Prototype",
+                        badge: "MVP STAGE",
+                        badgeColor: "border-cyan-500/20 text-cyan-400 bg-cyan-950/30"
+                      },
+                      { 
+                        name: "Band Aide", 
+                        desc: "Centralized band collaboration & logistics hub tracking rehearsals, setlist catalogs, merchandise inventory, fan mailing lists, and group finances.",
+                        stage: "Live Functional Prototype",
+                        badge: "MVP STAGE",
+                        badgeColor: "border-violet-500/20 text-violet-400 bg-violet-950/30"
+                      },
+                      { 
+                        name: "VideGrow", 
+                        desc: "AI-powered video marketing automation platform utilizing neural network analysis to optimize and distribute short-form visual content.",
+                        stage: "Live Functional Prototype",
+                        badge: "MVP STAGE",
+                        badgeColor: "border-emerald-500/20 text-emerald-400 bg-emerald-950/30"
+                      },
+                      { 
+                        name: "Music Admin Hub", 
+                        desc: "The central command center providing a unified, consolidated dashboard control over all integrated applications.",
+                        stage: "Live Core Interface",
+                        badge: "MVP STAGE",
+                        badgeColor: "border-amber-500/20 text-amber-400 bg-amber-950/30"
+                      },
+                      { 
+                        name: "Videgrow Agent", 
+                        desc: "Advanced AI virtual assistant automating helpdesk support, audience messaging, and digital marketing workflows continuously.",
+                        stage: "Live Agent Prototype",
+                        badge: "MVP STAGE",
+                        badgeColor: "border-teal-500/20 text-teal-400 bg-teal-950/30"
+                      }
+                    ].map((prod, idx) => (
+                      <div key={idx} className="bg-zinc-950 border border-zinc-900 p-4 rounded-2xl flex flex-col justify-between space-y-3 hover:border-zinc-800 transition-all">
+                        <div className="space-y-1.5">
+                          <div className="flex items-center justify-between">
+                            <span className="text-xs font-black text-white">{prod.name}</span>
+                            <span className={`text-[8px] font-mono px-2 py-0.5 rounded border uppercase tracking-wider font-bold ${prod.badgeColor}`}>
+                              {prod.badge}
+                            </span>
+                          </div>
+                          <p className="text-[11px] text-zinc-400 leading-relaxed font-sans">{prod.desc}</p>
+                        </div>
+                        <div className="pt-2 border-t border-zinc-900 flex justify-between items-center">
+                          <span className="text-[9px] font-mono text-zinc-500">Stage:</span>
+                          <span className="text-[9px] font-mono text-emerald-400 font-bold flex items-center gap-1">
+                            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping inline-block" />
+                            {prod.stage}
+                          </span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="bg-zinc-950/50 border border-zinc-900 p-4 rounded-2xl flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div className="space-y-1">
+                      <span className="text-[9px] font-mono text-cyan-400 uppercase font-black">🎨 Visual Assets & Interactive Sandbox</span>
+                      <p className="text-xs text-zinc-400 font-sans">
+                        Google evaluators can test the **Royalty Settlement Sandbox**, construct **Custom Licensing Contracts**, or view the **Zero-Trust Tokenization Ledger** live right now in our primary system tools.
+                      </p>
+                    </div>
+                    <div className="flex gap-2">
+                      <span className="bg-cyan-950/40 text-[9px] font-mono text-cyan-400 border border-cyan-500/20 px-3 py-1.5 rounded-xl uppercase font-black flex items-center gap-1">
+                        <CheckCircle2 className="w-3.5 h-3.5" /> High Fidelity Interactive Demos
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </motion.div>
+          </AnimatePresence>
         </div>
       </div>
 
@@ -1270,30 +1549,82 @@ export default function AboutUs() {
 
       </div>
 
-      {/* 5. Team Leadership Section */}
+      {/* 5. Meet the Founder Section */}
       <div className="space-y-4">
         <h3 className="text-xs font-mono uppercase font-black tracking-wider text-white">
-          Sovereign Governance Counsel
+          Meet the Founder
         </h3>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {TEAM_MEMBERS.map((member, idx) => (
-            <div key={idx} className="bg-[#09090b] border border-zinc-900 p-5 rounded-2xl flex flex-col justify-between space-y-4 hover:border-zinc-800 transition-all">
-              <div className="space-y-2">
-                <div className="flex justify-between items-center">
-                  <h4 className="text-xs font-black text-white tracking-tight">{member.name}</h4>
-                  <span className="bg-zinc-900 text-[9px] font-mono text-zinc-500 px-2 py-0.5 rounded border border-zinc-850">COUNCIL</span>
+        <div className="bg-[#09090b] border border-zinc-900 p-6 md:p-8 rounded-3xl hover:border-zinc-800 transition-all relative overflow-hidden group">
+          {/* Subtle grid background/glow behind the founder card */}
+          <div className="absolute top-0 right-0 w-[300px] h-[300px] bg-cyan-500/5 rounded-full blur-[100px] pointer-events-none group-hover:bg-cyan-500/8 transition-all duration-700" />
+          <div className="absolute bottom-0 left-0 w-[200px] h-[200px] bg-violet-500/5 rounded-full blur-[80px] pointer-events-none group-hover:bg-violet-500/8 transition-all duration-700" />
+
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center relative z-10">
+            {/* Founder Portrait Column */}
+            <div className="md:col-span-4 flex flex-col items-center justify-center">
+              <div className="relative w-48 h-48 md:w-64 md:h-64 rounded-2xl overflow-hidden border-2 border-zinc-800 shadow-2xl shadow-black/80 group-hover:border-cyan-500/40 transition-all duration-500">
+                <Image 
+                  src="/duane_portrait.jpg" 
+                  alt="Duane Marcel Abledsoul - Founder of Creative Sovereignty" 
+                  width={256}
+                  height={256}
+                  className="w-full h-full object-cover grayscale-[10%] group-hover:grayscale-0 transition-all duration-700 ease-out scale-100 group-hover:scale-[1.03]"
+                  referrerPolicy="no-referrer"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
+                
+                {/* Decorative Navy / Artist badges overlaid on photo */}
+                <div className="absolute bottom-3 left-3 right-3 flex flex-wrap gap-1.5 justify-center">
+                  <span className="bg-black/80 text-[8px] font-mono font-bold tracking-widest text-cyan-400 px-2 py-0.5 rounded border border-cyan-500/20 uppercase backdrop-blur-sm">
+                    U.S. Navy Vet
+                  </span>
+                  <span className="bg-black/80 text-[8px] font-mono font-bold tracking-widest text-violet-400 px-2 py-0.5 rounded border border-violet-500/20 uppercase backdrop-blur-sm">
+                    Solo Architect
+                  </span>
                 </div>
-                <p className="text-[11px] font-mono text-cyan-400 uppercase font-black">{member.role}</p>
-                <p className="text-[11px] text-zinc-400 leading-relaxed font-sans">{member.bio}</p>
+              </div>
+              <p className="mt-4 text-[10px] font-mono text-zinc-500 text-center uppercase tracking-widest">
+                Verification Cryptokey: <span className="text-cyan-400 bg-zinc-900/80 border border-zinc-850 px-1.5 py-0.5 rounded">0xdab1...77ea</span>
+              </p>
+            </div>
+
+            {/* Founder Bio Narrative Column */}
+            <div className="md:col-span-8 space-y-4">
+              <div className="space-y-1.5">
+                <div className="flex flex-wrap items-center gap-2">
+                  <h4 className="text-lg md:text-xl font-black text-white tracking-tight">
+                    Duane Marcel Abledsoul
+                  </h4>
+                  <span className="bg-cyan-950/40 text-[9px] font-mono text-cyan-400 px-2.5 py-0.5 rounded-full border border-cyan-500/20 uppercase font-black tracking-wider">
+                    Sole Visionary Architect
+                  </span>
+                </div>
+                <p className="text-xs font-mono text-zinc-400 uppercase tracking-wider">
+                  Founder & CEO, Creative Sovereignty LLC
+                </p>
               </div>
 
-              <div className="pt-3 border-t border-zinc-900 flex justify-between items-center text-[9px] font-mono text-zinc-500">
-                <span>Verification Cryptokey:</span>
-                <span className="text-zinc-300 font-bold bg-zinc-900 px-1.5 py-0.5 rounded border border-zinc-850">{member.signature}</span>
+              <div className="space-y-3 text-zinc-300 text-xs md:text-[13px] leading-relaxed font-sans">
+                <p>
+                  Duane Marcel Abledsoul is a multi-talented creative entrepreneur, retired U.S. Navy veteran, and the sole visionary architect behind <strong>Creative Sovereignty LLC</strong>. An award-winning filmmaker, extreme metal artist, and published author, Duane deeply understands the fragmented, high-pressure landscapes independent artists face daily.
+                </p>
+                <p>
+                  Holding a <strong>BA in Film & TV</strong> alongside an <strong>MBA in Project Management</strong>, he seamlessly bridges the gap between raw artistic vision and strategic technical execution. Driven by his personal experiences in the creative trenches, Duane single-handedly conceptualized, designed, and coded the entire interconnected <strong>Sovranly IP</strong> tech ecosystem from the ground up.
+                </p>
+                <p>
+                  By masterfully leveraging advanced AI assistants as his virtual development team, he built and launched five live prototype applications—including blockchain IP registries and automated video marketing tools—to protect and scale creator businesses. Based in California, Duane has been championing the independent community since 2005, serving as the entire engine, leadership, and technical force behind a movement toward true creative independence.
+                </p>
+              </div>
+
+              {/* Founder's Motto Quote */}
+              <div className="border-l-2 border-cyan-500 bg-cyan-950/10 p-3 rounded-r-xl">
+                <p className="text-[11px] font-mono text-cyan-400 italic leading-normal">
+                  &ldquo;In the modern digital economy, creators shouldn&apos;t just participate—they must exist as sovereign entities. We build the decentralized systems to make that a reality.&rdquo;
+                </p>
               </div>
             </div>
-          ))}
+          </div>
         </div>
       </div>
 
