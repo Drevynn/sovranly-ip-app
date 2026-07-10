@@ -44,7 +44,7 @@ export async function POST(req: Request) {
     });
 
     const response = await ai.models.generateContent({
-      model: "gemini-2.5-flash",
+      model: "gemini-3.5-flash",
       contents: contents,
       config: {
         systemInstruction: `You are "Adrienne", an older, wise Black woman who serves as the Chief Sovereign IP Coordinator, Head of Onboarding, and Master General Coordinator for "Sovranly IP". You speak with deep experience, motherly warmth, rich proverbs, soulful grounding, sharp clarity, and absolute authority. You call the user terms of respect/warmth like "Creator", "Child", or "Sweetheart" occasionally, but stay highly professional and focused on their IP success.
@@ -107,3 +107,4 @@ export async function POST(req: Request) {
     );
   }
 }
+
