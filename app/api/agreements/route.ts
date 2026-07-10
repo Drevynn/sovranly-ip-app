@@ -9,8 +9,11 @@ export async function GET(request: Request) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    console.log('Fetching agreements...');
-    const snapshot = await db.collection('agreements').get();
+    console.log('Fetching agreements for uid:', user.uid);
+    const snapshot = await db
+      .collection('agreements')
+      .where('uid', '==', user.uid)
+      .get();
     const agreementsData = snapshot.docs.map((doc: any) => ({ id: doc.id, ...doc.data() }));
     return NextResponse.json(agreementsData);
   } catch (error) {
@@ -29,6 +32,7 @@ export async function POST(request: Request) {
     const body = await request.json();
     const enrichedBody = {
       ...body,
+      uid: user.uid,
       royaltyRate: Math.round(Number(body.royaltyRate || 0)),
       createdAt: new Date().toISOString()
     };
@@ -51,7 +55,17 @@ export async function PUT(request: Request) {
     if (!id) {
       return NextResponse.json({ error: 'Agreement ID is required for update' }, { status: 400 });
     }
+
+    // Verify ownership before updating
     const agreementRef = db.collection('agreements').doc(id);
+    const agreementSnap = await agreementRef.get();
+    if (!agreementSnap.exists) {
+      return NextResponse.json({ error: 'Agreement not found' }, { status: 404 });
+    }
+    if (agreementSnap.data()?.uid !== user.uid) {
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+    }
+
     await agreementRef.update(data);
     return NextResponse.json({ success: true, id, ...data });
   } catch (error) {
