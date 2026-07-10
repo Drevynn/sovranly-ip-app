@@ -8,6 +8,7 @@ on:
       - 'firestore.rules'
       - 'firestore.indexes.json'
       - 'firebase.json'
+  workflow_dispatch:  # allows manual trigger from GitHub UI
 
 jobs:
   check-conflicts:
