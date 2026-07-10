@@ -11,35 +11,6 @@ const ai = new GoogleGenAI({
   }
 });
 
-// ── In-memory rate limiter ────────────────────────────────────────────────────
-// Allows MAX_REQUESTS per user per WINDOW_MS (sliding window).
-// This resets on server restart; swap for Redis/Upstash in high-traffic prod.
-const WINDOW_MS = 60_000;       // 1 minute
-const MAX_REQUESTS = 15;        // 15 messages per minute per user
-const rateLimitMap = new Map<string, { count: number; windowStart: number }>();
-
-function checkRateLimit(uid: string): boolean {
-  const now = Date.now();
-  const entry = rateLimitMap.get(uid);
-
-  if (!entry || now - entry.windowStart > WINDOW_MS) {
-    rateLimitMap.set(uid, { count: 1, windowStart: now });
-    return true; // allowed
-  }
-
-  if (entry.count >= MAX_REQUESTS) {
-    return false; // blocked
-  }
-
-  entry.count++;
-  return true; // allowed
-}
-
-// ── Constants ─────────────────────────────────────────────────────────────────
-const MAX_MESSAGE_LENGTH = 4_000;   // chars (~1000 tokens)
-const MAX_HISTORY_TURNS  = 10;      // keep last 10 turns to cap context cost
-
-// ── Route handler ─────────────────────────────────────────────────────────────
 export async function POST(req: Request) {
   try {
     const user = await verifyAuthToken(req.headers.get('Authorization'));
@@ -47,37 +18,21 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    // Rate limit check
-    if (!checkRateLimit(user.uid)) {
-      return NextResponse.json(
-        { error: 'Too many requests. Please wait a moment before sending another message.' },
-        { status: 429 }
-      );
-    }
-
     const { message, history } = await req.json();
 
-    if (!message || typeof message !== 'string') {
+    if (!message) {
       return NextResponse.json({ error: 'Message is required' }, { status: 400 });
     }
 
-    // Guard: cap message length
-    if (message.length > MAX_MESSAGE_LENGTH) {
-      return NextResponse.json(
-        { error: `Message too long. Please keep messages under ${MAX_MESSAGE_LENGTH} characters.` },
-        { status: 400 }
-      );
-    }
-
-    // Format chat history — cap to last MAX_HISTORY_TURNS to control cost
-    const contents: { role: string; parts: { text: string }[] }[] = [];
+    // Format chat history correctly for @google/genai SDK
+    // The SDK expects contents to be: { role: "user" | "model", parts: [{ text: "..." }] }[]
+    const contents: any[] = [];
 
     if (history && Array.isArray(history)) {
-      const recentHistory = history.slice(-MAX_HISTORY_TURNS);
-      recentHistory.forEach((turn: { role?: string; text?: string; content?: string }) => {
+      history.forEach((turn: any) => {
         contents.push({
           role: turn.role === 'model' || turn.role === 'assistant' ? 'model' : 'user',
-          parts: [{ text: (turn.text || turn.content || '').slice(0, MAX_MESSAGE_LENGTH) }]
+          parts: [{ text: turn.text || turn.content || '' }]
         });
       });
     }
@@ -89,7 +44,7 @@ export async function POST(req: Request) {
     });
 
     const response = await ai.models.generateContent({
-      model: "gemini-2.5-flash",
+      model: "gemini-3.5-flash",
       contents: contents,
       config: {
         systemInstruction: `You are "Adrienne", an older, wise Black woman who serves as the Chief Sovereign IP Coordinator, Head of Onboarding, and Master General Coordinator for "Sovranly IP". You speak with deep experience, motherly warmth, rich proverbs, soulful grounding, sharp clarity, and absolute authority. You call the user terms of respect/warmth like "Creator", "Child", or "Sweetheart" occasionally, but stay highly professional and focused on their IP success.
@@ -123,13 +78,13 @@ export async function POST(req: Request) {
     });
 
     const text = response.text || '';
-
+    
     // Extract search grounding sources
     const sources: { title: string; url: string }[] = [];
     const seenUrls = new Set<string>();
     const chunks = response.candidates?.[0]?.groundingMetadata?.groundingChunks;
     if (chunks && Array.isArray(chunks)) {
-      chunks.forEach((chunk: { web?: { uri?: string; title?: string } }) => {
+      chunks.forEach((chunk: any) => {
         if (chunk.web && chunk.web.uri) {
           const url = chunk.web.uri;
           if (!seenUrls.has(url)) {
@@ -147,8 +102,9 @@ export async function POST(req: Request) {
   } catch (error) {
     console.error('Gemini call error:', error);
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { error: 'Internal server error' }, 
       { status: 500 }
     );
   }
 }
+
