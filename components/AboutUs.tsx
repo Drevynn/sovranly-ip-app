@@ -29,7 +29,11 @@ import {
   Activity,
   Flame,
   Sparkles,
-  ExternalLink
+  ExternalLink,
+  Youtube,
+  Facebook,
+  Instagram,
+  Linkedin
 } from 'lucide-react';
 import Image from 'next/image';
 
@@ -402,20 +406,50 @@ export default function AboutUs() {
                       </div>
                     </div>
                     
-                    {/* LinkedIn Link and Email buttons */}
-                    <div className="mt-4 flex flex-col w-full max-w-[200px] gap-2">
-                      <a 
-                        href="https://www.linkedin.com/in/duane-abledsoul-9b1a50a1" 
-                        target="_blank" 
-                        rel="noopener noreferrer"
-                        className="bg-[#0a66c2]/10 hover:bg-[#0a66c2]/20 border border-[#0a66c2]/30 hover:border-[#0a66c2]/50 text-white rounded-xl py-2 px-3 text-center font-mono text-[10px] uppercase font-bold tracking-wider flex items-center justify-center gap-1.5 transition-all"
-                      >
-                        <ExternalLink className="w-3.5 h-3.5 text-[#0a66c2]" />
-                        Duane&apos;s LinkedIn
-                      </a>
+                    {/* Founder Connect Grid */}
+                    <div className="mt-4 w-full max-w-[200px] space-y-2">
+                      <div className="text-[10px] font-mono text-zinc-500 uppercase tracking-widest text-center font-bold">Follow the Founder</div>
+                      <div className="grid grid-cols-2 gap-1.5">
+                        <a 
+                          href="https://www.linkedin.com/in/ip-sovereignty" 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          title="LinkedIn"
+                          className="bg-zinc-950 hover:bg-[#0077b5]/10 border border-zinc-900 hover:border-[#0077b5]/30 text-zinc-400 hover:text-white rounded-lg p-2 flex items-center justify-center transition-all cursor-pointer"
+                        >
+                          <Linkedin className="w-4 h-4 text-[#0077b5]" />
+                        </a>
+                        <a 
+                          href="https://www.youtube.com/@SOVRANLYIP" 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          title="YouTube"
+                          className="bg-zinc-950 hover:bg-[#ff0000]/10 border border-zinc-900 hover:border-[#ff0000]/30 text-zinc-400 hover:text-white rounded-lg p-2 flex items-center justify-center transition-all cursor-pointer"
+                        >
+                          <Youtube className="w-4 h-4 text-[#ff0000]" />
+                        </a>
+                        <a 
+                          href="https://www.instagram.com/sovranlyip" 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          title="Instagram"
+                          className="bg-zinc-950 hover:bg-[#e1306c]/10 border border-zinc-900 hover:border-[#e1306c]/30 text-zinc-400 hover:text-white rounded-lg p-2 flex items-center justify-center transition-all cursor-pointer"
+                        >
+                          <Instagram className="w-4 h-4 text-[#e1306c]" />
+                        </a>
+                        <a 
+                          href="https://www.facebook.com/Sovranlyip" 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          title="Facebook"
+                          className="bg-zinc-950 hover:bg-[#1877f2]/10 border border-zinc-900 hover:border-[#1877f2]/30 text-zinc-400 hover:text-white rounded-lg p-2 flex items-center justify-center transition-all cursor-pointer"
+                        >
+                          <Facebook className="w-4 h-4 text-[#1877f2]" />
+                        </a>
+                      </div>
                       <a 
                         href="mailto:create@sovranlyip.com"
-                        className="bg-zinc-900 hover:bg-zinc-850 border border-zinc-800 hover:border-zinc-700 text-zinc-300 rounded-xl py-2 px-3 text-center font-mono text-[10px] uppercase font-bold tracking-wider flex items-center justify-center gap-1.5 transition-all"
+                        className="w-full bg-zinc-950 hover:bg-zinc-900 border border-zinc-900 hover:border-zinc-850 text-zinc-300 rounded-xl py-2 px-3 text-center font-mono text-[9px] uppercase font-bold tracking-wider flex items-center justify-center gap-1.5 transition-all cursor-pointer"
                       >
                         <Mail className="w-3.5 h-3.5 text-cyan-400" />
                         Contact Founder
@@ -1587,6 +1621,49 @@ export default function AboutUs() {
               <p className="mt-4 text-[10px] font-mono text-zinc-500 text-center uppercase tracking-widest">
                 Verification Cryptokey: <span className="text-cyan-400 bg-zinc-900/80 border border-zinc-850 px-1.5 py-0.5 rounded">0xdab1...77ea</span>
               </p>
+
+              {/* Founder Social Connect */}
+              <div className="mt-5 w-full max-w-[220px] mx-auto text-center space-y-2">
+                <div className="text-[9px] font-mono text-zinc-500 uppercase tracking-widest font-black">Follow our Founder</div>
+                <div className="flex justify-center items-center gap-1.5">
+                  <a 
+                    href="https://www.linkedin.com/in/ip-sovereignty" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    title="LinkedIn"
+                    className="bg-zinc-950 hover:bg-[#0077b5]/10 border border-zinc-900 hover:border-[#0077b5]/30 text-zinc-400 hover:text-white rounded-lg p-2 flex items-center justify-center transition-all cursor-pointer"
+                  >
+                    <Linkedin className="w-4 h-4 text-[#0077b5]" />
+                  </a>
+                  <a 
+                    href="https://www.youtube.com/@SOVRANLYIP" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    title="YouTube"
+                    className="bg-zinc-950 hover:bg-[#ff0000]/10 border border-zinc-900 hover:border-[#ff0000]/30 text-zinc-400 hover:text-white rounded-lg p-2 flex items-center justify-center transition-all cursor-pointer"
+                  >
+                    <Youtube className="w-4 h-4 text-[#ff0000]" />
+                  </a>
+                  <a 
+                    href="https://www.instagram.com/sovranlyip" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    title="Instagram"
+                    className="bg-zinc-950 hover:bg-[#e1306c]/10 border border-zinc-900 hover:border-[#e1306c]/30 text-zinc-400 hover:text-white rounded-lg p-2 flex items-center justify-center transition-all cursor-pointer"
+                  >
+                    <Instagram className="w-4 h-4 text-[#e1306c]" />
+                  </a>
+                  <a 
+                    href="https://www.facebook.com/Sovranlyip" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    title="Facebook"
+                    className="bg-zinc-950 hover:bg-[#1877f2]/10 border border-zinc-900 hover:border-[#1877f2]/30 text-zinc-400 hover:text-white rounded-lg p-2 flex items-center justify-center transition-all cursor-pointer"
+                  >
+                    <Facebook className="w-4 h-4 text-[#1877f2]" />
+                  </a>
+                </div>
+              </div>
             </div>
 
             {/* Founder Bio Narrative Column */}

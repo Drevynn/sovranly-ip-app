@@ -3,7 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { ShieldCheck, ArrowLeft, ArrowRight, Sparkles } from 'lucide-react';
+import { ShieldCheck, ArrowLeft, ArrowRight, Sparkles, Youtube, Facebook, Instagram, Linkedin } from 'lucide-react';
 import AboutUs from '@/components/AboutUs';
 import LanguageSelector from '@/components/LanguageSelector';
 import { useLanguage } from '@/components/LanguageProvider';
@@ -52,15 +52,52 @@ export default function AboutPage() {
       {/* Footer Element matching landing/home pages */}
       <footer className="border-t border-white/5 py-16 bg-zinc-950/40 relative z-10 flex flex-col items-center justify-center gap-8 text-center mt-12">
         <div className="flex flex-col items-center gap-4">
-          <div className="flex items-center gap-6">
+          <div className="text-[10px] font-mono text-zinc-500 uppercase tracking-widest font-black">Follow our Founder</div>
+          <div className="flex flex-wrap items-center justify-center gap-3">
             <Link 
               href="https://www.tiktok.com/@sovranlyip?lang=en" 
               target="_blank" 
               rel="noopener noreferrer"
-              className="flex items-center gap-2 px-4 py-2 bg-zinc-900 border border-zinc-800 rounded-full text-xs text-zinc-400 hover:text-white hover:border-zinc-700 transition-all"
+              className="flex items-center gap-1.5 px-3 py-1.5 bg-zinc-900 border border-zinc-850 hover:border-cyan-500/30 rounded-xl text-xs text-zinc-400 hover:text-white transition-all"
             >
-              <Sparkles className="w-4 h-4 text-cyan-400" />
-              Follow our Founder on TikTok
+              <Sparkles className="w-3.5 h-3.5 text-cyan-400" />
+              TikTok
+            </Link>
+            <Link 
+              href="https://www.linkedin.com/in/ip-sovereignty" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="flex items-center gap-1.5 px-3 py-1.5 bg-zinc-900 border border-zinc-850 hover:border-[#0077b5]/30 rounded-xl text-xs text-zinc-400 hover:text-white transition-all"
+            >
+              <Linkedin className="w-3.5 h-3.5 text-[#0077b5]" />
+              LinkedIn
+            </Link>
+            <Link 
+              href="https://www.youtube.com/@SOVRANLYIP" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="flex items-center gap-1.5 px-3 py-1.5 bg-zinc-900 border border-zinc-850 hover:border-[#ff0000]/30 rounded-xl text-xs text-zinc-400 hover:text-white transition-all"
+            >
+              <Youtube className="w-3.5 h-3.5 text-[#ff0000]" />
+              YouTube
+            </Link>
+            <Link 
+              href="https://www.facebook.com/Sovranlyip" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="flex items-center gap-1.5 px-3 py-1.5 bg-zinc-900 border border-zinc-850 hover:border-[#1877f2]/30 rounded-xl text-xs text-zinc-400 hover:text-white transition-all"
+            >
+              <Facebook className="w-3.5 h-3.5 text-[#1877f2]" />
+              Facebook
+            </Link>
+            <Link 
+              href="https://www.instagram.com/sovranlyip" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="flex items-center gap-1.5 px-3 py-1.5 bg-zinc-900 border border-zinc-850 hover:border-[#e1306c]/30 rounded-xl text-xs text-zinc-400 hover:text-white transition-all"
+            >
+              <Instagram className="w-3.5 h-3.5 text-[#e1306c]" />
+              Instagram
             </Link>
           </div>
         </div>
