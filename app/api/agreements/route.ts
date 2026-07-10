@@ -8,6 +8,7 @@ export async function GET(request: Request) {
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
+
     console.log('Fetching agreements...');
     const snapshot = await db.collection('agreements').get();
     const agreementsData = snapshot.docs.map((doc: any) => ({ id: doc.id, ...doc.data() }));
@@ -24,6 +25,7 @@ export async function POST(request: Request) {
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
+
     const body = await request.json();
     const enrichedBody = {
       ...body,
@@ -44,6 +46,7 @@ export async function PUT(request: Request) {
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
+
     const { id, ...data } = await request.json();
     if (!id) {
       return NextResponse.json({ error: 'Agreement ID is required for update' }, { status: 400 });

@@ -4,23 +4,23 @@ import { verifyAuthToken } from '@/lib/auth-server';
 
 export async function GET(req: Request) {
   try {
-    const authHeader = req.headers.get('Authorization');
-    const user = await verifyAuthToken(authHeader);
-
+    const user = await verifyAuthToken(req.headers.get('Authorization'));
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     const { searchParams } = new URL(req.url);
-    const requestedUid = searchParams.get('uid');
+    const uid = searchParams.get('uid');
 
-    // Prevent IDOR by ensuring user is only requesting their own key status
-    if (requestedUid && requestedUid !== user.uid) {
+    if (!uid) {
+      return NextResponse.json({ error: 'Authentication parameter uid is required' }, { status: 400 });
+    }
+
+    if (user.uid !== uid) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }
 
-    const uidToQuery = user.uid;
-    const docRef = db.collection('developer_keys').doc(uidToQuery);
+    const docRef = db.collection('developer_keys').doc(uid);
     const docSnap = await docRef.get();
 
     if (!docSnap.exists) {

@@ -1,19 +1,19 @@
-export async function getAuthHeaders(user: any, isSandboxMode: boolean): Promise<Record<string, string>> {
-  const headers: Record<string, string> = {
-    'Content-Type': 'application/json',
-  };
+import { User } from 'firebase/auth';
+
+export async function getAuthHeaders(user: User | null, isSandboxMode: boolean): Promise<Record<string, string>> {
+  if (!user) return {};
   if (isSandboxMode) {
-    headers['Authorization'] = 'Bearer sandbox-token-123';
-  } else if (user && typeof user.getIdToken === 'function') {
-    try {
-      const token = await user.getIdToken();
-      headers['Authorization'] = `Bearer ${token}`;
-    } catch (e) {
-      console.error('Failed to retrieve Firebase ID Token:', e);
-    }
-  } else if (user && user.uid) {
-    // Fallback for custom sandbox users that might not have getIdToken function
-    headers['Authorization'] = 'Bearer sandbox-token-123';
+    return {
+      'Authorization': 'Bearer sandbox-token-123',
+    };
   }
-  return headers;
+  try {
+    const token = await user.getIdToken();
+    return {
+      'Authorization': `Bearer ${token}`,
+    };
+  } catch (e) {
+    console.error('Failed to get auth token:', e);
+    return {};
+  }
 }

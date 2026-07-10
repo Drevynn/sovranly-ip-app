@@ -37,6 +37,8 @@ import {
   Cpu
 } from 'lucide-react';
 import Link from 'next/link';
+import { useAuth } from '@/components/auth/FirebaseProvider';
+import { getAuthHeaders } from '@/lib/auth-client';
 import { motion, AnimatePresence } from 'motion/react';
 
 type Message = {
@@ -58,6 +60,7 @@ type TourStep = {
 };
 
 export default function OnboardingVoiceAgent() {
+  const { user, isSandboxMode } = useAuth();
   // Speech Recognition support pre-check
   const [speechSupported] = useState(() => {
     if (typeof window !== 'undefined') {
@@ -317,9 +320,13 @@ export default function OnboardingVoiceAgent() {
 
     try {
       // Fetch latest messages for history snapshot
+      const headers = await getAuthHeaders(user, isSandboxMode);
       const res = await fetch('/api/chat', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          ...headers
+        },
         body: JSON.stringify({
           message: processedText,
           history: messages.map(m => ({ role: m.role, content: m.content }))
@@ -467,9 +474,13 @@ export default function OnboardingVoiceAgent() {
     }
 
     try {
+      const headers = await getAuthHeaders(user, isSandboxMode);
       const res = await fetch('/api/chat', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          ...headers
+        },
         body: JSON.stringify({
           message: commandText,
           history: messages.map(m => ({ role: m.role, content: m.content }))

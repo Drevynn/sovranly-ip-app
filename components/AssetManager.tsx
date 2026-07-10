@@ -1,6 +1,6 @@
 'use client';
 import { useState, useEffect } from 'react';
-import { useAuth } from './auth/FirebaseProvider';
+import { useAuth } from '@/components/auth/FirebaseProvider';
 import { getAuthHeaders } from '@/lib/auth-client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -131,7 +131,12 @@ export default function AssetManager({ walletAddress }: { walletAddress: string 
     let isMounted = true;
     const fetchAssets = async () => {
       try {
-        const res = await fetch('/api/assets');
+        const headers = await getAuthHeaders(user, isSandboxMode);
+        const res = await fetch('/api/assets', {
+          headers: {
+            ...headers
+          }
+        });
         if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
         const data = await res.json();
         if (isMounted) {
@@ -197,11 +202,12 @@ export default function AssetManager({ walletAddress }: { walletAddress: string 
   const addAsset = async () => {
     if(newAsset.title && newAsset.type && walletAddress) {
       try {
-        const authHeaders = await getAuthHeaders(user, isSandboxMode);
+        const headers = await getAuthHeaders(user, isSandboxMode);
         const response = await fetch('/api/assets', {
           method: 'POST',
-          headers: {
-            ...authHeaders,
+          headers: { 
+            'Content-Type': 'application/json',
+            ...headers
           },
           body: JSON.stringify({ ...newAsset, ownerAddress: walletAddress })
         });
@@ -224,28 +230,6 @@ export default function AssetManager({ walletAddress }: { walletAddress: string 
       } catch (err) {
         console.error('Error adding asset:', err);
       }
-    }
-  };
-
-  const handleDeleteAsset = async (id: string) => {
-    if (!confirm("Are you sure you want to permanently delete this asset? This action is irreversible.")) {
-      return;
-    }
-    try {
-      const authHeaders = await getAuthHeaders(user, isSandboxMode);
-      const res = await fetch(`/api/assets?id=${id}`, {
-        method: 'DELETE',
-        headers: {
-          ...authHeaders,
-        },
-      });
-      if (res.ok) {
-        setAssets(prev => prev.filter(a => a.id !== id));
-      } else {
-        console.error("Failed to delete asset from Firestore");
-      }
-    } catch (err) {
-      console.error("Error deleting asset:", err);
     }
   };
 
@@ -280,12 +264,12 @@ export default function AssetManager({ walletAddress }: { walletAddress: string 
         mintTxHash: txHash,
       };
 
-      const authHeaders = await getAuthHeaders(user, isSandboxMode);
-
+      const headers = await getAuthHeaders(user, isSandboxMode);
       const res = await fetch('/api/assets', {
         method: 'PUT',
-        headers: {
-          ...authHeaders,
+        headers: { 
+          'Content-Type': 'application/json',
+          ...headers
         },
         body: JSON.stringify(updatedData)
       });
@@ -298,8 +282,9 @@ export default function AssetManager({ walletAddress }: { walletAddress: string 
       // Log transaction
       await fetch('/api/transactions', {
         method: 'POST',
-        headers: {
-          ...authHeaders,
+        headers: { 
+          'Content-Type': 'application/json',
+          ...headers
         },
         body: JSON.stringify({
           hash: txHash,
@@ -333,12 +318,12 @@ export default function AssetManager({ walletAddress }: { walletAddress: string 
         price: priceFloat,
       };
 
-      const authHeaders = await getAuthHeaders(user, isSandboxMode);
-
+      const headers = await getAuthHeaders(user, isSandboxMode);
       const res = await fetch('/api/assets', {
         method: 'PUT',
-        headers: {
-          ...authHeaders,
+        headers: { 
+          'Content-Type': 'application/json',
+          ...headers
         },
         body: JSON.stringify(updatedData)
       });
@@ -350,8 +335,9 @@ export default function AssetManager({ walletAddress }: { walletAddress: string 
       // Record transaction
       await fetch('/api/transactions', {
         method: 'POST',
-        headers: {
-          ...authHeaders,
+        headers: { 
+          'Content-Type': 'application/json',
+          ...headers
         },
         body: JSON.stringify({
           type: 'License Listed',
@@ -372,17 +358,18 @@ export default function AssetManager({ walletAddress }: { walletAddress: string 
   const handleDelist = async (asset: Asset) => {
     setListingId(asset.id);
     try {
-      const authHeaders = await getAuthHeaders(user, isSandboxMode);
       const updatedData = {
         id: asset.id,
         isForSale: false,
         price: null,
       };
 
+      const headers = await getAuthHeaders(user, isSandboxMode);
       const res = await fetch('/api/assets', {
         method: 'PUT',
-        headers: {
-          ...authHeaders,
+        headers: { 
+          'Content-Type': 'application/json',
+          ...headers
         },
         body: JSON.stringify(updatedData)
       });
@@ -394,8 +381,9 @@ export default function AssetManager({ walletAddress }: { walletAddress: string 
       // Record delist transaction
       await fetch('/api/transactions', {
         method: 'POST',
-        headers: {
-          ...authHeaders,
+        headers: { 
+          'Content-Type': 'application/json',
+          ...headers
         },
         body: JSON.stringify({
           type: 'License Delisted',
@@ -461,12 +449,12 @@ export default function AssetManager({ walletAddress }: { walletAddress: string 
         scarcityTxHash: txHash
       };
 
-      const authHeaders = await getAuthHeaders(user, isSandboxMode);
-
+      const headers = await getAuthHeaders(user, isSandboxMode);
       const res = await fetch('/api/assets', {
         method: 'PUT',
-        headers: {
-          ...authHeaders,
+        headers: { 
+          'Content-Type': 'application/json',
+          ...headers
         },
         body: JSON.stringify(updatedData)
       });
@@ -479,8 +467,9 @@ export default function AssetManager({ walletAddress }: { walletAddress: string 
       // Log transaction
       await fetch('/api/transactions', {
         method: 'POST',
-        headers: {
-          ...authHeaders,
+        headers: { 
+          'Content-Type': 'application/json',
+          ...headers
         },
         body: JSON.stringify({
           hash: txHash,
@@ -676,25 +665,13 @@ export default function AssetManager({ walletAddress }: { walletAddress: string 
                         )}
                         <span>{a.type}</span>
                       </div>
-                      <div className="flex items-center gap-2">
-                        <div className="flex items-center gap-1 text-[10px] font-mono text-zinc-500">
-                          <Calendar className="w-3 h-3 text-zinc-600" />
-                          <span>
-                            {a.createdAt 
-                              ? new Date(a.createdAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })
-                              : 'MVP Original'}
-                          </span>
-                        </div>
-                        {a.id && (
-                          <Button
-                            onClick={() => handleDeleteAsset(a.id!)}
-                            variant="ghost"
-                            className="h-6 w-6 p-0 text-zinc-500 hover:text-red-400 hover:bg-red-950/20 rounded-full"
-                            title="Delete IP Asset"
-                          >
-                            <Trash2 className="w-3.5 h-3.5" />
-                          </Button>
-                        )}
+                      <div className="flex items-center gap-1 text-[10px] font-mono text-zinc-500">
+                        <Calendar className="w-3 h-3 text-zinc-600" />
+                        <span>
+                          {a.createdAt 
+                            ? new Date(a.createdAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })
+                            : 'MVP Original'}
+                        </span>
                       </div>
                     </div>
 

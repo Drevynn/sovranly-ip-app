@@ -1,121 +1,106 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-
     // Helper functions
     function isSignedIn() { return request.auth != null; }
-
-    function isValidId(id) {
-      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
-    }
-
+    function isValidId(id) { return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$'); }
     function isValidAsset(data) {
-      return data.title is string && data.title.size() <= 100 &&
-             data.type is string && data.type.size() <= 100 &&
-             data.royalty is int && data.royalty >= 0 && data.royalty <= 100 &&
-             data.license is string && data.license.size() <= 100 &&
-             data.ownerAddress is string && data.ownerAddress.size() <= 42 &&
-             (!('isScarce' in data) || data.isScarce is bool) &&
-             (!('scarcityTier' in data) || (data.scarcityTier is string && data.scarcityTier.size() <= 50)) &&
-             (!('scarcityPrice' in data) || (data.scarcityPrice is number || data.scarcityPrice == null)) &&
-             (!('scarcityTxHash' in data) || (data.scarcityTxHash is string && data.scarcityTxHash.size() <= 128 || data.scarcityTxHash == null));
+        return data.title is string && data.title.size() <= 100 &&
+               data.type is string && data.type.size() <= 100 &&
+               data.royalty is int && data.royalty >= 0 && data.royalty <= 100 &&
+               data.license is string && data.license.size() <= 100 &&
+               data.ownerAddress is string && data.ownerAddress.size() <= 42 &&
+               (!('isScarce' in data) || data.isScarce is bool) &&
+               (!('scarcityTier' in data) || (data.scarcityTier is string && data.scarcityTier.size() <= 50)) &&
+               (!('scarcityPrice' in data) || (data.scarcityPrice is number || data.scarcityPrice == null)) &&
+               (!('scarcityTxHash' in data) || (data.scarcityTxHash is string && data.scarcityTxHash.size() <= 128 || data.scarcityTxHash == null));
     }
 
     function isValidTransaction(data) {
-      return data.hash is string && data.hash.size() <= 128 &&
-             data.type is string && data.type.size() <= 50 &&
-             data.assetTitle is string && data.assetTitle.size() <= 100 &&
-             data.timestamp is timestamp;
+        return data.hash is string && data.hash.size() <= 128 &&
+               data.type is string && data.type.size() <= 50 &&
+               data.assetTitle is string && data.assetTitle.size() <= 100 &&
+               data.timestamp is timestamp;
     }
 
     function isValidAgreement(data) {
-      return data.assetId is string && data.assetId.size() <= 128 &&
-             data.assetTitle is string && data.assetTitle.size() <= 100 &&
-             data.royaltyRate is int && data.royaltyRate >= 0 && data.royaltyRate <= 100 &&
-             data.status is string && data.status.size() <= 20 &&
-             data.creatorEmail is string && data.creatorEmail.size() <= 100 &&
-             data.creatorWallet is string && data.creatorWallet.size() <= 42;
+        return data.assetId is string && data.assetId.size() <= 128 &&
+               data.assetTitle is string && data.assetTitle.size() <= 100 &&
+               data.royaltyRate is int && data.royaltyRate >= 0 && data.royaltyRate <= 100 &&
+               data.status is string && data.status.size() <= 20 &&
+               data.creatorEmail is string && data.creatorEmail.size() <= 100 &&
+               data.creatorWallet is string && data.creatorWallet.size() <= 42;
     }
 
     function isValidInquiry(data) {
-      return data.assetId is string && data.assetId.size() <= 128 &&
-             data.assetTitle is string && data.assetTitle.size() <= 100 &&
-             data.senderName is string && data.senderName.size() <= 100 &&
-             data.senderContact is string && data.senderContact.size() <= 150 &&
-             data.subject is string && data.subject.size() <= 150 &&
-             data.message is string && data.message.size() <= 2000 &&
-             data.recipientAddress is string && data.recipientAddress.size() <= 42 &&
-             data.createdAt is string;
+        return data.assetId is string && data.assetId.size() <= 128 &&
+               data.assetTitle is string && data.assetTitle.size() <= 100 &&
+               data.senderName is string && data.senderName.size() <= 100 &&
+               data.senderContact is string && data.senderContact.size() <= 150 &&
+               data.subject is string && data.subject.size() <= 150 &&
+               data.message is string && data.message.size() <= 2000 &&
+               data.recipientAddress is string && data.recipientAddress.size() <= 42 &&
+               data.createdAt is string;
     }
 
     function isValidFavorite(data) {
-      return data.userId is string && data.userId == request.auth.uid &&
-             data.assetId is string && data.assetId.size() <= 128 &&
-             data.createdAt is timestamp;
+        return data.userId is string && data.userId == request.auth.uid &&
+               data.assetId is string && data.assetId.size() <= 128 &&
+               data.createdAt is timestamp;
     }
 
     function isValidNotification(data) {
-      return data.userId is string && data.userId == request.auth.uid &&
-             data.type is string && data.type.size() <= 50 &&
-             data.title is string && data.title.size() <= 150 &&
-             data.description is string && data.description.size() <= 500 &&
-             data.read is bool &&
-             (data.createdAt is timestamp || data.createdAt is string) &&
-             (!('details' in data) || data.details is string);
+        return data.userId is string && data.userId == request.auth.uid &&
+               data.type is string && data.type.size() <= 50 &&
+               data.title is string && data.title.size() <= 150 &&
+               data.description is string && data.description.size() <= 500 &&
+               data.read is bool &&
+               (data.createdAt is timestamp || data.createdAt is string) &&
+               (!('details' in data) || data.details is string);
     }
 
-    // Assets — authenticated users only; validated on write
     match /assets/{assetId} {
       allow read: if isSignedIn();
       allow create, update: if isSignedIn() && isValidAsset(request.resource.data);
       allow delete: if isSignedIn();
     }
 
-    // Agreements — authenticated users only; validated on write
     match /agreements/{agreementId} {
       allow read: if isSignedIn();
       allow create, update: if isSignedIn() && isValidAgreement(request.resource.data);
       allow delete: if isSignedIn();
     }
 
-    // Transactions — authenticated users only; immutable after creation
     match /transactions/{transactionId} {
       allow read: if isSignedIn();
       allow create: if isSignedIn() && isValidTransaction(request.resource.data);
       allow update, delete: if false;
     }
 
-    // Developer keys — owner only
     match /developer_keys/{userId} {
       allow read, write: if isSignedIn() && userId == request.auth.uid;
     }
 
-    // Inquiries — anyone can submit a contact/license inquiry (public contact form)
-    // but only authenticated users can read the inbox
     match /inquiries/{inquiryId} {
       allow read: if isSignedIn();
       allow create: if isValidInquiry(request.resource.data);
       allow update, delete: if false;
     }
 
-    // Favorites — owner only
     match /favorites/{favoriteId} {
       allow read: if isSignedIn() && resource.data.userId == request.auth.uid;
       allow create: if isSignedIn() && isValidFavorite(request.resource.data);
       allow delete: if isSignedIn() && resource.data.userId == request.auth.uid;
     }
 
-    // Notifications — owner only; only the 'read' field can be updated
     match /notifications/{notificationId} {
       allow read, delete: if isSignedIn() && resource.data.userId == request.auth.uid;
       allow create: if isSignedIn() && isValidNotification(request.resource.data);
-      allow update: if isSignedIn() &&
-                       resource.data.userId == request.auth.uid &&
-                       isValidNotification(request.resource.data) &&
-                       request.resource.data.diff(resource.data).affectedKeys().hasOnly(['read']);
+      allow update: if isSignedIn() && resource.data.userId == request.auth.uid && isValidNotification(request.resource.data) &&
+                     request.resource.data.diff(resource.data).affectedKeys().hasOnly(['read']);
     }
 
-    // Default deny — block everything not explicitly listed above
+    // Default deny
     match /{document=**} {
       allow read, write: if false;
     }

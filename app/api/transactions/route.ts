@@ -11,7 +11,7 @@ export async function GET(request: Request) {
 
     const transactionsRef = db.collection('transactions');
     const snapshot = await transactionsRef.orderBy('timestamp', 'desc').limit(5).get();
-
+    
     let txs = snapshot.docs.map((doc: any) => {
       const data = doc.data();
       return {
@@ -75,6 +75,7 @@ export async function GET(request: Request) {
         await transactionsRef.add(tx);
       }
 
+      // Re-fetch sorted list
       const snapshotNew = await transactionsRef.orderBy('timestamp', 'desc').limit(5).get();
       txs = snapshotNew.docs.map((doc: any) => {
         const data = doc.data();

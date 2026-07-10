@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useAuth } from './auth/FirebaseProvider';
+import { useAuth } from '@/components/auth/FirebaseProvider';
 import { getAuthHeaders } from '@/lib/auth-client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -212,12 +212,12 @@ export default function DataTokenizationHub() {
         ipfsHash: `ipfs://Qm${Math.random().toString(36).substring(2, 17)}${Math.random().toString(36).substring(2, 17)}`
       };
 
-      const authHeaders = await getAuthHeaders(user, isSandboxMode);
-
+      const headers = await getAuthHeaders(user, isSandboxMode);
       const res = await fetch('/api/assets', {
         method: 'POST',
-        headers: {
-          ...authHeaders,
+        headers: { 
+          'Content-Type': 'application/json',
+          ...headers
         },
         body: JSON.stringify(assetPayload)
       });
@@ -238,8 +238,9 @@ export default function DataTokenizationHub() {
 
       const putRes = await fetch('/api/assets', {
         method: 'PUT',
-        headers: {
-          ...authHeaders,
+        headers: { 
+          'Content-Type': 'application/json',
+          ...headers
         },
         body: JSON.stringify(mintPayload)
       });
@@ -253,8 +254,9 @@ export default function DataTokenizationHub() {
       // Post record transaction to ledger simulation (creates beautiful user outcome)
       await fetch('/api/transactions', {
         method: 'POST',
-        headers: {
-          ...authHeaders,
+        headers: { 
+          'Content-Type': 'application/json',
+          ...headers
         },
         body: JSON.stringify({
           assetId: savedAsset.id,
@@ -358,12 +360,12 @@ export default function DataTokenizationHub() {
         ipfsHash: `ipfs://QmArt${Math.random().toString(36).substring(2, 17)}`
       };
 
-      const authHeaders = await getAuthHeaders(user, isSandboxMode);
-
+      const headers = await getAuthHeaders(user, isSandboxMode);
       const res = await fetch('/api/assets', {
         method: 'POST',
-        headers: {
-          ...authHeaders,
+        headers: { 
+          'Content-Type': 'application/json',
+          ...headers
         },
         body: JSON.stringify(assetPayload)
       });
@@ -384,8 +386,9 @@ export default function DataTokenizationHub() {
 
       const putRes = await fetch('/api/assets', {
         method: 'PUT',
-        headers: {
-          ...authHeaders,
+        headers: { 
+          'Content-Type': 'application/json',
+          ...headers
         },
         body: JSON.stringify(mintPayload)
       });
@@ -399,8 +402,9 @@ export default function DataTokenizationHub() {
       // Trigger transaction log
       await fetch('/api/transactions', {
         method: 'POST',
-        headers: {
-          ...authHeaders,
+        headers: { 
+          'Content-Type': 'application/json',
+          ...headers
         },
         body: JSON.stringify({
           assetId: savedAsset.id,

@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { GoogleGenAI } from "@google/genai";
+import { verifyAuthToken } from '@/lib/auth-server';
 
 const ai = new GoogleGenAI({
   apiKey: process.env.GEMINI_API_KEY,
@@ -12,6 +13,11 @@ const ai = new GoogleGenAI({
 
 export async function POST(req: Request) {
   try {
+    const user = await verifyAuthToken(req.headers.get('Authorization'));
+    if (!user) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
     const { message, history } = await req.json();
 
     if (!message) {

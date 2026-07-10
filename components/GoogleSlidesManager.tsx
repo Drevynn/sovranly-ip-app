@@ -1,6 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useAuth } from '@/components/auth/FirebaseProvider';
+import { getAuthHeaders } from '@/lib/auth-client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -36,7 +38,6 @@ import {
   ChevronRight,
   ChevronLeft
 } from 'lucide-react';
-import { useAuth } from './auth/FirebaseProvider';
 import { useLanguage } from './LanguageProvider';
 import { motion, AnimatePresence } from 'motion/react';
 
@@ -143,7 +144,12 @@ export default function GoogleSlidesManager() {
     const fetchAssets = async () => {
       setLoadingAssets(true);
       try {
-        const res = await fetch('/api/assets');
+        const headers = await getAuthHeaders(user, isSandboxMode);
+        const res = await fetch('/api/assets', {
+          headers: {
+            ...headers
+          }
+        });
         if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
         const data = await res.json();
         if (isMounted) {

@@ -5,23 +5,20 @@ import * as crypto from 'crypto';
 
 export async function POST(req: Request) {
   try {
-    const authHeader = req.headers.get('Authorization');
-    const user = await verifyAuthToken(authHeader);
-
+    const user = await verifyAuthToken(req.headers.get('Authorization'));
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const body = await req.json().catch(() => ({}));
-    const { uid, email } = body;
+    const { uid, email } = await req.json();
 
-    // Prevent IDOR by ensuring user only rotates their own API keys
-    if (uid && uid !== user.uid) {
-      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+    if (!uid) {
+      return NextResponse.json({ error: 'Authentication parameter uid is required' }, { status: 400 });
     }
 
-    const uidToUse = user.uid;
-    const emailToUse = email || user.email || 'create@sovranlyip.com';
+    if (user.uid !== uid) {
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+    }
 
     // Generate a fresh cryptographically secure developer API key
     // Pattern: sv_api_ + 32-character random hex
@@ -31,12 +28,12 @@ export async function POST(req: Request) {
     // Mask the key for subsequent read safety
     const maskedKey = `sv_api_${randomHex.substring(0, 4)}...${randomHex.substring(randomHex.length - 4)}`;
 
-    const docRef = db.collection('developer_keys').doc(uidToUse);
+    const docRef = db.collection('developer_keys').doc(uid);
     const now = new Date();
 
     await docRef.set({
-      uid: uidToUse,
-      email: emailToUse,
+      uid,
+      email: email || 'create@sovranlyip.com',
       maskedKey,
       hashedKey: crypto.createHash('sha256').update(fullKey).digest('hex'),
       createdAt: now,

@@ -1,9 +1,9 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
-import { useAuth } from './auth/FirebaseProvider';
+import { useAuth } from '@/components/auth/FirebaseProvider';
 import { getAuthHeaders } from '@/lib/auth-client';
+import { motion, AnimatePresence } from 'motion/react';
 import { 
   Cpu, 
   Brain, 
@@ -130,7 +130,12 @@ export default function AiLicensingCenter() {
     let isMounted = true;
     const fetchAssets = async () => {
       try {
-        const res = await fetch('/api/assets');
+        const headers = await getAuthHeaders(user, isSandboxMode);
+        const res = await fetch('/api/assets', {
+          headers: {
+            ...headers
+          }
+        });
         if (res.ok) {
           const data = await res.json();
           if (isMounted) {
@@ -187,11 +192,12 @@ export default function AiLicensingCenter() {
     };
 
     try {
-      const authHeaders = await getAuthHeaders(user, isSandboxMode);
+      const headers = await getAuthHeaders(user, isSandboxMode);
       const res = await fetch('/api/assets', {
         method: 'PUT',
-        headers: {
-          ...authHeaders,
+        headers: { 
+          'Content-Type': 'application/json',
+          ...headers
         },
         body: JSON.stringify(updatePayload)
       });

@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useAuth } from './auth/FirebaseProvider';
+import { getAuthHeaders } from '@/lib/auth-client';
 import { 
   FileText, 
   CheckCircle2, 
@@ -88,7 +89,7 @@ const TEMPLATES = [
 ];
 
 export default function LicensingAgreementBuilder({ walletAddress }: { walletAddress: string | null }) {
-  const { user } = useAuth();
+  const { user, isSandboxMode } = useAuth();
   const [contractSeed] = useState(() => Math.floor(100000 + Math.random() * 900000));
   
   // States for form and interaction
@@ -126,9 +127,18 @@ export default function LicensingAgreementBuilder({ walletAddress }: { walletAdd
     let isMounted = true;
     const loadAppData = async () => {
       try {
+        const headers = await getAuthHeaders(user, isSandboxMode);
         const [assetsRes, agreementsRes] = await Promise.all([
-          fetch('/api/assets'),
-          fetch('/api/agreements')
+          fetch('/api/assets', {
+            headers: {
+              ...headers
+            }
+          }),
+          fetch('/api/agreements', {
+            headers: {
+              ...headers
+            }
+          })
         ]);
         
         if (isMounted) {
@@ -240,9 +250,13 @@ export default function LicensingAgreementBuilder({ walletAddress }: { walletAdd
         createdAt: new Date().toISOString()
       };
 
+      const headers = await getAuthHeaders(user, isSandboxMode);
       const res = await fetch('/api/agreements', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          ...headers
+        },
         body: JSON.stringify(newAgr)
       });
 
@@ -316,9 +330,13 @@ export default function LicensingAgreementBuilder({ walletAddress }: { walletAdd
   const handleTerminateAction = async (agr: Agreement) => {
     if (!agr.id) return;
     try {
+      const headers = await getAuthHeaders(user, isSandboxMode);
       const res = await fetch('/api/agreements', {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          ...headers
+        },
         body: JSON.stringify({ id: agr.id, status: 'TERMINATED' })
       });
       if (res.ok) {

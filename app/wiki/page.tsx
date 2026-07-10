@@ -1,6 +1,8 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
+import { useAuth } from '@/components/auth/FirebaseProvider';
+import { getAuthHeaders } from '@/lib/auth-client';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
@@ -41,8 +43,6 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 import LanguageSelector from '@/components/LanguageSelector';
-import { useAuth } from '@/components/auth/FirebaseProvider';
-import { getAuthHeaders } from '@/lib/auth-client';
 
 type BlueprintSection = {
   id: string;
@@ -203,7 +203,7 @@ export function APIsUsageDashboard() {
 }
 
 export function DeveloperKeyPortal() {
-  const { user, loading, isSandboxMode } = useAuth();
+  const { user, loading } = useAuth();
   const [keyStatus, setKeyStatus] = useState<{ hasKey: boolean; maskedKey?: string; rotatedAt?: string } | null>(null);
   const [isRotating, setIsRotating] = useState(false);
   const [newlyCreatedKey, setNewlyCreatedKey] = useState<string | null>(null);
@@ -212,52 +212,39 @@ export function DeveloperKeyPortal() {
 
   useEffect(() => {
     let active = true;
-    const fetchKey = async () => {
-      if (user?.uid) {
-        try {
-          const authHeaders = await getAuthHeaders(user, isSandboxMode);
-          const res = await fetch(`/api/developer/key?uid=${user.uid}`, {
-            headers: {
-              ...authHeaders,
-            }
-          });
-          if (res.ok) {
-            const data = await res.json();
-            if (active) {
-              setKeyStatus(data);
-            }
-          } else {
-            throw new Error('Failed to get key status');
-          }
-        } catch (e) {
-          console.error('Failed to load developer key status:', e);
-        }
-      } else {
-        setTimeout(() => {
+    if (user?.uid) {
+      fetch(`/api/developer/key?uid=${user.uid}`)
+        .then((res) => {
+          if (res.ok) return res.json();
+          throw new Error('Failed to get key status');
+        })
+        .then((data) => {
           if (active) {
-            setKeyStatus(null);
+            setKeyStatus(data);
           }
-        }, 0);
-      }
-    };
-
-    fetchKey();
-
+        })
+        .catch((e) => {
+          console.error('Failed to load developer key status:', e);
+        });
+    } else {
+      setTimeout(() => {
+        if (active) {
+          setKeyStatus(null);
+        }
+      }, 0);
+    }
     return () => {
       active = false;
     };
-  }, [user, isSandboxMode]);
+  }, [user?.uid]);
 
   const handleGenerateOrRotate = async () => {
     if (!user) return;
     setIsRotating(true);
     try {
-      const authHeaders = await getAuthHeaders(user, isSandboxMode);
       const res = await fetch('/api/developer/rotate', {
         method: 'POST',
-        headers: {
-          ...authHeaders,
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ uid: user.uid, email: user.email }),
       });
       if (!res.ok) throw new Error('Rotation call failed');
@@ -443,6 +430,7 @@ export function DeveloperKeyPortal() {
 }
 
 export default function WikiPage() {
+  const { user, isSandboxMode } = useAuth();
   const [searchQuery, setSearchQuery] = useState('');
   const [activeTab, setActiveTab] = useState<'all' | 'vision' | 'economics' | 'legal' | 'manifesto' | 'api'>('all');
   const [openSections, setOpenSections] = useState<Record<string, boolean>>({
@@ -487,9 +475,13 @@ export default function WikiPage() {
     setIsChatLoading(true);
 
     try {
+      const headers = await getAuthHeaders(user, isSandboxMode);
       const response = await fetch('/api/chat', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          ...headers
+        },
         body: JSON.stringify({
           message: prompt,
           // Extract history without system instructions
