@@ -1,0 +1,68 @@
+name: Deploy Firestore Rules & Indexes
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'firestore.rules'
+      - 'firestore.indexes.json'
+      - 'firebase.json'
+
+jobs:
+  check-conflicts:
+    name: Check for Merge Conflict Markers
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Fail if conflict markers found in firestore.rules
+        run: |
+          if grep -qE '^(<<<<<<<|=======|>>>>>>>)' firestore.rules; then
+            echo "ERROR: Merge conflict markers detected in firestore.rules!"
+            echo "Resolve the conflict before deploying."
+            exit 1
+          fi
+          echo "firestore.rules is clean."
+
+      - name: Fail if conflict markers found in firestore.indexes.json
+        run: |
+          if grep -qE '^(<<<<<<<|=======|>>>>>>>)' firestore.indexes.json; then
+            echo "ERROR: Merge conflict markers detected in firestore.indexes.json!"
+            echo "Resolve the conflict before deploying."
+            exit 1
+          fi
+          echo "firestore.indexes.json is clean."
+
+      - name: Validate firebase.json targets correct database
+        run: |
+          DB=$(node -e "const f=require('./firebase.json'); console.log(f.firestore[0].database)")
+          EXPECTED="ai-studio-ce117e8f-1a01-4acb-bfa0-d33cc0d3dc54"
+          if [ "$DB" != "$EXPECTED" ]; then
+            echo "ERROR: firebase.json is targeting wrong database: $DB"
+            echo "Expected: $EXPECTED"
+            exit 1
+          fi
+          echo "Database target confirmed: $DB"
+
+  deploy:
+    name: Deploy to Firebase
+    runs-on: ubuntu-latest
+    needs: check-conflicts
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Firebase CLI
+        run: npm install -g firebase-tools
+
+      - name: Deploy Firestore Rules & Indexes
+        run: firebase deploy --only firestore --project ai-studio-ce117e8f-1a01-4acb-bfa0-d33cc0d3dc54
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+
+      - name: Confirm deployed indexes
+        run: firebase firestore:indexes --project ai-studio-ce117e8f-1a01-4acb-bfa0-d33cc0d3dc54
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
