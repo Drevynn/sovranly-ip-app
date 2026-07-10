@@ -22,6 +22,7 @@ import Link from 'next/link';
 import { useLanguage } from '@/components/LanguageProvider';
 import LanguageSelector from '@/components/LanguageSelector';
 import SlideStack from '@/components/SlideStack';
+import NewsletterSignup from '@/components/NewsletterSignup';
 
 export default function HomePage() {
   const [submitted, setSubmitted] = useState(false);
@@ -249,6 +250,11 @@ export default function HomePage() {
 
       {/* Footer */}
       <footer className="border-t border-white/5 py-16 bg-zinc-950/40 relative z-10 flex flex-col items-center justify-center gap-8 text-center">
+        {/* Newsletter Signup Form */}
+        <div className="w-full max-w-7xl px-6">
+          <NewsletterSignup />
+        </div>
+
         <div className="flex flex-col items-center gap-4">
           <div className="flex items-center gap-6">
             <Link 

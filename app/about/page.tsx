@@ -7,6 +7,7 @@ import { ShieldCheck, ArrowLeft, ArrowRight, Sparkles, Youtube, Facebook, Instag
 import AboutUs from '@/components/AboutUs';
 import LanguageSelector from '@/components/LanguageSelector';
 import { useLanguage } from '@/components/LanguageProvider';
+import NewsletterSignup from '@/components/NewsletterSignup';
 
 export default function AboutPage() {
   const { t } = useLanguage();
@@ -51,6 +52,11 @@ export default function AboutPage() {
 
       {/* Footer Element matching landing/home pages */}
       <footer className="border-t border-white/5 py-16 bg-zinc-950/40 relative z-10 flex flex-col items-center justify-center gap-8 text-center mt-12">
+        {/* Newsletter Signup Form */}
+        <div className="w-full max-w-7xl px-6">
+          <NewsletterSignup />
+        </div>
+
         <div className="flex flex-col items-center gap-4">
           <div className="text-[10px] font-mono text-zinc-500 uppercase tracking-widest font-black">Follow our Founder</div>
           <div className="flex flex-wrap items-center justify-center gap-3">

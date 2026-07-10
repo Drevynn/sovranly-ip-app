@@ -89,7 +89,13 @@ export const translations = {
     submitBtn: "Send Support Message",
     dispatchedTitle: "Message Dispatched Securely",
     dispatchedDesc: "We have received your request and will follow up with you shortly.",
-    loadingProgress: "Establishing Crypto Console..."
+    loadingProgress: "Establishing Crypto Console...",
+    newsletterTitle: "Sovereign Dispatch",
+    newsletterDesc: "Subscribe to continuous cryptographic intelligence and platform updates on creator IP rights.",
+    newsletterPlaceholder: "Enter your cryptographically secured email",
+    newsletterBtn: "Secure Subscription",
+    newsletterSuccessTitle: "Identity Registered on Feed",
+    newsletterSuccessDesc: "Your cryptographic email has been securely registered to receive automated platform dispatches."
   },
   es: {
     // Brand & General
@@ -161,7 +167,13 @@ export const translations = {
     submitBtn: "Enviar Mensaje de Soporte",
     dispatchedTitle: "Mensaje Enviado con Seguridad",
     dispatchedDesc: "Hemos recibido su solicitud y nos pondremos en contacto con usted en breve.",
-    loadingProgress: "Estableciendo Consola Criptográfica..."
+    loadingProgress: "Estableciendo Consola Criptográfica...",
+    newsletterTitle: "Despacho Soberano",
+    newsletterDesc: "Suscribirse a la inteligencia criptográfica continua y actualizaciones de derechos de PI del creador.",
+    newsletterPlaceholder: "Ingrese su correo con seguridad criptográfica",
+    newsletterBtn: "Asegurar Suscripción",
+    newsletterSuccessTitle: "Identidad Registrada en el Canal",
+    newsletterSuccessDesc: "Su correo criptográfico ha sido registrado de forma segura para recibir despachos automatizados."
   },
   ja: {
     // Brand & General
@@ -233,7 +245,13 @@ export const translations = {
     submitBtn: "サポートメッセージを送信",
     dispatchedTitle: "メッセージは安全に送信されました",
     dispatchedDesc: "お問い合わせを正常に受け付けました。折り返し担当者よりご連絡いたします。",
-    loadingProgress: "クリプトコンソールを構築中..."
+    loadingProgress: "クリプトコンソールを構築中...",
+    newsletterTitle: "ソブリン・ディスパッチ",
+    newsletterDesc: "クリエイターの知的財産権に関する暗号化インテリジェンスとプラットフォームの更新を購読する。",
+    newsletterPlaceholder: "暗号化されたメールアドレスを入力してください",
+    newsletterBtn: "安全に購読する",
+    newsletterSuccessTitle: "フィードにIDを登録完了",
+    newsletterSuccessDesc: "あなたの暗号化されたメールアドレスは、自動配信の受信先として安全に登録されました。"
   },
   fr: {
     // Brand & General
@@ -305,7 +323,13 @@ export const translations = {
     submitBtn: "Envoyer le Message",
     dispatchedTitle: "Message Transmis en Toute Sécurité",
     dispatchedDesc: "Nous avons bien reçu votre demande et reviendrons vers vous très prochainement.",
-    loadingProgress: "Établissement de la console crypto..."
+    loadingProgress: "Établissement de la console crypto...",
+    newsletterTitle: "Dépêche Souveraine",
+    newsletterDesc: "Abonnez-vous à l'intelligence cryptographique continue et aux mises à jour sur la PI des créateurs.",
+    newsletterPlaceholder: "Entrez votre e-mail sécurisé par cryptographie",
+    newsletterBtn: "Sécuriser l'Abonnement",
+    newsletterSuccessTitle: "Identité Enregistrée sur le Flux",
+    newsletterSuccessDesc: "Votre e-mail cryptographique a été enregistré avec sécurité pour recevoir des dépêches automatisées."
   }
 };
 
