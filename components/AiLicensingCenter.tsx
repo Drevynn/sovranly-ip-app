@@ -2,6 +2,8 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
+import { useAuth } from './auth/FirebaseProvider';
+import { getAuthHeaders } from '@/lib/auth-client';
 import { 
   Cpu, 
   Brain, 
@@ -95,6 +97,7 @@ const AI_BID_POOLS: AIBidPool[] = [
 ];
 
 export default function AiLicensingCenter() {
+  const { user, isSandboxMode } = useAuth();
   const [assets, setAssets] = useState<IPAsset[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isUpdating, setIsUpdating] = useState<string | null>(null);
@@ -184,9 +187,12 @@ export default function AiLicensingCenter() {
     };
 
     try {
+      const authHeaders = await getAuthHeaders(user, isSandboxMode);
       const res = await fetch('/api/assets', {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          ...authHeaders,
+        },
         body: JSON.stringify(updatePayload)
       });
 

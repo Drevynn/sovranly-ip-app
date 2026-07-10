@@ -84,7 +84,7 @@ export async function GET() {
     return NextResponse.json(txs);
   } catch (error) {
     console.error('API Error in GET /api/transactions:', error);
-    return NextResponse.json({ error: 'Failed to fetch transactions', details: String(error) }, { status: 500 });
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
 
@@ -105,6 +105,6 @@ export async function POST(request: Request) {
     return NextResponse.json({ id: docRef.id, ...newTx, timestamp: newTx.timestamp.toISOString() });
   } catch (error) {
     console.error('Error recording transaction:', error);
-    return NextResponse.json({ error: 'Failed to record transaction', details: String(error) }, { status: 500 });
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }

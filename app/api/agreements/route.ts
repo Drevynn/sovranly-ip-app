@@ -9,7 +9,7 @@ export async function GET() {
     return NextResponse.json(agreementsData);
   } catch (error) {
     console.error('Error fetching agreements:', error);
-    return NextResponse.json({ error: 'Failed to fetch agreements', details: String(error) }, { status: 500 });
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
 
@@ -25,7 +25,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ id: docRef.id, ...enrichedBody });
   } catch (error) {
     console.error('Error creating agreement:', error);
-    return NextResponse.json({ error: 'Failed to create agreement', details: String(error) }, { status: 500 });
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
 
@@ -40,6 +40,6 @@ export async function PUT(request: Request) {
     return NextResponse.json({ success: true, id, ...data });
   } catch (error) {
     console.error('Error updating agreement:', error);
-    return NextResponse.json({ error: 'Failed to update agreement', details: String(error) }, { status: 500 });
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }

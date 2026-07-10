@@ -96,7 +96,7 @@ export async function POST(req: Request) {
   } catch (error) {
     console.error('Gemini call error:', error);
     return NextResponse.json(
-      { error: 'Failed to generate response', details: String(error) }, 
+      { error: 'Internal server error' }, 
       { status: 500 }
     );
   }

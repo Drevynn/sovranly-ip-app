@@ -80,7 +80,7 @@ export async function GET() {
     return NextResponse.json(assetsData);
   } catch (error) {
     console.error('Error fetching assets:', error);
-    return NextResponse.json({ error: 'Failed to fetch assets', details: String(error) }, { status: 500 });
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
 
@@ -101,7 +101,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ id: docRef.id, ...enrichedBody });
   } catch (error) {
     console.error('Error creating asset:', error);
-    return NextResponse.json({ error: 'Failed to create asset', details: String(error) }, { status: 500 });
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
 
@@ -116,6 +116,6 @@ export async function PUT(request: Request) {
     return NextResponse.json({ success: true, id, ...data });
   } catch (error) {
     console.error('Error updating asset:', error);
-    return NextResponse.json({ error: 'Failed to update asset', details: String(error) }, { status: 500 });
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }

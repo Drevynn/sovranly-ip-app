@@ -61,24 +61,24 @@ service cloud.firestore {
 
     match /assets/{assetId} {
       allow read: if true;
-      allow create, update: if isValidAsset(request.resource.data);
-      allow delete: if true;
+      allow create, update: if isSignedIn() && isValidAsset(request.resource.data);
+      allow delete: if isSignedIn();
     }
 
     match /agreements/{agreementId} {
       allow read: if true;
-      allow create, update: if isValidAgreement(request.resource.data);
-      allow delete: if true;
+      allow create, update: if isSignedIn() && isValidAgreement(request.resource.data);
+      allow delete: if isSignedIn();
     }
 
     match /transactions/{transactionId} {
       allow read: if true;
-      allow create: if isValidTransaction(request.resource.data);
+      allow create: if isSignedIn() && isValidTransaction(request.resource.data);
       allow update, delete: if false;
     }
 
     match /developer_keys/{userId} {
-      allow read, write: if true;
+      allow read, write: if isSignedIn() && userId == request.auth.uid;
     }
 
     match /inquiries/{inquiryId} {

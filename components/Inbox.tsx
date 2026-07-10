@@ -1,6 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useAuth } from './auth/FirebaseProvider';
+import { getAuthHeaders } from '@/lib/auth-client';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -33,6 +35,7 @@ type Inquiry = {
 };
 
 export default function Inbox({ walletAddress }: { walletAddress: string | null }) {
+  const { user, isSandboxMode } = useAuth();
   const [inquiries, setInquiries] = useState<Inquiry[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(false);
@@ -49,7 +52,12 @@ export default function Inbox({ walletAddress }: { walletAddress: string | null 
     const load = async () => {
       setLoading(true);
       try {
-        const res = await fetch(`/api/messages?recipientAddress=${walletAddress}`);
+        const authHeaders = await getAuthHeaders(user, isSandboxMode);
+        const res = await fetch(`/api/messages?recipientAddress=${walletAddress}`, {
+          headers: {
+            ...authHeaders,
+          }
+        });
         if (res.ok && active) {
           const data = await res.json();
           setInquiries(data);
@@ -66,13 +74,18 @@ export default function Inbox({ walletAddress }: { walletAddress: string | null 
     return () => {
       active = false;
     };
-  }, [walletAddress]);
+  }, [walletAddress, user, isSandboxMode]);
 
   const fetchInquiries = async () => {
     if (!walletAddress) return;
     setLoading(true);
     try {
-      const res = await fetch(`/api/messages?recipientAddress=${walletAddress}`);
+      const authHeaders = await getAuthHeaders(user, isSandboxMode);
+      const res = await fetch(`/api/messages?recipientAddress=${walletAddress}`, {
+        headers: {
+          ...authHeaders,
+        }
+      });
       if (res.ok) {
         const data = await res.json();
         setInquiries(data);

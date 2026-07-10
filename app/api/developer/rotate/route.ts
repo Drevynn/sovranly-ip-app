@@ -1,14 +1,27 @@
 import { NextResponse } from 'next/server';
 import { db } from '@/lib/firebase-admin';
+import { verifyAuthToken } from '@/lib/auth-server';
 import * as crypto from 'crypto';
 
 export async function POST(req: Request) {
   try {
-    const { uid, email } = await req.json();
+    const authHeader = req.headers.get('Authorization');
+    const user = await verifyAuthToken(authHeader);
 
-    if (!uid) {
-      return NextResponse.json({ error: 'Authentication parameter uid is required' }, { status: 400 });
+    if (!user) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
+
+    const body = await req.json().catch(() => ({}));
+    const { uid, email } = body;
+
+    // Prevent IDOR by ensuring user only rotates their own API keys
+    if (uid && uid !== user.uid) {
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+    }
+
+    const uidToUse = user.uid;
+    const emailToUse = email || user.email || 'create@sovranlyip.com';
 
     // Generate a fresh cryptographically secure developer API key
     // Pattern: sv_api_ + 32-character random hex
@@ -18,12 +31,12 @@ export async function POST(req: Request) {
     // Mask the key for subsequent read safety
     const maskedKey = `sv_api_${randomHex.substring(0, 4)}...${randomHex.substring(randomHex.length - 4)}`;
 
-    const docRef = db.collection('developer_keys').doc(uid);
+    const docRef = db.collection('developer_keys').doc(uidToUse);
     const now = new Date();
 
     await docRef.set({
-      uid,
-      email: email || 'create@sovranlyip.com',
+      uid: uidToUse,
+      email: emailToUse,
       maskedKey,
       hashedKey: crypto.createHash('sha256').update(fullKey).digest('hex'),
       createdAt: now,

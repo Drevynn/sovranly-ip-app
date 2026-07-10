@@ -31,7 +31,7 @@ export async function GET(request: Request) {
     return NextResponse.json(inquiriesData);
   } catch (error) {
     console.error('Error fetching inquiries:', error);
-    return NextResponse.json({ error: 'Failed to fetch inquiries', details: String(error) }, { status: 500 });
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
 
@@ -61,6 +61,6 @@ export async function POST(request: Request) {
     return NextResponse.json({ id: docRef.id, ...enrichedBody });
   } catch (error) {
     console.error('Error creating inquiry:', error);
-    return NextResponse.json({ error: 'Failed to save inquiry', details: String(error) }, { status: 500 });
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }

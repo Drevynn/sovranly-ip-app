@@ -42,6 +42,7 @@ import {
 import Link from 'next/link';
 import LanguageSelector from '@/components/LanguageSelector';
 import { useAuth } from '@/components/auth/FirebaseProvider';
+import { getAuthHeaders } from '@/lib/auth-client';
 
 type BlueprintSection = {
   id: string;
@@ -202,7 +203,7 @@ export function APIsUsageDashboard() {
 }
 
 export function DeveloperKeyPortal() {
-  const { user, loading } = useAuth();
+  const { user, loading, isSandboxMode } = useAuth();
   const [keyStatus, setKeyStatus] = useState<{ hasKey: boolean; maskedKey?: string; rotatedAt?: string } | null>(null);
   const [isRotating, setIsRotating] = useState(false);
   const [newlyCreatedKey, setNewlyCreatedKey] = useState<string | null>(null);
@@ -211,39 +212,52 @@ export function DeveloperKeyPortal() {
 
   useEffect(() => {
     let active = true;
-    if (user?.uid) {
-      fetch(`/api/developer/key?uid=${user.uid}`)
-        .then((res) => {
-          if (res.ok) return res.json();
-          throw new Error('Failed to get key status');
-        })
-        .then((data) => {
-          if (active) {
-            setKeyStatus(data);
+    const fetchKey = async () => {
+      if (user?.uid) {
+        try {
+          const authHeaders = await getAuthHeaders(user, isSandboxMode);
+          const res = await fetch(`/api/developer/key?uid=${user.uid}`, {
+            headers: {
+              ...authHeaders,
+            }
+          });
+          if (res.ok) {
+            const data = await res.json();
+            if (active) {
+              setKeyStatus(data);
+            }
+          } else {
+            throw new Error('Failed to get key status');
           }
-        })
-        .catch((e) => {
+        } catch (e) {
           console.error('Failed to load developer key status:', e);
-        });
-    } else {
-      setTimeout(() => {
-        if (active) {
-          setKeyStatus(null);
         }
-      }, 0);
-    }
+      } else {
+        setTimeout(() => {
+          if (active) {
+            setKeyStatus(null);
+          }
+        }, 0);
+      }
+    };
+
+    fetchKey();
+
     return () => {
       active = false;
     };
-  }, [user?.uid]);
+  }, [user, isSandboxMode]);
 
   const handleGenerateOrRotate = async () => {
     if (!user) return;
     setIsRotating(true);
     try {
+      const authHeaders = await getAuthHeaders(user, isSandboxMode);
       const res = await fetch('/api/developer/rotate', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          ...authHeaders,
+        },
         body: JSON.stringify({ uid: user.uid, email: user.email }),
       });
       if (!res.ok) throw new Error('Rotation call failed');

@@ -1,16 +1,26 @@
 import { NextResponse } from 'next/server';
 import { db } from '@/lib/firebase-admin';
+import { verifyAuthToken } from '@/lib/auth-server';
 
 export async function GET(req: Request) {
   try {
-    const { searchParams } = new URL(req.url);
-    const uid = searchParams.get('uid');
+    const authHeader = req.headers.get('Authorization');
+    const user = await verifyAuthToken(authHeader);
 
-    if (!uid) {
-      return NextResponse.json({ error: 'Authentication parameter uid is required' }, { status: 400 });
+    if (!user) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const docRef = db.collection('developer_keys').doc(uid);
+    const { searchParams } = new URL(req.url);
+    const requestedUid = searchParams.get('uid');
+
+    // Prevent IDOR by ensuring user is only requesting their own key status
+    if (requestedUid && requestedUid !== user.uid) {
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+    }
+
+    const uidToQuery = user.uid;
+    const docRef = db.collection('developer_keys').doc(uidToQuery);
     const docSnap = await docRef.get();
 
     if (!docSnap.exists) {
