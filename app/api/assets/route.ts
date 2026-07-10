@@ -1,11 +1,16 @@
 import { NextResponse } from 'next/server';
 import { db } from '@/lib/firebase-admin';
+import { verifyAuthToken } from '@/lib/auth-server';
 
-export async function GET() {
+export async function GET(request: Request) {
   try {
+    const user = await verifyAuthToken(request.headers.get('Authorization'));
+    if (!user) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
     console.log('Fetching assets...');
     let querySnapshot = await db.collection('assets').get();
-    
+
     // Auto-seed if database is currently empty
     if (querySnapshot.empty) {
       console.log('No assets found. Seeding initial marketplace examples...');
@@ -71,7 +76,7 @@ export async function GET() {
       for (const asset of SEED_ASSETS) {
         await db.collection('assets').add(asset);
       }
-      
+
       // Re-fetch to get doc IDs correctly
       querySnapshot = await db.collection('assets').get();
     }
@@ -86,8 +91,11 @@ export async function GET() {
 
 export async function POST(request: Request) {
   try {
+    const user = await verifyAuthToken(request.headers.get('Authorization'));
+    if (!user) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
     const body = await request.json();
-    // Default asset state properties
     const enrichedBody = {
       ...body,
       isMinted: false,
@@ -107,6 +115,10 @@ export async function POST(request: Request) {
 
 export async function PUT(request: Request) {
   try {
+    const user = await verifyAuthToken(request.headers.get('Authorization'));
+    if (!user) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
     const { id, ...data } = await request.json();
     if (!id) {
       return NextResponse.json({ error: 'Asset ID is required for update' }, { status: 400 });

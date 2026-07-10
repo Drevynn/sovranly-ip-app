@@ -1,11 +1,17 @@
 import { NextResponse } from 'next/server';
 import { db } from '@/lib/firebase-admin';
+import { verifyAuthToken } from '@/lib/auth-server';
 
-export async function GET() {
+export async function GET(request: Request) {
   try {
+    const user = await verifyAuthToken(request.headers.get('Authorization'));
+    if (!user) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
     const transactionsRef = db.collection('transactions');
     const snapshot = await transactionsRef.orderBy('timestamp', 'desc').limit(5).get();
-    
+
     let txs = snapshot.docs.map((doc: any) => {
       const data = doc.data();
       return {
@@ -69,7 +75,6 @@ export async function GET() {
         await transactionsRef.add(tx);
       }
 
-      // Re-fetch sorted list
       const snapshotNew = await transactionsRef.orderBy('timestamp', 'desc').limit(5).get();
       txs = snapshotNew.docs.map((doc: any) => {
         const data = doc.data();
@@ -90,6 +95,11 @@ export async function GET() {
 
 export async function POST(request: Request) {
   try {
+    const user = await verifyAuthToken(request.headers.get('Authorization'));
+    if (!user) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
     const body = await request.json();
     const transactionsRef = db.collection('transactions');
     const newTx = {
