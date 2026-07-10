@@ -10,6 +10,10 @@ on:
       - 'firebase.json'
   workflow_dispatch:
 
+permissions:
+  contents: read
+  id-token: write  # required for Workload Identity Federation
+
 jobs:
   check-conflicts:
     name: Check for Merge Conflict Markers
@@ -40,7 +44,6 @@ jobs:
           EXPECTED="ai-studio-ce117e8f-1a01-4acb-bfa0-d33cc0d3dc54"
           if [ "$DB" != "$EXPECTED" ]; then
             echo "ERROR: firebase.json is targeting wrong database: $DB"
-            echo "Expected: $EXPECTED"
             exit 1
           fi
           echo "Database target confirmed: $DB"
@@ -53,22 +56,17 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Write service account key to file
-        run: echo '${{ secrets.FIREBASE_SERVICE_ACCOUNT }}' > /tmp/sa-key.json
+      - name: Authenticate to Google Cloud (keyless)
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ secrets.WIF_PROVIDER }}
+          service_account: firebase-adminsdk-fbsvc@sovranlyip.iam.gserviceaccount.com
 
       - name: Install Firebase CLI
         run: npm install -g firebase-tools
 
       - name: Deploy Firestore Rules & Indexes
         run: firebase deploy --only firestore --project ai-studio-ce117e8f-1a01-4acb-bfa0-d33cc0d3dc54
-        env:
-          GOOGLE_APPLICATION_CREDENTIALS: /tmp/sa-key.json
 
       - name: Confirm deployed indexes
         run: firebase firestore:indexes --project ai-studio-ce117e8f-1a01-4acb-bfa0-d33cc0d3dc54
-        env:
-          GOOGLE_APPLICATION_CREDENTIALS: /tmp/sa-key.json
-
-      - name: Cleanup key file
-        if: always()
-        run: rm -f /tmp/sa-key.json
