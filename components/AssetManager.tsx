@@ -115,6 +115,7 @@ export default function AssetManager({ walletAddress }: { walletAddress: string 
 
   // Proof of Sovereignty Certificate Modal State
   const [certModalAsset, setCertModalAsset] = useState<Asset | null>(null);
+  const [certTheme, setCertTheme] = useState<'Modern Tech' | 'Classic Editorial'>('Modern Tech');
   const [isGeneratingCert, setIsGeneratingCert] = useState(false);
   const [certDownloadProgress, setCertDownloadProgress] = useState(0);
   const [isVerifyingLedger, setIsVerifyingLedger] = useState(false);
@@ -1107,48 +1108,74 @@ export default function AssetManager({ walletAddress }: { walletAddress: string 
                 </div>
               )}
 
-              <div className="flex flex-col sm:flex-row gap-3">
-                <Button 
-                  onClick={async () => {
-                    setIsVerifyingLedger(true);
-                    setLedgerVerificationResult(null);
-                    await new Promise(resolve => setTimeout(resolve, 2000));
-                    setIsVerifyingLedger(false);
-                    setLedgerVerificationResult("LEDGER INTEGRITY CONFIRMED: Verified against block hash 0x7a2fd...e421. Zero-trust continuous state is secure and unaltered (100% integrity score).");
-                  }}
-                  disabled={isVerifyingLedger || isGeneratingCert}
-                  className="flex-1 rounded-2xl bg-zinc-900 border border-zinc-800 text-zinc-200 hover:text-white text-xs h-11 uppercase font-mono tracking-wider flex items-center justify-center gap-2"
-                >
-                  <Activity className="w-4 h-4 text-cyan-400" />
-                  Verify Ledger Integrity
-                </Button>
+                <div className="flex bg-zinc-950 rounded-2xl p-1 mb-4">
+                  <button onClick={() => setCertTheme('Modern Tech')} className={`flex-1 py-2 rounded-xl text-xs font-mono uppercase ${certTheme === 'Modern Tech' ? 'bg-cyan-600 text-white' : 'text-zinc-400'}`}>Modern Tech</button>
+                  <button onClick={() => setCertTheme('Classic Editorial')} className={`flex-1 py-2 rounded-xl text-xs font-mono uppercase ${certTheme === 'Classic Editorial' ? 'bg-cyan-600 text-white' : 'text-zinc-400'}`}>Classic Editorial</button>
+                </div>
 
-                <Button 
-                  onClick={async () => {
-                    setIsGeneratingCert(true);
-                    setCertDownloadProgress(0);
-                    const progressInterval = setInterval(() => {
-                      setCertDownloadProgress(prev => {
-                        if (prev >= 100) {
-                          clearInterval(progressInterval);
-                          setTimeout(() => {
-                            setIsGeneratingCert(false);
-                            // Simple window print
-                            window.print();
-                          }, 500);
-                          return 100;
-                        }
-                        return prev + 20;
-                      });
-                    }, 100);
-                  }}
-                  disabled={isVerifyingLedger || isGeneratingCert}
-                  className="flex-1 rounded-2xl bg-cyan-600 hover:bg-cyan-700 text-white font-mono font-bold text-xs uppercase tracking-wider h-11 flex items-center justify-center gap-2 shadow-lg shadow-cyan-950/40"
-                >
-                  <Printer className="w-4 h-4" />
-                  Export & Print Cert
-                </Button>
-              </div>
+                <div className="flex flex-col sm:flex-row gap-3">
+                  <Button 
+                    onClick={async () => {
+                      setIsVerifyingLedger(true);
+                      setLedgerVerificationResult(null);
+                      await new Promise(resolve => setTimeout(resolve, 2000));
+                      setIsVerifyingLedger(false);
+                      setLedgerVerificationResult("LEDGER INTEGRITY CONFIRMED: Verified against block hash 0x7a2fd...e421. Zero-trust continuous state is secure and unaltered (100% integrity score).");
+                    }}
+                    disabled={isVerifyingLedger || isGeneratingCert}
+                    className="flex-1 rounded-2xl bg-zinc-900 border border-zinc-800 text-zinc-200 hover:text-white text-xs h-11 uppercase font-mono tracking-wider flex items-center justify-center gap-2"
+                  >
+                    <Activity className="w-4 h-4 text-cyan-400" />
+                    Verify Ledger Integrity
+                  </Button>
+
+                  <Button 
+                    onClick={async () => {
+                      setIsGeneratingCert(true);
+                      setCertDownloadProgress(0);
+                      const progressInterval = setInterval(() => {
+                        setCertDownloadProgress(prev => {
+                          if (prev >= 90) return 90;
+                          return prev + 10;
+                        });
+                      }, 100);
+
+                      try {
+                        const response = await fetch('/api/certificates/generate', {
+                          method: 'POST',
+                          headers: { 'Content-Type': 'application/json' },
+                          body: JSON.stringify({ assetId: certModalAsset.id, theme: certTheme })
+                        });
+
+                        if (!response.ok) throw new Error('Failed to generate certificate');
+
+                        const blob = await response.blob();
+                        const url = window.URL.createObjectURL(blob);
+                        const a = document.createElement('a');
+                        a.href = url;
+                        a.download = `certificate_${certModalAsset.id}.pdf`;
+                        document.body.appendChild(a);
+                        a.click();
+                        document.body.removeChild(a);
+                        window.URL.revokeObjectURL(url);
+                        
+                        clearInterval(progressInterval);
+                        setCertDownloadProgress(100);
+                        setTimeout(() => setIsGeneratingCert(false), 500);
+                      } catch (error) {
+                        console.error('Download error:', error);
+                        clearInterval(progressInterval);
+                        setIsGeneratingCert(false);
+                        alert('Failed to generate certificate.');
+                      }
+                    }}
+                    disabled={isVerifyingLedger || isGeneratingCert}
+                    className="flex-1 rounded-2xl bg-cyan-600 hover:bg-cyan-700 text-white font-mono font-bold text-xs uppercase tracking-wider h-11 flex items-center justify-center gap-2 shadow-lg shadow-cyan-950/40"
+                  >
+                    <Printer className="w-4 h-4" />
+                    {isGeneratingCert ? 'Generating...' : 'Export & Print Cert'}
+                  </Button>
+                </div>
             </div>
 
             <div className="text-center">
