@@ -120,6 +120,7 @@ export default function AssetManager({ walletAddress }: { walletAddress: string 
   const [certDownloadProgress, setCertDownloadProgress] = useState(0);
   const [isVerifyingLedger, setIsVerifyingLedger] = useState(false);
   const [ledgerVerificationResult, setLedgerVerificationResult] = useState<string | null>(null);
+  const [copiedLink, setCopiedLink] = useState(false);
 
   const filteredAssets = assets.filter(a => 
     (a.title.toLowerCase().includes(searchQuery.toLowerCase()) || (a.description?.toLowerCase().includes(searchQuery.toLowerCase()) ?? false)) &&
@@ -676,6 +677,15 @@ export default function AssetManager({ walletAddress }: { walletAddress: string 
                       </div>
                     </div>
 
+                    {/* Cryptographic Ledger Status Badge */}
+                    <div className="flex items-center gap-2 mb-3 px-2.5 py-1.5 rounded-lg bg-zinc-950/50 border border-emerald-950/40 w-fit">
+                      <span className="relative flex h-1.5 w-1.5">
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                        <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500"></span>
+                      </span>
+                      <span className="text-[9px] uppercase font-mono text-emerald-400 tracking-wider font-bold">Ledger Match Confirmed</span>
+                    </div>
+
                     {/* Title */}
                     <div className="text-white text-lg font-bold mb-2 line-clamp-2 min-h-[3.5rem] break-words leading-snug flex items-start">
                       {a.title}
@@ -1111,6 +1121,31 @@ export default function AssetManager({ walletAddress }: { walletAddress: string 
                 <div className="flex bg-zinc-950 rounded-2xl p-1 mb-4">
                   <button onClick={() => setCertTheme('Modern Tech')} className={`flex-1 py-2 rounded-xl text-xs font-mono uppercase ${certTheme === 'Modern Tech' ? 'bg-cyan-600 text-white' : 'text-zinc-400'}`}>Modern Tech</button>
                   <button onClick={() => setCertTheme('Classic Editorial')} className={`flex-1 py-2 rounded-xl text-xs font-mono uppercase ${certTheme === 'Classic Editorial' ? 'bg-cyan-600 text-white' : 'text-zinc-400'}`}>Classic Editorial</button>
+                </div>
+
+                <div className="flex flex-col gap-1.5 p-3.5 bg-zinc-950/40 border border-zinc-800/60 rounded-2xl mb-4 font-mono text-xs">
+                  <div className="text-[10px] text-zinc-500 uppercase tracking-wider font-bold">Public Verification Link</div>
+                  <div className="flex items-center gap-2 mt-1">
+                    <input 
+                      type="text" 
+                      readOnly 
+                      value={typeof window !== 'undefined' ? `${window.location.origin}/verify/${certModalAsset.id}` : ''}
+                      className="flex-1 bg-zinc-950 px-3 py-1.5 rounded-xl border border-zinc-900 text-zinc-400 select-all font-mono text-[11px]" 
+                    />
+                    <Button 
+                      onClick={() => {
+                        if (typeof window !== 'undefined') {
+                          navigator.clipboard.writeText(`${window.location.origin}/verify/${certModalAsset.id}`);
+                          setCopiedLink(true);
+                          setTimeout(() => setCopiedLink(false), 2000);
+                        }
+                      }}
+                      className="bg-zinc-900 border border-zinc-800 hover:bg-zinc-800 text-zinc-300 font-mono text-[10px] px-3.5 py-1.5 rounded-xl uppercase flex items-center gap-1.5 shrink-0"
+                    >
+                      {copiedLink ? <Check className="w-3 h-3 text-emerald-400" /> : <ExternalLink className="w-3 h-3 text-cyan-400" />}
+                      {copiedLink ? 'Copied' : 'Copy'}
+                    </Button>
+                  </div>
                 </div>
 
                 <div className="flex flex-col sm:flex-row gap-3">

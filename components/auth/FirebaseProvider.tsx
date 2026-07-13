@@ -32,38 +32,62 @@ export function FirebaseProvider({ children }: { children: React.ReactNode }) {
   const [accessToken, setAccessToken] = useState<string | null>(null);
 
   useEffect(() => {
-    const auth = getFirebaseAuth();
-    
-    // Check local storage for sandbox user first
-    const savedSandboxUser = typeof window !== 'undefined' ? localStorage.getItem('sovranly_sandbox_user') : null;
-    if (savedSandboxUser) {
-      try {
-        const parsed = JSON.parse(savedSandboxUser);
-        setTimeout(() => {
-          setUser(parsed);
-          setIsSandboxMode(true);
-          setAccessToken('sandbox-token-123');
-          setLoading(false);
-        }, 0);
-        return;
-      } catch (e) {
-        // clear corrupted data
-        localStorage.removeItem('sovranly_sandbox_user');
+    if (typeof window !== 'undefined') {
+      const handleRejection = (event: PromiseRejectionEvent) => {
+        const reason = event.reason;
+        const msg = reason?.message || '';
+        const name = reason?.name || '';
+        if (
+          name === 'AbortError' ||
+          msg.includes('IndexedDB') ||
+          msg.includes('idb-') ||
+          msg.includes('database connection is closing') ||
+          msg.includes('transaction was aborted') ||
+          msg.includes('Unable to create writable file')
+        ) {
+          event.preventDefault();
+          console.warn('Suppressing benign IndexedDB/AbortError in iframe sandbox:', reason);
+        }
+      };
+      window.addEventListener('unhandledrejection', handleRejection);
+      
+      const auth = getFirebaseAuth();
+      
+      // Check local storage for sandbox user first
+      const savedSandboxUser = localStorage.getItem('sovranly_sandbox_user');
+      if (savedSandboxUser) {
+        try {
+          const parsed = JSON.parse(savedSandboxUser);
+          setTimeout(() => {
+            setUser(parsed);
+            setIsSandboxMode(true);
+            setAccessToken('sandbox-token-123');
+            setLoading(false);
+          }, 0);
+          window.removeEventListener('unhandledrejection', handleRejection);
+          return;
+        } catch (e) {
+          // clear corrupted data
+          localStorage.removeItem('sovranly_sandbox_user');
+        }
       }
-    }
 
-    const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
-      if (firebaseUser) {
-        setUser(firebaseUser);
-        setIsSandboxMode(false);
-      } else {
-        setUser(null);
-        setAccessToken(null);
-      }
-      setLoading(false);
-    });
-    
-    return () => unsubscribe();
+      const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
+        if (firebaseUser) {
+          setUser(firebaseUser);
+          setIsSandboxMode(false);
+        } else {
+          setUser(null);
+          setAccessToken(null);
+        }
+        setLoading(false);
+      });
+      
+      return () => {
+        unsubscribe();
+        window.removeEventListener('unhandledrejection', handleRejection);
+      };
+    }
   }, []);
 
   const signInWithGoogle = async () => {
