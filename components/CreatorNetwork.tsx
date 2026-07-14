@@ -64,6 +64,7 @@ export default function CreatorNetwork() {
       });
     } catch (error) {
       console.error('Error setting up real-time listener:', error);
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setIsLoading(false);
     }
 
