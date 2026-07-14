@@ -3,8 +3,7 @@ import * as admin from 'firebase-admin';
 // Initialize firebase-admin if not already initialized
 let firebaseConfigFromJson: any = {};
 try {
-  const configFile = 'firebase-applet-config.json';
-  firebaseConfigFromJson = require('../' + configFile);
+  // Config is expected in environment variables
 } catch (e) {
   // Ignore
 }
