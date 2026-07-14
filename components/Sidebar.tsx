@@ -1,6 +1,6 @@
 'use client';
 
-import { Gauge, BarChart3, User, FileText, LogOut, ShieldAlert, Scale, Sliders, Mail, X, Presentation, Rocket, Shield, Building2, Brain, ShieldCheck, Database } from 'lucide-react';
+import { Gauge, BarChart3, User, Users, FileText, LogOut, ShieldAlert, Scale, Sliders, Mail, X, Presentation, Rocket, Shield, Building2, Brain, ShieldCheck, Database } from 'lucide-react';
 import Image from 'next/image';
 import { useAuth } from './auth/FirebaseProvider';
 import { useLanguage } from './LanguageProvider';
@@ -110,6 +110,12 @@ export default function Sidebar({
                 className={`w-full flex items-center gap-4 px-5 py-4 rounded-2xl text-sm font-semibold transition-all cursor-pointer ${activePage === 6 ? 'bg-zinc-900 border border-zinc-800 text-white shadow-xl shadow-zinc-950/50' : 'text-zinc-500 hover:text-zinc-300 hover:bg-zinc-900/30'}`}
               >
                 <Mail className="w-5 h-5 text-purple-400" /> {t('creatorInbox') || 'Creator Inbox'}
+              </button>
+              <button 
+                onClick={() => { setActivePage(13); onClose(); }}
+                className={`w-full flex items-center gap-4 px-5 py-4 rounded-2xl text-sm font-semibold transition-all cursor-pointer ${activePage === 13 ? 'bg-zinc-900 border border-zinc-800 text-white shadow-xl shadow-zinc-950/50' : 'text-zinc-500 hover:text-zinc-300 hover:bg-zinc-900/30'}`}
+              >
+                <Users className="w-5 h-5 text-indigo-400" /> Creator Network
               </button>
               <button 
                 onClick={() => { setActivePage(7); onClose(); }}
