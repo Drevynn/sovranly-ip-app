@@ -21,9 +21,16 @@ export default function LandingPage() {
         <p className="text-xl text-zinc-400 mb-10 max-w-2xl mx-auto">
           Sovranly IP brings Zero Trust Architecture to the creative industries. Register, manage, and monetize your work with blockchain-native security and automated royalty distribution.
         </p>
-        <Button size="lg" className="px-8 rounded-full">
-          Launch Marketplace <ArrowRight className="ml-2 h-4 w-4" />
-        </Button>
+        <div className="flex items-center justify-center gap-4">
+          <Button size="lg" className="px-8 rounded-full">
+            Launch Marketplace <ArrowRight className="ml-2 h-4 w-4" />
+          </Button>
+          <Link href="/funnel/whitepaper">
+            <Button size="lg" variant="outline" className="px-8 rounded-full border-zinc-800 text-zinc-300 hover:bg-zinc-900 hover:text-white">
+              Download 2026 Executive Summary
+            </Button>
+          </Link>
+        </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-20">
           {[
