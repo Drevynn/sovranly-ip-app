@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -26,7 +26,13 @@ import NewsletterSignup from '@/components/NewsletterSignup';
 
 export default function HomePage() {
   const [submitted, setSubmitted] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
   const { t } = useLanguage();
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setIsMounted(true);
+  }, []);
 
   return (
     <div className="min-h-screen bg-black text-zinc-100 font-sans selection:bg-cyan-500/20 selection:text-cyan-300">
@@ -218,25 +224,29 @@ export default function HomePage() {
             </div>
 
             {!submitted ? (
-              <form onSubmit={(e) => { e.preventDefault(); setSubmitted(true); }} className="space-y-6">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                  <div className="space-y-2">
-                    <Label className="text-zinc-400 text-xs font-semibold uppercase tracking-wider">{t('formName')}</Label>
-                    <Input className="bg-zinc-950/60 border-zinc-800 text-white rounded-xl py-5 px-4 focus-visible:ring-cyan-500" required placeholder={t('formNamePlaceholder')} />
+              isMounted ? (
+                <form onSubmit={(e) => { e.preventDefault(); setSubmitted(true); }} className="space-y-6">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <div className="space-y-2">
+                      <Label className="text-zinc-400 text-xs font-semibold uppercase tracking-wider">{t('formName')}</Label>
+                      <Input className="bg-zinc-950/60 border-zinc-800 text-white rounded-xl py-5 px-4 focus-visible:ring-cyan-500" required placeholder={t('formNamePlaceholder')} />
+                    </div>
+                    <div className="space-y-2">
+                      <Label className="text-zinc-400 text-xs font-semibold uppercase tracking-wider">{t('formEmail')}</Label>
+                      <Input type="email" className="bg-zinc-950/60 border-zinc-800 text-white rounded-xl py-5 px-4 focus-visible:ring-cyan-500" required placeholder={t('formEmailPlaceholder')} />
+                    </div>
                   </div>
                   <div className="space-y-2">
-                    <Label className="text-zinc-400 text-xs font-semibold uppercase tracking-wider">{t('formEmail')}</Label>
-                    <Input type="email" className="bg-zinc-950/60 border-zinc-800 text-white rounded-xl py-5 px-4 focus-visible:ring-cyan-500" required placeholder={t('formEmailPlaceholder')} />
+                    <Label className="text-zinc-400 text-xs font-semibold uppercase tracking-wider">{t('formDetails')}</Label>
+                    <Textarea className="bg-zinc-950/60 border-zinc-800 text-white rounded-xl p-4 focus-visible:ring-cyan-500" rows={5} required placeholder={t('formDetailsPlaceholder')} />
                   </div>
-                </div>
-                <div className="space-y-2">
-                  <Label className="text-zinc-400 text-xs font-semibold uppercase tracking-wider">{t('formDetails')}</Label>
-                  <Textarea className="bg-zinc-950/60 border-zinc-800 text-white rounded-xl p-4 focus-visible:ring-cyan-500" rows={5} required placeholder={t('formDetailsPlaceholder')} />
-                </div>
-                <Button type="submit" className="w-full py-6 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-bold transition-all shadow-md shadow-cyan-950/20">
-                  {t('submitBtn')}
-                </Button>
-              </form>
+                  <Button type="submit" className="w-full py-6 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-bold transition-all shadow-md shadow-cyan-950/20">
+                    {t('submitBtn')}
+                  </Button>
+                </form>
+              ) : (
+                <div className="h-[200px] flex items-center justify-center text-xs font-mono text-zinc-600">Loading secure transmission protocol...</div>
+              )
             ) : (
               <div className="text-center py-12 px-6 bg-zinc-950/80 rounded-2xl border border-emerald-500/20 shadow-xl">
                 <div className="w-12 h-12 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 rounded-full flex items-center justify-center text-xl mx-auto mb-4">✓</div>

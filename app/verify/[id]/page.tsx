@@ -30,6 +30,14 @@ interface AssetData {
   mintTxHash?: string;
 }
 
+const VERIFICATION_LOGS = [
+  'Establishing secure Zero-Trust TLS link...',
+  'Fetching cryptographic block signature...',
+  'Cross-referencing hash with distributed ledger...',
+  'Verifying owner signature & access credentials...',
+  'LEDGER INTEGRITY CONFIRMED: 100% authentic record.'
+];
+
 export default function PublicVerificationPage() {
   const { id } = useParams() as { id: string };
   const [loading, setLoading] = useState(true);
@@ -38,14 +46,12 @@ export default function PublicVerificationPage() {
   const [error, setError] = useState<string | null>(null);
   const [verificationLogs, setVerificationLogs] = useState<string[]>([]);
   const [currentLogIndex, setCurrentLogIndex] = useState(0);
+  const [isMounted, setIsMounted] = useState(false);
 
-  const logs = [
-    'Establishing secure Zero-Trust TLS link...',
-    'Fetching cryptographic block signature...',
-    'Cross-referencing hash with distributed ledger...',
-    'Verifying owner signature & access credentials...',
-    'LEDGER INTEGRITY CONFIRMED: 100% authentic record.'
-  ];
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setIsMounted(true);
+  }, []);
 
   useEffect(() => {
     async function fetchAsset() {
@@ -72,8 +78,8 @@ export default function PublicVerificationPage() {
   useEffect(() => {
     if (!loading && asset) {
       const interval = setInterval(() => {
-        if (currentLogIndex < logs.length) {
-          setVerificationLogs(prev => [...prev, logs[currentLogIndex]]);
+        if (currentLogIndex < VERIFICATION_LOGS.length) {
+          setVerificationLogs(prev => [...prev, VERIFICATION_LOGS[currentLogIndex]]);
           setCurrentLogIndex(prev => prev + 1);
         } else {
           clearInterval(interval);
@@ -236,7 +242,7 @@ export default function PublicVerificationPage() {
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between text-zinc-500 text-[11px] font-mono pt-4 border-t border-zinc-800/40 gap-2">
               <div className="flex items-center gap-1">
                 <Clock className="w-3.5 h-3.5 text-zinc-500" />
-                <span>ISSUED: {verifiedAt ? new Date(verifiedAt).toLocaleString() : new Date().toLocaleString()}</span>
+                <span>ISSUED: {isMounted ? (verifiedAt ? new Date(verifiedAt).toLocaleString() : new Date().toLocaleString()) : 'Loading...'}</span>
               </div>
               <div className="text-zinc-500">
                 CHAIN ID: <span className="text-zinc-400">137 (POLYGON CORE)</span>
@@ -261,13 +267,13 @@ export default function PublicVerificationPage() {
                 key={index} 
                 initial={{ opacity: 0, x: -10 }} 
                 animate={{ opacity: 1, x: 0 }} 
-                className={`flex items-start gap-2 ${index === logs.length - 1 ? 'text-emerald-400 font-bold' : ''}`}
+                className={`flex items-start gap-2 ${index === VERIFICATION_LOGS.length - 1 ? 'text-emerald-400 font-bold' : ''}`}
               >
-                <span className="text-zinc-700 shrink-0">[{new Date().toLocaleTimeString()}]</span>
+                <span className="text-zinc-700 shrink-0">[{isMounted ? new Date().toLocaleTimeString() : '--:--:--'}]</span>
                 <span>{log}</span>
               </motion.div>
             ))}
-            {currentLogIndex < logs.length && (
+            {currentLogIndex < VERIFICATION_LOGS.length && (
               <div className="w-1.5 h-3.5 bg-zinc-500 animate-pulse inline-block" />
             )}
           </div>

@@ -1,7 +1,7 @@
 'use client';
 import { createContext, useContext, useEffect, useState } from 'react';
 import { getFirebaseAuth } from '@/lib/firebase';
-import { onAuthStateChanged, User, signInWithPopup, GoogleAuthProvider, signOut } from 'firebase/auth';
+import { onAuthStateChanged, User, signInWithPopup, signInWithRedirect, GoogleAuthProvider, signOut } from 'firebase/auth';
 
 interface AuthContextType {
   user: User | null;
@@ -43,13 +43,32 @@ export function FirebaseProvider({ children }: { children: React.ReactNode }) {
           msg.includes('idb-') ||
           msg.includes('database connection is closing') ||
           msg.includes('transaction was aborted') ||
-          msg.includes('Unable to create writable file')
+          msg.includes('Unable to create writable file') ||
+          msg.includes('Connection to Indexed Database')
         ) {
           event.preventDefault();
+          event.stopImmediatePropagation();
           console.warn('Suppressing benign IndexedDB/AbortError in iframe sandbox:', reason);
         }
       };
-      window.addEventListener('unhandledrejection', handleRejection);
+      window.addEventListener('unhandledrejection', handleRejection, true);
+
+      const handleError = (event: ErrorEvent) => {
+        const msg = event.message || '';
+        if (
+          msg.includes('Connection to Indexed Database') ||
+          msg.includes('Indexed Database') ||
+          msg.includes('IndexedDB') ||
+          msg.includes('indexeddb') ||
+          msg.includes('idb-') ||
+          msg.includes('database connection is closing')
+        ) {
+          event.preventDefault();
+          event.stopImmediatePropagation();
+          console.warn('Suppressing benign IndexedDB error in iframe sandbox:', msg);
+        }
+      };
+      window.addEventListener('error', handleError, true);
       
       const auth = getFirebaseAuth();
       
@@ -85,7 +104,8 @@ export function FirebaseProvider({ children }: { children: React.ReactNode }) {
       
       return () => {
         unsubscribe();
-        window.removeEventListener('unhandledrejection', handleRejection);
+        window.removeEventListener('unhandledrejection', handleRejection, true);
+        window.removeEventListener('error', handleError, true);
       };
     }
   }, []);
@@ -101,15 +121,20 @@ export function FirebaseProvider({ children }: { children: React.ReactNode }) {
     provider.addScope('https://www.googleapis.com/auth/spreadsheets');
     
     try {
-      const result = await signInWithPopup(auth, provider);
-      const credential = GoogleAuthProvider.credentialFromResult(result);
-      if (credential?.accessToken) {
-        setAccessToken(credential.accessToken);
+      const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+      if (isMobile) {
+        await signInWithRedirect(auth, provider);
+      } else {
+        const result = await signInWithPopup(auth, provider);
+        const credential = GoogleAuthProvider.credentialFromResult(result);
+        if (credential?.accessToken) {
+          setAccessToken(credential.accessToken);
+        }
+        setUser(result.user);
+        setIsSandboxMode(false);
       }
-      setUser(result.user);
-      setIsSandboxMode(false);
     } catch (e: any) {
-      console.error("Popup failed, checking if caught by iframe context limits", e);
+      console.error("Popup/Redirect failed, checking if caught by iframe context limits", e);
       throw e;
     }
   };

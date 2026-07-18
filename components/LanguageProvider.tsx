@@ -344,15 +344,17 @@ interface LanguageContextType {
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
-  const [language, setLanguageState] = useState<LanguageCode>(() => {
+  const [language, setLanguageState] = useState<LanguageCode>('en');
+
+  useEffect(() => {
     if (typeof window !== 'undefined') {
       const stored = localStorage.getItem('sovranly-lang') as LanguageCode;
       if (stored && (stored === 'en' || stored === 'es' || stored === 'ja' || stored === 'fr')) {
-        return stored;
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        setLanguageState(stored);
       }
     }
-    return 'en';
-  });
+  }, []);
 
   const setLanguage = (lang: LanguageCode) => {
     setLanguageState(lang);
