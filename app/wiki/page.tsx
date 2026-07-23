@@ -43,6 +43,7 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 import LanguageSelector from '@/components/LanguageSelector';
+import RateLimitGauge from '@/components/RateLimitGauge';
 
 type BlueprintSection = {
   id: string;
@@ -76,7 +77,8 @@ export function APIsUsageDashboard() {
 
   const limitCap = 2000;
   const fillRatio = currentUsage / limitCap;
-  const percentage = Math.min(fillRatio * 100, 100).toFixed(1);
+  const percentage = Math.min(fillRatio * 100, 100);
+  const percentageStr = percentage.toFixed(1);
 
   return (
     <div id="api-usage-monitor" className="mt-8 pt-8 border-t border-zinc-900 space-y-5">
@@ -126,55 +128,60 @@ export function APIsUsageDashboard() {
         </div>
       </div>
 
-      <div className="space-y-2">
-        <div className="flex justify-between items-baseline text-xs font-mono">
-          <div className="space-y-0.5">
-            <span className="text-[10px] text-zinc-500 uppercase tracking-widest">Minute Limit Progress</span>
-            <div className="flex items-baseline gap-1">
-              <span className="text-sm font-bold text-white">{currentUsage.toLocaleString()}</span>
-              <span className="text-zinc-500">/</span>
-              <span className="text-zinc-350 font-bold">2,000</span>
-              <span className="text-zinc-500 text-[10px]">Requests</span>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
+        <div className="md:col-span-2 space-y-2">
+          <div className="flex justify-between items-baseline text-xs font-mono">
+            <div className="space-y-0.5">
+              <span className="text-[10px] text-zinc-500 uppercase tracking-widest">Minute Limit Progress</span>
+              <div className="flex items-baseline gap-1">
+                <span className="text-sm font-bold text-white">{currentUsage.toLocaleString()}</span>
+                <span className="text-zinc-500">/</span>
+                <span className="text-zinc-350 font-bold">2,000</span>
+                <span className="text-zinc-500 text-[10px]">Requests</span>
+              </div>
+            </div>
+            <div className="text-right space-y-0.5">
+              <span className="text-[10px] text-zinc-500 uppercase tracking-widest">Rate Ratio</span>
+              <div className="text-sm font-bold text-cyan-400">{percentageStr}%</div>
             </div>
           </div>
-          <div className="text-right space-y-0.5">
-            <span className="text-[10px] text-zinc-500 uppercase tracking-widest">Rate Ratio</span>
-            <div className="text-sm font-bold text-cyan-400">{percentage}%</div>
-          </div>
-        </div>
 
-        {/* Progress bar container */}
-        <div className="relative w-full h-3 bg-zinc-950 rounded-full overflow-hidden border border-zinc-900">
-          <div
-            style={{ width: `${percentage}%` }}
-            className={`h-full rounded-full transition-all duration-300 relative ${
-              fillRatio > 0.85 
-                ? 'bg-gradient-to-r from-amber-500 via-rose-500 to-rose-600' 
-                : fillRatio > 0.5 
-                  ? 'bg-gradient-to-r from-cyan-500 to-amber-500' 
-                  : 'bg-gradient-to-r from-teal-500 to-cyan-500'
-            }`}
-          >
-            <div className="absolute inset-0 bg-white/5" />
-          </div>
-        </div>
-
-        {currentUsage >= 1800 ? (
-          <div className="flex items-start gap-3 text-xs text-rose-300 font-mono bg-rose-950/40 border border-rose-500 p-4 rounded-2xl shadow-lg shadow-rose-950/20 animate-pulse">
-            <AlertCircle className="w-5 h-5 text-rose-400 shrink-0 mt-0.5 animate-bounce" />
-            <div className="space-y-1">
-              <span className="block font-black uppercase text-rose-400 text-xs">CRITICAL LIMIT WARNING EXCEEDED 90%</span>
-              <p className="text-[11px] text-rose-300/80 leading-relaxed uppercase">
-                Active volume is currently at {currentUsage.toLocaleString()} / 2,000 RPM ({percentage}%). Automated Zero-Trust Rate Limiting is about to engage. Please optimize API requests or switch to a Dedicated Sovereign Node to avoid request throttling.
-              </p>
+          <div className="relative w-full h-3 bg-zinc-950 rounded-full overflow-hidden border border-zinc-900">
+            <div
+              style={{ width: `${percentageStr}%` }}
+              className={`h-full rounded-full transition-all duration-300 relative ${
+                fillRatio > 0.85 
+                  ? 'bg-gradient-to-r from-amber-500 via-rose-500 to-rose-600' 
+                  : fillRatio > 0.5 
+                    ? 'bg-gradient-to-r from-cyan-500 to-amber-500' 
+                    : 'bg-gradient-to-r from-teal-500 to-cyan-500'
+              }`}
+            >
+              <div className="absolute inset-0 bg-white/5" />
             </div>
           </div>
-        ) : fillRatio > 0.85 ? (
-          <div className="flex items-center gap-1.5 text-[10px] text-rose-400 font-mono uppercase bg-rose-950/15 border border-rose-900/20 p-2.5 rounded-xl">
-            <AlertCircle className="w-4 h-4 shrink-0" /> Warning: Approaching the 2,000 requests per minute maximum threshold. Slowing further requests may trigger client-side backoff.
-          </div>
-        ) : null}
+        </div>
+        
+        <div className="flex items-center justify-center">
+          <RateLimitGauge percentage={percentage} />
+        </div>
       </div>
+
+      {currentUsage >= 1800 ? (
+        <div className="flex items-start gap-3 text-xs text-rose-300 font-mono bg-rose-950/40 border border-rose-500 p-4 rounded-2xl shadow-lg shadow-rose-950/20 animate-pulse">
+          <AlertCircle className="w-5 h-5 text-rose-400 shrink-0 mt-0.5 animate-bounce" />
+          <div className="space-y-1">
+            <span className="block font-black uppercase text-rose-400 text-xs">CRITICAL LIMIT WARNING EXCEEDED 90%</span>
+            <p className="text-[11px] text-rose-300/80 leading-relaxed uppercase">
+              Active volume is currently at {currentUsage.toLocaleString()} / 2,000 RPM ({percentageStr}%). Automated Zero-Trust Rate Limiting is about to engage. Please optimize API requests or switch to a Dedicated Sovereign Node to avoid request throttling.
+            </p>
+          </div>
+        </div>
+      ) : fillRatio > 0.85 ? (
+        <div className="flex items-center gap-1.5 text-[10px] text-rose-400 font-mono uppercase bg-rose-950/15 border border-rose-900/20 p-2.5 rounded-xl">
+          <AlertCircle className="w-4 h-4 shrink-0" /> Warning: Approaching the 2,000 requests per minute maximum threshold. Slowing further requests may trigger client-side backoff.
+        </div>
+      ) : null}
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
         <div className="p-4 bg-zinc-900/35 border border-zinc-900 rounded-xl space-y-1">
