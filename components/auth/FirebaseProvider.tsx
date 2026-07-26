@@ -115,10 +115,11 @@ export function FirebaseProvider({ children }: { children: React.ReactNode }) {
     const provider = new GoogleAuthProvider();
     provider.setCustomParameters({ prompt: 'select_account' });
     
-    // Google Slides and Google Drive scopes requested by the applet
+    // Google Slides, Google Drive, and Gmail scopes requested by the applet
     provider.addScope('https://www.googleapis.com/auth/drive.file');
     provider.addScope('https://www.googleapis.com/auth/presentations');
     provider.addScope('https://www.googleapis.com/auth/spreadsheets');
+    provider.addScope('https://www.googleapis.com/auth/gmail.send');
     
     try {
       const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);

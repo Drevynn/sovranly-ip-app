@@ -24,8 +24,10 @@ import {
   Activity,
   UserCheck,
   Radio,
-  FileSignature
+  FileSignature,
+  Mail
 } from 'lucide-react';
+import NotarizationEmailModal from './NotarizationEmailModal';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -121,6 +123,10 @@ export default function LicensingAgreementBuilder({ walletAddress }: { walletAdd
   // Auditing states
   const [auditingId, setAuditingId] = useState<string | null>(null);
   const [auditReports, setAuditReports] = useState<Record<string, { status: string; log: string[] }>>({});
+
+  // Email Notification modal states
+  const [isEmailModalOpen, setIsEmailModalOpen] = useState(false);
+  const [emailTargetAgreement, setEmailTargetAgreement] = useState<Agreement | null>(null);
 
   // Core asset loaders
   useEffect(() => {
@@ -728,14 +734,26 @@ export default function LicensingAgreementBuilder({ walletAddress }: { walletAdd
                   <p className="text-[9px] font-mono text-emerald-400 bg-black/50 p-2 rounded truncate border border-emerald-950">
                     {successAgreement.deployTxHash}
                   </p>
-                  <Button 
-                    onClick={() => setSuccessAgreement(null)}
-                    type="button"
-                    variant="outline"
-                    className="w-full bg-zinc-900 border-zinc-800 text-white hover:bg-zinc-805"
-                  >
-                    Build Another Agreement
-                  </Button>
+                  <div className="flex flex-col sm:flex-row gap-2">
+                    <Button 
+                      onClick={() => setSuccessAgreement(null)}
+                      type="button"
+                      variant="outline"
+                      className="flex-1 bg-zinc-900 border-zinc-800 text-white hover:bg-zinc-800"
+                    >
+                      Build Another Agreement
+                    </Button>
+                    <Button
+                      onClick={() => {
+                        setEmailTargetAgreement(successAgreement);
+                        setIsEmailModalOpen(true);
+                      }}
+                      type="button"
+                      className="flex-1 bg-violet-600 hover:bg-violet-500 text-white font-mono text-xs font-bold uppercase flex items-center justify-center gap-2"
+                    >
+                      <Mail className="w-4 h-4" /> Notify Client via Gmail
+                    </Button>
+                  </div>
                 </div>
               ) : (
                 <Button
@@ -864,6 +882,16 @@ export default function LicensingAgreementBuilder({ walletAddress }: { walletAdd
           </div>
         )}
       </div>
+
+      {/* Gmail Notarization Email Modal */}
+      <NotarizationEmailModal
+        isOpen={isEmailModalOpen}
+        onClose={() => setIsEmailModalOpen(false)}
+        documentTitle={emailTargetAgreement?.assetTitle || selectedAsset?.title || 'Sovereign Licensing Covenant'}
+        documentHash={emailTargetAgreement?.contractAddress || emailTargetAgreement?.id || '0x7a2f...e421'}
+        txHash={emailTargetAgreement?.deployTxHash || '0x991f...3281'}
+        defaultClientName={emailTargetAgreement?.creatorEmail || ''}
+      />
     </div>
   );
 }

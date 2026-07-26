@@ -32,10 +32,12 @@ import {
   FileDown,
   Activity,
   Shield,
-  HardDrive
+  HardDrive,
+  Mail
 } from 'lucide-react';
 import { ethers } from 'ethers';
 import MediaVault from './MediaVault';
+import NotarizationEmailModal from '@/components/NotarizationEmailModal';
 
 export type Asset = { 
   id: string; 
@@ -121,6 +123,7 @@ export default function AssetManager({ walletAddress }: { walletAddress: string 
   const [isVerifyingLedger, setIsVerifyingLedger] = useState(false);
   const [ledgerVerificationResult, setLedgerVerificationResult] = useState<string | null>(null);
   const [copiedLink, setCopiedLink] = useState(false);
+  const [isEmailModalOpen, setIsEmailModalOpen] = useState(false);
 
   const filteredAssets = assets.filter(a => 
     (a.title.toLowerCase().includes(searchQuery.toLowerCase()) || (a.description?.toLowerCase().includes(searchQuery.toLowerCase()) ?? false)) &&
@@ -1210,6 +1213,14 @@ export default function AssetManager({ walletAddress }: { walletAddress: string 
                     <Printer className="w-4 h-4" />
                     {isGeneratingCert ? 'Generating...' : 'Export & Print Cert'}
                   </Button>
+
+                  <Button
+                    onClick={() => setIsEmailModalOpen(true)}
+                    className="flex-1 rounded-2xl bg-gradient-to-r from-violet-600 to-indigo-600 hover:brightness-110 text-white font-mono font-bold text-xs uppercase tracking-wider h-11 flex items-center justify-center gap-2 shadow-lg shadow-violet-950/40"
+                  >
+                    <Mail className="w-4 h-4" />
+                    Notify Client via Gmail
+                  </Button>
                 </div>
             </div>
 
@@ -1219,6 +1230,17 @@ export default function AssetManager({ walletAddress }: { walletAddress: string 
 
           </div>
         </div>
+      )}
+
+      {/* Gmail Notarization Notification Modal */}
+      {certModalAsset && (
+        <NotarizationEmailModal
+          isOpen={isEmailModalOpen}
+          onClose={() => setIsEmailModalOpen(false)}
+          documentTitle={certModalAsset.title}
+          documentHash={certModalAsset.ipfsHash || certModalAsset.nftTokenId || '0x7a2fd...e421'}
+          txHash={certModalAsset.mintTxHash || '0x991f8...3281'}
+        />
       )}
     </div>
   );

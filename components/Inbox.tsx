@@ -19,8 +19,10 @@ import {
   ExternalLink,
   ShieldCheck,
   Check,
-  AlertCircle
+  AlertCircle,
+  Send
 } from 'lucide-react';
+import NotarizationEmailModal from '@/components/NotarizationEmailModal';
 
 type Inquiry = {
   id: string;
@@ -44,6 +46,7 @@ export default function Inbox({ walletAddress }: { walletAddress: string | null 
   // Simulated decrypted states for zero-trust credentials
   const [decryptingId, setDecryptingId] = useState<string | null>(null);
   const [decryptedFields, setDecryptedFields] = useState<Record<string, boolean>>({});
+  const [isEmailModalOpen, setIsEmailModalOpen] = useState(false);
 
   useEffect(() => {
     if (!walletAddress) return;
@@ -332,6 +335,14 @@ export default function Inbox({ walletAddress }: { walletAddress: string | null 
                   </div>
                 </div>
 
+                {/* Gmail Notarization Dispatch Action */}
+                <Button
+                  onClick={() => setIsEmailModalOpen(true)}
+                  className="w-full py-6 rounded-2xl bg-gradient-to-r from-cyan-600 to-violet-600 hover:brightness-110 text-white font-mono text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 shadow-xl shadow-cyan-950/40"
+                >
+                  <Send className="w-4 h-4" /> Send Notarization Email via Gmail
+                </Button>
+
                 {/* Privacy Warning Footer Box */}
                 <div className="bg-emerald-950/20 border border-emerald-500/10 rounded-2xl p-4 flex items-start gap-3">
                   <ShieldCheck className="w-5 h-5 text-emerald-400 flex-shrink-0 mt-0.5" />
@@ -357,6 +368,16 @@ export default function Inbox({ walletAddress }: { walletAddress: string | null 
         </div>
 
       </div>
+
+      {selectedInquiry && (
+        <NotarizationEmailModal
+          isOpen={isEmailModalOpen}
+          onClose={() => setIsEmailModalOpen(false)}
+          documentTitle={selectedInquiry.assetTitle || selectedInquiry.subject || 'Sovereign Notarized Document'}
+          defaultClientEmail={selectedInquiry.senderContact.includes('@') ? selectedInquiry.senderContact : ''}
+          defaultClientName={selectedInquiry.senderName}
+        />
+      )}
 
     </div>
   );
