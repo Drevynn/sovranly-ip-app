@@ -1,30 +1,24 @@
 import { NextRequest, NextResponse } from 'next/server';
 import PDFDocument from 'pdfkit';
-import { getFirestore, doc, getDoc } from 'firebase/firestore';
-import { initializeApp, getApps } from 'firebase/app';
+import { verifyAuthToken } from '@/lib/auth-server';
+import { db } from '@/lib/firebase-admin';
 import QRCode from 'qrcode';
-
-const firebaseConfig = {
-  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
-  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
-  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
-  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
-  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
-};
-
-const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
-const db = getFirestore(app);
 
 export async function POST(req: NextRequest) {
   try {
+    // Require authentication — certificates contain ownership claims
+    const user = await verifyAuthToken(req.headers.get('Authorization'));
+    if (!user) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
     const { assetId, theme } = await req.json();
     if (!assetId) return NextResponse.json({ error: 'Asset ID required' }, { status: 400 });
 
-    const assetRef = doc(db, 'assets', assetId);
-    const assetSnap = await getDoc(assetRef);
+    const assetRef = db.collection('assets').doc(assetId);
+    const assetSnap = await assetRef.get();
 
-    if (!assetSnap.exists()) return NextResponse.json({ error: 'Asset not found' }, { status: 404 });
+    if (!assetSnap.exists) return NextResponse.json({ error: 'Asset not found' }, { status: 404 });
     const assetData = assetSnap.data();
 
     const docPdf = new PDFDocument({ size: 'A4', margin: 50 });
@@ -45,9 +39,10 @@ export async function POST(req: NextRequest) {
     docPdf.fontSize(25).text('Sovereign IP Proof Certificate', { align: 'center' });
     docPdf.moveDown();
     docPdf.fontSize(12).text(`Asset ID: ${assetId}`, { align: 'center' });
-    docPdf.text(`Title: ${assetData.title}`, { align: 'center' });
-    docPdf.text(`Owner: ${assetData.ownerAddress || 'Unknown'}`, { align: 'center' });
-    docPdf.text(`Type: ${assetData.type}`, { align: 'center' });
+    docPdf.text(`Title: ${assetData?.title || 'Unknown'}`, { align: 'center' });
+    docPdf.text(`Owner: ${assetData?.ownerAddress || 'Unknown'}`, { align: 'center' });
+    docPdf.text(`Type: ${assetData?.type || 'Unknown'}`, { align: 'center' });
+    docPdf.text(`Issued to: ${user.email || user.uid}`, { align: 'center' });
     docPdf.moveDown();
 
     // QR Code

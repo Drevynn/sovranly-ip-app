@@ -3,13 +3,16 @@ service cloud.firestore {
   match /databases/{database}/documents {
     // Helper functions
     function isSignedIn() { return request.auth != null; }
+    function isOwner(uid) { return isSignedIn() && request.auth.uid == uid; }
     function isValidId(id) { return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$'); }
+
     function isValidAsset(data) {
         return data.title is string && data.title.size() <= 100 &&
                data.type is string && data.type.size() <= 100 &&
                data.royalty is int && data.royalty >= 0 && data.royalty <= 100 &&
                data.license is string && data.license.size() <= 100 &&
                data.ownerAddress is string && data.ownerAddress.size() <= 42 &&
+               (!('ownerUid' in data) || (data.ownerUid is string && data.ownerUid.size() <= 128)) &&
                (!('isScarce' in data) || data.isScarce is bool) &&
                (!('scarcityTier' in data) || (data.scarcityTier is string && data.scarcityTier.size() <= 50)) &&
                (!('scarcityPrice' in data) || (data.scarcityPrice is number || data.scarcityPrice == null)) &&
@@ -29,7 +32,8 @@ service cloud.firestore {
                data.royaltyRate is int && data.royaltyRate >= 0 && data.royaltyRate <= 100 &&
                data.status is string && data.status.size() <= 20 &&
                data.creatorEmail is string && data.creatorEmail.size() <= 100 &&
-               data.creatorWallet is string && data.creatorWallet.size() <= 42;
+               data.creatorWallet is string && data.creatorWallet.size() <= 42 &&
+               (!('ownerUid' in data) || (data.ownerUid is string && data.ownerUid.size() <= 128));
     }
 
     function isValidInquiry(data) {
@@ -60,15 +64,24 @@ service cloud.firestore {
     }
 
     match /assets/{assetId} {
+      // Marketplace visibility: any signed-in user may read
       allow read: if isSignedIn();
-      allow create, update: if isSignedIn() && isValidAsset(request.resource.data);
-      allow delete: if isSignedIn();
+      // Create: must be signed in + valid schema; ownerUid must match caller when provided
+      allow create: if isSignedIn() && isValidAsset(request.resource.data) &&
+                       (!('ownerUid' in request.resource.data) || request.resource.data.ownerUid == request.auth.uid);
+      // Update/delete: only the document owner (ownerUid) may mutate
+      allow update, delete: if isSignedIn() &&
+                               resource.data.ownerUid == request.auth.uid &&
+                               isValidAsset(request.resource.data);
     }
 
     match /agreements/{agreementId} {
       allow read: if isSignedIn();
-      allow create, update: if isSignedIn() && isValidAgreement(request.resource.data);
-      allow delete: if isSignedIn();
+      allow create: if isSignedIn() && isValidAgreement(request.resource.data) &&
+                       (!('ownerUid' in request.resource.data) || request.resource.data.ownerUid == request.auth.uid);
+      allow update, delete: if isSignedIn() &&
+                               resource.data.ownerUid == request.auth.uid &&
+                               isValidAgreement(request.resource.data);
     }
 
     match /transactions/{transactionId} {

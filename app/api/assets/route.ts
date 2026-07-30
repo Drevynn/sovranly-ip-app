@@ -11,9 +11,9 @@ export async function GET(request: Request) {
 
     console.log('Fetching assets...');
     let querySnapshot = await db.collection('assets').get();
-    
-    // Auto-seed if database is currently empty
-    if (querySnapshot.empty) {
+
+    // Auto-seed if database is currently empty (dev convenience only)
+    if (querySnapshot.empty && process.env.NODE_ENV !== 'production') {
       console.log('No assets found. Seeding initial marketplace examples...');
       const SEED_ASSETS = [
         {
@@ -23,6 +23,7 @@ export async function GET(request: Request) {
           license: "Commercial Digital Sync License (Class 42 Protected)",
           description: "A high-fidelity premium library of 120+ synthetic audio stems, modular analog synthesizer loops, and digitized rhythm kits inspired by retro-wave cyberpunk acoustics. Includes full copyright clearance for independent content creators, podcasters, and video game developers.",
           ownerAddress: "0x742d35Cc6634C0532925a3b844Bc454e4438f44e",
+          ownerUid: user.uid,
           isMinted: true,
           nftTokenId: "1001",
           mintTxHash: "0x8fa4c3f2b87d3532fefc292f7e0bc872f2da4ec3",
@@ -37,6 +38,7 @@ export async function GET(request: Request) {
           license: "Dual-Use Enterprise License Agreement",
           description: "A secure, developer-ready react assembly designed with robust Tailwind CSS, continuous zero-trust validation guards, Web3 hardware wallet connectors, and multi-language selection controls.",
           ownerAddress: "0x8626f6940E2eb28930eFb4CeF49B2d1F2C9C1199",
+          ownerUid: user.uid,
           isMinted: true,
           nftTokenId: "1002",
           mintTxHash: "0x4bca3e52fef49b062c199efa454eb8d92ca847242",
@@ -51,6 +53,7 @@ export async function GET(request: Request) {
           license: "Non-Exclusive Fine Art Display Rights Agreement",
           description: "Procedurally generated audio-visual canvases exploring three-dimensional cosmic spectrums. Fits high-definition digital galleries, ambient sound architectures, and live stream backdrops.",
           ownerAddress: "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+          ownerUid: user.uid,
           isMinted: true,
           nftTokenId: "1003",
           mintTxHash: "0x9c4f8bf6a200fa44cbfae8700bc712f2da48dbdf1",
@@ -65,6 +68,7 @@ export async function GET(request: Request) {
           license: "Open Source Attribution with Commercial Fee Exemption",
           description: "Multi-party decentralized escrow script designed in Solidity to split licensing fees atomically. Complete with formal mathematical verification logs ensuring resistance against re-entrancy and update-gap attacks.",
           ownerAddress: "0x90F8bf6A479f320ced073E545b25137227557122",
+          ownerUid: user.uid,
           isMinted: true,
           nftTokenId: "1004",
           mintTxHash: "0x2da47f9f3ec0d73e545b25137227557f92ca48dbd",
@@ -77,8 +81,7 @@ export async function GET(request: Request) {
       for (const asset of SEED_ASSETS) {
         await db.collection('assets').add(asset);
       }
-      
-      // Re-fetch to get doc IDs correctly
+
       querySnapshot = await db.collection('assets').get();
     }
 
@@ -98,9 +101,10 @@ export async function POST(request: Request) {
     }
 
     const body = await request.json();
-    // Default asset state properties
+    // Always stamp the creating user as ownerUid — never trust client-supplied ownerUid
     const enrichedBody = {
       ...body,
+      ownerUid: user.uid,
       isMinted: false,
       nftTokenId: null,
       mintTxHash: null,
@@ -127,9 +131,23 @@ export async function PUT(request: Request) {
     if (!id) {
       return NextResponse.json({ error: 'Asset ID is required for update' }, { status: 400 });
     }
+
     const assetRef = db.collection('assets').doc(id);
-    await assetRef.update(data);
-    return NextResponse.json({ success: true, id, ...data });
+    const existing = await assetRef.get();
+    if (!existing.exists) {
+      return NextResponse.json({ error: 'Asset not found' }, { status: 404 });
+    }
+
+    const existingData = existing.data();
+    // Enforce ownership — only the original owner may update
+    if (existingData?.ownerUid && existingData.ownerUid !== user.uid) {
+      return NextResponse.json({ error: 'Forbidden: you do not own this asset' }, { status: 403 });
+    }
+
+    // Never allow client to change ownerUid
+    const { ownerUid: _ignored, ...safeData } = data;
+    await assetRef.update(safeData);
+    return NextResponse.json({ success: true, id, ...safeData });
   } catch (error) {
     console.error('Error updating asset:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });

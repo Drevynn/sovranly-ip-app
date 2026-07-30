@@ -27,19 +27,32 @@ export interface AuthenticatedUser {
   emailVerified?: boolean;
 }
 
+/**
+ * Sandbox token is ONLY accepted outside production.
+ * Never trust it in live environments.
+ */
+function isSandboxAllowed(): boolean {
+  const env = process.env.NODE_ENV || process.env.VERCEL_ENV || '';
+  return env !== 'production';
+}
+
 export async function verifyAuthToken(authHeader: string | null): Promise<AuthenticatedUser | null> {
   if (!authHeader) return null;
-  
+
   const parts = authHeader.split(' ');
   if (parts.length !== 2 || parts[0].toLowerCase() !== 'bearer') {
     return null;
   }
-  
+
   const token = parts[1];
   if (!token) return null;
 
-  // Seamless support for sandbox token in development/preview environments
+  // Sandbox token — development / preview only
   if (token === 'sandbox-token-123') {
+    if (!isSandboxAllowed()) {
+      console.warn('Sandbox token rejected in production');
+      return null;
+    }
     return {
       uid: 'sandbox-guest-agent-007',
       email: 'create@sovranlyip.com',
@@ -48,6 +61,7 @@ export async function verifyAuthToken(authHeader: string | null): Promise<Authen
     };
   }
 
+  // Strict Firebase ID token verification only — no unsigned JWT fallback
   try {
     const decodedToken = await admin.auth().verifyIdToken(token);
     return {
@@ -58,27 +72,6 @@ export async function verifyAuthToken(authHeader: string | null): Promise<Authen
     };
   } catch (error) {
     console.error('Failed to verify Firebase ID Token:', error);
-    
-    // Robust fallback for sandboxed/isolated preview containers
-    try {
-      const payloadBase64 = token.split('.')[1];
-      if (payloadBase64) {
-        const payloadJson = Buffer.from(payloadBase64, 'base64').toString('utf8');
-        const decoded = JSON.parse(payloadJson);
-        if (decoded && decoded.uid) {
-          console.warn('Fallback: Decoded JWT payload successfully:', decoded.uid);
-          return {
-            uid: decoded.uid,
-            email: decoded.email,
-            name: decoded.name || decoded.displayName,
-            emailVerified: decoded.email_verified ?? true,
-          };
-        }
-      }
-    } catch (e) {
-      console.error('Fallback JWT decoding failed:', e);
-    }
-    
     return null;
   }
 }

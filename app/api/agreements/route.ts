@@ -29,6 +29,7 @@ export async function POST(request: Request) {
     const body = await request.json();
     const enrichedBody = {
       ...body,
+      ownerUid: user.uid,
       royaltyRate: Math.round(Number(body.royaltyRate || 0)),
       createdAt: new Date().toISOString()
     };
@@ -51,9 +52,22 @@ export async function PUT(request: Request) {
     if (!id) {
       return NextResponse.json({ error: 'Agreement ID is required for update' }, { status: 400 });
     }
+
     const agreementRef = db.collection('agreements').doc(id);
-    await agreementRef.update(data);
-    return NextResponse.json({ success: true, id, ...data });
+    const existing = await agreementRef.get();
+    if (!existing.exists) {
+      return NextResponse.json({ error: 'Agreement not found' }, { status: 404 });
+    }
+
+    const existingData = existing.data();
+    if (existingData?.ownerUid && existingData.ownerUid !== user.uid) {
+      return NextResponse.json({ error: 'Forbidden: you do not own this agreement' }, { status: 403 });
+    }
+
+    // Never allow client to change ownerUid
+    const { ownerUid: _ignored, ...safeData } = data;
+    await agreementRef.update(safeData);
+    return NextResponse.json({ success: true, id, ...safeData });
   } catch (error) {
     console.error('Error updating agreement:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
