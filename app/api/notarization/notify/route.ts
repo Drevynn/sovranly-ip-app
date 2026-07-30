@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { verifyAuthToken } from '@/lib/auth-server';
 
 function createMimeMessage({
   to,
@@ -20,7 +19,7 @@ function createMimeMessage({
   ];
 
   const message = messageParts.join('\r\n');
-
+  
   // Convert to Base64URL
   return Buffer.from(message)
     .toString('base64')
@@ -31,12 +30,7 @@ function createMimeMessage({
 
 export async function POST(req: NextRequest) {
   try {
-    // Require a valid Firebase ID token (or sandbox in non-prod)
-    const user = await verifyAuthToken(req.headers.get('Authorization'));
-    if (!user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
-
+    const authHeader = req.headers.get('Authorization');
     const body = await req.json();
 
     const {
@@ -49,7 +43,6 @@ export async function POST(req: NextRequest) {
       notaryName = 'Certified Sovereign Notary',
       commissionNumber = 'N/A',
       notaryState = 'CA',
-      gmailAccessToken, // Optional: caller may supply a short-lived Gmail OAuth token separately
     } = body;
 
     if (!recipientEmail || !recipientEmail.includes('@')) {
@@ -115,10 +108,6 @@ export async function POST(req: NextRequest) {
                 <span class="label">Commissioned Notary</span>
                 <span class="value" style="color: #a1a1aa;">${notaryName} (${notaryState} Commission #${commissionNumber})</span>
               </div>
-              <div class="field">
-                <span class="label">Requested by</span>
-                <span class="value" style="color: #a1a1aa;">${user.email || user.uid}</span>
-              </div>
             </div>
 
             <p style="font-size: 12px; color: #a1a1aa;">
@@ -141,27 +130,29 @@ export async function POST(req: NextRequest) {
       htmlBody,
     });
 
-    // Live Gmail send only when an explicit Gmail OAuth token is supplied in the body.
-    // Never reuse the Firebase ID token for Gmail API calls (confused-deputy prevention).
-    if (!gmailAccessToken || typeof gmailAccessToken !== 'string') {
+    // Extract Bearer token if provided
+    const token = authHeader?.replace(/^Bearer\s+/i, '');
+
+    if (!token) {
+      // Sandbox fallback mode when no token is available
       return NextResponse.json({
         success: true,
         mode: 'sandbox_simulation',
-        message: `[SANDBOX / QUEUED] Notarization notification prepared for ${recipientEmail} by ${user.uid}`,
+        message: `[SANDBOX SIMULATION] Notarization notification queued for ${recipientEmail}`,
         details: {
           recipientEmail,
           documentTitle,
           certificateId,
-          requestedBy: user.uid,
           sentAt: new Date().toISOString(),
         },
       });
     }
 
+    // Call Gmail API
     const gmailRes = await fetch('https://gmail.googleapis.com/gmail/v1/users/me/messages/send', {
       method: 'POST',
       headers: {
-        Authorization: `Bearer ${gmailAccessToken}`,
+        Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({ raw: rawMessage }),
@@ -175,6 +166,7 @@ export async function POST(req: NextRequest) {
         {
           error: resData.error?.message || 'Failed to send email via Gmail API',
           code: gmailRes.status,
+          details: resData,
         },
         { status: gmailRes.status }
       );
@@ -186,7 +178,6 @@ export async function POST(req: NextRequest) {
       messageId: resData.id,
       threadId: resData.threadId,
       recipientEmail,
-      requestedBy: user.uid,
       sentAt: new Date().toISOString(),
     });
   } catch (error: any) {

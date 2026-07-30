@@ -1,16 +1,15 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
+    // Helper functions
     function isSignedIn() { return request.auth != null; }
     function isValidId(id) { return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$'); }
-
     function isValidAsset(data) {
         return data.title is string && data.title.size() <= 100 &&
                data.type is string && data.type.size() <= 100 &&
                data.royalty is int && data.royalty >= 0 && data.royalty <= 100 &&
                data.license is string && data.license.size() <= 100 &&
                data.ownerAddress is string && data.ownerAddress.size() <= 42 &&
-               (!('ownerUid' in data) || (data.ownerUid is string && data.ownerUid.size() <= 128)) &&
                (!('isScarce' in data) || data.isScarce is bool) &&
                (!('scarcityTier' in data) || (data.scarcityTier is string && data.scarcityTier.size() <= 50)) &&
                (!('scarcityPrice' in data) || (data.scarcityPrice is number || data.scarcityPrice == null)) &&
@@ -30,8 +29,7 @@ service cloud.firestore {
                data.royaltyRate is int && data.royaltyRate >= 0 && data.royaltyRate <= 100 &&
                data.status is string && data.status.size() <= 20 &&
                data.creatorEmail is string && data.creatorEmail.size() <= 100 &&
-               data.creatorWallet is string && data.creatorWallet.size() <= 42 &&
-               (!('ownerUid' in data) || (data.ownerUid is string && data.ownerUid.size() <= 128));
+               data.creatorWallet is string && data.creatorWallet.size() <= 42;
     }
 
     function isValidInquiry(data) {
@@ -61,25 +59,26 @@ service cloud.firestore {
                (!('details' in data) || data.details is string);
     }
 
-    // Legacy-safe ownership: missing ownerUid allows signed-in update (migration window)
-    function ownsOrLegacy(resourceData) {
-      return !('ownerUid' in resourceData) || resourceData.ownerUid == request.auth.uid;
+    function isAssetOwner(doc) {
+      return !('creator' in doc) || doc.creator == request.auth.uid || doc.userId == request.auth.uid || ('creatorEmail' in doc && doc.creatorEmail == request.auth.token.email);
+    }
+
+    function isAgreementOwner(doc) {
+      return !('creator' in doc) || doc.creator == request.auth.uid || doc.userId == request.auth.uid || ('creatorEmail' in doc && doc.creatorEmail == request.auth.token.email) || ('licensorEmail' in doc && doc.licensorEmail == request.auth.token.email);
     }
 
     match /assets/{assetId} {
       allow read: if isSignedIn();
-      allow create: if isSignedIn() && isValidAsset(request.resource.data) &&
-                       (!('ownerUid' in request.resource.data) || request.resource.data.ownerUid == request.auth.uid);
-      allow update, delete: if isSignedIn() && ownsOrLegacy(resource.data) &&
-                               isValidAsset(request.resource.data);
+      allow create: if isSignedIn() && isValidAsset(request.resource.data) && isAssetOwner(request.resource.data);
+      allow update: if isSignedIn() && isValidAsset(request.resource.data) && isAssetOwner(resource.data);
+      allow delete: if isSignedIn() && isAssetOwner(resource.data);
     }
 
     match /agreements/{agreementId} {
       allow read: if isSignedIn();
-      allow create: if isSignedIn() && isValidAgreement(request.resource.data) &&
-                       (!('ownerUid' in request.resource.data) || request.resource.data.ownerUid == request.auth.uid);
-      allow update, delete: if isSignedIn() && ownsOrLegacy(resource.data) &&
-                               isValidAgreement(request.resource.data);
+      allow create: if isSignedIn() && isValidAgreement(request.resource.data) && isAgreementOwner(request.resource.data);
+      allow update: if isSignedIn() && isValidAgreement(request.resource.data) && isAgreementOwner(resource.data);
+      allow delete: if isSignedIn() && isAgreementOwner(resource.data);
     }
 
     match /transactions/{transactionId} {
@@ -111,6 +110,7 @@ service cloud.firestore {
                      request.resource.data.diff(resource.data).affectedKeys().hasOnly(['read']);
     }
 
+    // Default deny
     match /{document=**} {
       allow read, write: if false;
     }

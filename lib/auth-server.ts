@@ -1,5 +1,6 @@
 import * as admin from 'firebase-admin';
 
+// Initialize firebase-admin if not already initialized
 let firebaseConfigFromJson: any = {};
 try {
   // Config is expected in environment variables
@@ -26,19 +27,26 @@ export interface AuthenticatedUser {
   emailVerified?: boolean;
 }
 
+function isSandboxAllowed(): boolean {
+  if (process.env.NODE_ENV === 'production') {
+    return process.env.ENABLE_SANDBOX_AUTH === 'true' || process.env.NEXT_PUBLIC_ALLOW_SANDBOX === 'true';
+  }
+  return true;
+}
+
 export async function verifyAuthToken(authHeader: string | null): Promise<AuthenticatedUser | null> {
   if (!authHeader) return null;
-
+  
   const parts = authHeader.split(' ');
   if (parts.length !== 2 || parts[0].toLowerCase() !== 'bearer') {
     return null;
   }
-
+  
   const token = parts[1];
   if (!token) return null;
 
-  // Sandbox token for development / preview / iframe environments
-  if (token === 'sandbox-token-123') {
+  // Seamless support for sandbox token in development/preview environments (gated in production)
+  if (token === 'sandbox-token-123' && isSandboxAllowed()) {
     return {
       uid: 'sandbox-guest-agent-007',
       email: 'create@sovranlyip.com',
@@ -57,27 +65,29 @@ export async function verifyAuthToken(authHeader: string | null): Promise<Authen
     };
   } catch (error) {
     console.error('Failed to verify Firebase ID Token:', error);
-
-    // Fallback for sandboxed/isolated preview containers without Admin credentials
-    try {
-      const payloadBase64 = token.split('.')[1];
-      if (payloadBase64) {
-        const payloadJson = Buffer.from(payloadBase64, 'base64').toString('utf8');
-        const decoded = JSON.parse(payloadJson);
-        if (decoded && decoded.uid) {
-          console.warn('Fallback: Decoded JWT payload successfully:', decoded.uid);
-          return {
-            uid: decoded.uid,
-            email: decoded.email,
-            name: decoded.name || decoded.displayName,
-            emailVerified: decoded.email_verified ?? true,
-          };
+    
+    // Robust fallback for sandboxed/isolated preview containers (strictly gated in production)
+    if (isSandboxAllowed()) {
+      try {
+        const payloadBase64 = token.split('.')[1];
+        if (payloadBase64) {
+          const payloadJson = Buffer.from(payloadBase64, 'base64').toString('utf8');
+          const decoded = JSON.parse(payloadJson);
+          if (decoded && decoded.uid) {
+            console.warn('Fallback: Decoded JWT payload successfully:', decoded.uid);
+            return {
+              uid: decoded.uid,
+              email: decoded.email,
+              name: decoded.name || decoded.displayName,
+              emailVerified: decoded.email_verified ?? true,
+            };
+          }
         }
+      } catch (e) {
+        console.error('Fallback JWT decoding failed:', e);
       }
-    } catch (e) {
-      console.error('Fallback JWT decoding failed:', e);
     }
-
+    
     return null;
   }
 }

@@ -8,8 +8,6 @@
     "start": "node server.js",
     "build": "next build",
     "lint": "eslint .",
-    "migrate:owner-uid": "node scripts/migrate-owner-uid.mjs",
-    "migrate:owner-uid:apply": "node scripts/migrate-owner-uid.mjs --apply",
     "contracts:compile": "hardhat compile",
     "contracts:deploy:ethereum": "hardhat run hardhat/scripts/deploy.ts --network ethereum",
     "contracts:deploy:arbitrum": "hardhat run hardhat/scripts/deploy.ts --network arbitrum",
