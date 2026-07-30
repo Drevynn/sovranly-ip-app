@@ -16,65 +16,65 @@ export async function GET(request: Request) {
     if (querySnapshot.empty && process.env.NODE_ENV !== 'production') {
       const SEED_ASSETS = [
         {
-          title: "Neon Horizon - Synthwave Audio Stems",
-          type: "Audio Sample Pack",
+          title: 'Neon Horizon - Synthwave Audio Stems',
+          type: 'Audio Sample Pack',
           royalty: 85,
-          license: "Commercial Digital Sync License (Class 42 Protected)",
-          description: "A high-fidelity premium library of 120+ synthetic audio stems.",
-          ownerAddress: "0x742d35Cc6634C0532925a3b844Bc454e4438f44e",
+          license: 'Commercial Digital Sync License (Class 42 Protected)',
+          description: 'A high-fidelity premium library of 120+ synthetic audio stems.',
+          ownerAddress: '0x742d35Cc6634C0532925a3b844Bc454e4438f44e',
           ownerUid: user.uid,
           isMinted: true,
-          nftTokenId: "1001",
-          mintTxHash: "0x8fa4c3f2b87d3532fefc292f7e0bc872f2da4ec3",
+          nftTokenId: '1001',
+          mintTxHash: '0x8fa4c3f2b87d3532fefc292f7e0bc872f2da4ec3',
           price: 0.12,
           isForSale: true,
-          createdAt: new Date().toISOString()
+          createdAt: new Date().toISOString(),
         },
         {
-          title: "Sovereign UI Component Library - Enterprise License",
-          type: "Software Utility",
+          title: 'Sovereign UI Component Library - Enterprise License',
+          type: 'Software Utility',
           royalty: 90,
-          license: "Dual-Use Enterprise License Agreement",
-          description: "A secure, developer-ready react assembly.",
-          ownerAddress: "0x8626f6940E2eb28930eFb4CeF49B2d1F2C9C1199",
+          license: 'Dual-Use Enterprise License Agreement',
+          description: 'A secure, developer-ready react assembly.',
+          ownerAddress: '0x8626f6940E2eb28930eFb4CeF49B2d1F2C9C1199',
           ownerUid: user.uid,
           isMinted: true,
-          nftTokenId: "1002",
-          mintTxHash: "0x4bca3e52fef49b062c199efa454eb8d92ca847242",
+          nftTokenId: '1002',
+          mintTxHash: '0x4bca3e52fef49b062c199efa454eb8d92ca847242',
           price: 0.25,
           isForSale: true,
-          createdAt: new Date().toISOString()
+          createdAt: new Date().toISOString(),
         },
         {
-          title: "Ethereal Echoes NFT Audio Art",
-          type: "Digital Artwork",
+          title: 'Ethereal Echoes NFT Audio Art',
+          type: 'Digital Artwork',
           royalty: 80,
-          license: "Non-Exclusive Fine Art Display Rights Agreement",
-          description: "Procedurally generated audio-visual canvases.",
-          ownerAddress: "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+          license: 'Non-Exclusive Fine Art Display Rights Agreement',
+          description: 'Procedurally generated audio-visual canvases.',
+          ownerAddress: '0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC',
           ownerUid: user.uid,
           isMinted: true,
-          nftTokenId: "1003",
-          mintTxHash: "0x9c4f8bf6a200fa44cbfae8700bc712f2da48dbdf1",
+          nftTokenId: '1003',
+          mintTxHash: '0x9c4f8bf6a200fa44cbfae8700bc712f2da48dbdf1',
           price: 0.08,
           isForSale: true,
-          createdAt: new Date().toISOString()
+          createdAt: new Date().toISOString(),
         },
         {
-          title: "Cybernetic Aegis Security Core",
-          type: "Smart Contract Suite",
+          title: 'Cybernetic Aegis Security Core',
+          type: 'Smart Contract Suite',
           royalty: 95,
-          license: "Open Source Attribution with Commercial Fee Exemption",
-          description: "Multi-party decentralized escrow script.",
-          ownerAddress: "0x90F8bf6A479f320ced073E545b25137227557122",
+          license: 'Open Source Attribution with Commercial Fee Exemption',
+          description: 'Multi-party decentralized escrow script.',
+          ownerAddress: '0x90F8bf6A479f320ced073E545b25137227557122',
           ownerUid: user.uid,
           isMinted: true,
-          nftTokenId: "1004",
-          mintTxHash: "0x2da47f9f3ec0d73e545b25137227557f92ca48dbd",
+          nftTokenId: '1004',
+          mintTxHash: '0x2da47f9f3ec0d73e545b25137227557f92ca48dbd',
           price: 0.45,
           isForSale: true,
-          createdAt: new Date().toISOString()
-        }
+          createdAt: new Date().toISOString(),
+        },
       ];
 
       for (const asset of SEED_ASSETS) {
@@ -83,7 +83,7 @@ export async function GET(request: Request) {
       querySnapshot = await db.collection('assets').get();
     }
 
-    const assetsData = querySnapshot.docs.map((doc: any) => ({ id: doc.id, ...doc.data() }));
+    const assetsData = querySnapshot.docs.map((d: any) => ({ id: d.id, ...d.data() }));
     return NextResponse.json(assetsData);
   } catch (error) {
     console.error('Error fetching assets:', error);
@@ -107,7 +107,7 @@ export async function POST(request: Request) {
       mintTxHash: null,
       price: null,
       isForSale: false,
-      createdAt: new Date().toISOString()
+      createdAt: new Date().toISOString(),
     };
     const docRef = await db.collection('assets').add(enrichedBody);
     return NextResponse.json({ id: docRef.id, ...enrichedBody });
@@ -137,13 +137,12 @@ export async function PUT(request: Request) {
     }
 
     const existingData = existing.data() || {};
-    // Enforce ownership when ownerUid is present; allow update for legacy docs missing it
     if (existingData.ownerUid && existingData.ownerUid !== user.uid) {
       return NextResponse.json({ error: 'Forbidden: you do not own this asset' }, { status: 403 });
     }
 
-    const { id: _id, ownerUid: _ownerUid, ...safeData } = body;
-    // Stamp ownerUid on legacy docs during first update by authenticated user
+    const { id: _id, ownerUid: _ou, ...rest } = body;
+    const safeData: any = { ...rest };
     if (!existingData.ownerUid) {
       safeData.ownerUid = user.uid;
     }

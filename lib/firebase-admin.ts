@@ -1,48 +1,63 @@
-import { 
-  collection, 
-  getDocs, 
-  addDoc, 
-  doc, 
-  getDoc, 
-  setDoc, 
-  updateDoc, 
+import {
+  collection,
+  getDocs,
+  addDoc,
+  doc,
+  getDoc,
+  setDoc,
+  updateDoc,
   deleteDoc,
   query,
   where,
   orderBy,
   limit,
-  Timestamp
+  Timestamp,
 } from 'firebase/firestore';
 import { getDb } from './firebase';
 
 class DocumentSnapshotCompat {
-  constructor(private _snap: any) {}
-  get exists() {
-    // Modular Firestore exposes `exists` as a boolean property, not a method
-    return typeof this._snap.exists === 'function'
-      ? this._snap.exists()
-      : Boolean(this._snap.exists);
+  private _snap: any;
+  constructor(snap: any) {
+    this._snap = snap;
   }
-  get id() {
-    return this._snap.id;
+  get exists(): boolean {
+    const ex = this._snap?.exists;
+    return typeof ex === 'function' ? Boolean(ex.call(this._snap)) : Boolean(ex);
   }
-  data() {
-    return this._snap.data();
+  get id(): string {
+    return this._snap?.id ?? '';
+  }
+  data(): any {
+    try {
+      return this._snap?.data?.() ?? undefined;
+    } catch {
+      return undefined;
+    }
   }
 }
 
 class QuerySnapshotCompat {
-  constructor(private _snap: any) {}
-  get empty() {
-    return this._snap.empty;
+  private _snap: any;
+  constructor(snap: any) {
+    this._snap = snap;
   }
-  get docs() {
-    return this._snap.docs.map((d: any) => new DocumentSnapshotCompat(d));
+  get empty(): boolean {
+    return Boolean(this._snap?.empty);
+  }
+  get docs(): DocumentSnapshotCompat[] {
+    const list = this._snap?.docs;
+    if (!Array.isArray(list)) return [];
+    return list.map((d: any) => new DocumentSnapshotCompat(d));
   }
 }
 
 class DocCompat {
-  constructor(private _collectionName: string, private _docId: string) {}
+  private _collectionName: string;
+  private _docId: string;
+  constructor(collectionName: string, docId: string) {
+    this._collectionName = collectionName;
+    this._docId = docId;
+  }
 
   async get() {
     const d = doc(getDb(), this._collectionName, this._docId);
@@ -52,15 +67,13 @@ class DocCompat {
 
   async set(data: any) {
     const d = doc(getDb(), this._collectionName, this._docId);
-    const processedData = this._processData(data);
-    await setDoc(d, processedData);
+    await setDoc(d, this._processData(data));
     return { success: true };
   }
 
   async update(data: any) {
     const d = doc(getDb(), this._collectionName, this._docId);
-    const processedData = this._processData(data);
-    await updateDoc(d, processedData);
+    await updateDoc(d, this._processData(data));
     return { success: true };
   }
 
@@ -73,11 +86,9 @@ class DocCompat {
   private _processData(data: any): any {
     if (data === null || data === undefined) return data;
     if (data instanceof Date) return Timestamp.fromDate(data);
-    if (Array.isArray(data)) return data.map(item => this._processData(item));
+    if (Array.isArray(data)) return data.map((item) => this._processData(item));
     if (typeof data === 'object') {
-      if (typeof data.toDate === 'function') {
-        return data;
-      }
+      if (typeof data.toDate === 'function') return data;
       const copy: any = {};
       for (const key of Object.keys(data)) {
         copy[key] = this._processData(data[key]);
@@ -90,8 +101,10 @@ class DocCompat {
 
 class QueryCompat {
   private _constraints: any[] = [];
-
-  constructor(private _collectionName: string) {}
+  private _collectionName: string;
+  constructor(collectionName: string) {
+    this._collectionName = collectionName;
+  }
 
   where(field: string, op: any, value: any) {
     this._constraints.push(where(field, op, value));
@@ -117,7 +130,10 @@ class QueryCompat {
 }
 
 class CollectionCompat {
-  constructor(private _collectionName: string) {}
+  private _collectionName: string;
+  constructor(collectionName: string) {
+    this._collectionName = collectionName;
+  }
 
   async get() {
     const c = collection(getDb(), this._collectionName);
@@ -127,8 +143,7 @@ class CollectionCompat {
 
   async add(data: any) {
     const c = collection(getDb(), this._collectionName);
-    const processedData = this._processData(data);
-    const ref = await addDoc(c, processedData);
+    const ref = await addDoc(c, this._processData(data));
     return { id: ref.id };
   }
 
@@ -137,28 +152,23 @@ class CollectionCompat {
   }
 
   where(field: string, op: any, value: any) {
-    const q = new QueryCompat(this._collectionName);
-    return q.where(field, op, value);
+    return new QueryCompat(this._collectionName).where(field, op, value);
   }
 
   orderBy(field: string, direction?: 'asc' | 'desc') {
-    const q = new QueryCompat(this._collectionName);
-    return q.orderBy(field, direction);
+    return new QueryCompat(this._collectionName).orderBy(field, direction);
   }
 
   limit(count: number) {
-    const q = new QueryCompat(this._collectionName);
-    return q.limit(count);
+    return new QueryCompat(this._collectionName).limit(count);
   }
 
   private _processData(data: any): any {
     if (data === null || data === undefined) return data;
     if (data instanceof Date) return Timestamp.fromDate(data);
-    if (Array.isArray(data)) return data.map(item => this._processData(item));
+    if (Array.isArray(data)) return data.map((item) => this._processData(item));
     if (typeof data === 'object') {
-      if (typeof data.toDate === 'function') {
-        return data;
-      }
+      if (typeof data.toDate === 'function') return data;
       const copy: any = {};
       for (const key of Object.keys(data)) {
         copy[key] = this._processData(data[key]);
@@ -172,5 +182,5 @@ class CollectionCompat {
 export const db = {
   collection(name: string) {
     return new CollectionCompat(name);
-  }
+  },
 };
