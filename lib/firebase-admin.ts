@@ -18,7 +18,10 @@ import { getDb } from './firebase';
 class DocumentSnapshotCompat {
   constructor(private _snap: any) {}
   get exists() {
-    return this._snap.exists();
+    // Modular Firestore exposes `exists` as a boolean property, not a method
+    return typeof this._snap.exists === 'function'
+      ? this._snap.exists()
+      : Boolean(this._snap.exists);
   }
   get id() {
     return this._snap.id;
@@ -72,9 +75,8 @@ class DocCompat {
     if (data instanceof Date) return Timestamp.fromDate(data);
     if (Array.isArray(data)) return data.map(item => this._processData(item));
     if (typeof data === 'object') {
-      // Avoid raw Firestore Timestamps or other class objects being treated as simple objects
       if (typeof data.toDate === 'function') {
-        return data; // Keep as-is if it's already a Firestore Timestamp
+        return data;
       }
       const copy: any = {};
       for (const key of Object.keys(data)) {
@@ -172,4 +174,3 @@ export const db = {
     return new CollectionCompat(name);
   }
 };
-
