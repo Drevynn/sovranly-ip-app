@@ -17,24 +17,33 @@ import { getDb } from './firebase';
 
 class DocumentSnapshotCompat {
   constructor(private _snap: any) {}
-  get exists() {
-    return this._snap.exists();
+  get exists(): boolean {
+    // Modular Firestore: `exists` is a boolean property.
+    // Admin-style APIs sometimes expose it as a method — support both.
+    const ex = this._snap?.exists;
+    return typeof ex === 'function' ? Boolean(ex.call(this._snap)) : Boolean(ex);
   }
-  get id() {
-    return this._snap.id;
+  get id(): string {
+    return this._snap?.id ?? '';
   }
-  data() {
-    return this._snap.data();
+  data(): any {
+    try {
+      return typeof this._snap?.data === 'function' ? this._snap.data() : undefined;
+    } catch {
+      return undefined;
+    }
   }
 }
 
 class QuerySnapshotCompat {
   constructor(private _snap: any) {}
-  get empty() {
-    return this._snap.empty;
+  get empty(): boolean {
+    return Boolean(this._snap?.empty);
   }
-  get docs() {
-    return this._snap.docs.map((d: any) => new DocumentSnapshotCompat(d));
+  get docs(): DocumentSnapshotCompat[] {
+    const list = this._snap?.docs;
+    if (!Array.isArray(list)) return [];
+    return list.map((d: any) => new DocumentSnapshotCompat(d));
   }
 }
 
@@ -72,9 +81,8 @@ class DocCompat {
     if (data instanceof Date) return Timestamp.fromDate(data);
     if (Array.isArray(data)) return data.map(item => this._processData(item));
     if (typeof data === 'object') {
-      // Avoid raw Firestore Timestamps or other class objects being treated as simple objects
       if (typeof data.toDate === 'function') {
-        return data; // Keep as-is if it's already a Firestore Timestamp
+        return data;
       }
       const copy: any = {};
       for (const key of Object.keys(data)) {
@@ -172,4 +180,3 @@ export const db = {
     return new CollectionCompat(name);
   }
 };
-
