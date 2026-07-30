@@ -1,9 +1,7 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Helper functions
     function isSignedIn() { return request.auth != null; }
-    function isOwner(uid) { return isSignedIn() && request.auth.uid == uid; }
     function isValidId(id) { return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$'); }
 
     function isValidAsset(data) {
@@ -63,15 +61,16 @@ service cloud.firestore {
                (!('details' in data) || data.details is string);
     }
 
+    // Legacy-safe ownership: missing ownerUid allows signed-in update (migration window)
+    function ownsOrLegacy(resourceData) {
+      return !('ownerUid' in resourceData) || resourceData.ownerUid == request.auth.uid;
+    }
+
     match /assets/{assetId} {
-      // Marketplace visibility: any signed-in user may read
       allow read: if isSignedIn();
-      // Create: must be signed in + valid schema; ownerUid must match caller when provided
       allow create: if isSignedIn() && isValidAsset(request.resource.data) &&
                        (!('ownerUid' in request.resource.data) || request.resource.data.ownerUid == request.auth.uid);
-      // Update/delete: only the document owner (ownerUid) may mutate
-      allow update, delete: if isSignedIn() &&
-                               resource.data.ownerUid == request.auth.uid &&
+      allow update, delete: if isSignedIn() && ownsOrLegacy(resource.data) &&
                                isValidAsset(request.resource.data);
     }
 
@@ -79,8 +78,7 @@ service cloud.firestore {
       allow read: if isSignedIn();
       allow create: if isSignedIn() && isValidAgreement(request.resource.data) &&
                        (!('ownerUid' in request.resource.data) || request.resource.data.ownerUid == request.auth.uid);
-      allow update, delete: if isSignedIn() &&
-                               resource.data.ownerUid == request.auth.uid &&
+      allow update, delete: if isSignedIn() && ownsOrLegacy(resource.data) &&
                                isValidAgreement(request.resource.data);
     }
 
@@ -113,7 +111,6 @@ service cloud.firestore {
                      request.resource.data.diff(resource.data).affectedKeys().hasOnly(['read']);
     }
 
-    // Default deny
     match /{document=**} {
       allow read, write: if false;
     }

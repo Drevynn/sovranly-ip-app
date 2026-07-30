@@ -2,6 +2,8 @@ import { NextResponse } from 'next/server';
 import { db } from '@/lib/firebase-admin';
 import { verifyAuthToken } from '@/lib/auth-server';
 
+export const runtime = 'nodejs';
+
 export async function GET(request: Request) {
   try {
     const user = await verifyAuthToken(request.headers.get('Authorization'));
@@ -9,7 +11,6 @@ export async function GET(request: Request) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    console.log('Fetching agreements...');
     const snapshot = await db.collection('agreements').get();
     const agreementsData = snapshot.docs.map((doc: any) => ({ id: doc.id, ...doc.data() }));
     return NextResponse.json(agreementsData);
@@ -48,8 +49,9 @@ export async function PUT(request: Request) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { id, ...data } = await request.json();
-    if (!id) {
+    const body = await request.json();
+    const id = body?.id;
+    if (!id || typeof id !== 'string') {
       return NextResponse.json({ error: 'Agreement ID is required for update' }, { status: 400 });
     }
 
@@ -59,13 +61,15 @@ export async function PUT(request: Request) {
       return NextResponse.json({ error: 'Agreement not found' }, { status: 404 });
     }
 
-    const existingData = existing.data();
-    if (existingData?.ownerUid && existingData.ownerUid !== user.uid) {
+    const existingData = existing.data() || {};
+    if (existingData.ownerUid && existingData.ownerUid !== user.uid) {
       return NextResponse.json({ error: 'Forbidden: you do not own this agreement' }, { status: 403 });
     }
 
-    // Never allow client to change ownerUid
-    const { ownerUid: _ignored, ...safeData } = data;
+    const { id: _id, ownerUid: _ownerUid, ...safeData } = body;
+    if (!existingData.ownerUid) {
+      safeData.ownerUid = user.uid;
+    }
     await agreementRef.update(safeData);
     return NextResponse.json({ success: true, id, ...safeData });
   } catch (error) {
