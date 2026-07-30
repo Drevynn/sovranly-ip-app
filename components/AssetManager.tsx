@@ -1219,7 +1219,7 @@ export default function AssetManager({ walletAddress }: { walletAddress: string 
                     className="flex-1 rounded-2xl bg-gradient-to-r from-violet-600 to-indigo-600 hover:brightness-110 text-white font-mono font-bold text-xs uppercase tracking-wider h-11 flex items-center justify-center gap-2 shadow-lg shadow-violet-950/40"
                   >
                     <Mail className="w-4 h-4" />
-                    Notify Client via Gmail
+                    Notify Client via Email
                   </Button>
                 </div>
             </div>

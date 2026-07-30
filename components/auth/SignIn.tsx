@@ -79,13 +79,10 @@ export function SignIn() {
           </div>
 
           {error && (
-            <div className="p-4 bg-red-950/10 border border-red-900/50 text-red-400 text-xs rounded-xl text-left space-y-2 select-none">
-              <p className="font-bold flex items-center gap-1.5">⚠️ Iframe/Sandbox Environment Notice</p>
+            <div className="p-4 bg-red-950/10 border border-red-900/50 text-red-400 text-xs rounded-xl text-left space-y-1 select-none">
+              <p className="font-bold flex items-center gap-1.5">⚠️ Authentication Alert</p>
               <p className="text-[11px] text-zinc-400 leading-relaxed">
-                Standard Google OAuth utilizes browser popups. Inside cross-origin iframes (like the AI Studio Preview), browser cookie filters may block the popup.
-              </p>
-              <p className="text-[11px] text-zinc-400 leading-relaxed">
-                To fix: Click the <strong className="text-white">“Open app in new tab”</strong> button at the top-right corner to log in with your Google account, or use the instant <strong className="text-emerald-400">“Sovereign Sandbox Pass”</strong> option below.
+                Unable to complete popup sign-in. You can use the instant <strong className="text-emerald-400">“Sovereign Sandbox Pass”</strong> below or open the app in a new browser window.
               </p>
             </div>
           )}

@@ -106,7 +106,7 @@ export default function DashboardPage() {
             activePage === 7 ? 'Google Slides Gateway' :
             activePage === 8 ? (t('launchPlanner') || 'Launch Planner') :
             activePage === 9 ? (t('techStackLedger') || 'Tech Stack Ledger') :
-            activePage === 10 ? (t('aboutInvestors') || 'About & Investors') :
+            activePage === 10 ? 'About Platform' :
             activePage === 11 ? (t('aiLicensing') || 'AI Training Vault') :
             activePage === 12 ? 'Sovereign Tokenizer' :
             'Creator Network'

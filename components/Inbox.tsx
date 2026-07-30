@@ -335,12 +335,12 @@ export default function Inbox({ walletAddress }: { walletAddress: string | null 
                   </div>
                 </div>
 
-                {/* Gmail Notarization Dispatch Action */}
+                {/* Notarization Dispatch Action */}
                 <Button
                   onClick={() => setIsEmailModalOpen(true)}
                   className="w-full py-6 rounded-2xl bg-gradient-to-r from-cyan-600 to-violet-600 hover:brightness-110 text-white font-mono text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 shadow-xl shadow-cyan-950/40"
                 >
-                  <Send className="w-4 h-4" /> Send Notarization Email via Gmail
+                  <Send className="w-4 h-4" /> Dispatch Notarization Email Notice
                 </Button>
 
                 {/* Privacy Warning Footer Box */}

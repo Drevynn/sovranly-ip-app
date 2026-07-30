@@ -279,17 +279,17 @@ export default function AboutUs() {
         <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-cyan-500/50 via-violet-500/50 to-transparent" />
         <div className="absolute top-4 right-4 bg-cyan-950/40 border border-cyan-500/20 px-3 py-1 rounded-full flex items-center gap-1.5 backdrop-blur-sm z-10">
           <Sparkles className="w-3.5 h-3.5 text-cyan-400 animate-pulse" />
-          <span className="text-[10px] font-mono font-black text-cyan-300 uppercase tracking-widest">Google Evaluation Console</span>
+          <span className="text-[10px] font-mono font-black text-cyan-300 uppercase tracking-widest">Platform Specification Desk</span>
         </div>
 
         <div className="space-y-6">
           <div className="space-y-1.5">
             <h2 className="text-xl font-black text-white uppercase tracking-tight flex items-center gap-2">
               <Building2 className="w-5 h-5 text-cyan-400" />
-              Sovereign Review Portfolio
+              Sovereign Platform Architecture
             </h2>
             <p className="text-xs text-zinc-400 leading-relaxed max-w-3xl">
-              This interactive desk aggregates the core documentation, team architecture, and prototype stages required for the **Google Black Founders Fund** review. Secure, integrated, and verified on-chain.
+              This interactive overview details the core technology, creator governance model, and zero-trust verification architecture powering Sovranly IP. Secure, decentralized, and verified on-chain.
             </p>
           </div>
 
@@ -591,7 +591,7 @@ export default function AboutUs() {
                     <div className="space-y-1">
                       <span className="text-[9px] font-mono text-cyan-400 uppercase font-black">🎨 Visual Assets & Interactive Sandbox</span>
                       <p className="text-xs text-zinc-400 font-sans">
-                        Google evaluators can test the **Royalty Settlement Sandbox**, construct **Custom Licensing Contracts**, or view the **Zero-Trust Tokenization Ledger** live right now in our primary system tools.
+                        Creators and partners can test the **Royalty Settlement Sandbox**, construct **Custom Licensing Contracts**, or view the **Zero-Trust Tokenization Ledger** live right now in our primary system tools.
                       </p>
                     </div>
                     <div className="flex gap-2">

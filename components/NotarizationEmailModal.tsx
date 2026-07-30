@@ -112,7 +112,7 @@ export default function NotarizationEmailModal({
           </div>
           <div>
             <h3 className="text-lg font-bold text-white tracking-tight">Send Notarization Email</h3>
-            <p className="text-xs text-zinc-400">Automatic client notification via Gmail API</p>
+            <p className="text-xs text-zinc-400">Automatic client notification & proof of execution</p>
           </div>
         </div>
 
@@ -129,28 +129,8 @@ export default function NotarizationEmailModal({
             </div>
             <p className="text-[11px] opacity-90 leading-relaxed">{sendResult.message}</p>
             {sendResult.messageId && (
-              <span className="text-[10px] text-zinc-500 block">Gmail Message ID: {sendResult.messageId}</span>
+              <span className="text-[10px] text-zinc-500 block">Dispatch Ref ID: {sendResult.messageId}</span>
             )}
-          </div>
-        )}
-
-        {/* Google Auth Status Check */}
-        {!accessToken && (
-          <div className="bg-zinc-900/80 border border-cyan-900/40 rounded-2xl p-4 text-xs space-y-3">
-            <div className="flex items-center gap-2 text-cyan-300 font-semibold">
-              <ShieldCheck className="w-4 h-4 text-cyan-400" />
-              <span>Connect Gmail Account</span>
-            </div>
-            <p className="text-zinc-400 text-[11px] leading-relaxed">
-              To dispatch emails directly from your verified Gmail address, sign in with Google below.
-            </p>
-            <Button
-              type="button"
-              onClick={signInWithGoogle}
-              className="w-full bg-cyan-600 hover:bg-cyan-500 text-white font-mono text-xs font-bold uppercase rounded-xl h-10 flex items-center justify-center gap-2"
-            >
-              Sign In with Google
-            </Button>
           </div>
         )}
 

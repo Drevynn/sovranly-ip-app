@@ -118,32 +118,8 @@ export default function Sidebar({
                 <Users className="w-5 h-5 text-indigo-400" /> Creator Network
               </button>
               <button 
-                onClick={() => { setActivePage(7); onClose(); }}
-                className={`w-full flex items-center gap-4 px-5 py-4 rounded-2xl text-sm font-semibold transition-all cursor-pointer ${activePage === 7 ? 'bg-zinc-900 border border-zinc-800 text-white shadow-xl shadow-zinc-950/50' : 'text-zinc-500 hover:text-zinc-300 hover:bg-zinc-900/30'}`}
-              >
-                <Presentation className="w-5 h-5 text-cyan-400" /> {slidesTitle}
-              </button>
-              <button 
-                onClick={() => { setActivePage(8); onClose(); }}
-                className={`w-full flex items-center gap-4 px-5 py-4 rounded-2xl text-sm font-semibold transition-all cursor-pointer ${activePage === 8 ? 'bg-zinc-900 border border-zinc-800 text-white shadow-xl shadow-zinc-950/50' : 'text-zinc-500 hover:text-zinc-300 hover:bg-zinc-900/30'}`}
-              >
-                <Rocket className="w-5 h-5 text-pink-400" /> {t('launchPlanner') || 'Launch Planner'}
-              </button>
-              <button 
-                onClick={() => { setActivePage(9); onClose(); }}
-                className={`w-full flex items-center gap-4 px-5 py-4 rounded-2xl text-sm font-semibold transition-all cursor-pointer ${activePage === 9 ? 'bg-zinc-900 border border-zinc-800 text-white shadow-xl shadow-zinc-950/50' : 'text-zinc-500 hover:text-zinc-300 hover:bg-zinc-900/30'}`}
-              >
-                <Shield className="w-5 h-5 text-emerald-400" /> {t('techStackLedger') || 'Tech Stack Ledger'}
-              </button>
-              <button 
-                onClick={() => { setActivePage(10); onClose(); }}
-                className={`w-full flex items-center gap-4 px-5 py-4 rounded-2xl text-sm font-semibold transition-all cursor-pointer ${activePage === 10 ? 'bg-zinc-900 border border-zinc-800 text-white shadow-xl shadow-zinc-950/50' : 'text-zinc-500 hover:text-zinc-300 hover:bg-zinc-900/30'}`}
-              >
-                <Building2 className="w-5 h-5 text-amber-400" /> {t('aboutInvestors') || 'About & Investors'}
-              </button>
-              <button 
                 onClick={() => { setActivePage(11); onClose(); }}
-                className={`w-full flex items-center gap-4 px-5 py-4 rounded-2xl text-sm font-semibold transition-all cursor-pointer ${activePage === 11 ? 'bg-zinc-900 border border-zinc-800 text-white shadow-xl shadow-zinc-950/50' : 'text-zinc-505 hover:text-zinc-350 hover:bg-zinc-900/30'}`}
+                className={`w-full flex items-center gap-4 px-5 py-4 rounded-2xl text-sm font-semibold transition-all cursor-pointer ${activePage === 11 ? 'bg-zinc-900 border border-zinc-800 text-white shadow-xl shadow-zinc-950/50' : 'text-zinc-500 hover:text-zinc-300 hover:bg-zinc-900/30'}`}
               >
                 <Brain className="w-5 h-5 text-cyan-400" /> {t('aiLicensing') || 'AI Training Vault'}
               </button>
@@ -152,6 +128,12 @@ export default function Sidebar({
                 className={`w-full flex items-center gap-4 px-5 py-4 rounded-2xl text-sm font-semibold transition-all cursor-pointer ${activePage === 12 ? 'bg-zinc-900 border border-zinc-800 text-white shadow-xl shadow-zinc-950/50' : 'text-zinc-500 hover:text-zinc-300 hover:bg-zinc-900/30'}`}
               >
                 <Database className="w-5 h-5 text-cyan-400" /> Sovereign Tokenizer
+              </button>
+              <button 
+                onClick={() => { setActivePage(10); onClose(); }}
+                className={`w-full flex items-center gap-4 px-5 py-4 rounded-2xl text-sm font-semibold transition-all cursor-pointer ${activePage === 10 ? 'bg-zinc-900 border border-zinc-800 text-white shadow-xl shadow-zinc-950/50' : 'text-zinc-500 hover:text-zinc-300 hover:bg-zinc-900/30'}`}
+              >
+                <Building2 className="w-5 h-5 text-amber-400" /> About Platform
               </button>
             </div>
 

@@ -230,7 +230,7 @@ export default function NewsletterSignup() {
         <div className="h-[74px] flex items-center justify-center text-xs font-mono text-zinc-600">Loading pipeline security layer...</div>
       )}
 
-      {/* Developer lead tracker vault (ideal for Google reviewers to see captured emails) */}
+      {/* Captured Leads Vault */}
       <div className="border-t border-zinc-900 pt-4 mt-2">
         <button
           onClick={() => setShowVault(!showVault)}

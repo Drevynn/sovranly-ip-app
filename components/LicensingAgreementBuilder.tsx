@@ -751,7 +751,7 @@ export default function LicensingAgreementBuilder({ walletAddress }: { walletAdd
                       type="button"
                       className="flex-1 bg-violet-600 hover:bg-violet-500 text-white font-mono text-xs font-bold uppercase flex items-center justify-center gap-2"
                     >
-                      <Mail className="w-4 h-4" /> Notify Client via Gmail
+                      <Mail className="w-4 h-4" /> Notify Client via Email
                     </Button>
                   </div>
                 </div>
