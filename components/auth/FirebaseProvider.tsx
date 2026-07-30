@@ -1,7 +1,7 @@
 'use client';
 import { createContext, useContext, useEffect, useState } from 'react';
 import { getFirebaseAuth } from '@/lib/firebase';
-import { onAuthStateChanged, User, signInWithPopup, signInWithRedirect, GoogleAuthProvider, signOut } from 'firebase/auth';
+import { onAuthStateChanged, User, signInWithPopup, signInWithRedirect, getRedirectResult, GoogleAuthProvider, signOut } from 'firebase/auth';
 
 interface AuthContextType {
   user: User | null;
@@ -91,6 +91,21 @@ export function FirebaseProvider({ children }: { children: React.ReactNode }) {
         }
       }
 
+      getRedirectResult(auth)
+        .then((result) => {
+          if (result) {
+            const credential = GoogleAuthProvider.credentialFromResult(result);
+            if (credential?.accessToken) {
+              setAccessToken(credential.accessToken);
+            }
+            setUser(result.user);
+            setIsSandboxMode(false);
+          }
+        })
+        .catch((err) => {
+          console.warn("getRedirectResult warning:", err);
+        });
+
       const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
         if (firebaseUser) {
           setUser(firebaseUser);
@@ -121,22 +136,30 @@ export function FirebaseProvider({ children }: { children: React.ReactNode }) {
     provider.addScope('https://www.googleapis.com/auth/spreadsheets');
     provider.addScope('https://www.googleapis.com/auth/gmail.send');
     
+    const inIframe = typeof window !== 'undefined' && window.self !== window.top;
+    
     try {
-      const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-      if (isMobile) {
-        await signInWithRedirect(auth, provider);
-      } else {
-        const result = await signInWithPopup(auth, provider);
-        const credential = GoogleAuthProvider.credentialFromResult(result);
-        if (credential?.accessToken) {
-          setAccessToken(credential.accessToken);
-        }
-        setUser(result.user);
-        setIsSandboxMode(false);
+      // First attempt popup sign in
+      const result = await signInWithPopup(auth, provider);
+      const credential = GoogleAuthProvider.credentialFromResult(result);
+      if (credential?.accessToken) {
+        setAccessToken(credential.accessToken);
       }
+      setUser(result.user);
+      setIsSandboxMode(false);
     } catch (e: any) {
-      console.error("Popup/Redirect failed, checking if caught by iframe context limits", e);
-      throw e;
+      console.warn("signInWithPopup failed or was restricted in frame:", e);
+      
+      if (inIframe) {
+        // Inside cross-origin iframe preview, Google Auth prevents framing and signInWithRedirect causes endless loop.
+        // Instantly transition user using Sovereign Sandbox mode so they enter the platform cleanly without getting stuck.
+        console.info("Iframe preview detected: activating Sovereign Sandbox pass for uninterrupted platform access.");
+        await signInWithSandbox();
+        return;
+      }
+      
+      // Top-level tab: proceed with redirect sign-in
+      await signInWithRedirect(auth, provider);
     }
   };
 
