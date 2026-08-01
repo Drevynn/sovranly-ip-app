@@ -9,9 +9,16 @@ export async function GET(request: Request) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    console.log('Fetching agreements...');
+    console.log('Fetching agreements for user:', user.uid);
     const snapshot = await db.collection('agreements').get();
-    const agreementsData = snapshot.docs.map((doc: any) => ({ id: doc.id, ...doc.data() }));
+    const agreementsData = snapshot.docs
+      .map((doc: any) => ({ id: doc.id, ...doc.data() }))
+      .filter((doc: any) => 
+        doc.creator === user.uid ||
+        doc.userId === user.uid ||
+        (user.email && doc.creatorEmail === user.email) ||
+        doc.creatorWallet === user.uid
+      );
     return NextResponse.json(agreementsData);
   } catch (error) {
     console.error('Error fetching agreements:', error);

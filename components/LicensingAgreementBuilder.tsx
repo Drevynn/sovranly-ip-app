@@ -434,10 +434,10 @@ export default function LicensingAgreementBuilder({ walletAddress }: { walletAdd
               ) : assets.length === 0 ? (
                 <div className="p-4 bg-amber-950/20 border border-amber-500/25 rounded-2xl space-y-2">
                   <p className="text-xs text-amber-400 flex items-center gap-1.5 font-bold">
-                    <ShieldAlert className="w-4 h-4" /> No elements found in SECURE REGISTRY
+                    <ShieldAlert className="w-4 h-4" /> No registered IP assets found
                   </p>
                   <p className="text-[10px] text-zinc-400 leading-normal">
-                    You have not registered any assets yet. We have provisioned a secure sandbox asset below of &quot;Sovereign Symphony Beat&quot; to allow validating the Licensing Agreement Builder.
+                    You have not registered any IP assets yet. Register your own IP asset in the Asset Manager to build a binding licensing agreement.
                   </p>
                 </div>
               ) : (
