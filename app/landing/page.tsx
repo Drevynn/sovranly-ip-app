@@ -46,15 +46,22 @@ export default function LandingPage() {
             </div>
             
             {/* Core Shield Emblem */}
-            <div className="relative w-36 h-36 md:w-44 md:h-44 rounded-3xl bg-zinc-950/90 border-2 border-cyan-500/40 flex flex-col items-center justify-center shadow-[0_0_50px_rgba(6,182,212,0.15)] overflow-hidden group">
+            <div className="relative w-36 h-36 md:w-44 md:h-44 rounded-3xl bg-zinc-950/90 border-2 border-cyan-500/40 flex flex-col items-center justify-center shadow-[0_0_50px_rgba(6,182,212,0.15)] overflow-hidden group p-3">
               {/* Circuit board line accents */}
               <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-cyan-400 to-transparent" />
               <div className="absolute inset-y-0 left-0 w-px bg-gradient-to-b from-transparent via-cyan-400 to-transparent" />
               
-              {/* Big central letter or icon */}
-              <div className="flex flex-col items-center gap-1.5 relative z-10 animate-pulse [animation-duration:3s]">
-                <ShieldCheck className="w-14 h-14 md:w-16 md:h-16 text-cyan-400 drop-shadow-[0_0_15px_rgba(6,182,212,0.6)]" />
-                <span className="font-mono text-[8px] md:text-[9px] font-bold tracking-[0.3em] uppercase text-zinc-400">SOVRANLY</span>
+              {/* Core Sovranly Logo Image */}
+              <div className="relative z-10 w-full h-full flex items-center justify-center p-2">
+                <Image
+                  src="/sovranly-logo-v2.png"
+                  alt="Sovranly IP Emblem"
+                  width={140}
+                  height={140}
+                  className="w-full h-full object-contain drop-shadow-[0_0_15px_rgba(34,211,238,0.5)] transform group-hover:scale-105 transition-transform duration-500"
+                  referrerPolicy="no-referrer"
+                  priority
+                />
               </div>
             </div>
           </div>

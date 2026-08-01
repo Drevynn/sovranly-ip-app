@@ -64,6 +64,14 @@ export const metadata: Metadata = {
     images: ['/sovranly_hero_logo.jpg'],
     creator: '@sovranlyip',
   },
+  icons: {
+    icon: '/sovranly-logo-v2.png',
+    shortcut: '/sovranly-logo-v2.png',
+    apple: '/sovranly-logo-v2.png',
+  },
+  verification: {
+    google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || '',
+  },
   manifest: '/manifest.json',
   appleWebApp: {
     capable: true,

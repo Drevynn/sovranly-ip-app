@@ -90,14 +90,14 @@ export default function HomePage() {
             </div>
             
             {/* Core Sovranly IP Emblem Image */}
-            <div className="relative w-56 h-56 md:w-72 md:h-72 rounded-full bg-zinc-950/90 border-2 border-cyan-500/40 flex items-center justify-center shadow-[0_0_60px_rgba(6,182,212,0.25)] overflow-hidden group p-1">
+            <div className="relative w-56 h-56 md:w-72 md:h-72 rounded-full bg-zinc-950/90 border-2 border-cyan-500/40 flex items-center justify-center shadow-[0_0_60px_rgba(6,182,212,0.25)] overflow-hidden group p-4">
               <Image 
-                src="/sovranly_circle_logo.jpg" 
+                src="/sovranly-logo-v2.png" 
                 alt="Sovranly IP Emblem Logo" 
                 width={350}
                 height={350}
                 priority
-                className="w-full h-full object-contain rounded-full drop-shadow-[0_0_20px_rgba(34,211,238,0.5)] transform group-hover:scale-105 transition-transform duration-500" 
+                className="w-full h-full object-contain drop-shadow-[0_0_20px_rgba(34,211,238,0.5)] transform group-hover:scale-105 transition-transform duration-500" 
                 referrerPolicy="no-referrer"
               />
             </div>
