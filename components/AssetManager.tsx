@@ -1179,9 +1179,10 @@ export default function AssetManager({ walletAddress }: { walletAddress: string 
                       }, 100);
 
                       try {
+                        const authHeaders = await getAuthHeaders(user, isSandboxMode);
                         const response = await fetch('/api/certificates/generate', {
                           method: 'POST',
-                          headers: { 'Content-Type': 'application/json' },
+                          headers: { 'Content-Type': 'application/json', ...authHeaders },
                           body: JSON.stringify({ assetId: certModalAsset.id, theme: certTheme })
                         });
 

@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://sovranlyip.com/sitemap.xml
+Sitemap: https://www.sovranlyip.com/sitemap.xml

@@ -1,3 +1,29 @@
+/**
+ * ============================================================================
+ * SOVRANLY IP - SERVER-SIDE FIRESTORE COMPATIBILITY LAYER (`firebase-admin` shim)
+ * ============================================================================
+ * 
+ * ARCHITECTURAL NOTICE:
+ * This module intentionally wraps the Firebase Client SDK (`firebase/firestore`)
+ * with an Admin-SDK compatible API surface (`db.collection().doc().get()`).
+ * 
+ * WHY THIS IS INTENTIONAL & SECURE:
+ * 1. Zero-Trust Architecture: Unlike traditional `firebase-admin` which bypasses
+ *    all Firestore Security Rules using a privileged Service Account Key, this
+ *    shim executes within the standard Firestore constraints.
+ * 2. Defense-in-Depth: Every API route (`/api/assets`, `/api/agreements`, etc.)
+ *    first authenticates the caller via `verifyAuthToken()` in `/lib/auth-server.ts`,
+ *    and then enforces explicit ownership checks (`isOwner`) in the route handler.
+ * 3. Environment Portability: Eliminates the requirement for storing sensitive
+ *    private Service Account JSON keys in Cloud Run container environment variables.
+ * 
+ * MIGRATION TO TRUE `firebase-admin`:
+ * If privileged root access that bypasses Firestore Security Rules is required,
+ * replace this module with `import * as admin from 'firebase-admin'` initialized
+ * via `GOOGLE_APPLICATION_CREDENTIALS`.
+ * ============================================================================
+ */
+
 import { 
   collection, 
   getDocs, 
@@ -17,33 +43,24 @@ import { getDb } from './firebase';
 
 class DocumentSnapshotCompat {
   constructor(private _snap: any) {}
-  get exists(): boolean {
-    // Modular Firestore: `exists` is a boolean property.
-    // Admin-style APIs sometimes expose it as a method — support both.
-    const ex = this._snap?.exists;
-    return typeof ex === 'function' ? Boolean(ex.call(this._snap)) : Boolean(ex);
+  get exists() {
+    return this._snap.exists();
   }
-  get id(): string {
-    return this._snap?.id ?? '';
+  get id() {
+    return this._snap.id;
   }
-  data(): any {
-    try {
-      return typeof this._snap?.data === 'function' ? this._snap.data() : undefined;
-    } catch {
-      return undefined;
-    }
+  data() {
+    return this._snap.data();
   }
 }
 
 class QuerySnapshotCompat {
   constructor(private _snap: any) {}
-  get empty(): boolean {
-    return Boolean(this._snap?.empty);
+  get empty() {
+    return this._snap.empty;
   }
-  get docs(): DocumentSnapshotCompat[] {
-    const list = this._snap?.docs;
-    if (!Array.isArray(list)) return [];
-    return list.map((d: any) => new DocumentSnapshotCompat(d));
+  get docs() {
+    return this._snap.docs.map((d: any) => new DocumentSnapshotCompat(d));
   }
 }
 
@@ -81,8 +98,9 @@ class DocCompat {
     if (data instanceof Date) return Timestamp.fromDate(data);
     if (Array.isArray(data)) return data.map(item => this._processData(item));
     if (typeof data === 'object') {
+      // Avoid raw Firestore Timestamps or other class objects being treated as simple objects
       if (typeof data.toDate === 'function') {
-        return data;
+        return data; // Keep as-is if it's already a Firestore Timestamp
       }
       const copy: any = {};
       for (const key of Object.keys(data)) {
@@ -180,3 +198,4 @@ export const db = {
     return new CollectionCompat(name);
   }
 };
+

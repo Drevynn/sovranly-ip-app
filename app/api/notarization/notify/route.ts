@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { verifyAuthToken } from '@/lib/auth-server';
 
 function createMimeMessage({
   to,
@@ -30,7 +31,11 @@ function createMimeMessage({
 
 export async function POST(req: NextRequest) {
   try {
-    const authHeader = req.headers.get('Authorization');
+    const user = await verifyAuthToken(req.headers.get('Authorization'));
+    if (!user) {
+      return NextResponse.json({ error: 'Unauthorized: valid Firebase ID token required' }, { status: 401 });
+    }
+
     const body = await req.json();
 
     const {
@@ -130,11 +135,11 @@ export async function POST(req: NextRequest) {
       htmlBody,
     });
 
-    // Extract Bearer token if provided
-    const token = authHeader?.replace(/^Bearer\s+/i, '');
+    // Never pass arbitrary Bearer tokens to Gmail. Only use explicit Gmail OAuth access token if provided in body.
+    const gmailToken = body.gmailAccessToken;
 
-    if (!token) {
-      // Sandbox fallback mode when no token is available
+    if (!gmailToken) {
+      // Sandbox fallback mode when no Gmail OAuth token is available
       return NextResponse.json({
         success: true,
         mode: 'sandbox_simulation',
@@ -152,7 +157,7 @@ export async function POST(req: NextRequest) {
     const gmailRes = await fetch('https://gmail.googleapis.com/gmail/v1/users/me/messages/send', {
       method: 'POST',
       headers: {
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${gmailToken}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({ raw: rawMessage }),

@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { useAuth } from '@/components/auth/FirebaseProvider';
+import { getAuthHeaders } from '@/lib/auth-client';
 import { Mail, CheckCircle, AlertTriangle, Loader2, Send, ShieldCheck, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -25,7 +26,7 @@ export default function NotarizationEmailModal({
   defaultClientEmail = '',
   defaultClientName = '',
 }: NotarizationEmailModalProps) {
-  const { user, accessToken, signInWithGoogle } = useAuth();
+  const { user, accessToken, isSandboxMode, signInWithGoogle } = useAuth();
 
   const [clientEmail, setClientEmail] = useState(defaultClientEmail || user?.email || '');
   const [clientName, setClientName] = useState(defaultClientName || user?.displayName || 'Client');
@@ -52,11 +53,12 @@ export default function NotarizationEmailModal({
     setSendResult(null);
 
     try {
-      const res = await fetch('/app/api/notarization/notify', {
+      const authHeaders = await getAuthHeaders(user, isSandboxMode);
+      const res = await fetch('/api/notarization/notify', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
+          ...authHeaders,
         },
         body: JSON.stringify({
           recipientEmail: clientEmail,
@@ -65,6 +67,7 @@ export default function NotarizationEmailModal({
           documentHash,
           txHash,
           certificateId: 'CERT-' + Math.floor(100000 + Math.random() * 900000),
+          gmailAccessToken: accessToken,
         }),
       });
 

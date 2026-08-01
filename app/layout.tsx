@@ -6,8 +6,64 @@ import { NotificationProvider } from '@/components/NotificationProvider';
 import CookieComplianceBanner from '@/components/CookieComplianceBanner';
 
 export const metadata: Metadata = {
-  title: 'Sovranly IP | Sovereign Intellectual Property & Automated Royalty Distribution',
-  description: 'Sovereign control center for creators to manage intellectual property assets, configure secure license agreements, and automate real-time royalty distribution with Zero-Trust security.',
+  metadataBase: new URL('https://www.sovranlyip.com'),
+  title: {
+    default: 'Sovranly IP | Sovereign Intellectual Property & Automated Royalty Distribution',
+    template: '%s | Sovranly IP',
+  },
+  description:
+    'Sovereign control center for creators to manage intellectual property assets, configure secure license agreements, and automate real-time royalty distribution with Zero Trust security.',
+  keywords: [
+    'Sovranly IP',
+    'intellectual property management',
+    'blockchain IP licensing',
+    'Zero Trust architecture',
+    'creator rights',
+    'royalty distribution',
+    'automated licensing',
+    'digital asset tokenization',
+    'on-chain copyright notarization',
+    'AI licensing protection',
+  ],
+  authors: [{ name: 'Sovranly IP Developer Network', url: 'https://www.sovranlyip.com' }],
+  creator: 'Sovranly IP',
+  publisher: 'Sovranly IP',
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
+  openGraph: {
+    type: 'website',
+    locale: 'en_US',
+    url: 'https://www.sovranlyip.com',
+    title: 'Sovranly IP | Sovereign Intellectual Property & Automated Royalty Distribution',
+    description:
+      'Sovereign control center for creators to manage intellectual property assets, configure secure license agreements, and automate real-time royalty distribution with Zero Trust security.',
+    siteName: 'Sovranly IP',
+    images: [
+      {
+        url: '/sovranly_hero_logo.jpg',
+        width: 1200,
+        height: 630,
+        alt: 'Sovranly IP - Sovereign Intellectual Property & Zero Trust Architecture',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Sovranly IP | Sovereign Intellectual Property & Automated Royalty Distribution',
+    description:
+      'Sovereign control center for creators to manage intellectual property assets, configure secure license agreements, and automate real-time royalty distribution with Zero Trust security.',
+    images: ['/sovranly_hero_logo.jpg'],
+    creator: '@sovranlyip',
+  },
   manifest: '/manifest.json',
   appleWebApp: {
     capable: true,

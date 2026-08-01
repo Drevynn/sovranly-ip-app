@@ -3,15 +3,31 @@ pragma solidity ^0.8.20;
 
 import "@openzeppelin/contracts/access/AccessControl.sol";
 
+interface IPausableAsset {
+    function emergencyPause() external;
+    function emergencyUnpause() external;
+    function paused() external view returns (bool);
+}
+
 contract SovranlyGuardian is AccessControl {
     bytes32 public constant GUARDIAN_ROLE = keccak256("GUARDIAN_ROLE");
 
-    constructor() {
-        _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
-        _grantRole(GUARDIAN_ROLE, msg.sender);
+    event AssetPaused(address indexed asset, address indexed guardian);
+    event AssetUnpaused(address indexed asset, address indexed guardian);
+
+    constructor(address admin) {
+        address initialAdmin = admin != address(0) ? admin : msg.sender;
+        _grantRole(DEFAULT_ADMIN_ROLE, initialAdmin);
+        _grantRole(GUARDIAN_ROLE, initialAdmin);
     }
     
-    function emergencyPause() public onlyRole(GUARDIAN_ROLE) {
-        // Implementation for emergency pause across assets
+    function emergencyPauseAsset(address asset) external onlyRole(GUARDIAN_ROLE) {
+        IPausableAsset(asset).emergencyPause();
+        emit AssetPaused(asset, msg.sender);
+    }
+
+    function emergencyUnpauseAsset(address asset) external onlyRole(GUARDIAN_ROLE) {
+        IPausableAsset(asset).emergencyUnpause();
+        emit AssetUnpaused(asset, msg.sender);
     }
 }

@@ -18,6 +18,7 @@ contract SovranlyIPAsset is ERC721, ERC2981, AccessControl, Pausable {
     mapping(bytes4 => uint256) public lastActionTimestamp;
 
     event GuardianActionExecuted(bytes4 indexed actionSelector, address guardian, uint256 cooldownApplied);
+    event AssetMinted(uint256 indexed assetId, address indexed to, uint96 royaltyFeeNumerator);
 
     modifier respectsCooldown(bytes4 actionSelector) {
         uint256 cooldown = actionCooldowns[actionSelector] > 0 ? actionCooldowns[actionSelector] : guardianGlobalCooldown;
@@ -25,18 +26,22 @@ contract SovranlyIPAsset is ERC721, ERC2981, AccessControl, Pausable {
         _;
     }
 
-    constructor() ERC721("SovranlyIPAsset", "SIPA") {
-        _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
-        _grantRole(MINTER_ROLE, msg.sender);
-        _grantRole(GUARDIAN_ROLE, msg.sender);
-        _setDefaultRoyalty(msg.sender, 1000); 
+    constructor(address admin) ERC721("SovranlyIPAsset", "SIPA") {
+        address initialAdmin = admin != address(0) ? admin : msg.sender;
+        _grantRole(DEFAULT_ADMIN_ROLE, initialAdmin);
+        _grantRole(MINTER_ROLE, initialAdmin);
+        _grantRole(GUARDIAN_ROLE, initialAdmin);
+        _setDefaultRoyalty(initialAdmin, 1000); 
     }
 
-    function mintAsset(address to, uint96 royaltyFeeNumerator) public onlyRole(MINTER_ROLE) returns (uint256) {
+    function mintAsset(address to, uint96 royaltyFeeNumerator) public onlyRole(MINTER_ROLE) whenNotPaused returns (uint256) {
+        require(to != address(0), "Invalid recipient");
+        require(royaltyFeeNumerator <= 10000, "Royalty fee exceeds 100%");
         uint256 assetId = nextAssetId;
         nextAssetId++;
         _safeMint(to, assetId);
-        _setTokenRoyalty(assetId, msg.sender, royaltyFeeNumerator);
+        _setTokenRoyalty(assetId, to, royaltyFeeNumerator);
+        emit AssetMinted(assetId, to, royaltyFeeNumerator);
         return assetId;
     }
 
