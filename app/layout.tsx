@@ -49,9 +49,9 @@ export const metadata: Metadata = {
     siteName: 'Sovranly IP',
     images: [
       {
-        url: '/sovranly_hero_logo.jpg',
-        width: 1200,
-        height: 630,
+        url: '/sovranly-logo-v2.png',
+        width: 1024,
+        height: 1024,
         alt: 'Sovranly IP - Sovereign Intellectual Property & Zero Trust Architecture',
       },
     ],
@@ -61,7 +61,7 @@ export const metadata: Metadata = {
     title: 'Sovranly IP | Sovereign Intellectual Property & Automated Royalty Distribution',
     description:
       'Sovereign control center for creators to manage intellectual property assets, configure secure license agreements, and automate real-time royalty distribution with Zero Trust security.',
-    images: ['/sovranly_hero_logo.jpg'],
+    images: ['/sovranly-logo-v2.png'],
     creator: '@sovranlyip',
   },
   icons: {

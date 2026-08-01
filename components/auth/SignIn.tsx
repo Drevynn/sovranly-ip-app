@@ -50,8 +50,15 @@ export function SignIn() {
           <div className="mx-auto relative w-24 h-24 flex items-center justify-center">
             {/* Pulsing cyan glow rings */}
             <div className="absolute inset-0 bg-cyan-500/10 rounded-full blur-xl animate-pulse pointer-events-none" />
-            <div className="relative w-20 h-20 rounded-full border border-cyan-500/30 bg-zinc-950 flex items-center justify-center shadow-lg shadow-cyan-950/40">
-              <ShieldCheck className="w-10 h-10 text-cyan-400 drop-shadow-[0_0_10px_rgba(6,182,212,0.5)]" />
+            <div className="relative w-20 h-20 rounded-full border border-cyan-500/30 bg-zinc-950 flex items-center justify-center shadow-lg shadow-cyan-950/40 p-2 overflow-hidden">
+              <Image
+                src="/sovranly-logo-v2.png"
+                alt="Sovranly IP Logo"
+                width={64}
+                height={64}
+                className="w-full h-full object-contain drop-shadow-[0_0_10px_rgba(34,211,238,0.5)]"
+                referrerPolicy="no-referrer"
+              />
             </div>
           </div>
           <div className="space-y-2">

@@ -256,7 +256,16 @@ export default function AboutUs() {
               <div className="relative w-48 h-64 md:w-52 md:h-68 rounded-xl bg-zinc-950/90 border border-cyan-500/30 flex flex-col items-center justify-center p-6 text-center select-none shadow-inner overflow-hidden">
                 <div className="absolute top-0 right-0 w-32 h-32 bg-cyan-500/10 rounded-full blur-2xl pointer-events-none" />
                 <div className="absolute bottom-0 left-0 w-32 h-32 bg-violet-500/5 rounded-full blur-2xl pointer-events-none" />
-                <ShieldCheck className="w-16 h-16 text-cyan-400 drop-shadow-[0_0_10px_rgba(6,182,212,0.5)] mb-4 animate-pulse" />
+                <div className="w-16 h-16 mb-4 relative flex items-center justify-center">
+                  <Image
+                    src="/sovranly-logo-v2.png"
+                    alt="Sovranly Sovereign Seal"
+                    width={64}
+                    height={64}
+                    className="w-full h-full object-contain drop-shadow-[0_0_12px_rgba(34,211,238,0.6)] animate-pulse"
+                    referrerPolicy="no-referrer"
+                  />
+                </div>
                 <span className="font-mono text-[10px] text-zinc-500 tracking-[0.2em] uppercase mb-1">SOVEREIGN SEAL</span>
                 <span className="text-xs font-bold text-white tracking-wide uppercase">CREATIVE SOVEREIGNTY</span>
                 <div className="mt-4 pt-4 border-t border-zinc-900 w-full text-[8px] font-mono text-zinc-600 space-y-1">
