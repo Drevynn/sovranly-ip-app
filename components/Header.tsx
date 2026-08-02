@@ -1,11 +1,10 @@
 'use client';
 
-'use client';
-
-import { Shield, Menu, ShieldCheck, LogIn, LogOut, User as UserIcon } from 'lucide-react';
+import { Shield, Menu, ShieldCheck, LogIn, LogOut, User as UserIcon, Sun, Moon } from 'lucide-react';
 import WalletConnect from './WalletConnect';
 import Image from 'next/image';
 import { useAuth } from '@/components/auth/FirebaseProvider';
+import { useTheme } from '@/components/ThemeProvider';
 import { useState } from 'react';
 
 export default function Header({ 
@@ -20,6 +19,7 @@ export default function Header({
   onToggleSidebar: () => void
 }) {
   const { user, signInWithGoogle, logout, isSandboxMode } = useAuth();
+  const { theme, toggleTheme, isLightMode } = useTheme();
   const [signingIn, setSigningIn] = useState(false);
 
   const handleGoogleAuth = async () => {
@@ -69,12 +69,29 @@ export default function Header({
         </span>
       </div>
 
-      {/* Right: Google Sign In + Security Status + Wallet Connect */}
+      {/* Right: Theme Toggle + Google Sign In + Security Status + Wallet Connect */}
       <div className="flex items-center gap-3 z-40">
         <div className="px-3 py-1.5 bg-emerald-950/30 border border-emerald-500/15 text-emerald-400 text-[9px] uppercase tracking-widest rounded-full items-center gap-2 hidden xl:flex">
           <span className="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse"></span>
           {walletAddress || user ? 'Zero Trust Authed' : 'Network Secure'}
         </div>
+
+        {/* Theme Toggle Button (Obsidian Dark vs Sovereign Light Mode) */}
+        <button
+          onClick={toggleTheme}
+          title={isLightMode ? "Switch to Obsidian Dark Mode" : "Switch to Sovereign Light Mode (High Contrast)"}
+          className="p-2 rounded-xl border border-zinc-800 bg-zinc-900/80 text-zinc-300 hover:text-white hover:border-cyan-500/40 transition-all flex items-center gap-1.5 cursor-pointer"
+          aria-label="Toggle color theme"
+        >
+          {isLightMode ? (
+            <Moon className="w-4 h-4 text-violet-400" />
+          ) : (
+            <Sun className="w-4 h-4 text-amber-400" />
+          )}
+          <span className="hidden xl:inline text-[10px] font-mono uppercase tracking-wider">
+            {isLightMode ? 'Light' : 'Obsidian'}
+          </span>
+        </button>
 
         {/* Google Authentication Status / Button */}
         {user ? (

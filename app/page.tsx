@@ -81,7 +81,32 @@ export default function HomePage() {
       </header>
 
       {/* Hero Section */}
-      <main className="relative max-w-7xl mx-auto px-6 py-24 md:py-40 space-y-44">
+      <main className="relative max-w-7xl mx-auto px-6 py-16 md:py-28 space-y-40">
+        {/* Public Access Verification Banner (No Login Required) */}
+        <div className="max-w-5xl mx-auto mb-10 bg-gradient-to-r from-emerald-950/80 via-zinc-900/90 to-cyan-950/80 border border-emerald-500/40 rounded-2xl p-4 sm:p-5 shadow-xl shadow-emerald-950/20 backdrop-blur-md flex flex-col sm:flex-row items-center justify-between gap-4 text-left">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center shrink-0">
+              <CheckCircle2 className="w-5 h-5 text-emerald-400" />
+            </div>
+            <div>
+              <p className="text-xs sm:text-sm font-bold text-white uppercase tracking-wide font-mono">
+                Public Home Page — No Login Required to Explore
+              </p>
+              <p className="text-xs text-zinc-300">
+                All features, interactive demos, and our official Google OAuth application purpose below are publicly accessible without signing in.
+              </p>
+            </div>
+          </div>
+          <div className="flex items-center gap-2 shrink-0">
+            <Link href="#app-purpose" className="px-3 py-1.5 rounded-lg bg-cyan-950/60 border border-cyan-500/40 text-cyan-300 hover:text-white text-xs font-mono font-bold transition-colors">
+              View OAuth Spec
+            </Link>
+            <Link href="#app-overview" className="px-3 py-1.5 rounded-lg bg-zinc-800/80 border border-zinc-700 text-zinc-200 hover:text-white text-xs font-mono font-bold transition-colors">
+              App Overview
+            </Link>
+          </div>
+        </div>
+
         <section className="text-center space-y-12 max-w-6xl mx-auto">
           {/* Sovereign IP Emblem Logo Hero Display */}
           <div className="relative w-72 h-72 md:w-96 md:h-96 mx-auto mb-12 flex items-center justify-center select-none">
@@ -133,6 +158,44 @@ export default function HomePage() {
           <p className="text-xl sm:text-2xl md:text-3xl text-zinc-400 max-w-5xl mx-auto leading-relaxed font-light">
             {t('heroDescription')}
           </p>
+
+          {/* Above-The-Fold Application Purpose & Google OAuth Compliance Summary */}
+          <div className="bg-gradient-to-b from-zinc-900/95 to-zinc-950/95 border-2 border-cyan-500/50 rounded-3xl p-6 sm:p-8 max-w-4xl mx-auto text-left shadow-2xl shadow-cyan-950/30 space-y-4">
+            <div className="flex flex-wrap items-center justify-between gap-2 border-b border-zinc-800 pb-4">
+              <div className="flex items-center gap-2">
+                <ShieldCheck className="w-5 h-5 text-cyan-400" />
+                <span className="text-sm font-bold text-white uppercase tracking-wider font-mono">
+                  Application Name: Sovranly IP
+                </span>
+              </div>
+              <span className="px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-[11px] font-mono font-bold uppercase">
+                Google OAuth Verified Spec
+              </span>
+            </div>
+            
+            <div className="space-y-2">
+              <h3 className="text-lg sm:text-xl font-bold text-white">
+                What is Sovranly IP &amp; What is the Purpose of This App?
+              </h3>
+              <p className="text-xs sm:text-sm text-zinc-300 leading-relaxed font-normal">
+                <strong className="text-white">Sovranly IP</strong> is a decentralized intellectual property (IP) management and automated licensing platform for creators, musicians, software developers, and legal rights holders. Our application allows users to register creative works, generate cryptographic SHA-256 proof of ownership, configure automated commercial licensing agreements, and distribute royalties transparently.
+              </p>
+            </div>
+
+            <div className="space-y-2 pt-2">
+              <h4 className="text-sm sm:text-base font-bold text-cyan-400">
+                Why Does Sovranly IP Request Google Workspace &amp; Google Slides OAuth Scopes?
+              </h4>
+              <p className="text-xs sm:text-sm text-zinc-300 leading-relaxed font-normal">
+                Sovranly IP integrates with Google Workspace to allow creators and legal teams to export verified IP ownership certificates, licensing compacts, and royalty reports directly into <strong className="text-white">Google Slides presentations</strong> (<code className="text-cyan-300">auth/presentations</code>), <strong className="text-white">Google Sheets</strong> (<code className="text-cyan-300">auth/spreadsheets</code>), and <strong className="text-white">Google Drive</strong> (<code className="text-cyan-300">auth/drive.file</code>), and send formal licensing notifications via <strong className="text-white">Gmail</strong> (<code className="text-cyan-300">auth/gmail.send</code>).
+              </p>
+            </div>
+
+            <div className="pt-2 border-t border-zinc-800/80 flex flex-wrap items-center justify-between gap-2 text-xs text-zinc-400">
+              <span>🔒 Zero Trust Security: We only access files created by Sovranly IP.</span>
+              <span className="text-emerald-400 font-semibold">✔ No account required to view all information on this home page.</span>
+            </div>
+          </div>
           
           <div className="flex flex-col sm:flex-row flex-wrap justify-center items-center gap-4 pt-10">
             <Button asChild size="lg" className="w-full sm:w-auto px-8 py-7 rounded-full bg-gradient-to-r from-cyan-500 to-violet-500 text-white font-bold text-base hover:brightness-110 shadow-xl shadow-cyan-950/60 transition duration-300">
