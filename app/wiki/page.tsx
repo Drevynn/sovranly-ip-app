@@ -39,7 +39,14 @@ import {
   EyeOff, 
   AlertCircle, 
   Check,
-  Activity
+  Activity,
+  Award,
+  Package,
+  Printer,
+  Truck,
+  FileCheck,
+  Mail,
+  QrCode
 } from 'lucide-react';
 import Link from 'next/link';
 import LanguageSelector from '@/components/LanguageSelector';
@@ -47,7 +54,7 @@ import RateLimitGauge from '@/components/RateLimitGauge';
 
 type BlueprintSection = {
   id: string;
-  category: 'vision' | 'economics' | 'legal' | 'manifesto' | 'api';
+  category: 'vision' | 'economics' | 'legal' | 'manifesto' | 'api' | 'certificates';
   title: string;
   subtitle: string;
   icon: any;
@@ -439,20 +446,22 @@ export function DeveloperKeyPortal() {
 export default function WikiPage() {
   const { user, isSandboxMode } = useAuth();
   const [searchQuery, setSearchQuery] = useState('');
-  const [activeTab, setActiveTab] = useState<'all' | 'vision' | 'economics' | 'legal' | 'manifesto' | 'api'>('all');
+  const [activeTab, setActiveTab] = useState<'all' | 'vision' | 'economics' | 'legal' | 'manifesto' | 'api' | 'certificates'>('all');
   const [openSections, setOpenSections] = useState<Record<string, boolean>>({
     'exec-summary': true,
     'royalty-splits': true,
     'legal-protection': true,
     'vla-resources': true,
-    'api-overview': true
+    'api-overview': true,
+    'cert-automation': true,
+    'cert-pod': true
   });
 
   // Chat agent states
   const [chatHistory, setChatHistory] = useState<{ role: 'user' | 'model'; text: string; sources?: { title: string; url: string }[] }[]>([
     { 
       role: 'model', 
-      text: 'Greetings, Creator/Licensee. I am the Sovranly AI Sovereign IP Agent, pre-programmed with our on-chain royalty structures (85%/15% splits), USPTO Trademark Class 42 guidelines, TESS database procedures, and Volunteers for the Arts (VLA) pro-bono resources.\n\nType your query, or click any quick-assistance option below to start!' 
+      text: 'Greetings, Creator/Licensee. I am the Sovranly AI Sovereign IP Agent, pre-programmed with our on-chain royalty structures (85%/15% splits), USPTO Trademark Class 42 guidelines, TESS database procedures, Volunteers for the Arts (VLA) pro-bono resources, and Automated Certificates & Print-on-Demand (POD) archival fulfillment.\n\nType your query, or click any quick-assistance option below to start!' 
     }
   ]);
   const [chatInput, setChatInput] = useState('');
@@ -736,6 +745,51 @@ export default function WikiPage() {
         { label: "Parameters", text: ":id (string) - Unique tracking ID or on-chain registration token ID." },
         { label: "Response Fields", text: "licensee (hex), expirationTimestamp (UTC epoch), allowedUses (string list), and status ('ACTIVE' | 'REVOKED')." }
       ]
+    },
+    {
+      id: 'cert-automation',
+      category: 'certificates',
+      title: '11. Sovereign IP Ownership Certificates & Automation',
+      subtitle: 'Automated digital certificates of registration, cryptographic timestamping, and Gmail/Google Workspace notarization.',
+      icon: Award,
+      content: [
+        "Every asset registered on Sovranly IP automatically generates a verifiable, tamper-evident Certificate of Registration. This certificate consolidates all vital metadata: the work's title, creator identity, cryptographic timestamp, SHA-256 IPFS/Arweave content hash, USPTO Trademark Class 42 classification, and the 85/15 automated royalty split ratio.",
+        "To eliminate manual paperwork, Sovranly IP automates certificate distribution through two instant channels: One-click browser-ready instant printing (using optimized CSS print stylesheets for PDF export) and automated cryptographic email notarization delivered directly to the creator's Gmail/Google Workspace inbox."
+      ],
+      bulletPoints: [
+        { label: "Sovereign Verification Code", text: "Each certificate is assigned a unique alphanumeric verification identifier (e.g., SVR-89A-002-2026) that third parties can verify on-chain without exposing private keys." },
+        { label: "Automated Gmail Notarization", text: "Instantly dispatches a cryptographically signed verification receipt to your email inbox with embedded timestamp headers for legal evidentiary admissibility." },
+        { label: "Instant Browser Print / PDF Export", text: "One-click 'Instant Print (Browser Ready)' formats the certificate into an elegant, high-contrast document suitable for legal portfolios and licensing exhibits." }
+      ],
+      checklist: [
+        "Register your creative work on the Sovranly IP Ledger to generate its unique Sovereign Verification Code",
+        "Click 'Certificate / Print' in the Asset Manager to inspect the certificate metadata",
+        "Use 'Email Notarization' to dispatch an immutable timestamped copy to your Gmail inbox",
+        "Use 'Instant Print' to export an official PDF or hard copy for court or licensing presentations"
+      ]
+    },
+    {
+      id: 'cert-pod',
+      category: 'certificates',
+      title: '12. Print-on-Demand (POD) Museum-Grade Archival Certificates',
+      subtitle: 'Physical archival fulfillment: cotton rag prints, framed gallery editions, and laser-engraved metallic plaques.',
+      icon: Package,
+      content: [
+        "For creators, studios, and licensors who require permanent physical artifacts of ownership, Sovranly IP offers an automated Print-on-Demand (POD) archival fulfillment pipeline. Each physical certificate is custom-produced using archival materials and embedded with multi-layered anti-counterfeit features.",
+        "Every physical edition features an embossed gold foil seal, a holographic NFC authentication tag that links directly to the live on-chain ledger proof when tapped with any smartphone, and a laser-engraved QR code displaying the asset's immutable IPFS hash and royalty splits."
+      ],
+      bulletPoints: [
+        { label: "Museum Cotton Rag Archival Print ($45 USD)", text: "300gsm acid-free textured paper with embossed gold foil seal and holographic NFC tag. Shipped globally in a protective archival tube." },
+        { label: "Framed Gallery Edition ($120 USD)", text: "Hand-crafted matte black gallery frame with UV-protective museum acrylic glass, custom matting, and certificate backing authentication." },
+        { label: "Laser-Engraved Anodized Metallic Plaque ($180 USD)", text: "Brushed obsidian metal plaque laser-engraved with your asset's IPFS hash, QR code, and royalty splits for corporate lobbies or studio displays." },
+        { label: "Automated Courier Fulfillment", text: "Orders are automatically dispatched to our specialized fine-art fulfillment centers and shipped with tracked global courier delivery within 3–5 business days." }
+      ],
+      checklist: [
+        "Select your desired physical archival tier (Cotton Rag, Framed Gallery, or Metallic Plaque)",
+        "Enter the official recipient/studio name to be embossed on the physical artifact",
+        "Provide a verified international shipping address for tracked courier delivery",
+        "Tap the NFC holographic tag upon delivery to verify live on-chain ledger synchronization"
+      ]
     }
   ];
 
@@ -800,7 +854,7 @@ export default function WikiPage() {
         </div>
 
         {/* Global Stats bar */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10 bg-zinc-950 p-5 rounded-2xl border border-zinc-900">
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-10 bg-zinc-950 p-5 rounded-2xl border border-zinc-900">
           <div>
             <div className="text-[10px] uppercase font-mono text-zinc-500 tracking-wider">Royalty Standard</div>
             <div className="text-xl font-bold text-white font-mono mt-0.5">85% / 15%</div>
@@ -821,6 +875,11 @@ export default function WikiPage() {
             <div className="text-xl font-bold text-white font-mono mt-0.5">Zero Trust</div>
             <p className="text-[10px] text-violet-400 mt-1 font-sans">Continuous validation</p>
           </div>
+          <div>
+            <div className="text-[10px] uppercase font-mono text-zinc-500 tracking-wider">Archival Proof</div>
+            <div className="text-xl font-bold text-white font-mono mt-0.5">POD Certs</div>
+            <p className="text-[10px] text-amber-400 mt-1 font-sans">Museum-grade NFC tags</p>
+          </div>
         </div>
 
         {/* Filters and search section */}
@@ -833,6 +892,7 @@ export default function WikiPage() {
               { id: 'vision', label: 'Vision & Tech' },
               { id: 'economics', label: 'Royalty Splits' },
               { id: 'legal', label: 'Trademark & Pro Bono' },
+              { id: 'certificates', label: 'Certificates & POD' },
               { id: 'manifesto', label: 'Creator Manuals' },
               { id: 'api', label: 'Developer API' }
             ].map(tab => (
@@ -1041,7 +1101,9 @@ export default function WikiPage() {
                 <p className="text-[9px] uppercase tracking-wider text-zinc-650 font-mono">Quick Inquiries</p>
                 <div className="flex gap-1.5 overflow-x-auto pb-1.5 custom-scrollbar-horizontal select-none">
                   {[
-                    "Class 42 Description Description",
+                    "How certificates work",
+                    "Print-on-Demand (POD) options",
+                    "Class 42 Description",
                     "Trademark Search TESS",
                     "Pro bono Volunteers for Arts",
                     "How royalty splits work"
