@@ -7,6 +7,7 @@ import CookieComplianceBanner from '@/components/CookieComplianceBanner';
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://www.sovranlyip.com'),
+  applicationName: 'Sovranly IP',
   title: {
     default: 'Sovranly IP | Sovereign Intellectual Property & Automated Royalty Distribution',
     template: '%s | Sovranly IP',

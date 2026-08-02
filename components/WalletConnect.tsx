@@ -463,22 +463,26 @@ export default function WalletConnect({ onConnect }: { onConnect: (address: stri
                           </p>
                         </div>
 
-                        {/* Simulated barcode / QR graphic */}
-                        <div className="relative p-4 rounded-2xl bg-white border border-zinc-800 flex items-center justify-center">
-                          <QrCode className="w-44 h-44 text-zinc-950" />
+                        {/* Interactive QR graphic that connects on click */}
+                        <div 
+                          onClick={handleSimulatedBridgeConnect}
+                          className="relative p-6 rounded-2xl bg-white border border-zinc-800 flex flex-col items-center justify-center cursor-pointer hover:shadow-[0_0_25px_rgba(34,211,238,0.3)] transition-all group"
+                          title="Click to authorize mobile wallet bridge"
+                        >
+                          <QrCode className="w-44 h-44 text-zinc-950 group-hover:scale-105 transition-transform" />
                           
                           {/* Top status indicator overlays on QR code */}
-                          <span className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-zinc-950 text-cyan-400 border border-cyan-800 p-2 rounded-xl text-[10px] font-mono tracking-widest uppercase font-black px-1.5 py-1">
-                            SOVRANLY
+                          <span className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-zinc-950 text-cyan-400 border border-cyan-800 rounded-xl text-[10px] font-mono tracking-widest uppercase font-black px-2 py-1 shadow-md">
+                            CLICK TO LINK
                           </span>
                         </div>
 
                         <div className="space-y-3.5 w-full">
                           <div className="text-[10px] text-zinc-400 leading-relaxed font-mono">
                             <p className="uppercase text-emerald-400 font-extrabold text-[9px] mb-1 flex items-center justify-center gap-1">
-                              <ShieldCheck className="w-3.5 h-3.5" /> SECURE DECENTRALIZED BRIDGE STABLE
+                              <ShieldCheck className="w-3.5 h-3.5" /> SECURE DECENTRALIZED BRIDGE READY
                             </p>
-                            Open your {selectedWallet} app on your phone, scan this code, then confirm the signing certificate request.
+                            Open your {selectedWallet} app to scan, or click the QR code / button below to instantly authorize the bridge connection.
                           </div>
 
                           <div className="flex gap-2 justify-center w-full">
@@ -492,14 +496,14 @@ export default function WalletConnect({ onConnect }: { onConnect: (address: stri
                             <Button 
                               onClick={handleSimulatedBridgeConnect}
                               disabled={isConnecting}
-                              className="bg-emerald-500 hover:bg-emerald-600 text-zinc-950 font-mono text-[9px] uppercase tracking-widest font-black flex-1 py-4"
+                              className="bg-emerald-500 hover:bg-emerald-600 text-zinc-950 font-mono text-[9px] uppercase tracking-widest font-black flex-1 py-4 shadow-lg shadow-emerald-500/20"
                             >
                               {isConnecting ? (
                                 <span className="flex items-center gap-1">
-                                  <RefreshCw className="w-3 h-3 animate-spin" /> AUTHORIZING...
+                                  <RefreshCw className="w-3 h-3 animate-spin" /> LINKING WALLET...
                                 </span>
                               ) : (
-                                "Simulate Mobile Pass"
+                                "Authorize Wallet Bridge"
                               )}
                             </Button>
                           </div>

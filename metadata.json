@@ -1,5 +1,5 @@
 {
-  "name": "Sovranly IP Control Center",
+  "name": "Sovranly IP",
   "description": "Sovereign control center for creators to manage intellectual property assets, configure secure license agreements, and automate real-time royalty distribution.",
   "requestFramePermissions": ["microphone"],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]

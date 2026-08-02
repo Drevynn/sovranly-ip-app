@@ -53,10 +53,10 @@ export const translations = {
     establishingIdentity: "Establishing Identity Link...",
 
     // Hero Section
-    heroMainTitle1: "Secure Intellectual",
-    heroMainTitle2: "Property",
-    heroMainTitleSub: "Powering the Creator Economy",
-    heroDescription: "Sovranly IP brings robust, Zero Trust Architecture to intellectual property. Register, license, and seamlessly commercialize your assets with automated smart contracts and immutable proof of ownership.",
+    heroMainTitle1: "Sovranly IP",
+    heroMainTitle2: "Sovereign Authority",
+    heroMainTitleSub: "Sovereign Intellectual Property & Zero Trust Creator Rights Authority",
+    heroDescription: "Sovranly IP brings robust, Zero Trust Architecture to intellectual property. Register, license, and seamlessly commercialize your assets with automated smart contracts, immutable proof of ownership, and Google Workspace presentation deck integration.",
     deployIpBtn: "Deploy IP Asset",
     exploreMarketplaceBtn: "Explore Marketplace",
 
@@ -131,10 +131,10 @@ export const translations = {
     establishingIdentity: "Estableciendo Enlace de Identidad...",
 
     // Hero Section
-    heroMainTitle1: "Asegure su Propiedad",
-    heroMainTitle2: "Intelectual",
-    heroMainTitleSub: "Impulsando la Economía de Creadores",
-    heroDescription: "Sovranly IP aporta una sólida arquitectura Zero Trust a la propiedad intelectual. Registre, licencie y comercialice sin problemas sus activos mediante contratos inteligentes automatizados y pruebas de propiedad inmutables.",
+    heroMainTitle1: "Sovranly IP",
+    heroMainTitle2: "Autoridad Soberana",
+    heroMainTitleSub: "Propiedad Intelectual Soberana y Autoridad Zero Trust para Creadores",
+    heroDescription: "Sovranly IP aporta una sólida arquitectura Zero Trust a la propiedad intelectual. Registre, licencie y comercialice sin problemas sus activos mediante contratos inteligentes automatizados, pruebas de propiedad inmutables e integración con Google Workspace.",
     deployIpBtn: "Desplegar Activo de PI",
     exploreMarketplaceBtn: "Explorar Mercado",
 
@@ -209,10 +209,10 @@ export const translations = {
     establishingIdentity: "IDリンク確立中...",
 
     // Hero Section
-    heroMainTitle1: "知的財産権を",
-    heroMainTitle2: "安全に保護",
-    heroMainTitleSub: "クリエイターエコノミーを強化する",
-    heroDescription: "Sovranly IPは、知的財産に堅牢なゼロトラスト・アーキテクチャをもたらします。自動化されたスマートコントラクトと不変の所有権証明により、資産の登録、ライセンス供与、およびシームレスな商用化を実現します。",
+    heroMainTitle1: "Sovranly IP",
+    heroMainTitle2: "自主的知的財産機関",
+    heroMainTitleSub: "ゼロトラスト知的財産管理＆クリエイター権利認証局",
+    heroDescription: "Sovranly IPは、知的財産に堅牢なゼロトラスト・アーキテクチャをもたらします。自動化されたスマートコントラクト、不変の所有権証明、およびGoogle Workspace統合により、資産の登録、ライセンス供与、商用化を実現します。",
     deployIpBtn: "IP資産を構築する",
     exploreMarketplaceBtn: "市場を探索する",
 
@@ -287,10 +287,10 @@ export const translations = {
     establishingIdentity: "Établissement du lien d'identité...",
 
     // Hero Section
-    heroMainTitle1: "Sécurisez la Propriété",
-    heroMainTitle2: "Intellectuelle",
-    heroMainTitleSub: "Propulser l'Économie des Créateurs",
-    heroDescription: "Sovranly IP apporte une architecture Zero Trust robuste à la propriété intellectuelle. Enregistrez, concédez sous licence et commercialisez vos actifs grâce à des contrats intelligents automatisés et à des preuves de propriété immuables.",
+    heroMainTitle1: "Sovranly IP",
+    heroMainTitle2: "Autorité Souveraine",
+    heroMainTitleSub: "Propriété Intellectuelle Souveraine & Autorité Zero Trust des Créateurs",
+    heroDescription: "Sovranly IP apporte une architecture Zero Trust robuste à la propriété intellectuelle. Enregistrez, concédez sous licence et commercialisez vos actifs grâce à des contrats intelligents automatisés, des preuves immuables et l'intégration Google Workspace.",
     deployIpBtn: "Déployer l'Actif de PI",
     exploreMarketplaceBtn: "Explorer le Marché",
 
