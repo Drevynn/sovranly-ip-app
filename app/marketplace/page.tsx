@@ -708,6 +708,24 @@ Secure cryptographic hash tunnel verified by Sovranly IP.`;
           </div>
         </div>
 
+        {/* Sync Licensing Storefront Quick-Launch Banner */}
+        <div className="mb-8 p-6 rounded-2xl bg-gradient-to-r from-zinc-950 via-zinc-900 to-violet-950/40 border border-violet-500/30 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div className="space-y-1">
+            <div className="flex items-center gap-2">
+              <span className="px-2.5 py-0.5 rounded-full bg-violet-500/10 border border-violet-500/30 text-violet-300 font-mono text-[10px] uppercase font-bold">
+                NEW SYNC MODULE
+              </span>
+              <h3 className="text-base font-bold text-white">Automated Sync Licensing &amp; Instant Clearance Storefront</h3>
+            </div>
+            <p className="text-xs text-zinc-300">
+              Clear music &amp; media synchronization rights instantly for video games, trailers, films, and corporate ads with automated smart contract splits.
+            </p>
+          </div>
+          <Link href="/dashboard" className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-cyan-500 to-violet-500 hover:brightness-110 text-white font-bold text-xs uppercase tracking-wider shrink-0 shadow-lg shadow-cyan-950/40">
+            Open Sync Storefront →
+          </Link>
+        </div>
+
         {/* Tab Filters and Action Buttons */}
         <div className="flex flex-col md:flex-row gap-4 justify-between items-start md:items-center mb-8 border-b border-zinc-900 pb-6">
           <div className="flex flex-wrap gap-2">

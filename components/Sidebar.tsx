@@ -1,6 +1,6 @@
 'use client';
 
-import { Gauge, BarChart3, User, Users, FileText, LogOut, ShieldAlert, Scale, Sliders, Mail, X, Presentation, Rocket, Shield, Building2, Brain, ShieldCheck, Database } from 'lucide-react';
+import { Gauge, BarChart3, User, Users, FileText, LogOut, ShieldAlert, Scale, Sliders, Mail, X, Presentation, Rocket, Shield, Building2, Brain, ShieldCheck, Database, Music } from 'lucide-react';
 import Image from 'next/image';
 import { useAuth } from './auth/FirebaseProvider';
 import { useLanguage } from './LanguageProvider';
@@ -135,6 +135,12 @@ export default function Sidebar({
                 className={`w-full flex items-center gap-4 px-5 py-4 rounded-2xl text-sm font-semibold transition-all cursor-pointer ${activePage === 12 ? 'bg-zinc-900 border border-zinc-800 text-white shadow-xl shadow-zinc-950/50' : 'text-zinc-500 hover:text-zinc-300 hover:bg-zinc-900/30'}`}
               >
                 <Database className="w-5 h-5 text-cyan-400" /> Sovereign Tokenizer
+              </button>
+              <button 
+                onClick={() => { setActivePage(14); onClose(); }}
+                className={`w-full flex items-center gap-4 px-5 py-4 rounded-2xl text-sm font-semibold transition-all cursor-pointer ${activePage === 14 ? 'bg-zinc-900 border border-zinc-800 text-white shadow-xl shadow-zinc-950/50' : 'text-zinc-500 hover:text-zinc-300 hover:bg-zinc-900/30'}`}
+              >
+                <Music className="w-5 h-5 text-violet-400" /> Sync Licensing Storefront
               </button>
               <button 
                 onClick={() => { setActivePage(10); onClose(); }}

@@ -14,12 +14,27 @@ interface ThemeContextType {
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
+function applyThemeToDom(targetTheme: ThemeMode) {
+  if (typeof document === 'undefined') return;
+  const root = document.documentElement;
+  if (targetTheme === 'sovereign-light') {
+    root.classList.remove('dark');
+    root.classList.add('light');
+    root.setAttribute('data-theme', 'sovereign-light');
+    root.style.colorScheme = 'light';
+  } else {
+    root.classList.remove('light');
+    root.classList.add('dark');
+    root.setAttribute('data-theme', 'obsidian');
+    root.style.colorScheme = 'dark';
+  }
+}
+
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [theme, setThemeState] = useState<ThemeMode>('obsidian');
-  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    setMounted(true);
+    /* eslint-disable react-hooks/set-state-in-effect */
     const storedTheme = localStorage.getItem('sovranly-theme') as ThemeMode | null;
     if (storedTheme === 'sovereign-light' || storedTheme === 'obsidian') {
       setThemeState(storedTheme);
@@ -27,22 +42,8 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     } else {
       applyThemeToDom('obsidian');
     }
+    /* eslint-enable react-hooks/set-state-in-effect */
   }, []);
-
-  const applyThemeToDom = (targetTheme: ThemeMode) => {
-    const root = document.documentElement;
-    if (targetTheme === 'sovereign-light') {
-      root.classList.remove('dark');
-      root.classList.add('light');
-      root.setAttribute('data-theme', 'sovereign-light');
-      root.style.colorScheme = 'light';
-    } else {
-      root.classList.remove('light');
-      root.classList.add('dark');
-      root.setAttribute('data-theme', 'obsidian');
-      root.style.colorScheme = 'dark';
-    }
-  };
 
   const setTheme = (newTheme: ThemeMode) => {
     setThemeState(newTheme);

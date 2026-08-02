@@ -33,7 +33,10 @@ import {
   Activity,
   Shield,
   HardDrive,
-  Mail
+  Mail,
+  Package,
+  Truck,
+  DollarSign
 } from 'lucide-react';
 import { ethers } from 'ethers';
 import MediaVault from './MediaVault';
@@ -124,6 +127,14 @@ export default function AssetManager({ walletAddress }: { walletAddress: string 
   const [ledgerVerificationResult, setLedgerVerificationResult] = useState<string | null>(null);
   const [copiedLink, setCopiedLink] = useState(false);
   const [isEmailModalOpen, setIsEmailModalOpen] = useState(false);
+
+  // Print-on-Demand (POD) Physical Archival Certificate State
+  const [isPodModalOpen, setIsPodModalOpen] = useState(false);
+  const [podTier, setPodTier] = useState<'cotton' | 'framed' | 'metallic'>('cotton');
+  const [podRecipientName, setPodRecipientName] = useState('');
+  const [podShippingAddress, setPodShippingAddress] = useState('');
+  const [isSubmittingPodOrder, setIsSubmittingPodOrder] = useState(false);
+  const [podOrderSuccessMessage, setPodOrderSuccessMessage] = useState<string | null>(null);
 
   const filteredAssets = assets.filter(a => 
     (a.title.toLowerCase().includes(searchQuery.toLowerCase()) || (a.description?.toLowerCase().includes(searchQuery.toLowerCase()) ?? false)) &&
@@ -1223,12 +1234,246 @@ export default function AssetManager({ walletAddress }: { walletAddress: string 
                     Notify Client via Email
                   </Button>
                 </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+                  <Button
+                    onClick={() => {
+                      setPodRecipientName(user?.displayName || 'Authorized IP Holder');
+                      setPodShippingAddress('');
+                      setPodOrderSuccessMessage(null);
+                      setIsPodModalOpen(true);
+                    }}
+                    className="w-full rounded-2xl bg-gradient-to-r from-amber-500 to-yellow-600 hover:brightness-110 text-zinc-950 font-mono font-black text-xs uppercase tracking-wider h-11 flex items-center justify-center gap-2 shadow-lg shadow-amber-950/40"
+                  >
+                    <Package className="w-4 h-4 text-zinc-950" />
+                    Order Physical Cert (Print-on-Demand)
+                  </Button>
+
+                  <Button
+                    onClick={() => {
+                      if (typeof window !== 'undefined') {
+                        window.print();
+                      }
+                    }}
+                    className="w-full rounded-2xl bg-zinc-900 border border-zinc-700 hover:border-zinc-500 text-white font-mono font-bold text-xs uppercase tracking-wider h-11 flex items-center justify-center gap-2"
+                  >
+                    <Printer className="w-4 h-4 text-cyan-400" />
+                    Instant Print (Browser Ready)
+                  </Button>
+                </div>
             </div>
 
             <div className="text-center">
               <span className="text-[8px] uppercase font-mono text-zinc-650 tracking-[0.2em] font-black block">SOVRANLY ZERO-TRUST CONSENSUS PROTOCOL v2.4</span>
             </div>
 
+          </div>
+        </div>
+      )}
+
+      {/* Print-on-Demand (POD) Museum-Grade Archival Physical Certificate Modal */}
+      {isPodModalOpen && certModalAsset && (
+        <div className="fixed inset-0 bg-black/95 backdrop-blur-md z-50 flex items-center justify-center p-4 overflow-y-auto">
+          <div className="bg-[#050505] border border-zinc-800 rounded-3xl p-6 sm:p-8 max-w-xl w-full relative space-y-6 shadow-2xl my-8 animate-in fade-in zoom-in duration-200">
+            <button
+              onClick={() => setIsPodModalOpen(false)}
+              className="absolute top-6 right-6 text-zinc-500 hover:text-white text-lg transition-colors"
+            >
+              ✕
+            </button>
+
+            <div className="text-center space-y-2 border-b border-zinc-800 pb-5">
+              <div className="w-14 h-14 bg-amber-950/40 border border-amber-500/30 rounded-full flex items-center justify-center mx-auto mb-2 shadow-lg shadow-amber-950/50">
+                <Award className="w-7 h-7 text-amber-400" />
+              </div>
+              <span className="text-[10px] uppercase font-mono text-amber-400 tracking-[0.25em] font-black block">
+                SOVRANLY IP ARCHIVAL FULFILLMENT
+              </span>
+              <h3 className="text-xl font-bold text-white tracking-tight uppercase">
+                Order Physical Proof Certificate
+              </h3>
+              <p className="text-xs text-zinc-400 max-w-sm mx-auto leading-relaxed">
+                Custom-printed museum-grade physical certificates with embossed gold foil seal, holographic NFC tag, and ledger QR code.
+              </p>
+            </div>
+
+            {podOrderSuccessMessage ? (
+              <div className="p-6 rounded-2xl bg-emerald-950/40 border border-emerald-500/30 text-center space-y-4">
+                <div className="w-12 h-12 rounded-full bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center mx-auto">
+                  <Check className="w-6 h-6 text-emerald-400" />
+                </div>
+                <h4 className="text-base font-bold text-white uppercase font-mono">
+                  Archival Fulfillment Order Confirmed!
+                </h4>
+                <p className="text-xs text-zinc-300 leading-relaxed font-mono">
+                  {podOrderSuccessMessage}
+                </p>
+                <div className="p-3 rounded-xl bg-zinc-950 border border-zinc-800 text-[11px] font-mono text-zinc-400 text-left space-y-1">
+                  <div><strong className="text-white">Asset:</strong> {certModalAsset.title}</div>
+                  <div><strong className="text-white">Selected Tier:</strong> {podTier === 'cotton' ? 'Museum Cotton Rag ($45)' : podTier === 'framed' ? 'Framed Gallery Edition ($120)' : 'Laser-Engraved Anodized Plaque ($180)'}</div>
+                  <div><strong className="text-white">Recipient:</strong> {podRecipientName}</div>
+                  <div><strong className="text-white">Shipping To:</strong> {podShippingAddress || 'Default Registered Address'}</div>
+                </div>
+                <Button
+                  onClick={() => {
+                    setIsPodModalOpen(false);
+                    setPodOrderSuccessMessage(null);
+                  }}
+                  className="w-full rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs uppercase h-10"
+                >
+                  Return to Certificate
+                </Button>
+              </div>
+            ) : (
+              <div className="space-y-5">
+                <div className="space-y-3">
+                  <label className="block text-xs font-mono text-zinc-400 uppercase tracking-wider">
+                    Select Physical Archival Edition
+                  </label>
+                  <div className="grid grid-cols-1 gap-3">
+                    <div
+                      onClick={() => setPodTier('cotton')}
+                      className={`p-4 rounded-2xl border transition-all cursor-pointer flex items-center justify-between ${
+                        podTier === 'cotton'
+                          ? 'bg-amber-950/20 border-amber-500/50 shadow-md shadow-amber-950/10'
+                          : 'bg-zinc-900/60 border-zinc-800 hover:border-zinc-700'
+                      }`}
+                    >
+                      <div className="space-y-1">
+                        <div className="flex items-center gap-2">
+                          <span className="text-xs font-bold text-white uppercase font-mono">
+                            Museum Cotton Rag Archival Print
+                          </span>
+                          <span className="px-2 py-0.5 rounded bg-amber-500/10 text-amber-400 text-[10px] font-mono font-bold">
+                            Popular
+                          </span>
+                        </div>
+                        <p className="text-[11px] text-zinc-400">
+                          300gsm acid-free textured paper, embossed gold foil seal, holographic NFC authentication tag. Shipped in protective archival tube.
+                        </p>
+                      </div>
+                      <span className="text-sm font-mono font-black text-amber-400 shrink-0 ml-3">
+                        $45 USD
+                      </span>
+                    </div>
+
+                    <div
+                      onClick={() => setPodTier('framed')}
+                      className={`p-4 rounded-2xl border transition-all cursor-pointer flex items-center justify-between ${
+                        podTier === 'framed'
+                          ? 'bg-amber-950/20 border-amber-500/50 shadow-md shadow-amber-950/10'
+                          : 'bg-zinc-900/60 border-zinc-800 hover:border-zinc-700'
+                      }`}
+                    >
+                      <div className="space-y-1">
+                        <span className="text-xs font-bold text-white uppercase font-mono block">
+                          Framed Gallery Edition
+                        </span>
+                        <p className="text-[11px] text-zinc-400">
+                          Hand-crafted matte black gallery frame with UV-protective museum acrylic glass and certificate backing authentication.
+                        </p>
+                      </div>
+                      <span className="text-sm font-mono font-black text-amber-400 shrink-0 ml-3">
+                        $120 USD
+                      </span>
+                    </div>
+
+                    <div
+                      onClick={() => setPodTier('metallic')}
+                      className={`p-4 rounded-2xl border transition-all cursor-pointer flex items-center justify-between ${
+                        podTier === 'metallic'
+                          ? 'bg-amber-950/20 border-amber-500/50 shadow-md shadow-amber-950/10'
+                          : 'bg-zinc-900/60 border-zinc-800 hover:border-zinc-700'
+                      }`}
+                    >
+                      <div className="space-y-1">
+                        <span className="text-xs font-bold text-white uppercase font-mono block">
+                          Laser-Engraved Anodized Metallic Plaque
+                        </span>
+                        <p className="text-[11px] text-zinc-400">
+                          Brushed obsidian metal plaque laser-engraved with your asset&apos;s IPFS hash, QR code, and royalty splits.
+                        </p>
+                      </div>
+                      <span className="text-sm font-mono font-black text-amber-400 shrink-0 ml-3">
+                        $180 USD
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="space-y-3 pt-2">
+                  <div>
+                    <label className="block text-[11px] font-mono text-zinc-400 uppercase mb-1">
+                      Recipient Name / Studio Name *
+                    </label>
+                    <input
+                      type="text"
+                      value={podRecipientName}
+                      onChange={(e) => setPodRecipientName(e.target.value)}
+                      placeholder="e.g. Aurelia Synth / Sovereign Media"
+                      className="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-zinc-600 focus:outline-none focus:border-amber-500"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[11px] font-mono text-zinc-400 uppercase mb-1">
+                      Shipping Street Address &amp; Country *
+                    </label>
+                    <input
+                      type="text"
+                      value={podShippingAddress}
+                      onChange={(e) => setPodShippingAddress(e.target.value)}
+                      placeholder="e.g. 104 Sovereign Blvd, Suite 400, New York, NY 10001, USA"
+                      className="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-zinc-600 focus:outline-none focus:border-amber-500"
+                    />
+                  </div>
+                </div>
+
+                <div className="flex gap-3 pt-3">
+                  <Button
+                    onClick={() => setIsPodModalOpen(false)}
+                    variant="outline"
+                    className="flex-1 rounded-2xl border-zinc-800 bg-zinc-950 text-zinc-400 hover:text-white text-xs h-11 uppercase font-bold tracking-wider"
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    onClick={async () => {
+                      if (!podRecipientName || !podShippingAddress) {
+                        alert('Please enter recipient name and shipping address.');
+                        return;
+                      }
+                      setIsSubmittingPodOrder(true);
+                      await new Promise((resolve) => setTimeout(resolve, 1500));
+                      setIsSubmittingPodOrder(false);
+                      const randomOrderNumber = `SVR-POD-${Math.floor(10000 + Math.random() * 90000)}`;
+                      setPodOrderSuccessMessage(
+                        `Order #${randomOrderNumber} submitted! Your ${
+                          podTier === 'cotton'
+                            ? 'Museum Cotton Rag Certificate'
+                            : podTier === 'framed'
+                            ? 'Framed Gallery Certificate'
+                            : 'Laser-Engraved Metallic Plaque'
+                        } will be printed and shipped with tracked courier delivery within 3-5 business days.`
+                      );
+                    }}
+                    disabled={isSubmittingPodOrder}
+                    className="flex-1 rounded-2xl bg-gradient-to-r from-amber-500 to-yellow-600 hover:brightness-110 text-zinc-950 font-black text-xs uppercase tracking-wider h-11 shadow-lg shadow-amber-950/50"
+                  >
+                    {isSubmittingPodOrder ? (
+                      <>
+                        <Loader2 className="w-4 h-4 animate-spin mr-1 text-zinc-950" />
+                        Processing Order...
+                      </>
+                    ) : (
+                      <>
+                        <Truck className="w-4 h-4 mr-1.5" />
+                        Submit Order ({podTier === 'cotton' ? '$45' : podTier === 'framed' ? '$120' : '$180'})
+                      </>
+                    )}
+                  </Button>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       )}

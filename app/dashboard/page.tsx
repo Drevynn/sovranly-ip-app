@@ -17,6 +17,7 @@ import AboutUs from '@/components/AboutUs';
 import AiLicensingCenter from '@/components/AiLicensingCenter';
 import DataTokenizationHub from '@/components/DataTokenizationHub';
 import CreatorNetwork from '@/components/CreatorNetwork';
+import SyncLicensingHub from '@/components/SyncLicensingHub';
 import { useAuth } from '@/components/auth/FirebaseProvider';
 import { useLanguage } from '@/components/LanguageProvider';
 import { SignIn } from '@/components/auth/SignIn';
@@ -116,6 +117,7 @@ export default function DashboardPage() {
             activePage === 10 ? 'About Platform' :
             activePage === 11 ? (t('aiLicensing') || 'AI Training Vault') :
             activePage === 12 ? 'Sovereign Tokenizer' :
+            activePage === 14 ? 'Sync Licensing Storefront' :
             'Creator Network'
           } 
           setWalletAddress={setCurrentAccount} 
@@ -138,6 +140,7 @@ export default function DashboardPage() {
           {activePage === 11 && <AiLicensingCenter />}
           {activePage === 12 && <DataTokenizationHub />}
           {activePage === 13 && <CreatorNetwork />}
+          {activePage === 14 && <SyncLicensingHub walletAddress={currentAccount} />}
         </main>
       </div>
     </div>
