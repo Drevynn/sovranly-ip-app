@@ -3,6 +3,7 @@ import { Metadata, Viewport } from 'next';
 import { FirebaseProvider } from '@/components/auth/FirebaseProvider';
 import { LanguageProvider } from '@/components/LanguageProvider';
 import { NotificationProvider } from '@/components/NotificationProvider';
+import { ThemeProvider } from '@/components/ThemeProvider';
 import CookieComplianceBanner from '@/components/CookieComplianceBanner';
 
 export const metadata: Metadata = {
