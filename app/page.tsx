@@ -82,81 +82,76 @@ export default function HomePage() {
       </header>
 
       {/* Hero Section */}
-      <main className="relative max-w-7xl mx-auto px-6 py-16 md:py-28 space-y-40">
-        <section className="text-center space-y-10 max-w-6xl mx-auto">
-          {/* Sovereign IP Emblem Logo Hero Display */}
-          <div className="relative w-72 h-72 md:w-96 md:h-96 mx-auto mb-10 flex items-center justify-center select-none">
+      <main className="relative max-w-7xl mx-auto px-6 py-12 md:py-20 space-y-32">
+        <section className="text-center space-y-8 max-w-5xl mx-auto">
+          {/* Sovereign IP Crowned Cyber Shield Emblem Hero Display */}
+          <div className="relative w-64 h-64 sm:w-80 sm:h-80 md:w-96 md:h-96 mx-auto mb-6 flex items-center justify-center select-none">
             {/* Ambient glows */}
-            <div className="absolute inset-0 bg-cyan-500/15 rounded-full blur-[100px] animate-pulse [animation-duration:4s] pointer-events-none" />
-            <div className="absolute inset-4 bg-violet-500/10 rounded-full blur-[80px] animate-pulse [animation-duration:6s] pointer-events-none" />
+            <div className="absolute inset-0 bg-cyan-500/25 rounded-full blur-[90px] animate-pulse [animation-duration:4s] pointer-events-none" />
+            <div className="absolute inset-4 bg-violet-500/20 rounded-full blur-[70px] animate-pulse [animation-duration:6s] pointer-events-none" />
             
             {/* Outer cybernetic ring */}
-            <div className="absolute inset-0 rounded-full border border-cyan-500/30 bg-black/40 backdrop-blur-md flex items-center justify-center animate-spin-slow [animation-duration:25s]">
-              <div className="absolute top-0 left-1/2 -translate-x-1/2 w-2.5 h-2.5 bg-cyan-400 rounded-full shadow-[0_0_10px_#22d3ee]" />
-              <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-2.5 h-2.5 bg-violet-500 rounded-full shadow-[0_0_10px_#a78bfa]" />
+            <div className="absolute inset-0 rounded-full border border-cyan-500/30 bg-black/40 backdrop-blur-md flex items-center justify-center animate-spin-slow">
+              <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3 h-3 bg-cyan-400 rounded-full shadow-[0_0_12px_#22d3ee]" />
+              <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-3 h-3 bg-violet-500 rounded-full shadow-[0_0_12px_#a78bfa]" />
             </div>
             
             {/* Inner cybernetic ring */}
-            <div className="absolute inset-8 rounded-full border border-dashed border-violet-500/40 flex items-center justify-center animate-spin-reverse [animation-duration:18s]">
-              <div className="absolute left-0 top-1/2 -translate-y-1/2 w-2 h-2 bg-emerald-400 rounded-full" />
-              <div className="absolute right-0 top-1/2 -translate-y-1/2 w-2 h-2 bg-sky-400 rounded-full" />
+            <div className="absolute inset-6 rounded-full border border-dashed border-violet-500/40 flex items-center justify-center animate-spin-reverse">
+              <div className="absolute left-0 top-1/2 -translate-y-1/2 w-2.5 h-2.5 bg-emerald-400 rounded-full shadow-[0_0_10px_#34d399]" />
+              <div className="absolute right-0 top-1/2 -translate-y-1/2 w-2.5 h-2.5 bg-sky-400 rounded-full shadow-[0_0_10px_#38bdf8]" />
             </div>
             
-            {/* Core Sovranly IP Emblem Image */}
-            <div className="relative w-56 h-56 md:w-72 md:h-72 rounded-full bg-zinc-950/90 border-2 border-cyan-500/40 flex items-center justify-center shadow-[0_0_60px_rgba(6,182,212,0.25)] overflow-hidden group p-4">
+            {/* Crowned Shield Emblem Image */}
+            <div className="relative w-48 h-48 sm:w-60 sm:h-60 md:w-72 md:h-72 rounded-3xl bg-zinc-950/90 border-2 border-cyan-500/40 flex items-center justify-center shadow-[0_0_60px_rgba(6,182,212,0.35)] overflow-hidden group p-2 transition-all duration-500 hover:border-cyan-400 hover:scale-105">
               <Image 
-                src="/sovranly-logo-v2.png" 
-                alt="Sovranly IP Emblem Logo" 
-                width={350}
-                height={350}
+                src="/sovranly_shield_v3.jpg" 
+                alt="Sovranly IP - Sovereign Crowned Cyber Shield Emblem" 
+                fill
                 priority
-                className="w-full h-full object-contain drop-shadow-[0_0_20px_rgba(34,211,238,0.5)] transform group-hover:scale-105 transition-transform duration-500" 
+                className="object-contain p-1 rounded-2xl drop-shadow-[0_0_20px_rgba(34,211,238,0.5)] transform group-hover:scale-105 transition-transform duration-500" 
                 referrerPolicy="no-referrer"
               />
             </div>
           </div>
           
-          <div className="inline-flex items-center gap-2.5 px-4 py-2 bg-zinc-900 border border-zinc-800 rounded-full text-xs sm:text-sm text-zinc-400 mb-2">
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-zinc-900/90 border border-cyan-500/30 rounded-full text-xs text-zinc-300 shadow-md shadow-cyan-950/30">
             <Sparkles className="w-4 h-4 text-cyan-400" />
-            <span className="font-mono tracking-wider uppercase text-[10px] sm:text-xs">{t('zeroTrustTag')}</span>
+            <span className="font-mono tracking-wider uppercase text-[10px] sm:text-xs text-cyan-300 font-medium">{t('zeroTrustTag')}</span>
           </div>
           
           {/* Primary H1 Application Title Matching OAuth Consent Screen */}
-          <div className="space-y-4">
-            <h1 className="text-6xl sm:text-8xl md:text-9xl font-black tracking-tight text-white leading-none drop-shadow-sm">
+          <div className="space-y-3">
+            <h1 className="text-5xl sm:text-7xl md:text-8xl font-black tracking-tight text-white leading-none drop-shadow-md">
               Sovranly IP
             </h1>
-            <p className="text-2xl sm:text-4xl md:text-5xl font-extrabold tracking-tight bg-gradient-to-r from-cyan-400 via-sky-400 to-violet-400 bg-clip-text text-transparent">
+            <p className="text-xl sm:text-3xl md:text-4xl font-extrabold tracking-tight bg-gradient-to-r from-cyan-400 via-sky-300 to-violet-400 bg-clip-text text-transparent">
               {t('heroMainTitleSub')}
             </p>
           </div>
           
-          <p className="text-xl sm:text-2xl md:text-3xl text-zinc-400 max-w-5xl mx-auto leading-relaxed font-light">
+          <p className="text-base sm:text-xl md:text-2xl text-zinc-300 max-w-4xl mx-auto leading-relaxed font-light">
             {t('heroDescription')}
           </p>
 
-          <p className="text-base sm:text-lg text-zinc-300 max-w-4xl mx-auto leading-relaxed font-normal">
-            Sovranly IP empowers creators, musicians, and software developers to register intellectual property assets with cryptographic SHA-256 proof of ownership, configure automated commercial licensing compacts, distribute peer-to-peer royalties, and export verified ownership certificates directly into <strong className="text-white font-semibold">Google Workspace Slides presentations</strong> for client proposals and pitch decks.
+          <p className="text-sm sm:text-base text-zinc-400 max-w-3xl mx-auto leading-relaxed font-normal">
+            Register intellectual property assets with cryptographic SHA-256 proof of ownership, configure automated commercial licensing compacts, distribute peer-to-peer royalties, and export verified ownership certificates directly into <strong className="text-white font-semibold">Google Workspace Slides presentations</strong>.
           </p>
           
-          <div className="flex flex-col sm:flex-row flex-wrap justify-center items-center gap-4 pt-8">
-            <Button asChild size="lg" className="w-full sm:w-auto px-8 py-7 rounded-full bg-gradient-to-r from-cyan-500 to-violet-500 text-white font-bold text-base hover:brightness-110 shadow-xl shadow-cyan-950/60 transition duration-300">
+          <div className="flex flex-col sm:flex-row flex-wrap justify-center items-center gap-3.5 pt-4">
+            <Button asChild size="lg" className="w-full sm:w-auto px-8 py-6 rounded-full bg-gradient-to-r from-cyan-500 to-violet-600 text-white font-bold text-base hover:brightness-110 shadow-xl shadow-cyan-950/50 transition duration-300">
               <Link href="/dashboard">{t('deployIpBtn')} <ArrowRight className="ml-2 h-5 w-5" /></Link>
             </Button>
-            <Button asChild size="lg" variant="outline" className="w-full sm:w-auto px-8 py-7 rounded-full border-cyan-500/50 bg-cyan-950/30 text-cyan-300 hover:bg-cyan-950/50 font-bold text-base transition duration-300 shadow-lg shadow-cyan-950/30">
+            <Button asChild size="lg" variant="outline" className="w-full sm:w-auto px-8 py-6 rounded-full border-cyan-500/40 bg-zinc-950/80 text-cyan-300 hover:bg-cyan-950/40 font-bold text-base transition duration-300 shadow-md">
+              <Link href="/marketplace" className="flex items-center gap-2">
+                <span>{t('exploreMarketplaceBtn')}</span>
+              </Link>
+            </Button>
+            <Button asChild size="lg" variant="outline" className="w-full sm:w-auto px-8 py-6 rounded-full border-zinc-800 bg-zinc-950/80 text-zinc-300 hover:bg-zinc-900 font-medium text-base transition duration-300">
               <Link href="#app-purpose" className="flex items-center gap-2">
-                <ShieldCheck className="w-5 h-5 text-cyan-400" />
-                <span>Application Capabilities</span>
+                <ShieldCheck className="w-4 h-4 text-cyan-400" />
+                <span>Capabilities</span>
               </Link>
-            </Button>
-            <Button asChild size="lg" variant="outline" className="w-full sm:w-auto px-8 py-7 rounded-full border-zinc-800 bg-zinc-950 text-white hover:bg-zinc-900 font-bold text-base transition duration-300">
-              <Link href="#app-overview" className="flex items-center gap-2">
-                <Eye className="w-5 h-5 text-cyan-400" />
-                <span>Explore App Overview</span>
-              </Link>
-            </Button>
-            <Button asChild size="lg" variant="outline" className="w-full sm:w-auto px-8 py-7 rounded-full border-zinc-800 bg-zinc-950 text-white hover:bg-zinc-900 font-bold text-base transition duration-300">
-              <Link href="/marketplace">{t('exploreMarketplaceBtn')}</Link>
             </Button>
           </div>
         </section>
