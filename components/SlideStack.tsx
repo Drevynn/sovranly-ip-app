@@ -1,104 +1,73 @@
 'use client';
 
-import { useState } from 'react';
-import { motion } from 'motion/react';
-import { ShieldCheck, Zap, Lock, Sparkles, Server } from 'lucide-react';
-
-const cards = [
-  {
-    id: 1,
-    title: 'Immutable Ledger',
-    desc: 'Permanent cryptographic record of ownership for creative IP.',
-    icon: ShieldCheck,
-    color: 'from-cyan-900/40 to-cyan-950/40',
-    borderColor: 'border-cyan-500/30',
-    textColor: 'text-cyan-400'
-  },
-  {
-    id: 2,
-    title: 'Smart Execution',
-    desc: 'Instantly execute contracts without middlemen interference.',
-    icon: Zap,
-    color: 'from-violet-900/40 to-violet-950/40',
-    borderColor: 'border-violet-500/30',
-    textColor: 'text-violet-400'
-  },
-  {
-    id: 3,
-    title: 'Zero-Trust Security',
-    desc: 'Trust nothing. Authenticate everything. Your assets are secure.',
-    icon: Lock,
-    color: 'from-emerald-900/40 to-emerald-950/40',
-    borderColor: 'border-emerald-500/30',
-    textColor: 'text-emerald-400'
-  },
-  {
-    id: 4,
-    title: 'Decentralized Vaults',
-    desc: 'Resilient digital asset storage across multiple global nodes.',
-    icon: Server,
-    color: 'from-rose-900/40 to-rose-950/40',
-    borderColor: 'border-rose-500/30',
-    textColor: 'text-rose-400'
-  }
-];
+import React from 'react';
+import { Presentation, FileText, CheckCircle, ExternalLink } from 'lucide-react';
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 
 export default function SlideStack() {
-  const [cardsArr, setCardsArr] = useState(cards);
-
-  const moveCard = () => {
-    setCardsArr((prev) => {
-      const newArr = [...prev];
-      const first = newArr.shift();
-      if (first) newArr.push(first);
-      return newArr;
-    });
-  };
-
   return (
-    <div className="relative w-full h-[320px] md:h-[400px] flex items-center justify-center cursor-pointer" onClick={moveCard}>
-      {cardsArr.map((card, index) => {
-        let scale = 1;
-        let y = 0;
-        let zIndex = cards.length - index;
-        let opacity = 1;
+    <div className="w-full space-y-6">
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <div className="p-2.5 rounded-xl bg-cyan-500/10 border border-cyan-500/30 text-cyan-400">
+            <Presentation className="w-6 h-6" />
+          </div>
+          <div>
+            <h3 className="text-xl font-bold text-white">Google Workspace Integration</h3>
+            <p className="text-xs text-zinc-400">Export verified certificates & pitch decks directly to Google Slides</p>
+          </div>
+        </div>
+      </div>
 
-        if (index > 2) {
-          scale = 0.85;
-          y = 40;
-          opacity = 0;
-        } else {
-          scale = 1 - index * 0.05;
-          y = index * 20;
-          opacity = 1 - index * 0.2;
-        }
-
-        return (
-          <motion.div
-            key={card.id}
-            layout
-            initial={false}
-            animate={{
-              scale,
-              y,
-              zIndex,
-              opacity
-            }}
-            transition={{
-              type: 'spring',
-              stiffness: 300,
-              damping: 20
-            }}
-            className={`absolute w-[280px] md:w-[360px] p-8 rounded-3xl border bg-gradient-to-br backdrop-blur-md shadow-2xl ${card.color} ${card.borderColor}`}
-          >
-            <div className={`p-4 rounded-2xl bg-black/50 border border-white/5 inline-flex mb-6 ${card.textColor}`}>
-              <card.icon className="w-8 h-8" />
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <Card className="border-cyan-500/20 bg-zinc-950/80 hover:border-cyan-500/40 transition-all">
+          <CardHeader>
+            <CardTitle className="text-base font-semibold text-cyan-300 flex items-center gap-2">
+              <FileText className="w-4 h-4 text-cyan-400" />
+              Ownership Slide Deck
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-3 text-xs text-zinc-400">
+            <p>Generates a multi-slide presentation containing cryptographic SHA-256 hashes, metadata, and license terms.</p>
+            <div className="flex items-center gap-2 text-cyan-400 font-medium">
+              <CheckCircle className="w-3.5 h-3.5" />
+              <span>Ready for Google Slides</span>
             </div>
-            <h3 className="text-2xl font-bold text-white mb-3">{card.title}</h3>
-            <p className="text-zinc-400 text-sm leading-relaxed">{card.desc}</p>
-          </motion.div>
-        );
-      })}
+          </CardContent>
+        </Card>
+
+        <Card className="border-cyan-500/20 bg-zinc-950/80 hover:border-cyan-500/40 transition-all">
+          <CardHeader>
+            <CardTitle className="text-base font-semibold text-cyan-300 flex items-center gap-2">
+              <Presentation className="w-4 h-4 text-cyan-400" />
+              Royalty Proposal Deck
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-3 text-xs text-zinc-400">
+            <p>Export commercial 85/15 revenue sharing breakdown slides formatted for enterprise client review.</p>
+            <div className="flex items-center gap-2 text-cyan-400 font-medium">
+              <CheckCircle className="w-3.5 h-3.5" />
+              <span>Formatted Pitch Format</span>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="border-cyan-500/20 bg-zinc-950/80 hover:border-cyan-500/40 transition-all">
+          <CardHeader>
+            <CardTitle className="text-base font-semibold text-cyan-300 flex items-center gap-2">
+              <ExternalLink className="w-4 h-4 text-cyan-400" />
+              USPTO Class 42 Audit Deck
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-3 text-xs text-zinc-400">
+            <p>Complies with TESS database procedures and USPTO Class 42 trademark registration standards.</p>
+            <div className="flex items-center gap-2 text-cyan-400 font-medium">
+              <CheckCircle className="w-3.5 h-3.5" />
+              <span>Audit Proof Included</span>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 }
