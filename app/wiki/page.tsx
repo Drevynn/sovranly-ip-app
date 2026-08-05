@@ -46,7 +46,8 @@ import {
   Truck,
   FileCheck,
   Mail,
-  QrCode
+  QrCode,
+  ShieldAlert
 } from 'lucide-react';
 import Link from 'next/link';
 import LanguageSelector from '@/components/LanguageSelector';
@@ -454,14 +455,15 @@ export default function WikiPage() {
     'vla-resources': true,
     'api-overview': true,
     'cert-automation': true,
-    'cert-pod': true
+    'cert-pod': true,
+    'refund-policy': true
   });
 
   // Chat agent states
   const [chatHistory, setChatHistory] = useState<{ role: 'user' | 'model'; text: string; sources?: { title: string; url: string }[] }[]>([
     { 
       role: 'model', 
-      text: 'Greetings, Creator/Licensee. I am the Sovranly AI Sovereign IP Agent, pre-programmed with our on-chain royalty structures (85%/15% splits), USPTO Trademark Class 42 guidelines, TESS database procedures, Volunteers for the Arts (VLA) pro-bono resources, and Automated Certificates & Print-on-Demand (POD) archival fulfillment.\n\nType your query, or click any quick-assistance option below to start!' 
+      text: 'Greetings, Creator/Licensee. I am the Sovranly AI Sovereign IP Agent, pre-programmed with our on-chain royalty structures (85%/15% splits), USPTO Trademark Class 42 guidelines, TESS database procedures, Volunteers for the Arts (VLA) pro-bono resources, Automated Certificates & POD archival fulfillment, and our Refund & Cancellation Policy (Immutable On-Chain Minting).\n\nType your query, or click any quick-assistance option below to start!' 
     }
   ]);
   const [chatInput, setChatInput] = useState('');
@@ -789,6 +791,28 @@ export default function WikiPage() {
         "Enter the official recipient/studio name to be embossed on the physical artifact",
         "Provide a verified international shipping address for tracked courier delivery",
         "Tap the NFC holographic tag upon delivery to verify live on-chain ledger synchronization"
+      ]
+    },
+    {
+      id: 'refund-policy',
+      category: 'legal',
+      title: '13. Refund & Cancellation Policy (Immutable On-Chain Minting)',
+      subtitle: 'Why sovereign IP minting, tokenization, and registration transactions are final and non-refundable.',
+      icon: ShieldAlert,
+      content: [
+        "Do you need a published Refund Policy? Yes. Payment gateways, credit card processors, and institutional licensees require every platform to publish an explicit Refund & Cancellation Policy—even when that policy is strictly 'No Refunds'. Maintaining a clear, transparent policy protects creators and Sovranly IP against chargebacks, disputes, and regulatory friction.",
+        "What do we call 'coining' an IP? In industry and legal terminology, we call this process Minting, Tokenizing, or Sovereign On-Chain Registration. Once an IP asset is minted or tokenized on Sovranly IP, its cryptographic SHA-256 hash, timestamp, and ownership record are written permanently to an immutable blockchain ledger. Because blockchain transactions cannot be reversed, erased, or 'un-minted', all minting and registration fees are 100% non-refundable."
+      ],
+      bulletPoints: [
+        { label: "Why Minting is Permanent & Non-Refundable", text: "When an IP is minted ('coined') on-chain, decentralized network validators immediately consume gas fees and permanent storage fees (IPFS/Arweave). These computational resources cannot be undone or refunded by any party." },
+        { label: "Sovereign IP Minting & Licensing Sales", text: "All Sovereign IP token minting, smart contract registration fees, and direct license purchases between creators and licensees are final, irrevocable, and non-refundable upon blockchain confirmation." },
+        { label: "Print-on-Demand (POD) Archival Fulfillment Exception", text: "Custom museum-grade physical certificates (Cotton Rag, Framed Gallery Editions, Metallic Plaques) are non-refundable once custom embossing or engraving has begun. However, if a physical artifact is damaged in transit by the courier, Sovranly IP provides a free replacement reprint within 14 days of delivery." }
+      ],
+      checklist: [
+        "Review and confirm all IP title, creator metadata, and 85/15 royalty splits before executing an on-chain minting transaction",
+        "Understand that blockchain gas fees and IPFS storage allocations are consumed permanently upon broadcast",
+        "Publish this explicit 'No Refunds (Immutable On-Chain Minting)' policy on licensing agreements and checkout modals to satisfy Stripe and payment gateways",
+        "Report any physical transit damage for Print-on-Demand (POD) archival certificates within 14 days for a free replacement"
       ]
     }
   ];
