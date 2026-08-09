@@ -1,5 +1,7 @@
 'use client';
 
+export const dynamic = 'force-dynamic';
+
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
@@ -84,31 +86,31 @@ export default function HomePage() {
       <main className="relative max-w-7xl mx-auto px-6 py-12 md:py-20 space-y-32">
         <section className="text-center space-y-8 max-w-5xl mx-auto">
           {/* Sovereign IP Crowned Cyber Shield Emblem Hero Display */}
-          <div className="relative w-64 h-64 sm:w-80 sm:h-80 md:w-96 md:h-96 mx-auto mb-6 flex items-center justify-center select-none">
+          <div className="relative w-72 h-72 sm:w-96 sm:h-96 md:w-[420px] md:h-[420px] mx-auto mb-8 flex items-center justify-center select-none">
             {/* Ambient glows */}
-            <div className="absolute inset-0 bg-cyan-500/25 rounded-full blur-[90px] animate-pulse [animation-duration:4s] pointer-events-none" />
-            <div className="absolute inset-4 bg-violet-500/20 rounded-full blur-[70px] animate-pulse [animation-duration:6s] pointer-events-none" />
+            <div className="absolute inset-0 bg-cyan-500/30 rounded-full blur-[100px] animate-pulse [animation-duration:4s] pointer-events-none" />
+            <div className="absolute inset-6 bg-violet-500/25 rounded-full blur-[80px] animate-pulse [animation-duration:6s] pointer-events-none" />
             
             {/* Outer cybernetic ring */}
-            <div className="absolute inset-0 rounded-full border border-cyan-500/30 bg-black/40 backdrop-blur-md flex items-center justify-center animate-spin-slow">
-              <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3 h-3 bg-cyan-400 rounded-full shadow-[0_0_12px_#22d3ee]" />
-              <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-3 h-3 bg-violet-500 rounded-full shadow-[0_0_12px_#a78bfa]" />
+            <div className="absolute inset-0 rounded-full border border-cyan-500/40 bg-black/40 backdrop-blur-md flex items-center justify-center animate-spin-slow">
+              <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3.5 h-3.5 bg-cyan-400 rounded-full shadow-[0_0_15px_#22d3ee]" />
+              <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-3.5 h-3.5 bg-violet-500 rounded-full shadow-[0_0_15px_#a78bfa]" />
             </div>
             
             {/* Inner cybernetic ring */}
-            <div className="absolute inset-6 rounded-full border border-dashed border-violet-500/40 flex items-center justify-center animate-spin-reverse">
-              <div className="absolute left-0 top-1/2 -translate-y-1/2 w-2.5 h-2.5 bg-emerald-400 rounded-full shadow-[0_0_10px_#34d399]" />
-              <div className="absolute right-0 top-1/2 -translate-y-1/2 w-2.5 h-2.5 bg-sky-400 rounded-full shadow-[0_0_10px_#38bdf8]" />
+            <div className="absolute inset-8 rounded-full border border-dashed border-violet-500/50 flex items-center justify-center animate-spin-reverse">
+              <div className="absolute left-0 top-1/2 -translate-y-1/2 w-3 h-3 bg-emerald-400 rounded-full shadow-[0_0_12px_#34d399]" />
+              <div className="absolute right-0 top-1/2 -translate-y-1/2 w-3 h-3 bg-sky-400 rounded-full shadow-[0_0_12px_#38bdf8]" />
             </div>
             
             {/* Crowned Shield Emblem Image */}
-            <div className="relative w-48 h-48 sm:w-60 sm:h-60 md:w-72 md:h-72 rounded-3xl bg-zinc-950/90 border-2 border-cyan-500/40 flex items-center justify-center shadow-[0_0_60px_rgba(6,182,212,0.35)] overflow-hidden group p-2 transition-all duration-500 hover:border-cyan-400 hover:scale-105">
+            <div className="relative w-56 h-56 sm:w-72 sm:h-72 md:w-80 md:h-80 rounded-full bg-black border-2 border-cyan-500/50 flex items-center justify-center shadow-[0_0_70px_rgba(6,182,212,0.45)] overflow-hidden group transition-all duration-500 hover:border-cyan-400 hover:shadow-[0_0_90px_rgba(6,182,212,0.65)] hover:scale-105">
               <Image 
-                src="/sovranly_shield_v3.jpg" 
+                src="/sovranly_hero_emblem.jpg" 
                 alt="Sovranly IP - Sovereign Crowned Cyber Shield Emblem" 
                 fill
                 priority
-                className="object-contain p-1 rounded-2xl drop-shadow-[0_0_20px_rgba(34,211,238,0.5)] transform group-hover:scale-105 transition-transform duration-500" 
+                className="object-cover transform group-hover:scale-105 transition-transform duration-700" 
                 referrerPolicy="no-referrer"
               />
             </div>

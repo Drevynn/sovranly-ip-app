@@ -10,7 +10,7 @@ try {
 
 const projectId = process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || firebaseConfigFromJson.projectId;
 
-if (!admin.apps.length && projectId) {
+if (!admin?.apps?.length && projectId) {
   try {
     admin.initializeApp({
       projectId: projectId,

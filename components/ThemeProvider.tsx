@@ -34,7 +34,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [theme, setThemeState] = useState<ThemeMode>('obsidian');
 
   useEffect(() => {
-    /* eslint-disable react-hooks/set-state-in-effect */
+    
     const storedTheme = localStorage.getItem('sovranly-theme') as ThemeMode | null;
     if (storedTheme === 'sovereign-light' || storedTheme === 'obsidian') {
       setThemeState(storedTheme);
@@ -42,7 +42,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     } else {
       applyThemeToDom('obsidian');
     }
-    /* eslint-enable react-hooks/set-state-in-effect */
+    
   }, []);
 
   const setTheme = (newTheme: ThemeMode) => {
