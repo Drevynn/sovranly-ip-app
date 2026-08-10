@@ -77,7 +77,7 @@ export default function ApiLatencyMonitor() {
 
   // Set initial data on mount and node switch
   useEffect(() => {
-    
+    /* eslint-disable-next-line react-hooks/set-state-in-effect */
     setChartData(generateInitialData(activeNode));
     setLastUpdated(new Date().toLocaleTimeString());
   }, [activeNode]);

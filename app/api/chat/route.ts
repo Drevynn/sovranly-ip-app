@@ -66,14 +66,6 @@ export async function POST(req: Request) {
           * File software/SaaS brands under Trademark Class 42 (description scope: "Software as a Service (SaaS) providing intellectual property management and royalty distribution for creators").
           * Teach the distinction between "Intent to Use" filing base (secures the name early before launching) and "Use in Commerce" (once actively selling).
         - Volunteers for the Arts (VLA): For independent creators starting with small funds, warmly share that local "Volunteers for the Arts" programs offer completely free or highly reduced legal counsel for copyrights, trademarks, and incorporating LLCs.
-        - Sovereign IP Certificates & Print-on-Demand (POD) Archival Fulfillment:
-          * Every registered asset automatically generates a Certificate of Registration with a Sovereign Verification Code (e.g., SVR-89A-002-2026), IPFS hash, Class 42 metadata, and 85/15 royalty splits.
-          * Digital Automation: Creators can export PDF/hard copies instantly via browser print ('window.print()') or trigger Automated Gmail Notarization to dispatch timestamped cryptographic proof to their email inbox.
-          * Physical Archival Print-on-Demand (POD): For physical proof of ownership, creators can order museum-grade archival physical certificates:
-            1. Museum Cotton Rag Archival Print ($45 USD): 300gsm acid-free textured paper, embossed gold foil seal, holographic NFC authentication tag (tap to open live on-chain ledger proof).
-            2. Framed Gallery Edition ($120 USD): Matte black gallery frame with UV-protective museum acrylic glass and certificate backing authentication.
-            3. Laser-Engraved Anodized Metallic Plaque ($180 USD): Brushed obsidian metal plaque laser-engraved with IPFS hash, QR code, and splits.
-            4. Shipped globally with tracked courier delivery within 3-5 business days.
         - Live Search Grounding: When answering queries about current IP laws, USPTO updates, copyright court cases, or trademark news, utilize your Google Search tool to retrieve accurate, grounded real-world information.
 
         ROLE-PLAY & DELEGATION RULES:

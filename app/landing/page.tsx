@@ -1,5 +1,4 @@
 'use client';
-
 import { useState } from 'react';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
@@ -55,11 +54,11 @@ export default function LandingPage() {
               {/* Core Sovranly Logo Image */}
               <div className="relative z-10 w-full h-full flex items-center justify-center p-2">
                 <Image
-                  src="/sovranly_hero_emblem.jpg"
+                  src="/sovranly-logo-v2.png"
                   alt="Sovranly IP Emblem"
                   width={140}
                   height={140}
-                  className="w-full h-full object-cover rounded-2xl drop-shadow-[0_0_15px_rgba(34,211,238,0.5)] transform group-hover:scale-105 transition-transform duration-500"
+                  className="w-full h-full object-contain drop-shadow-[0_0_15px_rgba(34,211,238,0.5)] transform group-hover:scale-105 transition-transform duration-500"
                   referrerPolicy="no-referrer"
                   priority
                 />

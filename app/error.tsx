@@ -1,21 +1,27 @@
 'use client';
 
 import { useEffect } from 'react';
-import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { ShieldAlert, RefreshCw, Home } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
-export default function Error({
+export default function GlobalError({
   error,
   reset,
 }: {
   error: Error & { digest?: string };
   reset: () => void;
 }) {
+  const router = useRouter();
+
   useEffect(() => {
     // Log the error securely for telemetry & developer review
     console.error('Unhandled application exception captured by root boundary:', error);
   }, [error]);
+
+  const handleReturnHome = () => {
+    router.push('/');
+  };
 
   return (
     <div className="min-h-screen w-full bg-[#030712] text-zinc-100 flex flex-col items-center justify-center p-6 md:p-12 font-sans selection:bg-zinc-800">
@@ -64,15 +70,14 @@ export default function Error({
             Retry Transaction
           </Button>
           
-          <Link href="/" className="w-full sm:flex-1">
-            <Button
-              variant="outline"
-              className="w-full border-zinc-800 text-zinc-300 hover:bg-zinc-900 hover:text-white transition-all font-medium py-6 rounded-xl flex items-center justify-center gap-2"
-            >
-              <Home className="w-4 h-4" />
-              Home Console
-            </Button>
-          </Link>
+          <Button
+            onClick={handleReturnHome}
+            variant="outline"
+            className="w-full sm:flex-1 border-zinc-800 text-zinc-300 hover:bg-zinc-900 hover:text-white transition-all font-medium py-6 rounded-xl flex items-center justify-center gap-2"
+          >
+            <Home className="w-4 h-4" />
+            Home Console
+          </Button>
         </div>
       </div>
 

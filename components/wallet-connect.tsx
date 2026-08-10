@@ -13,7 +13,7 @@ export default function WalletButton() {
   const [account, setAccount] = useState<string | null>(null);
 
   const connectWallet = async () => {
-    if (typeof window !== 'undefined' && window.ethereum) {
+    if (typeof window.ethereum !== 'undefined') {
       try {
         const provider = new ethers.BrowserProvider(window.ethereum);
         const accounts = await provider.send("eth_requestAccounts", []);

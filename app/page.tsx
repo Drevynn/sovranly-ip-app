@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
@@ -21,8 +21,7 @@ import {
   Database,
   FileText,
   Presentation,
-  CheckCircle2,
-  Music
+  CheckCircle2
 } from 'lucide-react';
 import Link from 'next/link';
 import { useLanguage } from '@/components/LanguageProvider';
@@ -37,6 +36,7 @@ export default function HomePage() {
   const { t } = useLanguage();
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsMounted(true);
   }, []);
 
@@ -81,99 +81,100 @@ export default function HomePage() {
       </header>
 
       {/* Hero Section */}
-      <main className="relative max-w-7xl mx-auto px-6 py-12 md:py-20 space-y-32">
-        <section className="text-center space-y-8 max-w-5xl mx-auto">
-          {/* Sovereign IP Crowned Cyber Shield Emblem Hero Display */}
-          <div className="relative w-72 h-72 sm:w-96 sm:h-96 md:w-[420px] md:h-[420px] mx-auto mb-8 flex items-center justify-center select-none">
+      <main className="relative max-w-7xl mx-auto px-6 py-24 md:py-40 space-y-44">
+        <section className="text-center space-y-12 max-w-6xl mx-auto">
+          {/* Sovereign IP Emblem Logo Hero Display */}
+          <div className="relative w-72 h-72 md:w-96 md:h-96 mx-auto mb-12 flex items-center justify-center select-none">
             {/* Ambient glows */}
-            <div className="absolute inset-0 bg-cyan-500/30 rounded-full blur-[100px] animate-pulse [animation-duration:4s] pointer-events-none" />
-            <div className="absolute inset-6 bg-violet-500/25 rounded-full blur-[80px] animate-pulse [animation-duration:6s] pointer-events-none" />
+            <div className="absolute inset-0 bg-cyan-500/15 rounded-full blur-[100px] animate-pulse [animation-duration:4s] pointer-events-none" />
+            <div className="absolute inset-4 bg-violet-500/10 rounded-full blur-[80px] animate-pulse [animation-duration:6s] pointer-events-none" />
             
             {/* Outer cybernetic ring */}
-            <div className="absolute inset-0 rounded-full border border-cyan-500/40 bg-black/40 backdrop-blur-md flex items-center justify-center animate-spin-slow">
-              <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3.5 h-3.5 bg-cyan-400 rounded-full shadow-[0_0_15px_#22d3ee]" />
-              <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-3.5 h-3.5 bg-violet-500 rounded-full shadow-[0_0_15px_#a78bfa]" />
+            <div className="absolute inset-0 rounded-full border border-cyan-500/30 bg-black/40 backdrop-blur-md flex items-center justify-center animate-spin-slow [animation-duration:25s]">
+              <div className="absolute top-0 left-1/2 -translate-x-1/2 w-2.5 h-2.5 bg-cyan-400 rounded-full shadow-[0_0_10px_#22d3ee]" />
+              <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-2.5 h-2.5 bg-violet-500 rounded-full shadow-[0_0_10px_#a78bfa]" />
             </div>
             
             {/* Inner cybernetic ring */}
-            <div className="absolute inset-8 rounded-full border border-dashed border-violet-500/50 flex items-center justify-center animate-spin-reverse">
-              <div className="absolute left-0 top-1/2 -translate-y-1/2 w-3 h-3 bg-emerald-400 rounded-full shadow-[0_0_12px_#34d399]" />
-              <div className="absolute right-0 top-1/2 -translate-y-1/2 w-3 h-3 bg-sky-400 rounded-full shadow-[0_0_12px_#38bdf8]" />
+            <div className="absolute inset-8 rounded-full border border-dashed border-violet-500/40 flex items-center justify-center animate-spin-reverse [animation-duration:18s]">
+              <div className="absolute left-0 top-1/2 -translate-y-1/2 w-2 h-2 bg-emerald-400 rounded-full" />
+              <div className="absolute right-0 top-1/2 -translate-y-1/2 w-2 h-2 bg-sky-400 rounded-full" />
             </div>
             
-            {/* Crowned Shield Emblem Image */}
-            <div className="relative w-56 h-56 sm:w-72 sm:h-72 md:w-80 md:h-80 rounded-full bg-black border-2 border-cyan-500/50 flex items-center justify-center shadow-[0_0_70px_rgba(6,182,212,0.45)] overflow-hidden group transition-all duration-500 hover:border-cyan-400 hover:shadow-[0_0_90px_rgba(6,182,212,0.65)] hover:scale-105">
+            {/* Core Sovranly IP Emblem Image */}
+            <div className="relative w-56 h-56 md:w-72 md:h-72 rounded-full bg-zinc-950/90 border-2 border-cyan-500/40 flex items-center justify-center shadow-[0_0_60px_rgba(6,182,212,0.25)] overflow-hidden group p-4">
               <Image 
-                src="/sovranly_hero_emblem.jpg" 
-                alt="Sovranly IP - Sovereign Crowned Cyber Shield Emblem" 
-                fill
+                src="/sovranly-logo-v2.png" 
+                alt="Sovranly IP Emblem Logo" 
+                width={350}
+                height={350}
                 priority
-                className="object-cover transform group-hover:scale-105 transition-transform duration-700" 
+                className="w-full h-full object-contain drop-shadow-[0_0_20px_rgba(34,211,238,0.5)] transform group-hover:scale-105 transition-transform duration-500" 
                 referrerPolicy="no-referrer"
               />
             </div>
           </div>
           
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-zinc-900/90 border border-cyan-500/30 rounded-full text-xs text-zinc-300 shadow-md shadow-cyan-950/30">
+          <div className="inline-flex items-center gap-2.5 px-4 py-2 bg-zinc-900 border border-zinc-800 rounded-full text-xs sm:text-sm text-zinc-400 mb-2">
             <Sparkles className="w-4 h-4 text-cyan-400" />
-            <span className="font-mono tracking-wider uppercase text-[10px] sm:text-xs text-cyan-300 font-medium">{t('zeroTrustTag')}</span>
+            <span className="font-mono tracking-wider uppercase text-[10px] sm:text-xs">{t('zeroTrustTag')}</span>
           </div>
           
           {/* Primary H1 Application Title Matching OAuth Consent Screen */}
-          <div className="space-y-3">
-            <h1 className="text-5xl sm:text-7xl md:text-8xl font-black tracking-tight text-white leading-none drop-shadow-md">
+          <div className="space-y-4">
+            <h1 className="text-6xl sm:text-8xl md:text-9xl font-black tracking-tight text-white leading-none drop-shadow-sm">
               Sovranly IP
             </h1>
-            <p className="text-xl sm:text-3xl md:text-4xl font-extrabold tracking-tight bg-gradient-to-r from-cyan-400 via-sky-300 to-violet-400 bg-clip-text text-transparent">
+            <p className="text-2xl sm:text-4xl md:text-5xl font-extrabold tracking-tight bg-gradient-to-r from-cyan-400 via-sky-400 to-violet-400 bg-clip-text text-transparent">
               {t('heroMainTitleSub')}
             </p>
           </div>
           
-          <p className="text-base sm:text-xl md:text-2xl text-zinc-300 max-w-4xl mx-auto leading-relaxed font-light">
+          <p className="text-xl sm:text-2xl md:text-3xl text-zinc-400 max-w-5xl mx-auto leading-relaxed font-light">
             {t('heroDescription')}
           </p>
-
-          <p className="text-sm sm:text-base text-zinc-400 max-w-3xl mx-auto leading-relaxed font-normal">
-            Register intellectual property assets with cryptographic SHA-256 proof of ownership, configure automated commercial licensing compacts, distribute peer-to-peer royalties, and export verified ownership certificates directly into <strong className="text-white font-semibold">Google Workspace Slides presentations</strong>.
-          </p>
           
-          <div className="flex flex-col sm:flex-row flex-wrap justify-center items-center gap-3.5 pt-4">
-            <Button asChild size="lg" className="w-full sm:w-auto px-8 py-6 rounded-full bg-gradient-to-r from-cyan-500 to-violet-600 text-white font-bold text-base hover:brightness-110 shadow-xl shadow-cyan-950/50 transition duration-300">
+          <div className="flex flex-col sm:flex-row flex-wrap justify-center items-center gap-4 pt-10">
+            <Button asChild size="lg" className="w-full sm:w-auto px-8 py-7 rounded-full bg-gradient-to-r from-cyan-500 to-violet-500 text-white font-bold text-base hover:brightness-110 shadow-xl shadow-cyan-950/60 transition duration-300">
               <Link href="/dashboard">{t('deployIpBtn')} <ArrowRight className="ml-2 h-5 w-5" /></Link>
             </Button>
-            <Button asChild size="lg" variant="outline" className="w-full sm:w-auto px-8 py-6 rounded-full border-cyan-500/40 bg-zinc-950/80 text-cyan-300 hover:bg-cyan-950/40 font-bold text-base transition duration-300 shadow-md">
-              <Link href="/marketplace" className="flex items-center gap-2">
-                <span>{t('exploreMarketplaceBtn')}</span>
+            <Button asChild size="lg" variant="outline" className="w-full sm:w-auto px-8 py-7 rounded-full border-cyan-500/50 bg-cyan-950/30 text-cyan-300 hover:bg-cyan-950/50 font-bold text-base transition duration-300 shadow-lg shadow-cyan-950/30">
+              <Link href="#app-purpose" className="flex items-center gap-2">
+                <ShieldCheck className="w-5 h-5 text-cyan-400" />
+                <span>Application Purpose &amp; OAuth Spec</span>
               </Link>
             </Button>
-            <Button asChild size="lg" variant="outline" className="w-full sm:w-auto px-8 py-6 rounded-full border-zinc-800 bg-zinc-950/80 text-zinc-300 hover:bg-zinc-900 font-medium text-base transition duration-300">
-              <Link href="#app-purpose" className="flex items-center gap-2">
-                <ShieldCheck className="w-4 h-4 text-cyan-400" />
-                <span>Capabilities</span>
+            <Button asChild size="lg" variant="outline" className="w-full sm:w-auto px-8 py-7 rounded-full border-zinc-800 bg-zinc-950 text-white hover:bg-zinc-900 font-bold text-base transition duration-300">
+              <Link href="#app-overview" className="flex items-center gap-2">
+                <Eye className="w-5 h-5 text-cyan-400" />
+                <span>Explore App Overview (No Login)</span>
               </Link>
+            </Button>
+            <Button asChild size="lg" variant="outline" className="w-full sm:w-auto px-8 py-7 rounded-full border-zinc-800 bg-zinc-950 text-white hover:bg-zinc-900 font-bold text-base transition duration-300">
+              <Link href="/marketplace">{t('exploreMarketplaceBtn')}</Link>
             </Button>
           </div>
         </section>
 
-        {/* Dedicated Application Purpose Section */}
+        {/* Dedicated Application Purpose & OAuth Disclosure Section for Compliance */}
         <section id="app-purpose" className="relative max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="bg-gradient-to-b from-zinc-900/90 to-zinc-950/90 border border-zinc-800 rounded-3xl p-6 sm:p-10 md:p-12 shadow-2xl backdrop-blur-md space-y-10">
+          <div className="bg-gradient-to-b from-zinc-900/90 to-zinc-950/90 border border-cyan-500/30 rounded-3xl p-6 sm:p-10 md:p-12 shadow-2xl shadow-cyan-950/20 backdrop-blur-md space-y-10">
             {/* Header / Title */}
             <div className="space-y-4 border-b border-zinc-800/80 pb-8 text-left">
               <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-cyan-950/50 border border-cyan-500/40 text-cyan-400 text-xs font-mono uppercase tracking-widest">
                 <ShieldCheck className="w-4 h-4" />
-                <span>Sovereign Rights &amp; Platform Architecture</span>
+                <span>Application Purpose &amp; OAuth Compliance Specification</span>
               </div>
               <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-white">
-                The Sovereign Authority for <span className="text-cyan-400">Creator Intellectual Property</span>
+                What is <span className="text-cyan-400">Sovranly IP</span> &amp; Why We Exist
               </h2>
               <p className="text-base sm:text-lg text-zinc-300 leading-relaxed max-w-4xl font-light">
                 <strong className="text-white font-semibold">Sovranly IP</strong> is a decentralized, Zero Trust intellectual property management and licensing platform built for creators, musicians, software developers, visual artists, and legal rights holders. Our application provides tools to register creative assets, generate cryptographic proof of ownership, configure automated commercial licensing compacts, and distribute peer-to-peer royalties transparently.
               </p>
             </div>
 
-            {/* 4 Core Purpose Pillars */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 text-left">
+            {/* 3 Core Purpose Pillars */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
               <div className="p-6 bg-zinc-950/60 border border-zinc-800 rounded-2xl space-y-3 hover:border-cyan-500/40 transition-all">
                 <div className="w-10 h-10 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center">
                   <Database className="w-5 h-5 text-cyan-400" />
@@ -200,30 +201,20 @@ export default function HomePage() {
                 </div>
                 <h3 className="text-lg font-bold text-white">03. Google Workspace Slides Integration</h3>
                 <p className="text-xs sm:text-sm text-zinc-400 leading-relaxed">
-                  Sovranly IP integrates with Google Workspace (<code className="text-emerald-300">auth/presentations</code>, <code className="text-emerald-300">auth/spreadsheets</code>, <code className="text-emerald-300">auth/drive.file</code>) to enable creators and legal teams to export verified IP ownership certificates, licensing compacts, and royalty reports directly into <strong className="text-white">Google Slides presentations</strong> for client proposals and pitch decks.
-                </p>
-              </div>
-
-              <div className="p-6 bg-zinc-950/60 border border-zinc-800 rounded-2xl space-y-3 hover:border-cyan-400/40 transition-all">
-                <div className="w-10 h-10 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center">
-                  <Music className="w-5 h-5 text-cyan-400" />
-                </div>
-                <h3 className="text-lg font-bold text-white">04. Instant Sync Licensing Storefront</h3>
-                <p className="text-xs sm:text-sm text-zinc-400 leading-relaxed">
-                  Video game developers, filmmakers, and creators can search the music &amp; media catalog, filter by mood/genre/tier, and purchase instant sync rights with automated on-chain royalty splits among co-writers and producers.
+                  <strong className="text-emerald-300">Why we request Google OAuth:</strong> Sovranly IP integrates with Google Workspace (Google Slides API) to enable creators and legal teams to export verified IP ownership certificates, licensing compacts, and royalty reports directly into <strong className="text-white">Google Slides presentations</strong> for client proposals and pitch decks.
                 </p>
               </div>
             </div>
 
-            {/* Zero Trust Security & Data Privacy Transparency Note */}
+            {/* Google OAuth & Data Privacy Transparency Note */}
             <div className="p-6 bg-black/60 border border-zinc-800/80 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-left">
               <div className="space-y-1">
                 <div className="flex items-center gap-2">
                   <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-                  <span className="text-xs font-mono text-emerald-400 font-bold uppercase">Zero Trust Data Privacy &amp; Workspace Integration</span>
+                  <span className="text-xs font-mono text-emerald-400 font-bold uppercase">Google OAuth &amp; Data Sovereignty Guarantee</span>
                 </div>
                 <p className="text-xs text-zinc-400 leading-relaxed">
-                  Sovranly IP only accesses Google Workspace presentation scopes when explicitly authorized by the user. We never read emails, personal files, or unrelated drive contents. All data remains cryptographically protected under our Zero Trust Architecture.
+                  Sovranly IP only accesses Google Slides presentation scopes when explicitly authorized by the user. We never read your emails, personal files, or unrelated drive contents. All data remains cryptographically protected under our Zero Trust Architecture.
                 </p>
               </div>
               <Button asChild size="sm" variant="outline" className="border-zinc-700 bg-zinc-900 text-white hover:bg-zinc-800 font-mono text-xs shrink-0">
