@@ -1,7 +1,5 @@
 'use client';
 
-export const dynamic = 'force-dynamic';
-
 import { Shield, FileText, ArrowLeft, Terminal, CheckCircle } from 'lucide-react';
 import Link from 'next/link';
 
