@@ -104,6 +104,38 @@ export default function LicensingAgreementBuilder({ walletAddress }: { walletAdd
   const [royaltyRate, setRoyaltyRate] = useState<number>(15);
   const [basePrice, setBasePrice] = useState<number>(0.1);
   const [duration, setDuration] = useState<string>('3 Years');
+  
+  // 1. Licensing Scope & Rights Definition
+  const [mediaType, setMediaType] = useState<string>('SVOD / Streaming TV');
+  const [territory, setTerritory] = useState<string>('Worldwide (WW)');
+  const [exclusivity, setExclusivity] = useState<'Non-Exclusive' | 'Exclusive'>('Non-Exclusive');
+
+  // 2. Financial Architecture & Royalty Splits
+  const [masterSplit, setMasterSplit] = useState<number>(50); // Sound Recording
+  const [publishingSplit, setPublishingSplit] = useState<number>(50); // Composition
+  const [collaborators, setCollaborators] = useState<Array<{ name: string; role: string; split: number }>>([
+    { name: 'Primary Producer', role: 'Producer', split: 10 },
+    { name: 'Co-Writer / Lyricist', role: 'Writer', split: 5 }
+  ]);
+  const [newCollabName, setNewCollabName] = useState('');
+  const [newCollabRole, setNewCollabRole] = useState('Contributor');
+  const [newCollabSplit, setNewCollabSplit] = useState(5);
+  const [backendTrigger, setBackendTrigger] = useState<string>('Stream count threshold (>10M streams via Oracle)');
+
+  // 3. Usage & Attribution Constraints
+  const [creditRequirement, setCreditRequirement] = useState<string>('"[Track Title]" performed by [Artist], courtesy of Sovranly IP');
+  const [allowedEdits, setAllowedEdits] = useState({
+    truncation: true,
+    looping: true,
+    instrumentalOnly: false,
+    pitchShift: false
+  });
+  const [moralityClause, setMoralityClause] = useState<boolean>(true);
+
+  // 4. Technical Execution & Oracle Integration
+  const [executionTrigger, setExecutionTrigger] = useState<string>('Multi-sig Escrow Deposit');
+  const [metadataIpfsHash] = useState<string>(() => 'ipfs://bafybeig' + Math.random().toString(36).slice(2, 15) + 'q5h7');
+
   const [permittedUsages, setPermittedUsages] = useState<string[]>(['Streaming & Broadcasting']);
   const [continuousVerification, setContinuousVerification] = useState<string[]>([
     'Cryptographic Digital Watermark',
@@ -198,6 +230,17 @@ export default function LicensingAgreementBuilder({ walletAddress }: { walletAdd
     } else {
       setContinuousVerification([...continuousVerification, v]);
     }
+  };
+
+  const addCollaborator = () => {
+    if (!newCollabName.trim()) return;
+    setCollaborators([...collaborators, { name: newCollabName.trim(), role: newCollabRole, split: newCollabSplit }]);
+    setNewCollabName('');
+    setNewCollabSplit(5);
+  };
+
+  const removeCollaborator = (index: number) => {
+    setCollaborators(collaborators.filter((_, i) => i !== index));
   };
 
   // Sign & Deploys
@@ -599,6 +642,265 @@ export default function LicensingAgreementBuilder({ walletAddress }: { walletAdd
                     </button>
                   );
                 })}
+              </div>
+            </div>
+
+            {/* Category 1: Licensing Scope & Rights Definition */}
+            <div className="pt-6 border-t border-zinc-900 space-y-4">
+              <h4 className="text-sm font-black text-cyan-400 uppercase tracking-wider flex items-center gap-2">
+                <Scale className="w-4 h-4" /> 1. Licensing Scope & Rights Definition
+              </h4>
+              
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label className="text-xs text-zinc-400 uppercase font-bold">Media Type (Grandfathering)</Label>
+                  <select
+                    value={mediaType}
+                    onChange={(e) => setMediaType(e.target.value)}
+                    className="w-full bg-zinc-900 border border-zinc-800 rounded-xl p-3 text-xs text-white font-mono focus:outline-none focus:border-cyan-500"
+                  >
+                    <option value="SVOD / Streaming TV">SVOD / Streaming TV</option>
+                    <option value="Feature Film">Feature Film</option>
+                    <option value="Advertising / Commercial">Advertising / Commercial</option>
+                    <option value="Video Game">Video Game</option>
+                    <option value="Social Media UGC">Social Media UGC</option>
+                  </select>
+                </div>
+
+                <div className="space-y-2">
+                  <Label className="text-xs text-zinc-400 uppercase font-bold">Territory (Geographical)</Label>
+                  <select
+                    value={territory}
+                    onChange={(e) => setTerritory(e.target.value)}
+                    className="w-full bg-zinc-900 border border-zinc-800 rounded-xl p-3 text-xs text-white font-mono focus:outline-none focus:border-cyan-500"
+                  >
+                    <option value="Worldwide (WW)">Worldwide (WW)</option>
+                    <option value="North America (US/CA/MX)">North America (US/CA/MX)</option>
+                    <option value="European Union (EU)">European Union (EU)</option>
+                    <option value="Asia-Pacific (APAC)">Asia-Pacific (APAC)</option>
+                    <option value="ISO Country Code [US]">ISO Code: US (United States)</option>
+                    <option value="ISO Country Code [GB]">ISO Code: GB (United Kingdom)</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <Label className="text-xs text-zinc-400 uppercase font-bold">Exclusivity Clause</Label>
+                <div className="grid grid-cols-2 gap-3">
+                  <button
+                    type="button"
+                    onClick={() => setExclusivity('Non-Exclusive')}
+                    className={`py-3 px-4 rounded-xl text-xs font-bold border transition-all ${exclusivity === 'Non-Exclusive' ? 'bg-cyan-950/30 border-cyan-500 text-white shadow-md' : 'bg-zinc-900/40 border-zinc-800 text-zinc-400'}`}
+                  >
+                    Non-Exclusive (Allows Parallel Licensing)
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setExclusivity('Exclusive')}
+                    className={`py-3 px-4 rounded-xl text-xs font-bold border transition-all ${exclusivity === 'Exclusive' ? 'bg-violet-950/30 border-violet-500 text-white shadow-md' : 'bg-zinc-900/40 border-zinc-800 text-zinc-400'}`}
+                  >
+                    Exclusive (Prohibits Competing Works)
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* Category 2: Financial Architecture & Royalty Splits */}
+            <div className="pt-6 border-t border-zinc-900 space-y-4">
+              <h4 className="text-sm font-black text-cyan-400 uppercase tracking-wider flex items-center gap-2">
+                <Award className="w-4 h-4" /> 2. Financial Architecture & Royalty Splits
+              </h4>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="space-y-2 bg-zinc-900/40 p-4 rounded-xl border border-zinc-850">
+                  <div className="flex justify-between text-xs">
+                    <span className="text-zinc-300 font-bold">Master (Sound Recording)</span>
+                    <span className="text-cyan-400 font-mono font-bold">{masterSplit}%</span>
+                  </div>
+                  <Input
+                    type="range"
+                    min="0"
+                    max="100"
+                    value={masterSplit}
+                    onChange={(e) => {
+                      const val = Number(e.target.value);
+                      setMasterSplit(val);
+                      setPublishingSplit(100 - val);
+                    }}
+                    className="accent-cyan-400 h-1.5"
+                  />
+                </div>
+
+                <div className="space-y-2 bg-zinc-900/40 p-4 rounded-xl border border-zinc-850">
+                  <div className="flex justify-between text-xs">
+                    <span className="text-zinc-300 font-bold">Publishing (Composition)</span>
+                    <span className="text-violet-400 font-mono font-bold">{publishingSplit}%</span>
+                  </div>
+                  <Input
+                    type="range"
+                    min="0"
+                    max="100"
+                    value={publishingSplit}
+                    onChange={(e) => {
+                      const val = Number(e.target.value);
+                      setPublishingSplit(val);
+                      setMasterSplit(100 - val);
+                    }}
+                    className="accent-violet-400 h-1.5"
+                  />
+                </div>
+              </div>
+
+              {/* Collaborator Sub-Splits */}
+              <div className="space-y-3 pt-2">
+                <Label className="text-xs text-zinc-400 uppercase font-bold">Collaborator & Contributor Sub-Splits (On-Chain Router)</Label>
+                <div className="space-y-2">
+                  {collaborators.map((c, i) => (
+                    <div key={i} className="flex items-center justify-between p-3 bg-zinc-900/70 rounded-xl border border-zinc-800 text-xs font-mono">
+                      <div>
+                        <span className="text-white font-bold">{c.name}</span>
+                        <span className="text-zinc-500 ml-2">({c.role})</span>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <span className="text-cyan-400 font-bold">{c.split}% pool</span>
+                        <button
+                          type="button"
+                          onClick={() => removeCollaborator(i)}
+                          className="text-zinc-500 hover:text-red-400 text-[10px]"
+                        >
+                          [Remove]
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="flex flex-col sm:flex-row gap-2 pt-1">
+                  <Input
+                    placeholder="Contributor Name (e.g. Mixing Engineer)"
+                    value={newCollabName}
+                    onChange={(e) => setNewCollabName(e.target.value)}
+                    className="bg-zinc-900 border-zinc-800 text-xs text-white"
+                  />
+                  <Input
+                    type="number"
+                    placeholder="Split %"
+                    min="1"
+                    max="50"
+                    value={newCollabSplit}
+                    onChange={(e) => setNewCollabSplit(Number(e.target.value))}
+                    className="bg-zinc-900 border-zinc-800 text-xs text-white sm:w-28"
+                  />
+                  <Button
+                    type="button"
+                    onClick={addCollaborator}
+                    className="bg-zinc-800 hover:bg-zinc-700 text-xs text-white font-mono"
+                  >
+                    Add Split
+                  </Button>
+                </div>
+              </div>
+
+              <div className="space-y-2 pt-2">
+                <Label className="text-xs text-zinc-400 uppercase font-bold">Backend Royalty Trigger Condition</Label>
+                <select
+                  value={backendTrigger}
+                  onChange={(e) => setBackendTrigger(e.target.value)}
+                  className="w-full bg-zinc-900 border border-zinc-800 rounded-xl p-3 text-xs text-white font-mono focus:outline-none focus:border-cyan-500"
+                >
+                  <option value="Stream count threshold (>10M streams via Oracle)">Stream count threshold (&gt;10M streams via Oracle)</option>
+                  <option value="Box office milestone ($10M theatrical gross)">Box office milestone ($10M theatrical gross)</option>
+                  <option value="Broadcast milestone (National TV syndication)">Broadcast milestone (National TV syndication)</option>
+                  <option value="Continuous per-play streaming micropayment">Continuous per-play streaming micropayment</option>
+                </select>
+              </div>
+            </div>
+
+            {/* Category 3: Usage & Attribution Constraints */}
+            <div className="pt-6 border-t border-zinc-900 space-y-4">
+              <h4 className="text-sm font-black text-cyan-400 uppercase tracking-wider flex items-center gap-2">
+                <ShieldCheck className="w-4 h-4" /> 3. Usage & Attribution Constraints
+              </h4>
+
+              <div className="space-y-2">
+                <Label className="text-xs text-zinc-400 uppercase font-bold">Mandatory Credit Requirement String</Label>
+                <Input
+                  value={creditRequirement}
+                  onChange={(e) => setCreditRequirement(e.target.value)}
+                  className="bg-zinc-900 border-zinc-800 text-xs text-white font-mono"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label className="text-xs text-zinc-400 uppercase font-bold">Allowed Edits & Transformations</Label>
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                  {[
+                    { key: 'truncation', label: 'Truncation' },
+                    { key: 'looping', label: 'Looping' },
+                    { key: 'instrumentalOnly', label: 'Instrumental Only' },
+                    { key: 'pitchShift', label: 'Pitch Shifting' }
+                  ].map((edit) => {
+                    const active = (allowedEdits as any)[edit.key];
+                    return (
+                      <button
+                        key={edit.key}
+                        type="button"
+                        onClick={() => setAllowedEdits({ ...allowedEdits, [edit.key]: !active })}
+                        className={`p-3 rounded-xl border text-xs font-bold transition-all flex items-center justify-between ${active ? 'bg-cyan-950/20 border-cyan-500 text-white' : 'bg-zinc-900/40 border-zinc-800 text-zinc-500'}`}
+                      >
+                        <span>{edit.label}</span>
+                        <span className={active ? 'text-cyan-400 font-mono text-[10px]' : 'text-zinc-600 font-mono text-[10px]'}>
+                          {active ? 'ALLOWED' : 'RESTRICTED'}
+                        </span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              <div className="flex items-center justify-between p-4 bg-zinc-900/50 rounded-xl border border-zinc-800">
+                <div className="space-y-0.5">
+                  <span className="text-xs font-bold text-white flex items-center gap-1.5">
+                    <ShieldAlert className="w-3.5 h-3.5 text-red-400" /> Morality & Revocation Emergency Kill-Switch
+                  </span>
+                  <p className="text-[10px] text-zinc-400">Automatically revokes license upon association with hate speech, defamation, or political breach.</p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setMoralityClause(!moralityClause)}
+                  className={`px-4 py-2 rounded-xl text-xs font-bold font-mono transition-all border ${moralityClause ? 'bg-red-950/40 text-red-400 border-red-500/50 shadow-md' : 'bg-zinc-800 text-zinc-400 border-zinc-700'}`}
+                >
+                  {moralityClause ? 'ENABLED (ACTIVE)' : 'DISABLED'}
+                </button>
+              </div>
+            </div>
+
+            {/* Category 4: Technical Execution & Oracle Integration */}
+            <div className="pt-6 border-t border-zinc-900 space-y-4">
+              <h4 className="text-sm font-black text-cyan-400 uppercase tracking-wider flex items-center gap-2">
+                <Zap className="w-4 h-4" /> 4. Technical Execution & Oracle Integration
+              </h4>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label className="text-xs text-zinc-400 uppercase font-bold">Smart Contract Execution Trigger</Label>
+                  <select
+                    value={executionTrigger}
+                    onChange={(e) => setExecutionTrigger(e.target.value)}
+                    className="w-full bg-zinc-900 border border-zinc-800 rounded-xl p-3 text-xs text-white font-mono focus:outline-none focus:border-cyan-500"
+                  >
+                    <option value="Multi-sig Escrow Deposit">Multi-sig Escrow Deposit (Immediate)</option>
+                    <option value="Stablecoin / Fiat Gateway Confirmation">Stablecoin / Fiat Gateway Confirmation</option>
+                    <option value="DAI / USDC Smart Contract Release">DAI / USDC Smart Contract Release</option>
+                  </select>
+                </div>
+
+                <div className="space-y-2">
+                  <Label className="text-xs text-zinc-400 uppercase font-bold">Metadata IPFS Fingerprint (CID)</Label>
+                  <div className="p-3 bg-zinc-900 rounded-xl border border-zinc-800 text-[11px] font-mono text-cyan-400 truncate">
+                    {metadataIpfsHash}
+                  </div>
+                </div>
               </div>
             </div>
           </div>

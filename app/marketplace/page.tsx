@@ -926,17 +926,22 @@ Secure cryptographic hash tunnel verified by Sovranly IP.`;
                         initial={{ opacity: 0, y: 15 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -15, scale: 0.95 }}
-                        transition={{ duration: 0.35, ease: "easeOut" }}
-                        className="group bg-zinc-950 hover:bg-[#08080a]/90 rounded-3xl border border-zinc-900 hover:border-cyan-500/30 p-6 flex flex-col justify-between transition-all duration-300 shadow-xl relative overflow-hidden"
+                        whileHover={{ y: -6, scale: 1.018 }}
+                        whileTap={{ scale: 0.992 }}
+                        transition={{ duration: 0.25, ease: [0.25, 0.1, 0.25, 1.0] }}
+                        className="group bg-zinc-950 hover:bg-[#0a0a0f] rounded-3xl border border-zinc-900/90 hover:border-cyan-500/40 p-6 flex flex-col justify-between transition-all duration-300 shadow-xl hover:shadow-2xl hover:shadow-cyan-500/15 relative overflow-hidden cursor-pointer"
                       >
+                      {/* Ambient radial glow on hover */}
+                      <div className="absolute -inset-px rounded-3xl bg-gradient-to-br from-cyan-500/10 via-violet-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+
                       {/* Interactive Visual border sheen on hover */}
-                      <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-cyan-500/0 via-cyan-500/0 to-cyan-500/0 group-hover:from-cyan-500/40 group-hover:via-violet-500/40 group-hover:to-cyan-500/0 transition-all duration-500" />
+                      <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-cyan-500/0 via-cyan-500/0 to-cyan-500/0 group-hover:from-cyan-400/80 group-hover:via-violet-400/80 group-hover:to-cyan-400/0 transition-all duration-500" />
 
                       <div>
                         {/* Top Indicator */}
-                        <div className="flex items-center justify-between gap-2 mb-4">
+                        <div className="flex items-center justify-between gap-2 mb-4 relative z-10">
                           <div className="flex items-center gap-2">
-                            <span className="bg-cyan-950/40 text-cyan-400 border border-cyan-500/10 px-3 py-1 rounded-xl text-[10px] font-mono font-bold">
+                            <span className="bg-cyan-950/40 text-cyan-400 border border-cyan-500/10 group-hover:border-cyan-500/30 group-hover:bg-cyan-950/70 px-3 py-1 rounded-xl text-[10px] font-mono font-bold transition-all duration-300">
                               {asset.type}
                             </span>
                             {/* Favorite Button */}
@@ -956,7 +961,7 @@ Secure cryptographic hash tunnel verified by Sovranly IP.`;
                             </button>
                           </div>
                           {asset.isForSale && (
-                            <div className="text-emerald-400 text-xs font-black font-mono bg-emerald-950/20 px-2.5 py-1 rounded-xl border border-emerald-500/10 flex items-center gap-1">
+                            <div className="text-emerald-400 text-xs font-black font-mono bg-emerald-950/20 px-2.5 py-1 rounded-xl border border-emerald-500/10 group-hover:border-emerald-500/30 group-hover:shadow-sm group-hover:shadow-emerald-500/20 flex items-center gap-1 transition-all duration-300">
                               <Coins className="w-3.5 h-3.5" />
                               {asset.price} ETH
                             </div>
@@ -964,7 +969,7 @@ Secure cryptographic hash tunnel verified by Sovranly IP.`;
                         </div>
 
                         {/* Title & Description */}
-                        <h3 className="text-base font-bold text-white tracking-tight leading-snug group-hover:text-cyan-400 transition-colors text-left">
+                        <h3 className="text-base font-bold text-white tracking-tight leading-snug group-hover:text-cyan-400 group-hover:translate-x-0.5 transition-all duration-300 text-left relative z-10">
                           {asset.title || 'Unnamed IP Asset'}
                         </h3>
                         <p className="text-zinc-400 text-xs mt-3 line-clamp-3 text-left leading-relaxed min-h-[4.5rem]">

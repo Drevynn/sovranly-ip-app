@@ -655,7 +655,7 @@ export default function AssetManager({ walletAddress }: { walletAddress: string 
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
             {filteredAssets.map((a, i) => (
-              <Card key={a.id || i} className="bg-zinc-920 border border-zinc-800 shadow-md hover:border-cyan-500/50 transition-all flex flex-col h-full duration-200">
+              <Card key={a.id || i} className="bg-zinc-920 border border-zinc-800 shadow-md hover:border-cyan-500/50 hover:scale-[1.018] hover:-translate-y-1.5 hover:shadow-2xl hover:shadow-cyan-500/10 transition-all duration-300 flex flex-col h-full">
                 <CardContent className="p-6 flex flex-col flex-1 justify-between h-full">
                   <div className="flex-1 flex flex-col">
                     {/* Category badge & Creation date */}
