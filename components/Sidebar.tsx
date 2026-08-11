@@ -4,6 +4,7 @@ import { Gauge, BarChart3, User, Users, FileText, LogOut, ShieldAlert, Scale, Sl
 import Image from 'next/image';
 import { useAuth } from './auth/FirebaseProvider';
 import { useLanguage } from './LanguageProvider';
+import { SovranlyLogo } from '@/components/SovranlyLogo';
 import LanguageSelector from './LanguageSelector';
 import { motion, AnimatePresence } from 'motion/react';
 
@@ -52,16 +53,7 @@ export default function Sidebar({
             <div className="p-8 border-b border-zinc-900 flex items-center justify-between">
               <div>
                 <div className="flex items-center gap-3 mb-2">
-                  <div className="w-9 h-9 bg-zinc-950 border border-cyan-500/30 rounded-xl flex items-center justify-center shadow-lg shadow-cyan-950/20 overflow-hidden p-1">
-                    <Image
-                      src="/sovranly-logo-v2.png"
-                      alt="Sovranly IP"
-                      width={28}
-                      height={28}
-                      className="w-full h-full object-contain drop-shadow-[0_0_8px_rgba(34,211,238,0.4)]"
-                      referrerPolicy="no-referrer"
-                    />
-                  </div>
+                  <SovranlyLogo size="sm" />
                   <span className="font-bold tracking-tighter text-white text-xl uppercase">{t('brandName')}</span>
                 </div>
                 <p className="text-emerald-400 text-[9px] uppercase tracking-widest mt-1 font-mono">{t('brandSubtitle')}</p>

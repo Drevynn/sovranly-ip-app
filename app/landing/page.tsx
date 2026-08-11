@@ -7,6 +7,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ExternalLink, Mail, ShieldCheck } from 'lucide-react';
+import { SovranlyLogo } from '@/components/SovranlyLogo';
 import Link from 'next/link';
 import SlideStack from '@/components/SlideStack';
 
@@ -46,23 +47,8 @@ export default function LandingPage() {
             </div>
             
             {/* Core Shield Emblem */}
-            <div className="relative w-36 h-36 md:w-44 md:h-44 rounded-3xl bg-zinc-950/90 border-2 border-cyan-500/40 flex flex-col items-center justify-center shadow-[0_0_50px_rgba(6,182,212,0.15)] overflow-hidden group p-3">
-              {/* Circuit board line accents */}
-              <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-cyan-400 to-transparent" />
-              <div className="absolute inset-y-0 left-0 w-px bg-gradient-to-b from-transparent via-cyan-400 to-transparent" />
-              
-              {/* Core Sovranly Logo Image */}
-              <div className="relative z-10 w-full h-full flex items-center justify-center p-2">
-                <Image
-                  src="/sovranly-logo-v2.png"
-                  alt="Sovranly IP Emblem"
-                  width={140}
-                  height={140}
-                  className="w-full h-full object-contain drop-shadow-[0_0_15px_rgba(34,211,238,0.5)] transform group-hover:scale-105 transition-transform duration-500"
-                  referrerPolicy="no-referrer"
-                  priority
-                />
-              </div>
+            <div className="relative w-36 h-36 md:w-44 md:h-44 flex items-center justify-center transform group-hover:scale-105 transition-transform duration-500">
+              <SovranlyLogo size="lg" />
             </div>
           </div>
           <h2 className="text-5xl font-extrabold tracking-tighter text-white">Sovereign Asset Management</h2>

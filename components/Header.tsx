@@ -5,6 +5,7 @@
 import { Shield, Menu, ShieldCheck, LogIn, LogOut, User as UserIcon } from 'lucide-react';
 import WalletConnect from './WalletConnect';
 import Image from 'next/image';
+import { SovranlyLogo } from '@/components/SovranlyLogo';
 import { useAuth } from '@/components/auth/FirebaseProvider';
 import { useState } from 'react';
 
@@ -52,18 +53,7 @@ export default function Header({
 
       {/* Center: Centered Logo and Brand */}
       <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 flex items-center gap-2.5 z-10 pointer-events-none">
-        <div className="relative w-8 h-8 flex-shrink-0 flex items-center justify-center">
-          <div className="absolute inset-x-0 inset-y-0 bg-cyan-400/20 rounded-full blur-md animate-pulse" />
-          <Image
-            src="/sovranly-logo-v2.png"
-            alt="Sovranly IP Logo"
-            width={32}
-            height={32}
-            className="w-7 h-7 object-contain relative z-10 drop-shadow-[0_0_8px_rgba(34,211,238,0.6)]"
-            referrerPolicy="no-referrer"
-            priority
-          />
-        </div>
+        <SovranlyLogo size="sm" />
         <span className="font-bold tracking-widest text-white text-xs uppercase font-mono hidden md:inline-block">
           Sovranly IP
         </span>

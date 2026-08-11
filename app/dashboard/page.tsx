@@ -21,7 +21,7 @@ import { useAuth } from '@/components/auth/FirebaseProvider';
 import { useLanguage } from '@/components/LanguageProvider';
 import { SignIn } from '@/components/auth/SignIn';
 import LanguageSelector from '@/components/LanguageSelector';
-import Image from 'next/image';
+import { SovranlyLogo } from '@/components/SovranlyLogo';
 import Link from 'next/link';
 import { ShieldCheck } from 'lucide-react';
 
@@ -59,16 +59,7 @@ export default function DashboardPage() {
         <header className="border-b border-white/5 py-6 bg-transparent relative z-10">
           <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 bg-zinc-950 border border-cyan-500/30 rounded-xl flex items-center justify-center shadow-lg shadow-cyan-950/20 p-1 overflow-hidden">
-                <Image
-                  src="/sovranly-logo-v2.png"
-                  alt="Sovranly IP"
-                  width={24}
-                  height={24}
-                  className="w-full h-full object-contain drop-shadow-[0_0_6px_rgba(34,211,238,0.4)]"
-                  referrerPolicy="no-referrer"
-                />
-              </div>
+              <SovranlyLogo size="sm" />
               <span className="font-bold tracking-tighter text-white uppercase text-lg">{t('brandName')}</span>
             </div>
             <Link href="/" className="text-xs text-zinc-500 hover:text-white transition-colors uppercase tracking-wider font-extrabold flex items-center gap-2">
