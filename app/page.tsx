@@ -85,27 +85,12 @@ export default function HomePage() {
       <main className="relative max-w-7xl mx-auto px-6 py-24 md:py-40 space-y-44">
         <section className="text-center space-y-12 max-w-6xl mx-auto">
           {/* Sovereign IP Emblem Logo Hero Display */}
-          <div className="relative w-72 h-72 md:w-96 md:h-96 mx-auto mb-12 flex items-center justify-center select-none">
-            {/* Ambient glows */}
-            <div className="absolute inset-0 bg-cyan-500/15 rounded-full blur-[100px] animate-pulse [animation-duration:4s] pointer-events-none" />
-            <div className="absolute inset-4 bg-violet-500/10 rounded-full blur-[80px] animate-pulse [animation-duration:6s] pointer-events-none" />
+          <div className="relative w-64 h-80 md:w-80 md:h-96 mx-auto mb-8 flex items-center justify-center select-none">
+            {/* Subtle backlight glow */}
+            <div className="absolute inset-0 bg-cyan-500/10 rounded-full blur-[90px] animate-pulse [animation-duration:5s] pointer-events-none" />
             
-            {/* Outer cybernetic ring */}
-            <div className="absolute inset-0 rounded-full border border-cyan-500/30 bg-black/40 backdrop-blur-md flex items-center justify-center animate-spin-slow [animation-duration:25s]">
-              <div className="absolute top-0 left-1/2 -translate-x-1/2 w-2.5 h-2.5 bg-cyan-400 rounded-full shadow-[0_0_10px_#22d3ee]" />
-              <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-2.5 h-2.5 bg-violet-500 rounded-full shadow-[0_0_10px_#a78bfa]" />
-            </div>
-            
-            {/* Inner cybernetic ring */}
-            <div className="absolute inset-8 rounded-full border border-dashed border-violet-500/40 flex items-center justify-center animate-spin-reverse [animation-duration:18s]">
-              <div className="absolute left-0 top-1/2 -translate-y-1/2 w-2 h-2 bg-emerald-400 rounded-full" />
-              <div className="absolute right-0 top-1/2 -translate-y-1/2 w-2 h-2 bg-sky-400 rounded-full" />
-            </div>
-            
-            {/* Core Sovranly IP Emblem Logo */}
-            <div className="relative w-56 h-56 md:w-72 md:h-72 flex items-center justify-center transform group-hover:scale-105 transition-transform duration-500">
-              <SovranlyLogo size="hero" />
-            </div>
+            {/* Core Sovranly IP Emblem Logo (No background container) */}
+            <SovranlyLogo size="hero" />
           </div>
           
           <div className="inline-flex items-center gap-2.5 px-4 py-2 bg-zinc-900 border border-zinc-800 rounded-full text-xs sm:text-sm text-zinc-400 mb-2">
