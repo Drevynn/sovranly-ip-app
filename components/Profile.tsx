@@ -51,26 +51,7 @@ const AVATAR_SEEDS = [
   'cryptography_key'
 ];
 
-const DEFAULT_SHOWCASE: ShowcaseItem[] = [
-  {
-    id: 'sc-1',
-    title: 'Sovereign Chord Sequence v4.2',
-    description: 'Decentralized modular soundscape with real-time dynamic synth loops, registered on the Class 42 IP block.',
-    category: 'Audio Pack',
-    link: 'https://sovranlyip.com/assets/chord-seq-42',
-    image: 'https://picsum.photos/seed/modular_synth/400/250',
-    year: '2026'
-  },
-  {
-    id: 'sc-2',
-    title: 'ZK-Rollup Royalty Router',
-    description: 'A suite of light-client smart contracts ensuring instant gasless royalty micro-allocations directly on layer 2.',
-    category: 'Software Utility',
-    link: 'https://github.com/sovranly-ip/royalty-router',
-    image: 'https://picsum.photos/seed/smart_contracts/400/250',
-    year: '2025'
-  }
-];
+const DEFAULT_SHOWCASE: ShowcaseItem[] = [];
 
 export default function Profile() {
   const { user } = useAuth();
@@ -78,12 +59,12 @@ export default function Profile() {
   // --- Profile state ---
   const [isEditMode, setIsEditMode] = useState(false);
   const [displayName, setDisplayName] = useState('');
-  const [bio, setBio] = useState('Digital Creator & Smart Contract Developer');
+  const [bio, setBio] = useState('Verified Sovereign IP Creator');
   const [profilePic, setProfilePic] = useState('https://picsum.photos/seed/abstract_neon/150/150');
-  const [website, setWebsite] = useState('https://janecreator.space');
-  const [twitter, setTwitter] = useState('jane_creator');
-  const [instagram, setInstagram] = useState('jane.creates');
-  const [github, setGithub] = useState('jane-creator-git');
+  const [website, setWebsite] = useState('');
+  const [twitter, setTwitter] = useState('');
+  const [instagram, setInstagram] = useState('');
+  const [github, setGithub] = useState('');
   
   // --- Showcase state ---
   const [showcaseList, setShowcaseList] = useState<ShowcaseItem[]>(DEFAULT_SHOWCASE);
@@ -111,7 +92,7 @@ export default function Profile() {
     const savedShowcase = localStorage.getItem('sov_profile_showcase');
 
     if (savedName !== null) setDisplayName(savedName);
-    else if (user) setDisplayName(user.displayName || user.email?.split('@')[0] || 'Jane Creator');
+    else if (user) setDisplayName(user.displayName || user.email?.split('@')[0] || 'Sovereign Artist');
     
     if (savedBio !== null) setBio(savedBio);
     if (savedPic !== null) setProfilePic(savedPic);

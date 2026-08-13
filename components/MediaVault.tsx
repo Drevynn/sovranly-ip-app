@@ -1,6 +1,8 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
+import { useAuth } from '@/components/auth/FirebaseProvider';
+import { getAuthHeaders } from '@/lib/auth-client';
 import { 
   UploadCloud, 
   Lock, 
@@ -17,7 +19,8 @@ import {
   AlertTriangle,
   RefreshCw,
   Binary,
-  Maximize2
+  Maximize2,
+  FolderLock
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -34,36 +37,59 @@ type VaultAsset = {
   isCustom?: boolean;
 };
 
-const DEFAULT_VAULT: VaultAsset[] = [
-  {
-    id: 'vault-1',
-    name: 'genesis_master_steganographic_key_96khz.wav',
-    type: 'Audio',
-    size: '48.2 MB',
-    uploadedAt: '2026-06-12T14:32:00Z',
-    encryptionHash: '0x8f3c7e46927d31b098defb751b7401a5ce9c2f6d2da320f8626e2e50fe144b64'
-  },
-  {
-    id: 'vault-2',
-    name: 'sovranly_corporate_manifesto_draft_4k_raw.mp4',
-    type: 'Video',
-    size: '142.7 MB',
-    uploadedAt: '2026-06-13T02:11:00Z',
-    encryptionHash: '0x3fb11a2f60e908da72517deca2903f83a6288b0226eec085fe307b275bf4ab02'
-  },
-  {
-    id: 'vault-3',
-    name: 'blockchain_revenue_smart_contracts_audit_signed.pdf',
-    type: 'Document',
-    size: '1.8 MB',
-    uploadedAt: '2026-06-13T05:01:22Z',
-    encryptionHash: '0xe8dd73a4b9ca8de3cb017be75127cf0a6311ceef33d59e30a59ffd14ac012bb5'
-  }
-];
-
 export default function MediaVault() {
-  const [vaultList, setVaultList] = useState<VaultAsset[]>(DEFAULT_VAULT);
-  const [selectedAsset, setSelectedAsset] = useState<VaultAsset>(DEFAULT_VAULT[0]);
+  const { user, isSandboxMode } = useAuth();
+  const [vaultList, setVaultList] = useState<VaultAsset[]>([]);
+  const [selectedAsset, setSelectedAsset] = useState<VaultAsset | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  // Fetch real assets for the user from /api/assets
+  useEffect(() => {
+    let active = true;
+    const fetchVaultAssets = async () => {
+      try {
+        const headers = await getAuthHeaders(user, isSandboxMode);
+        const res = await fetch('/api/assets', {
+          headers: { ...headers }
+        });
+        if (res.ok) {
+          const rawAssets = await res.json();
+          if (active && Array.isArray(rawAssets)) {
+            const mapped: VaultAsset[] = rawAssets.map((ast: any, idx: number) => {
+              let cleanType = 'Audio';
+              if (ast.type?.includes('Audio') || ast.type?.includes('Music')) cleanType = 'Audio';
+              else if (ast.type?.includes('Video') || ast.type?.includes('Animation')) cleanType = 'Video';
+              else cleanType = 'Document';
+
+              return {
+                id: ast.id || `vault-custom-${idx}`,
+                name: ast.fileName || ast.title || 'Untitled_IP_Asset',
+                type: cleanType,
+                size: ast.fileSize || '12.4 MB',
+                uploadedAt: ast.createdAt || new Date().toISOString(),
+                encryptionHash: ast.ipfsHash || `0x${Math.random().toString(16).slice(2, 66)}`
+              };
+            });
+
+            setVaultList(mapped);
+            if (mapped.length > 0) {
+              setSelectedAsset(mapped[0]);
+            } else {
+              setSelectedAsset(null);
+            }
+          }
+        }
+      } catch (err) {
+        console.error('Error loading vault assets:', err);
+      } finally {
+        if (active) setLoading(false);
+      }
+    };
+
+    fetchVaultAssets();
+    return () => { active = false; };
+  }, [user, isSandboxMode]);
+
   
   // Drag-and-drop state
   const [isDragOver, setIsDragOver] = useState(false);
@@ -268,6 +294,7 @@ export default function MediaVault() {
 
   // Perform Decryption Handshake
   const triggerDecryptionHandshake = async () => {
+    if (!selectedAsset) return;
     if (isDecrypted) {
       setIsDecrypted(false);
       setIsPlaying(false);
@@ -394,46 +421,54 @@ export default function MediaVault() {
               <div className="space-y-3">
                 <Label className="text-xs text-zinc-500 uppercase tracking-widest font-black font-sans">Sealed Vault Archives</Label>
                 <div className="space-y-2 max-h-[195px] overflow-auto pr-1">
-                  {vaultList.map((asset) => {
-                    const active = selectedAsset.id === asset.id;
-                    return (
-                      <button
-                        key={asset.id}
-                        onClick={() => {
-                          setSelectedAsset(asset);
-                          setIsDecrypted(false);
-                          setIsPlaying(false);
-                          setAuthSessionToken(null);
-                        }}
-                        type="button"
-                        className={`w-full p-3 rounded-xl border text-left flex items-center justify-between transition-all ${
-                          active 
-                            ? 'bg-zinc-900 border-cyan-500/40 text-white' 
-                            : 'bg-zinc-950 border-zinc-900 text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900/40'
-                        }`}
-                      >
-                        <div className="min-w-0 pr-3 flex-1 flex items-center gap-2.5">
-                          {asset.type === 'Audio' ? (
-                            <Music className={`w-4 h-4 flex-shrink-0 ${active ? 'text-cyan-450' : 'text-zinc-600'}`} />
-                          ) : asset.type === 'Video' ? (
-                            <Tv className="w-4 h-4 text-violet-500 flex-shrink-0" />
-                          ) : (
-                            <FileCheck className="w-4 h-4 text-emerald-500 flex-shrink-0" />
-                          )}
-                          <div className="min-w-0 flex-1">
-                            <p className="text-xs font-bold truncate leading-none mb-1 text-zinc-200">{asset.name}</p>
-                            <p className="text-[9px] text-zinc-500 font-mono tracking-wide">
-                              Cipher Block: {asset.encryptionHash.slice(0, 16)}...
-                            </p>
+                  {vaultList.length === 0 ? (
+                    <div className="p-6 text-center border border-dashed border-zinc-800 rounded-xl bg-zinc-950/50 space-y-2">
+                      <FolderLock className="w-8 h-8 text-zinc-650 mx-auto" />
+                      <p className="text-xs text-zinc-400 font-medium">Your Media Vault is clean and empty</p>
+                      <p className="text-[10px] text-zinc-500">Drag & drop files above or register assets in the Asset Manager to lock them in the encrypted vault.</p>
+                    </div>
+                  ) : (
+                    vaultList.map((asset) => {
+                      const active = selectedAsset?.id === asset.id;
+                      return (
+                        <button
+                          key={asset.id}
+                          onClick={() => {
+                            setSelectedAsset(asset);
+                            setIsDecrypted(false);
+                            setIsPlaying(false);
+                            setAuthSessionToken(null);
+                          }}
+                          type="button"
+                          className={`w-full p-3 rounded-xl border text-left flex items-center justify-between transition-all ${
+                            active 
+                              ? 'bg-zinc-900 border-cyan-500/40 text-white' 
+                              : 'bg-zinc-950 border-zinc-900 text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900/40'
+                          }`}
+                        >
+                          <div className="min-w-0 pr-3 flex-1 flex items-center gap-2.5">
+                            {asset.type === 'Audio' ? (
+                              <Music className={`w-4 h-4 flex-shrink-0 ${active ? 'text-cyan-450' : 'text-zinc-600'}`} />
+                            ) : asset.type === 'Video' ? (
+                              <Tv className="w-4 h-4 text-violet-500 flex-shrink-0" />
+                            ) : (
+                              <FileCheck className="w-4 h-4 text-emerald-500 flex-shrink-0" />
+                            )}
+                            <div className="min-w-0 flex-1">
+                              <p className="text-xs font-bold truncate leading-none mb-1 text-zinc-200">{asset.name}</p>
+                              <p className="text-[9px] text-zinc-500 font-mono tracking-wide">
+                                Cipher Block: {asset.encryptionHash.slice(0, 16)}...
+                              </p>
+                            </div>
                           </div>
-                        </div>
-                        <div className="text-right flex-shrink-0 pl-2">
-                          <span className="text-[10px] font-mono font-black">{asset.size}</span>
-                          <p className="text-[9px] text-zinc-500 uppercase font-bold">{asset.type}</p>
-                        </div>
-                      </button>
-                    );
-                  })}
+                          <div className="text-right flex-shrink-0 pl-2">
+                            <span className="text-[10px] font-mono font-black">{asset.size}</span>
+                            <p className="text-[9px] text-zinc-500 uppercase font-bold">{asset.type}</p>
+                          </div>
+                        </button>
+                      );
+                    })
+                  )}
                 </div>
               </div>
             </CardContent>
@@ -515,19 +550,26 @@ export default function MediaVault() {
                 </div>
 
                 {/* Displaying Current Info */}
-                <div className="flex items-start justify-between bg-zinc-900/20 p-4 border border-zinc-900/60 rounded-xl space-y-1">
-                  <div className="min-w-0 pr-4">
-                    <p className="text-[9px] font-mono text-zinc-500 uppercase tracking-widest font-black">ACTIVE TARGET CHANNEL</p>
-                    <p className="text-xs font-black text-white truncate max-w-[280px] mt-0.5">{selectedAsset.name}</p>
-                    <p className="text-[9px] text-zinc-400 font-mono mt-1">Hash ID: {selectedAsset.encryptionHash.slice(0, 32)}...</p>
+                {selectedAsset ? (
+                  <div className="flex items-start justify-between bg-zinc-900/20 p-4 border border-zinc-900/60 rounded-xl space-y-1">
+                    <div className="min-w-0 pr-4">
+                      <p className="text-[9px] font-mono text-zinc-500 uppercase tracking-widest font-black">ACTIVE TARGET CHANNEL</p>
+                      <p className="text-xs font-black text-white truncate max-w-[280px] mt-0.5">{selectedAsset.name}</p>
+                      <p className="text-[9px] text-zinc-400 font-mono mt-1">Hash ID: {selectedAsset.encryptionHash.slice(0, 32)}...</p>
+                    </div>
+                    <div className="text-right">
+                      <span className="text-[10px] font-mono font-semibold text-zinc-500">MIME-TYPE:</span>
+                      <p className="text-[10px]" style={{ color: selectedAsset.type === 'Audio' ? '#22d3ee' : '#a78bfa' }}>
+                        {selectedAsset.type === 'Audio' ? 'audio/x-wav' : selectedAsset.type === 'Video' ? 'video/mp4' : 'application/pdf'}
+                      </p>
+                    </div>
                   </div>
-                  <div className="text-right">
-                    <span className="text-[10px] font-mono font-semibold text-zinc-500">MIME-TYPE:</span>
-                    <p className="text-[10px]" style={{ color: selectedAsset.type === 'Audio' ? '#22d3ee' : '#a78bfa' }}>
-                      {selectedAsset.type === 'Audio' ? 'audio/x-wav' : selectedAsset.type === 'Video' ? 'video/mp4' : 'application/pdf'}
-                    </p>
+                ) : (
+                  <div className="p-4 bg-zinc-900/20 border border-zinc-900/60 rounded-xl text-center">
+                    <p className="text-[9px] font-mono text-zinc-500 uppercase tracking-widest font-black">NO ACTIVE ASSET SELECTED</p>
+                    <p className="text-xs text-zinc-400 mt-1">Upload or register an asset to open in Decryption Shell</p>
                   </div>
-                </div>
+                )}
 
                 {/* Secure handshaking session tokens info */}
                 {isDecrypted && authSessionToken && (

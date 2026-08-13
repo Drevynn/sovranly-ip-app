@@ -50,6 +50,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'motion/react';
 import { useAuth } from '@/components/auth/FirebaseProvider';
+import { getAuthHeaders } from '@/lib/auth-client';
 import { getDb, getFirebaseAuth } from '@/lib/firebase';
 import { 
   collection, 
@@ -165,7 +166,7 @@ function generateRandomHash(): string {
 }
 
 export default function MarketplacePage() {
-  const { user } = useAuth();
+  const { user, isSandboxMode } = useAuth();
   const [assets, setAssets] = useState<Asset[]>([]);
   const [walletAddress, setWalletAddress] = useState<string | null>(null);
   const [filterMode, setFilterMode] = useState<'all' | 'listed' | 'mine' | 'favorites'>('listed');
@@ -234,12 +235,20 @@ export default function MarketplacePage() {
   const fetchAssets = async () => {
     setLoadingAssets(true);
     try {
-      const res = await fetch('/api/assets');
-      if (!res.ok) throw new Error('Failed to fetch assets');
-      const data = await res.json();
-      setAssets(data);
+      const headers = await getAuthHeaders(user, isSandboxMode);
+      const res = await fetch('/api/assets?scope=marketplace', {
+        headers: {
+          ...headers,
+        },
+      });
+      if (res.ok) {
+        const data = await res.json();
+        if (Array.isArray(data)) {
+          setAssets(data);
+        }
+      }
     } catch (err) {
-      console.error('Error loading assets:', err);
+      console.warn('Notice loading marketplace assets:', err);
     } finally {
       setLoadingAssets(false);
     }
@@ -247,7 +256,7 @@ export default function MarketplacePage() {
 
   useEffect(() => {
     fetchAssets();
-  }, []);
+  }, [user, isSandboxMode]);
 
   // Sync favorites from Firestore in real-time
   useEffect(() => {
@@ -485,9 +494,13 @@ export default function MarketplacePage() {
         customClause: customClause
       };
 
+      const headers = await getAuthHeaders(user, isSandboxMode);
       const res = await fetch('/api/assets', {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          ...headers 
+        },
         body: JSON.stringify(updatedData)
       });
 

@@ -104,7 +104,7 @@ export default function AppOverviewShowcase() {
       <div className="text-center space-y-4 max-w-4xl mx-auto">
         <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-cyan-950/40 border border-cyan-500/30 text-cyan-400 text-xs font-mono uppercase tracking-widest">
           <Eye className="w-3.5 h-3.5" />
-          <span>Public App Overview — No Login Required</span>
+          <span>Interactive Platform Showcase</span>
         </div>
         <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-white">
           Explore Sovranly IP <span className="bg-gradient-to-r from-cyan-400 via-sky-400 to-violet-400 bg-clip-text text-transparent">Inside & Out</span>

@@ -57,12 +57,6 @@ export default function HomePage() {
             <Link href="/" className="font-bold tracking-tighter text-white text-xl uppercase">Sovranly IP</Link>
           </div>
           <nav className="hidden md:flex items-center gap-6">
-            <Link href="#app-purpose" className="text-sm text-cyan-400 hover:text-cyan-300 transition-colors font-semibold flex items-center gap-1.5">
-              <ShieldCheck className="w-4 h-4" /> App Purpose &amp; OAuth
-            </Link>
-            <Link href="#app-overview" className="text-sm text-zinc-300 hover:text-white transition-colors font-semibold flex items-center gap-1.5">
-              <Eye className="w-4 h-4" /> App Overview
-            </Link>
             <Link href="/dashboard" className="text-sm text-zinc-400 hover:text-white transition-colors">{t('commandCenter')}</Link>
             <Link href="/pricing" className="text-sm text-zinc-400 hover:text-white transition-colors">Pricing Plan</Link>
             <Link href="/marketplace" className="text-sm text-zinc-400 hover:text-white transition-colors">{t('marketplace')}</Link>
@@ -85,12 +79,13 @@ export default function HomePage() {
       <main className="relative max-w-7xl mx-auto px-6 py-24 md:py-40 space-y-44">
         <section className="text-center space-y-12 max-w-6xl mx-auto">
           {/* Sovereign IP Emblem Logo Hero Display */}
-          <div className="relative w-64 h-80 md:w-80 md:h-96 mx-auto mb-8 flex items-center justify-center select-none">
-            {/* Subtle backlight glow */}
-            <div className="absolute inset-0 bg-cyan-500/10 rounded-full blur-[90px] animate-pulse [animation-duration:5s] pointer-events-none" />
+          <div className="relative w-64 h-64 sm:w-80 sm:h-80 md:w-96 md:h-96 mx-auto mb-8 flex items-center justify-center select-none">
+            {/* Subtle multi-layer backlight glow */}
+            <div className="absolute inset-0 bg-cyan-500/20 rounded-full blur-[100px] animate-pulse [animation-duration:4s] pointer-events-none" />
+            <div className="absolute inset-4 bg-violet-600/15 rounded-full blur-[80px] pointer-events-none" />
             
-            {/* Core Sovranly IP Emblem Logo (No background container) */}
-            <SovranlyLogo size="hero" />
+            {/* Core Sovranly IP Emblem Logo */}
+            <SovranlyLogo size="hero" glow={false} />
           </div>
           
           <div className="inline-flex items-center gap-2.5 px-4 py-2 bg-zinc-900 border border-zinc-800 rounded-full text-xs sm:text-sm text-zinc-400 mb-2">
@@ -116,21 +111,31 @@ export default function HomePage() {
             <Button asChild size="lg" className="w-full sm:w-auto px-8 py-7 rounded-full bg-gradient-to-r from-cyan-500 to-violet-500 text-white font-bold text-base hover:brightness-110 shadow-xl shadow-cyan-950/60 transition duration-300">
               <Link href="/dashboard">{t('deployIpBtn')} <ArrowRight className="ml-2 h-5 w-5" /></Link>
             </Button>
-            <Button asChild size="lg" variant="outline" className="w-full sm:w-auto px-8 py-7 rounded-full border-cyan-500/50 bg-cyan-950/30 text-cyan-300 hover:bg-cyan-950/50 font-bold text-base transition duration-300 shadow-lg shadow-cyan-950/30">
-              <Link href="#app-purpose" className="flex items-center gap-2">
-                <ShieldCheck className="w-5 h-5 text-cyan-400" />
-                <span>Application Purpose &amp; OAuth Spec</span>
-              </Link>
-            </Button>
-            <Button asChild size="lg" variant="outline" className="w-full sm:w-auto px-8 py-7 rounded-full border-zinc-800 bg-zinc-950 text-white hover:bg-zinc-900 font-bold text-base transition duration-300">
-              <Link href="#app-overview" className="flex items-center gap-2">
-                <Eye className="w-5 h-5 text-cyan-400" />
-                <span>Explore App Overview (No Login)</span>
-              </Link>
-            </Button>
             <Button asChild size="lg" variant="outline" className="w-full sm:w-auto px-8 py-7 rounded-full border-zinc-800 bg-zinc-950 text-white hover:bg-zinc-900 font-bold text-base transition duration-300">
               <Link href="/marketplace">{t('exploreMarketplaceBtn')}</Link>
             </Button>
+          </div>
+
+          {/* Product Hunt Review Badge matching theme */}
+          <div className="pt-6 flex justify-center items-center">
+            <div className="p-1 rounded-2xl bg-zinc-900/80 border border-cyan-500/20 shadow-lg shadow-cyan-950/40 hover:border-cyan-500/40 transition-all duration-300 hover:scale-105">
+              <a
+                href="https://www.producthunt.com/products/sovranly-ip/reviews/new?utm_source=badge-product_review&utm_medium=badge&utm_source=badge-sovranly&#0045;ip"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-block rounded-xl overflow-hidden"
+              >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src="https://api.producthunt.com/widgets/embed-image/v1/product_review.svg?product_id=1282199&theme=dark"
+                  alt="Sovranly IP - Zero Trust Sovereign IP Management System for Creators | Product Hunt"
+                  style={{ width: '250px', height: '54px' }}
+                  width="250"
+                  height="54"
+                  className="block rounded-xl"
+                />
+              </a>
+            </div>
           </div>
         </section>
 
@@ -351,7 +356,11 @@ export default function HomePage() {
         </div>
         
         <LanguageSelector />
-        <div className="flex items-center gap-4 text-zinc-500 text-xs">
+        <div className="flex flex-wrap items-center justify-center gap-4 text-zinc-500 text-xs px-4">
+          <Link href="#app-purpose" className="hover:text-cyan-400 transition-colors">App Purpose &amp; OAuth</Link>
+          <span>•</span>
+          <Link href="#app-overview" className="hover:text-cyan-400 transition-colors">App Overview</Link>
+          <span>•</span>
           <Link href="/about" className="hover:text-cyan-400 transition-colors">About Us</Link>
           <span>•</span>
           <Link href="/terms" className="hover:text-cyan-400 transition-colors">Terms of Service</Link>

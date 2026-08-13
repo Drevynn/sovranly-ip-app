@@ -17,6 +17,7 @@ import AboutUs from '@/components/AboutUs';
 import AiLicensingCenter from '@/components/AiLicensingCenter';
 import DataTokenizationHub from '@/components/DataTokenizationHub';
 import CreatorNetwork from '@/components/CreatorNetwork';
+import MobileBottomNav from '@/components/MobileBottomNav';
 import { useAuth } from '@/components/auth/FirebaseProvider';
 import { useLanguage } from '@/components/LanguageProvider';
 import { SignIn } from '@/components/auth/SignIn';
@@ -114,7 +115,7 @@ export default function DashboardPage() {
           onToggleSidebar={() => setSidebarOpen(!sidebarOpen)}
         />
 
-        <main className="flex-1 overflow-auto p-8 bg-[#09090b]">
+        <main className="flex-1 overflow-auto p-4 sm:p-6 md:p-8 pb-28 md:pb-8 bg-[#09090b]">
           {activePage === 0 && <Overview />}
           {activePage === 1 && <Profile />}
           {activePage === 2 && <AssetManager walletAddress={currentAccount} />}
@@ -130,6 +131,12 @@ export default function DashboardPage() {
           {activePage === 12 && <DataTokenizationHub />}
           {activePage === 13 && <CreatorNetwork />}
         </main>
+
+        <MobileBottomNav 
+          activePage={activePage} 
+          setActivePage={setActivePage} 
+          onOpenMenu={() => setSidebarOpen(true)} 
+        />
       </div>
     </div>
   );
