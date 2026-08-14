@@ -30,6 +30,7 @@ import SlideStack from '@/components/SlideStack';
 import NewsletterSignup from '@/components/NewsletterSignup';
 import AppOverviewShowcase from '@/components/AppOverviewShowcase';
 import { SovranlyLogo } from '@/components/SovranlyLogo';
+import { motion } from 'motion/react';
 
 export default function HomePage() {
   const [submitted, setSubmitted] = useState(false);
@@ -79,13 +80,59 @@ export default function HomePage() {
       <main className="relative max-w-7xl mx-auto px-6 py-24 md:py-40 space-y-44">
         <section className="text-center space-y-12 max-w-6xl mx-auto">
           {/* Sovereign IP Emblem Logo Hero Display */}
-          <div className="relative w-64 h-64 sm:w-80 sm:h-80 md:w-96 md:h-96 mx-auto mb-8 flex items-center justify-center select-none">
-            {/* Subtle multi-layer backlight glow */}
-            <div className="absolute inset-0 bg-cyan-500/20 rounded-full blur-[100px] animate-pulse [animation-duration:4s] pointer-events-none" />
-            <div className="absolute inset-4 bg-violet-600/15 rounded-full blur-[80px] pointer-events-none" />
+          <div className="relative group w-72 h-72 sm:w-88 sm:h-88 md:w-[420px] md:h-[420px] mx-auto mb-8 flex items-center justify-center select-none">
+            {/* Multi-layer animated backlight glow */}
+            <motion.div 
+              animate={{
+                scale: [1, 1.12, 1],
+                opacity: [0.25, 0.45, 0.25],
+              }}
+              transition={{
+                duration: 4,
+                repeat: Infinity,
+                ease: 'easeInOut',
+              }}
+              className="absolute inset-0 bg-cyan-500 rounded-full blur-[100px] pointer-events-none z-0" 
+            />
+            <motion.div 
+              animate={{
+                scale: [1.08, 0.96, 1.08],
+                opacity: [0.2, 0.35, 0.2],
+              }}
+              transition={{
+                duration: 6,
+                repeat: Infinity,
+                ease: 'easeInOut',
+              }}
+              className="absolute inset-6 bg-violet-600 rounded-full blur-[85px] pointer-events-none z-0" 
+            />
             
-            {/* Core Sovranly IP Emblem Logo */}
-            <SovranlyLogo size="hero" glow={false} />
+            {/* Outer cybernetic orbital ring */}
+            <motion.div 
+              animate={{ rotate: 360 }}
+              transition={{ duration: 30, repeat: Infinity, ease: 'linear' }}
+              className="absolute inset-2 rounded-full border border-cyan-500/20 pointer-events-none flex items-center justify-center z-0"
+            >
+              <div className="absolute top-0 left-1/2 -translate-x-1/2 w-2 h-2 bg-cyan-400 rounded-full shadow-[0_0_12px_#22d3ee]" />
+              <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-2 h-2 bg-violet-500 rounded-full shadow-[0_0_12px_#a78bfa]" />
+              <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1.5 h-1.5 bg-cyan-300 rounded-full shadow-[0_0_8px_#67e8f9]" />
+              <div className="absolute right-0 top-1/2 -translate-y-1/2 w-1.5 h-1.5 bg-violet-400 rounded-full shadow-[0_0_8px_#c084fc]" />
+            </motion.div>
+
+            {/* Core Sovranly IP Emblem Logo with gentle levitation */}
+            <motion.div
+              animate={{
+                y: [-5, 6, -5],
+              }}
+              transition={{
+                duration: 5,
+                repeat: Infinity,
+                ease: 'easeInOut',
+              }}
+              className="relative z-10 w-full h-full flex items-center justify-center"
+            >
+              <SovranlyLogo size="hero" glow={false} />
+            </motion.div>
           </div>
           
           <div className="inline-flex items-center gap-2.5 px-4 py-2 bg-zinc-900 border border-zinc-800 rounded-full text-xs sm:text-sm text-zinc-400 mb-2">

@@ -210,7 +210,7 @@ export function APIsUsageDashboard() {
 }
 
 export function DeveloperKeyPortal() {
-  const { user, loading } = useAuth();
+  const { user, loading, isSandboxMode } = useAuth();
   const [keyStatus, setKeyStatus] = useState<{ hasKey: boolean; maskedKey?: string; rotatedAt?: string } | null>(null);
   const [isRotating, setIsRotating] = useState(false);
   const [newlyCreatedKey, setNewlyCreatedKey] = useState<string | null>(null);
@@ -219,39 +219,56 @@ export function DeveloperKeyPortal() {
 
   useEffect(() => {
     let active = true;
-    if (user?.uid) {
-      fetch(`/api/developer/key?uid=${user.uid}`)
-        .then((res) => {
-          if (res.ok) return res.json();
-          throw new Error('Failed to get key status');
-        })
-        .then((data) => {
+
+    const loadKeyStatus = async () => {
+      if (!user?.uid) {
+        if (active) setKeyStatus(null);
+        return;
+      }
+
+      try {
+        const headers = await getAuthHeaders(user, isSandboxMode);
+        const res = await fetch(`/api/developer/key?uid=${user.uid}`, {
+          headers: {
+            ...headers,
+          },
+        });
+
+        if (res.ok) {
+          const data = await res.json();
           if (active) {
             setKeyStatus(data);
           }
-        })
-        .catch((e) => {
-          console.error('Failed to load developer key status:', e);
-        });
-    } else {
-      setTimeout(() => {
-        if (active) {
-          setKeyStatus(null);
+        } else {
+          if (active) {
+            setKeyStatus({ hasKey: false });
+          }
         }
-      }, 0);
-    }
+      } catch (e) {
+        console.warn('Developer key status fetch notice:', e);
+        if (active) {
+          setKeyStatus({ hasKey: false });
+        }
+      }
+    };
+
+    loadKeyStatus();
     return () => {
       active = false;
     };
-  }, [user?.uid]);
+  }, [user, isSandboxMode]);
 
   const handleGenerateOrRotate = async () => {
     if (!user) return;
     setIsRotating(true);
     try {
+      const headers = await getAuthHeaders(user, isSandboxMode);
       const res = await fetch('/api/developer/rotate', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          ...headers,
+        },
         body: JSON.stringify({ uid: user.uid, email: user.email }),
       });
       if (!res.ok) throw new Error('Rotation call failed');

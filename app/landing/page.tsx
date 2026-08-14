@@ -10,6 +10,7 @@ import { ExternalLink, Mail, ShieldCheck } from 'lucide-react';
 import { SovranlyLogo } from '@/components/SovranlyLogo';
 import Link from 'next/link';
 import SlideStack from '@/components/SlideStack';
+import { motion } from 'motion/react';
 
 export default function LandingPage() {
   const [submitted, setSubmitted] = useState(false);
@@ -34,22 +35,74 @@ export default function LandingPage() {
 
       <main className="max-w-4xl mx-auto space-y-16">
         <section className="text-center space-y-6">
-          {/* Futuristic CSS-based Emblem/Shield (Zero-Trust Replacement for Hero Image) */}
-          <div className="relative w-72 h-72 md:w-80 md:h-80 mx-auto mb-6 flex items-center justify-center select-none">
+          {/* Futuristic CSS-based Emblem/Shield with smooth infinite looping motion */}
+          <div className="relative group w-80 h-80 md:w-96 md:h-96 mx-auto mb-6 flex items-center justify-center select-none">
             {/* Ambient glows */}
-            <div className="absolute inset-0 bg-cyan-500/10 rounded-full blur-[100px] animate-pulse [animation-duration:4s] pointer-events-none" />
-            <div className="absolute inset-4 bg-violet-500/5 rounded-full blur-[80px] animate-pulse [animation-duration:6s] pointer-events-none" />
+            <motion.div 
+              animate={{
+                scale: [1, 1.1, 1],
+                opacity: [0.15, 0.28, 0.15],
+              }}
+              transition={{
+                duration: 4,
+                repeat: Infinity,
+                ease: 'easeInOut',
+              }}
+              className="absolute inset-0 bg-cyan-500 rounded-full blur-[90px] pointer-events-none z-0" 
+            />
+            <motion.div 
+              animate={{
+                scale: [1.05, 0.95, 1.05],
+                opacity: [0.1, 0.22, 0.1],
+              }}
+              transition={{
+                duration: 6,
+                repeat: Infinity,
+                ease: 'easeInOut',
+              }}
+              className="absolute inset-4 bg-violet-600 rounded-full blur-[75px] pointer-events-none z-0" 
+            />
             
             {/* Outer cybernetic ring */}
-            <div className="absolute inset-0 rounded-full border border-cyan-500/25 bg-black/40 backdrop-blur-md flex items-center justify-center animate-spin-slow [animation-duration:25s]">
-              <div className="absolute top-0 left-1/2 -translate-x-1/2 w-2 h-2 bg-cyan-400 rounded-full shadow-[0_0_10px_#22d3ee]" />
-              <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-2 h-2 bg-violet-500 rounded-full shadow-[0_0_10px_#a78bfa]" />
-            </div>
+            <motion.div 
+              animate={{ rotate: 360 }}
+              transition={{ duration: 28, repeat: Infinity, ease: 'linear' }}
+              className="absolute inset-0 rounded-full border border-cyan-500/25 pointer-events-none flex items-center justify-center z-0"
+            >
+              <div className="absolute top-0 left-1/2 -translate-x-1/2 w-2 h-2 bg-cyan-400 rounded-full shadow-[0_0_12px_#22d3ee]" />
+              <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-2 h-2 bg-violet-500 rounded-full shadow-[0_0_12px_#a78bfa]" />
+              <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1.5 h-1.5 bg-cyan-300 rounded-full shadow-[0_0_8px_#67e8f9]" />
+              <div className="absolute right-0 top-1/2 -translate-y-1/2 w-1.5 h-1.5 bg-violet-400 rounded-full shadow-[0_0_8px_#c084fc]" />
+            </motion.div>
+
+            {/* Concentric subtle radar pulse ring */}
+            <motion.div
+              animate={{
+                scale: [0.88, 1.02, 0.88],
+                opacity: [0.3, 0.6, 0.3],
+              }}
+              transition={{
+                duration: 3.5,
+                repeat: Infinity,
+                ease: 'easeInOut',
+              }}
+              className="absolute inset-6 rounded-full border border-cyan-500/15 pointer-events-none z-0"
+            />
             
-            {/* Core Shield Emblem */}
-            <div className="relative w-36 h-36 md:w-44 md:h-44 flex items-center justify-center transform group-hover:scale-105 transition-transform duration-500">
-              <SovranlyLogo size="lg" />
-            </div>
+            {/* Core Shield Emblem with perpetual float & glow loop */}
+            <motion.div 
+              animate={{
+                y: [-5, 6, -5],
+              }}
+              transition={{
+                duration: 4.5,
+                repeat: Infinity,
+                ease: 'easeInOut',
+              }}
+              className="relative z-10 w-48 h-48 md:w-56 md:h-56 flex items-center justify-center transform transition-transform duration-500 hover:scale-105"
+            >
+              <SovranlyLogo size="hero" glow={false} />
+            </motion.div>
           </div>
           <h2 className="text-5xl font-extrabold tracking-tighter text-white">Sovereign Asset Management</h2>
           <p className="text-xl text-zinc-400">Secure, blockchain-based IP management for visionary creators.</p>
