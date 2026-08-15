@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import Image from 'next/image';
+import { motion } from 'motion/react';
 
 interface SovranlyLogoProps {
   id?: string;
@@ -55,9 +56,16 @@ export function SovranlyLogo({
   }[size];
 
   return (
-    <div 
+    <motion.div 
       id={id}
-      className={`group/logo relative flex items-center justify-center select-none transition-all duration-500 cursor-pointer ${sizeClasses} ${className}`}
+      initial={{ opacity: 0, scale: 0.88 }}
+      animate={{ opacity: 1, scale: 1 }}
+      whileTap={{ scale: 0.95 }}
+      transition={{ 
+        opacity: { duration: 0.5, ease: 'easeOut' },
+        scale: { duration: 0.5, ease: 'easeOut' },
+      }}
+      className={`group/logo relative flex items-center justify-center select-none transition-all duration-300 active:scale-95 cursor-pointer shadow-[0_0_15px_rgba(6,182,212,0.25)] animate-pulse hover:shadow-[0_0_20px_theme(colors.cyan.500)] ${sizeClasses} ${className}`}
     >
       {/* Ambient glowing box-shadow aura that intensifies on hover */}
       <div 
@@ -120,7 +128,7 @@ export function SovranlyLogo({
           </div>
         )}
       </div>
-    </div>
+    </motion.div>
   );
 }
 

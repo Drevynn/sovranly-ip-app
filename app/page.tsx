@@ -58,10 +58,10 @@ export default function HomePage() {
             <Link href="/" className="font-bold tracking-tighter text-white text-xl uppercase">Sovranly IP</Link>
           </div>
           <nav className="hidden md:flex items-center gap-6">
+            <Link href="/pitch-deck" className="text-sm text-cyan-400 font-semibold hover:text-cyan-300 transition-colors flex items-center gap-1.5"><Presentation className="w-4 h-4" /> Pitch Deck</Link>
             <Link href="/dashboard" className="text-sm text-zinc-400 hover:text-white transition-colors">{t('commandCenter')}</Link>
             <Link href="/pricing" className="text-sm text-zinc-400 hover:text-white transition-colors">Pricing Plan</Link>
             <Link href="/marketplace" className="text-sm text-zinc-400 hover:text-white transition-colors">{t('marketplace')}</Link>
-            <Link href="/onboarding" className="text-sm text-zinc-400 hover:text-white transition-colors">{t('chatHelp')}</Link>
             <Link href="/wiki" className="text-sm text-zinc-400 hover:text-white transition-colors">{t('wiki')}</Link>
             <Link href="/faq" className="text-sm text-zinc-400 hover:text-white transition-colors">{t('faq')}</Link>
           </nav>

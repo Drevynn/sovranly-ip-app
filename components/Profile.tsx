@@ -8,6 +8,7 @@ import {
   Twitter, 
   Instagram, 
   Github, 
+  Youtube,
   Plus, 
   Trash2, 
   Check, 
@@ -65,6 +66,7 @@ export default function Profile() {
   const [twitter, setTwitter] = useState('');
   const [instagram, setInstagram] = useState('');
   const [github, setGithub] = useState('');
+  const [youtube, setYoutube] = useState('');
   
   // --- Showcase state ---
   const [showcaseList, setShowcaseList] = useState<ShowcaseItem[]>(DEFAULT_SHOWCASE);
@@ -89,6 +91,7 @@ export default function Profile() {
     const savedTwitter = localStorage.getItem('sov_profile_twitter');
     const savedInstagram = localStorage.getItem('sov_profile_instagram');
     const savedGithub = localStorage.getItem('sov_profile_github');
+    const savedYoutube = localStorage.getItem('sov_profile_youtube');
     const savedShowcase = localStorage.getItem('sov_profile_showcase');
 
     if (savedName !== null) setDisplayName(savedName);
@@ -100,6 +103,7 @@ export default function Profile() {
     if (savedTwitter !== null) setTwitter(savedTwitter);
     if (savedInstagram !== null) setInstagram(savedInstagram);
     if (savedGithub !== null) setGithub(savedGithub);
+    if (savedYoutube !== null) setYoutube(savedYoutube);
     if (savedShowcase !== null) {
       try {
         setShowcaseList(JSON.parse(savedShowcase));
@@ -120,6 +124,7 @@ export default function Profile() {
     localStorage.setItem('sov_profile_twitter', twitter);
     localStorage.setItem('sov_profile_instagram', instagram);
     localStorage.setItem('sov_profile_github', github);
+    localStorage.setItem('sov_profile_youtube', youtube);
     localStorage.setItem('sov_profile_showcase', JSON.stringify(showcaseList));
 
     setTimeout(() => {
@@ -313,7 +318,7 @@ export default function Profile() {
                   </a>
                 )}
 
-                <div className="grid grid-cols-3 gap-2">
+                <div className="grid grid-cols-4 gap-2">
                   {twitter && (
                     <a 
                       href={`https://x.com/${twitter}`} 
@@ -323,6 +328,18 @@ export default function Profile() {
                       className="p-2.5 rounded-xl bg-zinc-900/40 hover:bg-zinc-900 border border-zinc-850 hover:border-zinc-800 transition-colors flex justify-center"
                     >
                       <Twitter className="w-4 h-4 text-sky-400" />
+                    </a>
+                  )}
+
+                  {youtube && (
+                    <a 
+                      href={youtube.startsWith('http') ? youtube : `https://youtube.com/@${youtube}`} 
+                      target="_blank" 
+                      rel="noreferrer" 
+                      title={`YouTube: ${youtube}`}
+                      className="p-2.5 rounded-xl bg-zinc-900/40 hover:bg-zinc-900 border border-zinc-850 hover:border-zinc-800 transition-colors flex justify-center"
+                    >
+                      <Youtube className="w-4 h-4 text-red-500" />
                     </a>
                   )}
 
@@ -383,6 +400,19 @@ export default function Profile() {
                   value={twitter}
                   onChange={(e) => setTwitter(e.target.value)}
                   placeholder="jane_creator"
+                  className="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-cyan-500 transition-colors"
+                />
+              </div>
+
+              <div className="space-y-1.5">
+                <label className="text-[9px] font-mono uppercase text-zinc-500 tracking-wider font-bold block flex items-center gap-1.5">
+                  <Youtube className="w-3.5 h-3.5 text-red-500" /> YouTube Channel / URL
+                </label>
+                <input 
+                  type="text" 
+                  value={youtube}
+                  onChange={(e) => setYoutube(e.target.value)}
+                  placeholder="jane_creator_official"
                   className="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-cyan-500 transition-colors"
                 />
               </div>
