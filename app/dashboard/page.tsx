@@ -112,7 +112,7 @@ export default function DashboardPage() {
         />
 
         <main className="flex-1 overflow-auto p-4 sm:p-6 md:p-8 pb-28 md:pb-8 bg-[#09090b]">
-          {activePage === 0 && <Overview />}
+          {activePage === 0 && <Overview onNavigate={setActivePage} />}
           {activePage === 1 && <Profile />}
           {activePage === 2 && <AssetManager walletAddress={currentAccount} />}
           {activePage === 3 && <Analytics />}

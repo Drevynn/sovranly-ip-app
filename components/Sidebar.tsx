@@ -59,73 +59,138 @@ export default function Sidebar({
               </button>
             </div>
 
-            <div className="flex-1 px-5 py-6 space-y-1.5 overflow-y-auto">
-              <button 
-                onClick={() => { setActivePage(0); onClose(); }}
-                className={`w-full flex items-center gap-4 px-5 py-4 rounded-2xl text-sm font-semibold transition-all cursor-pointer ${activePage === 0 ? 'bg-zinc-900 border border-zinc-800 text-white shadow-xl shadow-zinc-950/50' : 'text-zinc-500 hover:text-zinc-300 hover:bg-zinc-900/30'}`}
-              >
-                <Gauge className="w-5 h-5 text-cyan-400" /> Command Center
-              </button>
-              <button 
-                onClick={() => { setActivePage(1); onClose(); }}
-                className={`w-full flex items-center gap-4 px-5 py-4 rounded-2xl text-sm font-semibold transition-all cursor-pointer ${activePage === 1 ? 'bg-zinc-900 border border-zinc-800 text-white shadow-xl shadow-zinc-950/50' : 'text-zinc-500 hover:text-zinc-300 hover:bg-zinc-900/30'}`}
-              >
-                <User className="w-5 h-5 text-violet-400" /> User Profile
-              </button>
-              <button 
-                onClick={() => { setActivePage(2); onClose(); }}
-                className={`w-full flex items-center gap-4 px-5 py-4 rounded-2xl text-sm font-semibold transition-all cursor-pointer ${activePage === 2 ? 'bg-zinc-900 border border-zinc-800 text-white shadow-xl shadow-zinc-950/50' : 'text-zinc-500 hover:text-zinc-300 hover:bg-zinc-900/30'}`}
-              >
-                <FileText className="w-5 h-5 text-emerald-400" /> IP Asset Registry
-              </button>
-              <button 
-                onClick={() => { setActivePage(3); onClose(); }}
-                className={`w-full flex items-center gap-4 px-5 py-4 rounded-2xl text-sm font-semibold transition-all cursor-pointer ${activePage === 3 ? 'bg-zinc-900 border border-zinc-800 text-white shadow-xl shadow-zinc-950/50' : 'text-zinc-500 hover:text-zinc-300 hover:bg-zinc-900/30'}`}
-              >
-                <BarChart3 className="w-5 h-5 text-amber-400" /> Analytics
-              </button>
-              <button 
-                onClick={() => { setActivePage(4); onClose(); }}
-                className={`w-full flex items-center gap-4 px-5 py-4 rounded-2xl text-sm font-semibold transition-all cursor-pointer ${activePage === 4 ? 'bg-zinc-900 border border-zinc-800 text-white shadow-xl shadow-zinc-950/50' : 'text-zinc-505 hover:text-zinc-350 hover:bg-zinc-900/30'}`}
-              >
-                <Scale className="w-5 h-5 text-cyan-400" /> Licensing Compacts
-              </button>
-              <button 
-                onClick={() => { setActivePage(5); onClose(); }}
-                className={`w-full flex items-center gap-4 px-5 py-4 rounded-2xl text-sm font-semibold transition-all cursor-pointer ${activePage === 5 ? 'bg-zinc-900 border border-zinc-800 text-white shadow-xl shadow-zinc-950/50' : 'text-zinc-500 hover:text-zinc-300 hover:bg-zinc-900/30'}`}
-              >
-                <Sliders className="w-5 h-5 text-teal-400" /> Royalty Sandbox
-              </button>
-              <button 
-                onClick={() => { setActivePage(6); onClose(); }}
-                className={`w-full flex items-center gap-4 px-5 py-4 rounded-2xl text-sm font-semibold transition-all cursor-pointer ${activePage === 6 ? 'bg-zinc-900 border border-zinc-800 text-white shadow-xl shadow-zinc-950/50' : 'text-zinc-500 hover:text-zinc-300 hover:bg-zinc-900/30'}`}
-              >
-                <Mail className="w-5 h-5 text-purple-400" /> Creator Inbox
-              </button>
-              <button 
-                onClick={() => { setActivePage(13); onClose(); }}
-                className={`w-full flex items-center gap-4 px-5 py-4 rounded-2xl text-sm font-semibold transition-all cursor-pointer ${activePage === 13 ? 'bg-zinc-900 border border-zinc-800 text-white shadow-xl shadow-zinc-950/50' : 'text-zinc-500 hover:text-zinc-300 hover:bg-zinc-900/30'}`}
-              >
-                <Users className="w-5 h-5 text-indigo-400" /> Creator Network
-              </button>
-              <button 
-                onClick={() => { setActivePage(11); onClose(); }}
-                className={`w-full flex items-center gap-4 px-5 py-4 rounded-2xl text-sm font-semibold transition-all cursor-pointer ${activePage === 11 ? 'bg-zinc-900 border border-zinc-800 text-white shadow-xl shadow-zinc-950/50' : 'text-zinc-500 hover:text-zinc-300 hover:bg-zinc-900/30'}`}
-              >
-                <Brain className="w-5 h-5 text-cyan-400" /> AI Training Vault
-              </button>
-              <button 
-                onClick={() => { setActivePage(12); onClose(); }}
-                className={`w-full flex items-center gap-4 px-5 py-4 rounded-2xl text-sm font-semibold transition-all cursor-pointer ${activePage === 12 ? 'bg-zinc-900 border border-zinc-800 text-white shadow-xl shadow-zinc-950/50' : 'text-zinc-500 hover:text-zinc-300 hover:bg-zinc-900/30'}`}
-              >
-                <Database className="w-5 h-5 text-cyan-400" /> Sovereign Tokenizer
-              </button>
-              <button 
-                onClick={() => { setActivePage(10); onClose(); }}
-                className={`w-full flex items-center gap-4 px-5 py-4 rounded-2xl text-sm font-semibold transition-all cursor-pointer ${activePage === 10 ? 'bg-zinc-900 border border-zinc-800 text-white shadow-xl shadow-zinc-950/50' : 'text-zinc-500 hover:text-zinc-300 hover:bg-zinc-900/30'}`}
-              >
-                <Building2 className="w-5 h-5 text-amber-400" /> About Platform
-              </button>
+            <div className="flex-1 px-4 py-5 space-y-6 overflow-y-auto custom-scrollbar">
+              {/* Main Hub */}
+              <div className="space-y-1">
+                <button 
+                  onClick={() => { setActivePage(0); onClose(); }}
+                  className={`w-full flex items-center gap-3.5 px-4 py-3 rounded-xl text-sm font-semibold transition-all cursor-pointer ${activePage === 0 ? 'bg-zinc-900 border border-zinc-800 text-white shadow-lg' : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900/40'}`}
+                >
+                  <Gauge className="w-4 h-4 text-cyan-400 shrink-0" /> Command Center
+                </button>
+              </div>
+
+              {/* Category 1: Core Creator Workflow */}
+              <div className="space-y-1">
+                <div className="px-4 pb-1 text-[10px] font-mono font-bold tracking-wider text-zinc-500 uppercase flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-cyan-400"></span>
+                  Core Creator Workflow
+                </div>
+                <button 
+                  onClick={() => { setActivePage(2); onClose(); }}
+                  className={`w-full flex items-center justify-between px-4 py-2.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${activePage === 2 ? 'bg-zinc-900 border border-zinc-800 text-white shadow-lg' : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900/40'}`}
+                >
+                  <span className="flex items-center gap-3">
+                    <FileText className="w-4 h-4 text-emerald-400 shrink-0" />
+                    1. IP Asset Registry
+                  </span>
+                  <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-emerald-950/60 text-emerald-400 border border-emerald-800/40">Stamp</span>
+                </button>
+                <button 
+                  onClick={() => { setActivePage(4); onClose(); }}
+                  className={`w-full flex items-center justify-between px-4 py-2.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${activePage === 4 ? 'bg-zinc-900 border border-zinc-800 text-white shadow-lg' : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900/40'}`}
+                >
+                  <span className="flex items-center gap-3">
+                    <Scale className="w-4 h-4 text-cyan-400 shrink-0" />
+                    2. Licensing Compacts
+                  </span>
+                  <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-cyan-950/60 text-cyan-400 border border-cyan-800/40">Terms</span>
+                </button>
+                <button 
+                  onClick={() => { setActivePage(5); onClose(); }}
+                  className={`w-full flex items-center justify-between px-4 py-2.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${activePage === 5 ? 'bg-zinc-900 border border-zinc-800 text-white shadow-lg' : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900/40'}`}
+                >
+                  <span className="flex items-center gap-3">
+                    <Sliders className="w-4 h-4 text-teal-400 shrink-0" />
+                    3. Royalty Sandbox
+                  </span>
+                  <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-teal-950/60 text-teal-400 border border-teal-800/40">85/15</span>
+                </button>
+              </div>
+
+              {/* Category 2: Protection & Distribution */}
+              <div className="space-y-1">
+                <div className="px-4 pb-1 text-[10px] font-mono font-bold tracking-wider text-zinc-500 uppercase flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-violet-400"></span>
+                  Protection &amp; Tokenization
+                </div>
+                <button 
+                  onClick={() => { setActivePage(11); onClose(); }}
+                  className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${activePage === 11 ? 'bg-zinc-900 border border-zinc-800 text-white shadow-lg' : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900/40'}`}
+                >
+                  <Brain className="w-4 h-4 text-violet-400 shrink-0" /> AI Training Vault
+                </button>
+                <button 
+                  onClick={() => { setActivePage(12); onClose(); }}
+                  className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${activePage === 12 ? 'bg-zinc-900 border border-zinc-800 text-white shadow-lg' : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900/40'}`}
+                >
+                  <Database className="w-4 h-4 text-cyan-400 shrink-0" /> Sovereign Tokenizer
+                </button>
+                <button 
+                  onClick={() => { setActivePage(3); onClose(); }}
+                  className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${activePage === 3 ? 'bg-zinc-900 border border-zinc-800 text-white shadow-lg' : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900/40'}`}
+                >
+                  <BarChart3 className="w-4 h-4 text-amber-400 shrink-0" /> Economics &amp; Analytics
+                </button>
+              </div>
+
+              {/* Category 3: Workspace & Collaboration */}
+              <div className="space-y-1">
+                <div className="px-4 pb-1 text-[10px] font-mono font-bold tracking-wider text-zinc-500 uppercase flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                  Workspace &amp; Outreach
+                </div>
+                <button 
+                  onClick={() => { setActivePage(6); onClose(); }}
+                  className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${activePage === 6 ? 'bg-zinc-900 border border-zinc-800 text-white shadow-lg' : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900/40'}`}
+                >
+                  <Mail className="w-4 h-4 text-purple-400 shrink-0" /> Creator Inbox
+                </button>
+                <button 
+                  onClick={() => { setActivePage(13); onClose(); }}
+                  className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${activePage === 13 ? 'bg-zinc-900 border border-zinc-800 text-white shadow-lg' : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900/40'}`}
+                >
+                  <Users className="w-4 h-4 text-indigo-400 shrink-0" /> Creator Network
+                </button>
+                <button 
+                  onClick={() => { setActivePage(7); onClose(); }}
+                  className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${activePage === 7 ? 'bg-zinc-900 border border-zinc-800 text-white shadow-lg' : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900/40'}`}
+                >
+                  <Presentation className="w-4 h-4 text-orange-400 shrink-0" /> Google Slides Gateway
+                </button>
+                <button 
+                  onClick={() => { setActivePage(8); onClose(); }}
+                  className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${activePage === 8 ? 'bg-zinc-900 border border-zinc-800 text-white shadow-lg' : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900/40'}`}
+                >
+                  <Rocket className="w-4 h-4 text-rose-400 shrink-0" /> Launch Planner
+                </button>
+              </div>
+
+              {/* Category 4: Account & Authority */}
+              <div className="space-y-1">
+                <div className="px-4 pb-1 text-[10px] font-mono font-bold tracking-wider text-zinc-500 uppercase flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-zinc-400"></span>
+                  Account &amp; Platform
+                </div>
+                <button 
+                  onClick={() => { setActivePage(1); onClose(); }}
+                  className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${activePage === 1 ? 'bg-zinc-900 border border-zinc-800 text-white shadow-lg' : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900/40'}`}
+                >
+                  <User className="w-4 h-4 text-zinc-300 shrink-0" /> Creator Profile
+                </button>
+                <button 
+                  onClick={() => { setActivePage(9); onClose(); }}
+                  className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${activePage === 9 ? 'bg-zinc-900 border border-zinc-800 text-white shadow-lg' : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900/40'}`}
+                >
+                  <ShieldCheck className="w-4 h-4 text-cyan-400 shrink-0" /> Tech Stack Ledger
+                </button>
+                <button 
+                  onClick={() => { setActivePage(10); onClose(); }}
+                  className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${activePage === 10 ? 'bg-zinc-900 border border-zinc-800 text-white shadow-lg' : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900/40'}`}
+                >
+                  <Building2 className="w-4 h-4 text-amber-400 shrink-0" /> About Platform
+                </button>
+              </div>
             </div>
 
             <div className="p-6 border-t border-zinc-900 space-y-4">

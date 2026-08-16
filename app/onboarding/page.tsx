@@ -101,14 +101,14 @@ export default function OnboardingVoiceAgent() {
 
   // Discovery Client Profile States
   const [clientProfile, setClientProfile] = useState<{
-    creatorType: 'musician' | 'writer' | 'developer' | 'filmmaker' | 'artist' | null;
+    creatorType: 'musician' | 'writer' | 'developer' | 'filmmaker' | 'artist' | 'youtuber' | null;
     hasCollaborators: 'yes' | 'no' | null;
-    needsTrademark: 'yes' | 'no' | null;
+    primaryGoal: 'timestamp' | 'licensing' | 'splits' | 'ai_defense' | null;
     budgetTier: 'independent' | 'funded' | null;
   }>({
     creatorType: null,
     hasCollaborators: null,
-    needsTrademark: null,
+    primaryGoal: null,
     budgetTier: null,
   });
 
@@ -128,16 +128,16 @@ export default function OnboardingVoiceAgent() {
       icon: Compass,
       color: "from-cyan-500 to-blue-500",
       promptHint: "Please explain the core vision of Sovranly IP and why Zero Trust matters for independent creators.",
-      description: "Welcome to the Zero-Trust creative frontier. Sovranly IP completely removes intermediaries, placing full cryptographic control directly back into the creator's hands.",
+      description: "Welcome to the creator-first frontier. Sovranly IP removes costly middlemen, placing full cryptographic ownership and control directly into your hands.",
       visualLabel: "SECURE LAYER 0"
     },
     {
       title: "On-Chain Registry",
-      subtitle: "Sealing Integrity",
+      subtitle: "Proof of Creation",
       icon: Lock,
       color: "from-blue-500 to-indigo-500",
-      promptHint: "How does the asset registry work, what is Git commit anchoring, and how do we opt-out from AI scrapers?",
-      description: "Anchor your assets into immutable blockchain registries, attach custom bot-exclusion metadata (crawler training opt-out), and stamp your priority of work permanently.",
+      promptHint: "How do I timestamp my work, get a SHA-256 certificate, and prove I created it first?",
+      description: "Anchor your digital works (YouTube videos, beats, artwork, code) into immutable blockchain registries to establish permanent, tamper-proof proof of creation.",
       visualLabel: "REGISTRY LEDGER"
     },
     {
@@ -145,26 +145,26 @@ export default function OnboardingVoiceAgent() {
       subtitle: "Immediate Micropayments",
       icon: Coins,
       color: "from-emerald-500 to-cyan-500",
-      promptHint: "Explain the standard 85/15 royalty splits and direct MetaMask payouts at the protocol tier.",
-      description: "Zero collection delay. Payouts are routed automatically at the protocol level: 85% goes instantly to your Web3 wallet, while 15% secures platform gas and microservice buffers.",
+      promptHint: "Explain the standard 85/15 royalty splits and direct creator payouts.",
+      description: "Zero payment delays. When your work is licensed, 85% is routed directly to your wallet/payout instantly, while 15% maintains network infrastructure.",
       visualLabel: "PAYMENT ROUTER"
     },
     {
-      title: "Legal & Trademark Shielding",
-      subtitle: "Class 42 & Pro Bono Counsel",
+      title: "Smart Licensing & AI Defense",
+      subtitle: "Custom Terms & Anti-Scraping",
       icon: Scale,
       color: "from-amber-500 to-orange-500",
-      promptHint: "What is Trademark Class 42, how does Intent-to-Use protect names, and how do we access Volunteers for the Arts (VLA)?",
-      description: "Navigate global trademark systems with guidance on USPTO Class 42 and utilize free, pro-bono Volunteers for the Arts (VLA) legal programs for small-budget creators.",
-      visualLabel: "LEGAL PARADIGM"
+      promptHint: "How do I set commercial licensing terms and prevent AI bots from training on my work without permission?",
+      description: "Define your own commercial usage rules, set licensing fees, and attach machine-readable bot exclusion tags to block unapproved AI training scrapers.",
+      visualLabel: "SMART LICENSING"
     },
     {
       title: "Specialized Sovereign Tracks",
       subtitle: "Tailored Media Pipelines",
       icon: Sparkles,
       color: "from-violet-500 to-fuchsia-500",
-      promptHint: "What are the custom tracking paths for developers, musicians, and writers/filmmakers?",
-      description: "Specific lanes built for each craft. Git Repos for Software Developers, Stems Registry for Musicians, and Screenplay Ledger for Writers & Filmmakers.",
+      promptHint: "What are the custom tracking paths for developers, musicians, YouTubers, and visual artists?",
+      description: "Specific lanes built for each craft: Video & Stems Registry for Musicians & YouTubers, Git Commit Anchoring for Developers, and Screenplay/Art Ledgers.",
       visualLabel: "MEDIA INTERFACE"
     }
   ];
@@ -245,15 +245,17 @@ export default function OnboardingVoiceAgent() {
   const detectProfileFields = (text: string) => {
     const lowercase = text.toLowerCase();
     
-    if (lowercase.includes('music') || lowercase.includes('musician') || lowercase.includes('song') || lowercase.includes('producer')) {
+    if (lowercase.includes('music') || lowercase.includes('musician') || lowercase.includes('song') || lowercase.includes('producer') || lowercase.includes('beat')) {
       updateProfile('creatorType', 'musician');
+    } else if (lowercase.includes('youtube') || lowercase.includes('youtuber') || lowercase.includes('video') || lowercase.includes('vlog') || lowercase.includes('streamer') || lowercase.includes('tiktok')) {
+      updateProfile('creatorType', 'youtuber');
     } else if (lowercase.includes('developer') || lowercase.includes('software') || lowercase.includes('git') || lowercase.includes('code') || lowercase.includes('algorithm')) {
       updateProfile('creatorType', 'developer');
     } else if (lowercase.includes('writer') || lowercase.includes('author') || lowercase.includes('book') || lowercase.includes('poetry') || lowercase.includes('novel')) {
       updateProfile('creatorType', 'writer');
     } else if (lowercase.includes('film') || lowercase.includes('screenplay') || lowercase.includes('movie') || lowercase.includes('screenwriter') || lowercase.includes('filmmaker')) {
       updateProfile('creatorType', 'filmmaker');
-    } else if (lowercase.includes('art') || lowercase.includes('artist') || lowercase.includes('paint') || lowercase.includes('sculpt') || lowercase.includes('design')) {
+    } else if (lowercase.includes('art') || lowercase.includes('artist') || lowercase.includes('paint') || lowercase.includes('sculpt') || lowercase.includes('design') || lowercase.includes('illustrat')) {
       updateProfile('creatorType', 'artist');
     }
 
@@ -261,11 +263,15 @@ export default function OnboardingVoiceAgent() {
       updateProfile('hasCollaborators', 'yes');
     }
 
-    if (lowercase.includes('trademark') || lowercase.includes('brand') || lowercase.includes('logo') || lowercase.includes('name protection')) {
-      updateProfile('needsTrademark', 'yes');
+    if (lowercase.includes('timestamp') || lowercase.includes('proof') || lowercase.includes('copyright') || lowercase.includes('protect')) {
+      updateProfile('primaryGoal', 'timestamp');
+    } else if (lowercase.includes('license') || lowercase.includes('sell') || lowercase.includes('commercial')) {
+      updateProfile('primaryGoal', 'licensing');
+    } else if (lowercase.includes('ai') || lowercase.includes('scraper') || lowercase.includes('bot') || lowercase.includes('scrape')) {
+      updateProfile('primaryGoal', 'ai_defense');
     }
 
-    if (lowercase.includes('small budget') || lowercase.includes('free help') || lowercase.includes('pro bono') || lowercase.includes('low fund') || lowercase.includes('independent')) {
+    if (lowercase.includes('small budget') || lowercase.includes('free') || lowercase.includes('starter') || lowercase.includes('first time') || lowercase.includes('independent')) {
       updateProfile('budgetTier', 'independent');
     } else if (lowercase.includes('funded') || lowercase.includes('venture') || lowercase.includes('enterprise') || lowercase.includes('company')) {
       updateProfile('budgetTier', 'funded');
@@ -606,7 +612,7 @@ export default function OnboardingVoiceAgent() {
         msgIdCounter.current += 1;
         setMessages(prev => [...prev, {
           role: 'model',
-          content: "🤖 [Maya - Opportunity Scout]: \"Active scans completed on brand trademark registries and licensing queries. Identified a Class 42 SaaS trademark gap for 'Sovereign Tokenizer' in the target media market. Estimated outreach success: 78%. Passing context to Jordan for materials drafting.\"",
+          content: "🤖 [Maya - Opportunity Scout]: \"Active scans completed across creator licensing queries and media catalogs. Identified 4 high-demand synchronization opportunities for your media assets. Estimated placement fit: 88%. Passing asset package to Jordan for deck formatting.\"",
           id: `sim_${msgIdCounter.current}`,
           timestamp: 'Just now'
         }]);
@@ -616,7 +622,7 @@ export default function OnboardingVoiceAgent() {
         msgIdCounter.current += 1;
         setMessages(prev => [...prev, {
           role: 'model',
-          content: "🤖 [Jordan - Personal Exec Assistant]: \"Outbound presentation structure synchronized. Drafted a 5-slide visual pitch emphasizing Zero-Trust verification and standard 85% creator-direct payouts. Moving materials to Aria for distribution queue.\"",
+          content: "🤖 [Jordan - Personal Exec Assistant]: \"Outbound presentation structure synchronized. Drafted a clean 5-slide visual pitch highlighting your SHA-256 copyright certificate and instant 85% creator royalty terms. Handing off to Aria for distribution queue.\"",
           id: `sim_${msgIdCounter.current}`,
           timestamp: 'Just now'
         }]);
@@ -626,7 +632,7 @@ export default function OnboardingVoiceAgent() {
         msgIdCounter.current += 1;
         setMessages(prev => [...prev, {
           role: 'model',
-          content: "🤖 [Aria - Comms Agent]: \"Direct automated email queue compiled with Jordan's pitch materials. Outbound lines active. Communications loaded: 12 potential brand partners staged for batch dispatch. Help desk is live.\"",
+          content: "🤖 [Aria - Comms Agent]: \"Automated email distribution queue prepared. Pitch deck and licensing agreements staged for 12 prospective partners. Real-time creator inbox is active and monitoring replies.\"",
           id: `sim_${msgIdCounter.current}`,
           timestamp: 'Just now'
         }]);
@@ -634,7 +640,7 @@ export default function OnboardingVoiceAgent() {
 
       setTimeout(() => {
         msgIdCounter.current += 1;
-        const finalWise = "That is a beautiful circle of action, team. Creator, your opportunities are queued and your work is shielded. All you have to do is keep creating.";
+        const finalWise = "That is a beautiful circle of action, team. Creator, your opportunities are queued and your work is protected on the ledger. All you have to do is keep creating.";
         setMessages(prev => [...prev, {
           role: 'model',
           content: `Adrienne: "${finalWise}"`,
@@ -651,18 +657,18 @@ export default function OnboardingVoiceAgent() {
         msgIdCounter.current += 1;
         setMessages(prev => [...prev, {
           role: 'model',
-          content: "Adrienne (Sovereign Orator): \"Jordan, sweetheart, let's get our creator's week fully organized. Aria, check on those free legal clinics to see if we can secure some pro-bono time.\"",
+          content: "Adrienne (Sovereign Orator): \"Jordan, sweetheart, let's get our creator's weekly schedule in order. Aria, confirm our creator support lines and verification alerts are ready.\"",
           id: `sim_${msgIdCounter.current}`,
           timestamp: 'Just now'
         }]);
-        speakText("Jordan, sweetheart, let's get our creator's week fully organized. Aria, check on those free legal clinics to see if we can secure some pro-bono time.");
+        speakText("Jordan, sweetheart, let's get our creator's weekly schedule in order. Aria, confirm our creator support lines and verification alerts are ready.");
       }, 1500);
 
       setTimeout(() => {
         msgIdCounter.current += 1;
         setMessages(prev => [...prev, {
           role: 'model',
-          content: "🤖 [Jordan - Personal Exec Assistant]: \"Workspace calendar synchronized. Organized executive dashboard priorities: 1. Finalize Sovereign Tokenizer registrations. 2. Track smart contract payouts. 3. Review pro-bono VLA intake form. Timelines are set.\"",
+          content: "🤖 [Jordan - Personal Exec Assistant]: \"Workspace scheduler locked. Key priorities organized: 1. Generate SHA-256 digital certificate for your latest media upload. 2. Configure 85/15 smart contract payout rules. 3. Export Google Slides licensing proposal.\"",
           id: `sim_${msgIdCounter.current}`,
           timestamp: 'Just now'
         }]);
@@ -672,7 +678,7 @@ export default function OnboardingVoiceAgent() {
         msgIdCounter.current += 1;
         setMessages(prev => [...prev, {
           role: 'model',
-          content: "🤖 [Aria - Comms Agent]: \"Contacted local Volunteers for the Arts (VLA) pro-bono clinic. Scheduled a 45-minute virtual intake consultation for next Tuesday to review trademark filing base requirements. Meeting details appended to Jordan's calendar link.\"",
+          content: "🤖 [Aria - Comms Agent]: \"Verification alerts initialized. Direct notification channel established. Ready to ping your inbox the second your work is verified or licensed by a buyer.\"",
           id: `sim_${msgIdCounter.current}`,
           timestamp: 'Just now'
         }]);
@@ -680,7 +686,7 @@ export default function OnboardingVoiceAgent() {
 
       setTimeout(() => {
         msgIdCounter.current += 1;
-        const finalWise = "You see that, sweetheart? You don't have to carry the weight of the world on your shoulders. We've got your back. Just take a deep breath and let your soul make the art.";
+        const finalWise = "You see that, sweetheart? You don't have to worry about complicated technical steps. We've got your back every step of the way. Take a deep breath and let your creativity flow.";
         setMessages(prev => [...prev, {
           role: 'model',
           content: `Adrienne: "${finalWise}"`,
@@ -705,39 +711,50 @@ export default function OnboardingVoiceAgent() {
 
   // Compile Recommendation String
   const getRecommendation = () => {
-    const { creatorType, hasCollaborators, needsTrademark, budgetTier } = clientProfile;
+    const { creatorType, hasCollaborators, primaryGoal, budgetTier } = clientProfile;
     
-    let protocol = "Sovranly Base Protocol v1.4";
+    let protocol = "Sovranly Creator Protocol v1.4";
     let setup = "Single-Creator On-Chain Registry Signature";
-    let splitCode = "None (100% routed directly to creator's MetaMask)";
-    let legalPath = "Standard Self-guided Digital Copyright Stamp";
-    let extraNotes = "Optimized for raw, unmediated registry priority verification.";
+    let splitCode = "Direct Payout (100% routed directly to creator's wallet)";
+    let legalPath = "SHA-256 Cryptographic Timestamp & Proof of Creation";
+    let extraNotes = "Optimized for instant proof of authorship and direct ownership control.";
 
     if (creatorType === 'developer') {
-      protocol = "Sovranly Engine Vault Node";
-      setup = "Git Commit Hash Anchoring & Crawler Opt-Out Stamps";
-      extraNotes = "Machine-readable compliance manifest included in software package envelopes to reject scraper bots automatically.";
+      protocol = "Sovranly Codebase Vault Node";
+      setup = "Git Commit Hash Anchoring & Scraper Opt-Out Stamps";
+      extraNotes = "Machine-readable compliance manifest attached to repository files to reject uncredited AI scraper bots.";
     } else if (creatorType === 'musician') {
       protocol = "Acoustic Ledger Registry";
-      setup = "Acoustic wave structures fingerprint registration & Splitting router";
+      setup = "Audio waveform fingerprinting & Split-Sheet Router";
+      extraNotes = "Perfect for beats, stems, and songs. Payouts divided automatically upon licensing.";
+    } else if (creatorType === 'youtuber') {
+      protocol = "Video & Digital Media Ledger";
+      setup = "Video stem timestamping & Anti-Theft Certificate";
+      extraNotes = "Permanently proves you published and owned the video first, shielding against false copyright strikes.";
     } else if (creatorType === 'filmmaker') {
       protocol = "Sovereign Cinematic Ledger";
-      setup = "Verifiable Screenplay Draft Timeline & Production Split Sheet Signature";
+      setup = "Verifiable Screenplay Draft Timeline & Production Split Sheet";
+      extraNotes = "Chronological timestamping across draft versions and collaborative production credits.";
     } else if (creatorType === 'writer') {
       protocol = "Editorial Copyright Stamp";
-      setup = "Serial Release Gated Subscriptions & eBook Adaptation Rights";
+      setup = "Manuscript Hash Certificate & Adaptation Rights Agreement";
+      extraNotes = "Protects written drafts, articles, and book chapters from plagiarism.";
     }
 
     if (hasCollaborators === 'yes' || creatorType === 'musician' || creatorType === 'filmmaker') {
-      splitCode = "Automated Split-Sheet Protocol (85% directly to creator Metamask, 15% system gas-free pool)";
+      splitCode = "Automated Split-Sheet Protocol (85% directly to creator wallet, 15% network pool)";
     }
 
-    if (needsTrademark === 'yes') {
-      legalPath = "USPTO Class 42 SaaS Brand Intent-to-Use Filing";
+    if (primaryGoal === 'licensing') {
+      legalPath = "Smart Commercial Licensing Compact (Instant 85% creator payout)";
+    } else if (primaryGoal === 'ai_defense') {
+      legalPath = "Anti-AI Crawler Opt-Out Header & Proof of Authorship Stamp";
+    } else if (primaryGoal === 'splits') {
+      legalPath = "Automated Multi-Creator Royalty Split-Sheet Protocol";
     }
 
     if (budgetTier === 'independent') {
-      legalPath += " + Volunteers for the Arts (VLA) Pro-Bono Legal Consultation Link";
+      extraNotes += " Free tier enabled with zero upfront legal retainers.";
     }
 
     return { protocol, setup, splitCode, legalPath, extraNotes };
@@ -901,12 +918,13 @@ export default function OnboardingVoiceAgent() {
                 {/* 1. Craft Type */}
                 <div className="space-y-1.5">
                   <span className="text-[9px] font-mono text-zinc-500 uppercase block">Creative Craft / Industry</span>
-                  <div className="grid grid-cols-5 gap-1">
+                  <div className="grid grid-cols-6 gap-1">
                     {[
                       { id: 'musician', label: 'Music', icon: Music, color: 'text-violet-400' },
+                      { id: 'youtuber', label: 'YouTube', icon: Sparkles, color: 'text-red-400' },
                       { id: 'writer', label: 'Writing', icon: BookOpen, color: 'text-amber-400' },
                       { id: 'filmmaker', label: 'Film', icon: Film, color: 'text-rose-400' },
-                      { id: 'developer', label: 'Software', icon: Code2, color: 'text-cyan-400' },
+                      { id: 'developer', label: 'Code', icon: Code2, color: 'text-cyan-400' },
                       { id: 'artist', label: 'Art', icon: Sparkles, color: 'text-emerald-400' }
                     ].map(item => {
                       const Icon = item.icon;
@@ -953,39 +971,43 @@ export default function OnboardingVoiceAgent() {
                   </div>
                 </div>
 
-                {/* 3. Trademark Protection */}
+                {/* 3. Primary Goal */}
                 <div className="flex items-center justify-between bg-zinc-900/30 p-2.5 rounded-2xl border border-zinc-900/60">
                   <div>
-                    <span className="block text-[10px] font-bold text-white leading-none">Global Trademark Security</span>
-                    <span className="block text-[8px] text-zinc-500 font-mono mt-1">Brand name &amp; Class 42 shielding</span>
+                    <span className="block text-[10px] font-bold text-white leading-none">Primary Protection Goal</span>
+                    <span className="block text-[8px] text-zinc-500 font-mono mt-1">Timestamp, Licensing, or AI Opt-Out</span>
                   </div>
                   <div className="flex bg-zinc-950 p-0.5 rounded-lg border border-zinc-850">
-                    {['yes', 'no'].map(val => (
+                    {[
+                      { id: 'timestamp', label: 'Proof' },
+                      { id: 'licensing', label: 'License' },
+                      { id: 'ai_defense', label: 'AI Shield' }
+                    ].map(goal => (
                       <button
-                        key={val}
-                        onClick={() => updateProfile('needsTrademark', val as any)}
+                        key={goal.id}
+                        onClick={() => updateProfile('primaryGoal', goal.id as any)}
                         className={`px-2 py-1 text-[8px] font-mono font-bold uppercase rounded-md transition-all cursor-pointer ${
-                          clientProfile.needsTrademark === val 
+                          clientProfile.primaryGoal === goal.id 
                             ? 'bg-zinc-900 text-cyan-400 border border-zinc-800' 
                             : 'text-zinc-500 hover:text-zinc-300'
                         }`}
                       >
-                        {val}
+                        {goal.label}
                       </button>
                     ))}
                   </div>
                 </div>
 
-                {/* 4. Counsel Assistance */}
+                {/* 4. Creator Tier */}
                 <div className="flex items-center justify-between bg-zinc-900/30 p-2.5 rounded-2xl border border-zinc-900/60">
                   <div>
-                    <span className="block text-[10px] font-bold text-white leading-none">Legal Counsel Target</span>
-                    <span className="block text-[8px] text-zinc-500 font-mono mt-1">Access pro-bono VLA assistance</span>
+                    <span className="block text-[10px] font-bold text-white leading-none">Creator Setup Tier</span>
+                    <span className="block text-[8px] text-zinc-500 font-mono mt-1">Free starter or commercial studio</span>
                   </div>
                   <div className="flex bg-zinc-950 p-0.5 rounded-lg border border-zinc-850">
                     {[
-                      { id: 'independent', label: 'Independent' },
-                      { id: 'funded', label: 'Funded' }
+                      { id: 'independent', label: 'Starter' },
+                      { id: 'funded', label: 'Pro Studio' }
                     ].map(tier => (
                       <button
                         key={tier.id}
@@ -996,7 +1018,7 @@ export default function OnboardingVoiceAgent() {
                             : 'text-zinc-500 hover:text-zinc-300'
                         }`}
                       >
-                        {tier.label.slice(0, 4)}
+                        {tier.label}
                       </button>
                     ))}
                   </div>
@@ -1217,9 +1239,9 @@ export default function OnboardingVoiceAgent() {
                   <div className="flex flex-wrap justify-center gap-2 max-w-lg pt-4">
                     {[
                       { text: "Give me a feature tour 🚀", hint: "Give me a complete feature tour." },
-                      { text: "What is Trademark Class 42? ⚖️", hint: "Explain Trademark Class 42 and why it fits software SaaS." },
-                      { text: "How do split sheets work? 💸", hint: "Explain how automated split sheets route creator royalties." },
-                      { text: "Who qualifies for VLA pro-bono? 🎨", hint: "Tell me about Volunteers for the Arts (VLA) pro-bono assistance." }
+                      { text: "How do I timestamp my first video or track? 🔒", hint: "Explain how I can timestamp my first YouTube video or song to prove I created it first." },
+                      { text: "How do split sheets work? 💸", hint: "Explain how automated split sheets route creator royalties directly." },
+                      { text: "How do I stop AI bots from scraping my art? 🛡️", hint: "How do I attach an AI scraping opt-out tag to my work?" }
                     ].map((chip, i) => (
                       <button
                         key={i}
