@@ -1,7 +1,7 @@
 'use client';
 /* eslint-disable react-hooks/set-state-in-effect */
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import WalletConnect from '@/components/WalletConnect';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -40,10 +40,25 @@ import {
   PlusCircle,
   CheckCircle2,
   Lock,
+  Unlock,
   ChevronDown,
   Info,
   Heart,
-  ShieldCheck
+  ShieldCheck,
+  LayoutGrid,
+  List as ListIcon,
+  Copy,
+  Check,
+  Music,
+  Code2,
+  Image as ImageIcon,
+  FileText as FileIcon,
+  Video as VideoIcon,
+  Eye,
+  User,
+  Layers,
+  Flame,
+  Award
 } from 'lucide-react';
 import { ethers } from 'ethers';
 import Image from 'next/image';
@@ -170,10 +185,13 @@ export default function MarketplacePage() {
   const [assets, setAssets] = useState<Asset[]>([]);
   const [walletAddress, setWalletAddress] = useState<string | null>(null);
   const [filterMode, setFilterMode] = useState<'all' | 'listed' | 'mine' | 'favorites'>('listed');
+  const [viewMode, setViewMode] = useState<'grid' | 'compact'>('grid');
   const [favoritedAssetIds, setFavoritedAssetIds] = useState<string[]>([]);
   const [favoritesMap, setFavoritesMap] = useState<Record<string, string>>({});
   const [loadingId, setLoadingId] = useState<string | null>(null);
   const [loadingAssets, setLoadingAssets] = useState(true);
+  const [copiedAddress, setCopiedAddress] = useState<string | null>(null);
+  const [inspectingAsset, setInspectingAsset] = useState<Asset | null>(null);
 
   // --- SEARCH & FILTER STATE ---
   const [searchTerm, setSearchTerm] = useState('');
@@ -232,7 +250,7 @@ export default function MarketplacePage() {
   } | null>(null);
 
   // Fetch initial assets from API
-  const fetchAssets = async () => {
+  const fetchAssets = useCallback(async () => {
     setLoadingAssets(true);
     try {
       const headers = await getAuthHeaders(user, isSandboxMode);
@@ -252,11 +270,19 @@ export default function MarketplacePage() {
     } finally {
       setLoadingAssets(false);
     }
-  };
+  }, [user, isSandboxMode]);
 
   useEffect(() => {
     fetchAssets();
-  }, [user, isSandboxMode]);
+  }, [fetchAssets]);
+
+  const copyToClipboard = (text: string, id: string) => {
+    if (typeof navigator !== 'undefined' && navigator.clipboard) {
+      navigator.clipboard.writeText(text);
+      setCopiedAddress(id);
+      setTimeout(() => setCopiedAddress(null), 2000);
+    }
+  };
 
   // Sync favorites from Firestore in real-time
   useEffect(() => {
@@ -721,36 +747,50 @@ Secure cryptographic hash tunnel verified by Sovranly IP.`;
           </div>
         </div>
 
-        {/* Tab Filters and Action Buttons */}
-        <div className="flex flex-col md:flex-row gap-4 justify-between items-start md:items-center mb-8 border-b border-zinc-900 pb-6">
-          <div className="flex flex-wrap gap-2">
+        {/* Tab Filters, Search, and View Toggles */}
+        <div className="flex flex-col lg:flex-row gap-4 justify-between items-start lg:items-center mb-8 border-b border-zinc-900 pb-6">
+          <div className="flex flex-wrap gap-2 items-center">
             <Button 
               onClick={() => setFilterMode('listed')} 
               variant="outline" 
-              className={`rounded-full px-5 text-xs ${filterMode === 'listed' ? 'border-cyan-500 text-cyan-400 bg-cyan-950/20' : 'border-zinc-800 text-zinc-400 bg-transparent'}`}
+              className={`rounded-xl px-4 text-xs font-semibold h-9 transition-all duration-200 ${
+                filterMode === 'listed' 
+                  ? 'border-cyan-500/80 text-cyan-300 bg-cyan-950/40 shadow-sm shadow-cyan-950/60' 
+                  : 'border-zinc-800/80 text-zinc-400 bg-zinc-950 hover:bg-zinc-900 hover:text-zinc-200'
+              }`}
             >
-              Listed Licenses
+              <Flame className="w-3.5 h-3.5 mr-1.5 text-cyan-400" />
+              Listed Licenses ({assets.filter(a => a.isForSale).length})
             </Button>
             <Button 
               onClick={() => setFilterMode('all')} 
               variant="outline" 
-              className={`rounded-full px-5 text-xs ${filterMode === 'all' ? 'border-cyan-500 text-cyan-400 bg-cyan-950/20' : 'border-zinc-800 text-zinc-400 bg-transparent'}`}
+              className={`rounded-xl px-4 text-xs font-semibold h-9 transition-all duration-200 ${
+                filterMode === 'all' 
+                  ? 'border-cyan-500/80 text-cyan-300 bg-cyan-950/40 shadow-sm shadow-cyan-950/60' 
+                  : 'border-zinc-800/80 text-zinc-400 bg-zinc-950 hover:bg-zinc-900 hover:text-zinc-200'
+              }`}
             >
-              All IP Registry
+              <Layers className="w-3.5 h-3.5 mr-1.5 text-zinc-400" />
+              All IP Registry ({assets.length})
             </Button>
             <Button 
               onClick={() => {
                 if (!walletAddress) {
-                  alert("Connect your sovereign wallet to view your owned assets.");
+                  alert("Connect your sovereign Web3 wallet in the top bar to filter your owned IP assets.");
                   return;
                 }
                 setFilterMode('mine');
               }} 
-              disabled={!walletAddress}
               variant="outline" 
-              className={`rounded-full px-5 text-xs disabled:opacity-40 ${filterMode === 'mine' ? 'border-cyan-500 text-cyan-400 bg-cyan-950/20' : 'border-zinc-800 text-zinc-400 bg-transparent'}`}
+              className={`rounded-xl px-4 text-xs font-semibold h-9 transition-all duration-200 ${
+                filterMode === 'mine' 
+                  ? 'border-emerald-500/80 text-emerald-300 bg-emerald-950/40 shadow-sm shadow-emerald-950/60' 
+                  : 'border-zinc-800/80 text-zinc-400 bg-zinc-950 hover:bg-zinc-900 hover:text-zinc-200'
+              } ${!walletAddress ? 'opacity-50' : ''}`}
             >
-              My IP Assets ({assets.filter(a => walletAddress && a.ownerAddress?.toLowerCase() === walletAddress.toLowerCase()).length})
+              <ShieldCheck className={`w-3.5 h-3.5 mr-1.5 ${filterMode === 'mine' ? 'text-emerald-400' : 'text-zinc-400'}`} />
+              My Sovereign Assets ({assets.filter(a => walletAddress && a.ownerAddress?.toLowerCase() === walletAddress.toLowerCase()).length})
             </Button>
             <Button 
               onClick={() => {
@@ -761,36 +801,66 @@ Secure cryptographic hash tunnel verified by Sovranly IP.`;
                 setFilterMode('favorites');
               }} 
               variant="outline" 
-              className={`rounded-full px-5 text-xs ${filterMode === 'favorites' ? 'border-pink-500 text-pink-400 bg-pink-950/20' : 'border-zinc-800 text-zinc-400 bg-transparent'}`}
+              className={`rounded-xl px-4 text-xs font-semibold h-9 transition-all duration-200 ${
+                filterMode === 'favorites' 
+                  ? 'border-pink-500/80 text-pink-300 bg-pink-950/40 shadow-sm shadow-pink-950/60' 
+                  : 'border-zinc-800/80 text-zinc-400 bg-zinc-950 hover:bg-zinc-900 hover:text-zinc-200'
+              }`}
             >
               <Heart className={`w-3.5 h-3.5 mr-1.5 ${filterMode === 'favorites' ? 'fill-pink-400 text-pink-400' : 'text-zinc-500'}`} />
               Favorited ({user ? favoritedAssetIds.length : 0})
             </Button>
           </div>
 
-          <div className="flex items-center gap-3 w-full md:w-auto">
-            <div className="relative flex-1 md:w-72">
-              <Search className="absolute left-3 top-2.5 w-4 h-4 text-zinc-500" />
+          {/* Search, Filter, and Grid/Compact Mode Switch */}
+          <div className="flex items-center gap-2.5 w-full lg:w-auto">
+            <div className="relative flex-1 lg:w-64">
+              <Search className="absolute left-3 top-2.5 w-3.5 h-3.5 text-zinc-500" />
               <input 
                 type="text" 
-                placeholder="Search title, details, category..." 
+                placeholder="Search title, category, hash..." 
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full bg-zinc-950 border border-zinc-850 rounded-full pl-9 pr-4 py-2 text-xs text-white focus:outline-none focus:border-cyan-500 transition-colors h-9"
+                className="w-full bg-zinc-950 border border-zinc-850 rounded-xl pl-9 pr-3 py-2 text-xs text-white focus:outline-none focus:border-cyan-500 transition-colors h-9 placeholder:text-zinc-600"
               />
+              {searchTerm && (
+                <button onClick={() => setSearchTerm('')} className="absolute right-2.5 top-2.5 text-zinc-500 hover:text-white">
+                  <X className="w-3.5 h-3.5" />
+                </button>
+              )}
             </div>
             
             <Button 
               onClick={() => setShowAdvancedFilters(!showAdvancedFilters)}
               variant="outline"
-              className={`rounded-full border-zinc-850 text-xs px-4 h-9 flex items-center gap-2 ${showAdvancedFilters ? 'border-cyan-500 bg-cyan-950/25 text-cyan-400' : 'text-zinc-400'}`}
+              className={`rounded-xl border-zinc-850 text-xs px-3.5 h-9 flex items-center gap-1.5 bg-zinc-950 ${
+                showAdvancedFilters ? 'border-cyan-500/60 bg-cyan-950/30 text-cyan-300' : 'text-zinc-400 hover:text-zinc-200'
+              }`}
             >
-              <SlidersHorizontal className="w-3.5 h-3.5" />
-              Filters
-              { (selectedCategory !== 'All' || selectedDuration !== 'All' || maxPrice !== 'All' || requiredUsages.length > 0) && (
-                <span className="w-2 h-2 rounded-full bg-cyan-400" />
-              ) }
+              <SlidersHorizontal className="w-3.5 h-3.5 text-zinc-400" />
+              <span>Filters</span>
+              {(selectedCategory !== 'All' || selectedDuration !== 'All' || maxPrice !== 'All' || requiredUsages.length > 0) && (
+                <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
+              )}
             </Button>
+
+            {/* View Mode Toggle */}
+            <div className="flex items-center bg-zinc-950 border border-zinc-850 rounded-xl p-0.5 h-9">
+              <button
+                onClick={() => setViewMode('grid')}
+                className={`p-1.5 rounded-lg transition-colors ${viewMode === 'grid' ? 'bg-zinc-850 text-cyan-400' : 'text-zinc-500 hover:text-zinc-300'}`}
+                title="Grid View"
+              >
+                <LayoutGrid className="w-4 h-4" />
+              </button>
+              <button
+                onClick={() => setViewMode('compact')}
+                className={`p-1.5 rounded-lg transition-colors ${viewMode === 'compact' ? 'bg-zinc-850 text-cyan-400' : 'text-zinc-500 hover:text-zinc-300'}`}
+                title="List View"
+              >
+                <ListIcon className="w-4 h-4" />
+              </button>
+            </div>
           </div>
         </div>
 
@@ -908,198 +978,161 @@ Secure cryptographic hash tunnel verified by Sovranly IP.`;
           <div className="lg:col-span-2 space-y-6">
             
             {loadingAssets ? (
-              <div className="text-center py-20 bg-zinc-950 border border-zinc-900 rounded-3xl">
-                <Loader2 className="w-8 h-8 text-cyan-500 animate-spin mx-auto mb-4" />
-                <p className="text-xs font-mono uppercase tracking-widest text-zinc-500">Retrieving secure IP ledger...</p>
+              <div className="text-center py-24 bg-zinc-950 border border-zinc-900 rounded-3xl">
+                <Loader2 className="w-8 h-8 text-cyan-400 animate-spin mx-auto mb-4" />
+                <p className="text-xs font-mono uppercase tracking-widest text-zinc-400 font-bold">Synchronizing Decentralized IP Registry...</p>
               </div>
             ) : filteredAssets.length === 0 ? (
-              <div className="text-center py-20 bg-[#09090b] rounded-3xl border border-zinc-900 shadow-inner">
-                <Coins className="w-10 h-10 text-cyan-500/50 mx-auto mb-4 animate-pulse" />
-                <p className="text-zinc-400 font-semibold mb-2">No IP licensed items match your parameters</p>
+              <div className="text-center py-20 bg-zinc-950/80 rounded-3xl border border-zinc-900 shadow-inner">
+                <Coins className="w-10 h-10 text-cyan-500/40 mx-auto mb-4 animate-pulse" />
+                <p className="text-zinc-300 font-semibold mb-2">No IP licensed items match your parameters</p>
                 <p className="text-zinc-500 text-xs max-w-sm mx-auto leading-relaxed">
                   {filterMode === 'mine' 
-                    ? "Verify your wallet has registered assets. Head to Dashboard &gt; Secure Registry to claim digital assets." 
-                    : "Try resetting your search filters or advanced search preferences above."}
+                    ? "Verify your connected wallet address has registered assets, or create and register new IP in the Dashboard." 
+                    : "Try resetting your search filters or adjusting the category and price range above."}
                 </p>
               </div>
-            ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            ) : viewMode === 'compact' ? (
+              /* COMPACT / LIST VIEW */
+              <div className="space-y-3">
                 <AnimatePresence mode="popLayout">
                   {filteredAssets.map(asset => {
-                    const isOwner = walletAddress && asset.ownerAddress?.toLowerCase() === walletAddress.toLowerCase();
-                    
-                    // Default fallbacks for customizable licensing fields
+                    const isOwner = Boolean(
+                      (walletAddress && asset.ownerAddress?.toLowerCase() === walletAddress.toLowerCase()) ||
+                      (user && (asset as unknown as { userId?: string }).userId === user.uid)
+                    );
                     const assetDuration = asset.duration || '3 Years';
                     const assetUsages = asset.usages || ['Streaming & Broadcasting', 'Derivative Works'];
 
                     return (
-                      <motion.div 
-                        key={asset.id} 
+                      <motion.div
+                        key={asset.id}
                         layout
-                        initial={{ opacity: 0, y: 15 }}
+                        initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -15, scale: 0.95 }}
-                        whileHover={{ y: -6, scale: 1.018 }}
-                        whileTap={{ scale: 0.992 }}
-                        transition={{ duration: 0.25, ease: [0.25, 0.1, 0.25, 1.0] }}
-                        className="group bg-zinc-950 hover:bg-[#0a0a0f] rounded-3xl border border-zinc-900/90 hover:border-cyan-500/40 p-6 flex flex-col justify-between transition-all duration-300 shadow-xl hover:shadow-2xl hover:shadow-cyan-500/15 relative overflow-hidden cursor-pointer"
+                        exit={{ opacity: 0, scale: 0.98 }}
+                        whileHover={{ x: 4 }}
+                        transition={{ duration: 0.2 }}
+                        className={`group bg-zinc-950 hover:bg-[#0c0c14] border rounded-2xl p-4 transition-all duration-300 relative overflow-hidden flex flex-col md:flex-row md:items-center justify-between gap-4 ${
+                          isOwner 
+                            ? 'border-emerald-500/30 hover:border-emerald-400/60 shadow-lg shadow-emerald-950/20' 
+                            : 'border-zinc-900/90 hover:border-cyan-500/40 hover:shadow-lg hover:shadow-cyan-950/20'
+                        }`}
                       >
-                      {/* Ambient radial glow on hover */}
-                      <div className="absolute -inset-px rounded-3xl bg-gradient-to-br from-cyan-500/10 via-violet-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+                        {/* Status bar highlight */}
+                        <div className={`absolute top-0 left-0 bottom-0 w-1 ${isOwner ? 'bg-emerald-400' : asset.isForSale ? 'bg-cyan-400' : 'bg-zinc-700'}`} />
 
-                      {/* Interactive Visual border sheen on hover */}
-                      <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-cyan-500/0 via-cyan-500/0 to-cyan-500/0 group-hover:from-cyan-400/80 group-hover:via-violet-400/80 group-hover:to-cyan-400/0 transition-all duration-500" />
-
-                      <div>
-                        {/* Top Indicator */}
-                        <div className="flex items-center justify-between gap-2 mb-4 relative z-10">
-                          <div className="flex items-center gap-2">
-                            <span className="bg-cyan-950/40 text-cyan-400 border border-cyan-500/10 group-hover:border-cyan-500/30 group-hover:bg-cyan-950/70 px-3 py-1 rounded-xl text-[10px] font-mono font-bold transition-all duration-300">
-                              {asset.type}
-                            </span>
-                            {/* Favorite Button */}
-                            <button
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                toggleFavorite(asset.id);
-                              }}
-                              className={`p-1.5 rounded-lg transition-all border cursor-pointer ${
-                                favoritedAssetIds.includes(asset.id)
-                                  ? 'bg-pink-950/30 border-pink-500/30 text-pink-500 shadow-sm shadow-pink-950/50'
-                                  : 'bg-zinc-900/40 border-zinc-800/80 text-zinc-500 hover:text-zinc-300 hover:border-zinc-700'
-                              }`}
-                              title={favoritedAssetIds.includes(asset.id) ? "Remove from favorites" : "Add to favorites"}
-                            >
-                              <Heart className={`w-3.5 h-3.5 ${favoritedAssetIds.includes(asset.id) ? 'fill-pink-500' : ''}`} />
-                            </button>
+                        <div className="flex items-start gap-3.5 flex-1 min-w-0 pl-1">
+                          <div className={`w-11 h-11 rounded-xl flex items-center justify-center border shrink-0 ${
+                            isOwner 
+                              ? 'bg-emerald-950/40 border-emerald-500/30 text-emerald-400' 
+                              : 'bg-zinc-900/90 border-zinc-800 text-cyan-400'
+                          }`}>
+                            {asset.type?.toLowerCase().includes('music') || asset.type?.toLowerCase().includes('audio') ? (
+                              <Music className="w-5 h-5" />
+                            ) : asset.type?.toLowerCase().includes('software') || asset.type?.toLowerCase().includes('code') ? (
+                              <Code2 className="w-5 h-5" />
+                            ) : asset.type?.toLowerCase().includes('art') || asset.type?.toLowerCase().includes('design') ? (
+                              <ImageIcon className="w-5 h-5" />
+                            ) : (
+                              <FileIcon className="w-5 h-5" />
+                            )}
                           </div>
+
+                          <div className="min-w-0 space-y-1">
+                            <div className="flex items-center gap-2 flex-wrap">
+                              <h4 className="text-sm font-bold text-white group-hover:text-cyan-300 transition-colors truncate">
+                                {asset.title || 'Unnamed IP Asset'}
+                              </h4>
+                              {isOwner ? (
+                                <span className="inline-flex items-center gap-1 text-[10px] font-mono font-bold bg-emerald-950/60 text-emerald-300 border border-emerald-500/30 px-2 py-0.5 rounded-md">
+                                  <ShieldCheck className="w-3 h-3 text-emerald-400" />
+                                  YOUR SOVEREIGN ASSET
+                                </span>
+                              ) : asset.isForSale ? (
+                                <span className="inline-flex items-center gap-1 text-[10px] font-mono font-bold bg-cyan-950/50 text-cyan-300 border border-cyan-500/20 px-2 py-0.5 rounded-md">
+                                  <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
+                                  LISTED
+                                </span>
+                              ) : (
+                                <span className="inline-flex items-center gap-1 text-[10px] font-mono text-zinc-500 bg-zinc-900 border border-zinc-800 px-2 py-0.5 rounded-md">
+                                  <Lock className="w-2.5 h-2.5" />
+                                  VAULTED
+                                </span>
+                              )}
+                            </div>
+
+                            <div className="flex items-center gap-3 text-[11px] text-zinc-400 font-mono flex-wrap">
+                              <span className="text-zinc-500">{asset.type}</span>
+                              <span>•</span>
+                              <span>{assetDuration}</span>
+                              <span>•</span>
+                              <span className="text-cyan-400">{asset.royalty}% royalty</span>
+                              {asset.ownerAddress && (
+                                <>
+                                  <span>•</span>
+                                  <span className="text-zinc-500 truncate max-w-[120px]">
+                                    Creator: {asset.ownerAddress.slice(0, 6)}...{asset.ownerAddress.slice(-4)}
+                                  </span>
+                                </>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Price & Action controls */}
+                        <div className="flex items-center gap-3 shrink-0 pt-2 md:pt-0 border-t md:border-t-0 border-zinc-900">
                           {asset.isForSale && (
-                            <div className="text-emerald-400 text-xs font-black font-mono bg-emerald-950/20 px-2.5 py-1 rounded-xl border border-emerald-500/10 group-hover:border-emerald-500/30 group-hover:shadow-sm group-hover:shadow-emerald-500/20 flex items-center gap-1 transition-all duration-300">
-                              <Coins className="w-3.5 h-3.5" />
-                              {asset.price} ETH
+                            <div className="text-right font-mono pr-2">
+                              <div className="text-xs font-black text-emerald-400">{asset.price} ETH</div>
+                              <div className="text-[10px] text-zinc-500 font-mono">~$210 USD</div>
                             </div>
                           )}
-                        </div>
 
-                        {/* Title & Description */}
-                        <h3 className="text-base font-bold text-white tracking-tight leading-snug group-hover:text-cyan-400 group-hover:translate-x-0.5 transition-all duration-300 text-left relative z-10">
-                          {asset.title || 'Unnamed IP Asset'}
-                        </h3>
-                        <p className="text-zinc-400 text-xs mt-3 line-clamp-3 text-left leading-relaxed min-h-[4.5rem]">
-                          {asset.description || 'No digital metadata description provided for this decentralized IP element.'}
-                        </p>
+                          <button
+                            onClick={() => toggleFavorite(asset.id)}
+                            className={`p-2 rounded-xl border transition-all ${
+                              favoritedAssetIds.includes(asset.id)
+                                ? 'bg-pink-950/40 border-pink-500/40 text-pink-400'
+                                : 'bg-zinc-900/60 border-zinc-850 text-zinc-500 hover:text-zinc-300'
+                            }`}
+                            title="Favorite"
+                          >
+                            <Heart className={`w-4 h-4 ${favoritedAssetIds.includes(asset.id) ? 'fill-pink-400' : ''}`} />
+                          </button>
 
-                        {/* Custom Customizable Terms Summary */}
-                        <div className="mt-5 space-y-2 pt-4 border-t border-zinc-900 text-xs">
-                          <div className="flex items-center justify-between text-zinc-500">
-                            <span className="flex items-center gap-1"><Clock className="w-3 h-3 text-cyan-500/60" /> License Duration</span>
-                            <span className="font-bold text-zinc-300">{assetDuration}</span>
-                          </div>
-                          <div className="flex items-center justify-between text-zinc-500">
-                            <span className="flex items-center gap-1"><Scale className="w-3 h-3 text-cyan-500/60" /> Allowed Usages</span>
-                            <span className="text-zinc-300 font-bold truncate max-w-[150px]" title={assetUsages.join(', ')}>
-                              {assetUsages.length} Standard Rights
-                            </span>
-                          </div>
-                          <div className="flex items-center justify-between text-zinc-500">
-                            <span className="flex items-center gap-1"><Calculator className="w-3 h-3 text-cyan-500/60" /> Creator Royalty</span>
-                            <span className="font-mono text-cyan-400 font-bold">{asset.royalty}% split</span>
-                          </div>
-                          {asset.customClause && (
-                            <div className="mt-2 text-left bg-zinc-900/30 p-2 rounded-xl border border-zinc-850 text-[10px] text-zinc-400 italic line-clamp-1">
-                              &ldquo;{asset.customClause}&rdquo;
-                            </div>
-                          )}
-                        </div>
-                      </div>
+                          <Button
+                            onClick={() => setInspectingAsset(asset)}
+                            variant="outline"
+                            className="rounded-xl border-zinc-800 bg-zinc-900 hover:bg-zinc-850 text-zinc-300 hover:text-white text-xs h-9 px-3"
+                          >
+                            <Eye className="w-3.5 h-3.5 mr-1 text-cyan-400" />
+                            Details
+                          </Button>
 
-                      {/* Button interface panels */}
-                      <div className="mt-6 pt-4 border-t border-zinc-900 space-y-2">
-                        {isOwner ? (
-                          <div className="space-y-2">
-                            <div className="text-center py-2 bg-zinc-900/40 rounded-xl border border-zinc-850">
-                              <span className="text-[10px] uppercase font-mono tracking-wider text-cyan-400 flex items-center justify-center gap-1.5 font-bold">
-                                <BookmarkCheck className="w-4 h-4 text-cyan-500" />
-                                My Sovereign IP
-                              </span>
-                            </div>
+                          {isOwner ? (
                             <Button
                               onClick={() => handleOpenCustomizing(asset)}
-                              className="w-full rounded-xl bg-zinc-900 hover:bg-zinc-850 border border-zinc-800 text-cyan-400 hover:text-cyan-300 text-xs font-bold font-mono py-1.5 h-9"
+                              className="rounded-xl bg-zinc-900 hover:bg-zinc-850 border border-emerald-500/30 text-emerald-300 text-xs font-bold font-mono h-9 px-3.5"
                             >
-                              Configure Licensing Terms
+                              Configure Terms
                             </Button>
-                          </div>
-                        ) : asset.isForSale ? (
-                          <div className="space-y-2">
-                            <div className="grid grid-cols-2 gap-2">
-                              <Button 
-                                onClick={() => handlePurchase(asset)}
-                                disabled={loadingId === asset.id}
-                                className="rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-bold text-xs uppercase tracking-wider h-10 flex items-center justify-center gap-1.5"
-                              >
-                                {loadingId === asset.id ? (
-                                  <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                                ) : (
-                                  <>
-                                    Instant Buy
-                                    <ArrowRight className="w-3 h-3" />
-                                  </>
-                                )}
-                              </Button>
-                              
-                              <Button
-                                onClick={() => {
-                                  setNegotiatingAsset(asset);
-                                  setProposalStatus('idle');
-                                  setNegoForm({
-                                    senderName: '',
-                                    senderContact: '',
-                                    proposedPrice: asset.price ? asset.price.toString() : '0.1',
-                                    requestedDuration: assetDuration,
-                                    requestedUsages: assetUsages,
-                                    proposalMessage: ''
-                                  });
-                                }}
-                                variant="outline"
-                                className="rounded-xl border-zinc-800 bg-zinc-950 text-purple-400 hover:text-purple-300 hover:bg-zinc-900 text-xs font-bold h-10 flex items-center justify-center gap-1.5"
-                              >
-                                <Mail className="w-3.5 h-3.5" />
-                                Request terms
-                              </Button>
-                            </div>
-                            
+                          ) : asset.isForSale ? (
                             <Button
-                              onClick={() => {
-                                setDemoSelectedAsset(asset);
-                                setDemoStep('sign');
-                                setDemoWalletConnected(true);
-                                setDemoLogs([
-                                  `[SANDBOX] Target asset selected: "${asset.title}"`,
-                                  `[SANDBOX] Smart Contract: Loaded split covenants (${asset.royalty}% artist, ${100 - asset.royalty}% platform).`,
-                                  `[SANDBOX] Price parameter: ${asset.price || 0.05} ETH.`,
-                                  `[SANDBOX] Custom duration: ${assetDuration}.`,
-                                  `[SANDBOX] Ready for continuous session signature...`
-                                ]);
-                                setDemoProgress(25);
-                                setDemoArtistPay('0.00');
-                                setDemoPlatformPay('0.00');
-                                setDemoTxHash('');
-                              }}
-                              variant="outline"
-                              className="w-full rounded-xl border-zinc-900 bg-zinc-950/20 text-zinc-500 hover:text-white text-[10px] font-mono h-8 flex items-center justify-center gap-1.5"
+                              onClick={() => handlePurchase(asset)}
+                              disabled={loadingId === asset.id}
+                              className="rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-bold text-xs h-9 px-4 flex items-center gap-1.5 shadow-sm shadow-cyan-950"
                             >
-                              <Sparkles className="w-3.5 h-3.5 text-cyan-400" />
-                              Load in Demo Simulator
+                              {loadingId === asset.id ? (
+                                <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                              ) : (
+                                <>
+                                  Instant Buy
+                                  <ArrowRight className="w-3 h-3" />
+                                </>
+                              )}
                             </Button>
-                          </div>
-                        ) : (
-                          <div className="space-y-2">
-                            <div className="text-center py-2 bg-zinc-900/10 rounded-xl">
-                              <span className="text-[9px] uppercase font-mono tracking-wider text-zinc-600">
-                                Not Listed for Sale
-                              </span>
-                            </div>
+                          ) : (
                             <Button
                               onClick={() => {
                                 setNegotiatingAsset(asset);
@@ -1114,18 +1147,350 @@ Secure cryptographic hash tunnel verified by Sovranly IP.`;
                                 });
                               }}
                               variant="outline"
-                              className="w-full rounded-xl border-zinc-800 bg-zinc-950 text-purple-400 hover:text-purple-300 hover:bg-zinc-900 text-xs font-bold h-9 flex items-center justify-center gap-1.5"
+                              className="rounded-xl border-zinc-800 bg-zinc-900 text-purple-300 hover:bg-zinc-850 text-xs font-bold h-9 px-3.5"
                             >
-                              <Mail className="w-3.5 h-3.5" />
-                              Submit Licensing Proposal
+                              Inquire
                             </Button>
-                          </div>
-                        )}
-                      </div>
+                          )}
+                        </div>
+                      </motion.div>
+                    );
+                  })}
+                </AnimatePresence>
+              </div>
+            ) : (
+              /* GRID VIEW (PREMIUM DARK CARDS WITH ARTWORK BANNERS & CLEAR OWNERSHIP) */
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <AnimatePresence mode="popLayout">
+                  {filteredAssets.map(asset => {
+                    const isOwner = Boolean(
+                      (walletAddress && asset.ownerAddress?.toLowerCase() === walletAddress.toLowerCase()) ||
+                      (user && (asset as unknown as { userId?: string }).userId === user.uid)
+                    );
+                    
+                    const assetDuration = asset.duration || '3 Years';
+                    const assetUsages = asset.usages || ['Streaming & Broadcasting', 'Derivative Works'];
+                    const isAudio = asset.type?.toLowerCase().includes('music') || asset.type?.toLowerCase().includes('audio');
+                    const isCode = asset.type?.toLowerCase().includes('software') || asset.type?.toLowerCase().includes('code') || asset.type?.toLowerCase().includes('contract');
+                    const isArt = asset.type?.toLowerCase().includes('art') || asset.type?.toLowerCase().includes('design') || asset.type?.toLowerCase().includes('3d');
 
-                    </motion.div>
-                  );
-                })}
+                    return (
+                      <motion.div 
+                        key={asset.id} 
+                        layout
+                        initial={{ opacity: 0, y: 15 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -15, scale: 0.95 }}
+                        whileHover={{ y: -6, scale: 1.015 }}
+                        transition={{ duration: 0.25, ease: [0.25, 0.1, 0.25, 1.0] }}
+                        className={`group bg-zinc-950 hover:bg-[#0a0a10] rounded-3xl border flex flex-col justify-between transition-all duration-300 relative overflow-hidden shadow-xl hover:shadow-2xl ${
+                          isOwner 
+                            ? 'border-emerald-500/30 hover:border-emerald-400/60 hover:shadow-emerald-950/20' 
+                            : 'border-zinc-900/90 hover:border-cyan-500/40 hover:shadow-cyan-950/25'
+                        }`}
+                      >
+                        {/* Ambient radial glow on hover */}
+                        <div className={`absolute -inset-px rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none ${
+                          isOwner 
+                            ? 'bg-gradient-to-br from-emerald-500/10 via-cyan-500/5 to-transparent' 
+                            : 'bg-gradient-to-br from-cyan-500/12 via-violet-500/6 to-transparent'
+                        }`} />
+
+                        {/* Top Accent Sheen */}
+                        <div className={`absolute top-0 left-0 w-full h-[2px] transition-all duration-500 ${
+                          isOwner 
+                            ? 'bg-gradient-to-r from-emerald-500/0 via-emerald-400 to-emerald-500/0 opacity-60 group-hover:opacity-100' 
+                            : 'bg-gradient-to-r from-cyan-500/0 via-cyan-400/90 to-cyan-500/0 opacity-0 group-hover:opacity-100'
+                        }`} />
+
+                        <div>
+                          {/* Visual IP Artwork & Category Header Banner */}
+                          <div className={`relative h-32 w-full p-4 flex flex-col justify-between border-b overflow-hidden ${
+                            isAudio 
+                              ? 'bg-gradient-to-br from-violet-950/70 via-indigo-950/40 to-zinc-950 border-violet-900/30' 
+                              : isCode 
+                              ? 'bg-gradient-to-br from-cyan-950/70 via-blue-950/40 to-zinc-950 border-cyan-900/30' 
+                              : isArt 
+                              ? 'bg-gradient-to-br from-fuchsia-950/70 via-purple-950/40 to-zinc-950 border-fuchsia-900/30' 
+                              : 'bg-gradient-to-br from-emerald-950/70 via-teal-950/40 to-zinc-950 border-emerald-900/30'
+                          }`}>
+                            {/* Decorative background grid pattern */}
+                            <div className="absolute inset-0 bg-[radial-gradient(#ffffff0a_1px,transparent_1px)] [background-size:12px_12px] pointer-events-none opacity-60" />
+
+                            {/* Top row: Category Badge & Actions */}
+                            <div className="flex items-center justify-between relative z-10">
+                              <div className="flex items-center gap-2">
+                                <span className="bg-black/60 backdrop-blur-md text-white border border-white/10 px-3 py-1 rounded-xl text-[10px] font-mono font-bold flex items-center gap-1.5 shadow-sm">
+                                  {isAudio && <Music className="w-3 h-3 text-cyan-400" />}
+                                  {isCode && <Code2 className="w-3 h-3 text-cyan-400" />}
+                                  {isArt && <ImageIcon className="w-3 h-3 text-fuchsia-400" />}
+                                  {!isAudio && !isCode && !isArt && <FileIcon className="w-3 h-3 text-emerald-400" />}
+                                  {asset.type}
+                                </span>
+
+                                <span className="bg-black/40 text-zinc-400 border border-white/5 px-2 py-1 rounded-xl text-[9px] font-mono">
+                                  #SVIP-{(asset.id.charCodeAt(0) * 892 + 104).toString().slice(0, 5)}
+                                </span>
+                              </div>
+
+                              {/* Favorite Button */}
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  toggleFavorite(asset.id);
+                                }}
+                                className={`p-1.5 rounded-xl transition-all border cursor-pointer backdrop-blur-md ${
+                                  favoritedAssetIds.includes(asset.id)
+                                    ? 'bg-pink-950/70 border-pink-500/50 text-pink-400 shadow-md shadow-pink-950/60'
+                                    : 'bg-black/50 border-white/10 text-zinc-400 hover:text-white hover:border-white/30'
+                                }`}
+                                title={favoritedAssetIds.includes(asset.id) ? "Remove from favorites" : "Add to favorites"}
+                              >
+                                <Heart className={`w-3.5 h-3.5 ${favoritedAssetIds.includes(asset.id) ? 'fill-pink-400 text-pink-400' : ''}`} />
+                              </button>
+                            </div>
+
+                            {/* Bottom row of header banner: Ownership Status & Price Pill */}
+                            <div className="flex items-end justify-between relative z-10">
+                              {/* Ownership Status Pill */}
+                              {isOwner ? (
+                                <div className="flex items-center gap-1.5 bg-emerald-950/90 border border-emerald-500/50 text-emerald-300 px-3 py-1 rounded-xl text-[10px] font-mono font-bold shadow-md shadow-emerald-950/50 backdrop-blur-sm">
+                                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                                  <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
+                                  YOUR SOVEREIGN ASSET
+                                </div>
+                              ) : asset.isForSale ? (
+                                <div className="flex items-center gap-1.5 bg-cyan-950/90 border border-cyan-500/40 text-cyan-300 px-3 py-1 rounded-xl text-[10px] font-mono font-bold shadow-md shadow-cyan-950/50 backdrop-blur-sm">
+                                  <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
+                                  AVAILABLE FOR LICENSE
+                                </div>
+                              ) : (
+                                <div className="flex items-center gap-1.5 bg-zinc-900/90 border border-zinc-700/60 text-zinc-400 px-3 py-1 rounded-xl text-[10px] font-mono font-bold backdrop-blur-sm">
+                                  <Lock className="w-3 h-3 text-zinc-500" />
+                                  VAULTED / UNLISTED
+                                </div>
+                              )}
+
+                              {/* Price Indicator */}
+                              {asset.isForSale && (
+                                <div className="text-emerald-300 text-xs font-black font-mono bg-black/80 backdrop-blur-md px-3 py-1 rounded-xl border border-emerald-500/30 flex items-center gap-1.5 shadow-sm">
+                                  <Coins className="w-3.5 h-3.5 text-emerald-400" />
+                                  {asset.price} ETH
+                                </div>
+                              )}
+                            </div>
+                          </div>
+
+                          {/* Card Body Information */}
+                          <div className="p-6 space-y-4">
+                            {/* Title & Inspect Link */}
+                            <div className="flex items-start justify-between gap-3">
+                              <h3 
+                                onClick={() => setInspectingAsset(asset)}
+                                className="text-base font-bold text-white tracking-tight leading-snug group-hover:text-cyan-300 transition-colors text-left cursor-pointer hover:underline"
+                              >
+                                {asset.title || 'Unnamed IP Asset'}
+                              </h3>
+                              
+                              <button
+                                onClick={() => setInspectingAsset(asset)}
+                                className="text-zinc-500 hover:text-cyan-400 transition-colors p-1"
+                                title="Inspect Specifications"
+                              >
+                                <Eye className="w-4 h-4" />
+                              </button>
+                            </div>
+
+                            {/* Creator Metadata Chip */}
+                            <div className="flex items-center justify-between text-xs text-zinc-400 pb-1 border-b border-zinc-900">
+                              <div className="flex items-center gap-1.5">
+                                <User className="w-3 h-3 text-cyan-400/80" />
+                                <span className="text-[11px] text-zinc-400">Creator:</span>
+                                <span className="font-mono text-[11px] text-zinc-300 font-semibold">
+                                  {asset.ownerAddress ? `${asset.ownerAddress.slice(0, 6)}...${asset.ownerAddress.slice(-4)}` : '0xSovranly'}
+                                </span>
+                              </div>
+                              {asset.ownerAddress && (
+                                <button
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    if (asset.ownerAddress) {
+                                      copyToClipboard(asset.ownerAddress, asset.id);
+                                    }
+                                  }}
+                                  className="text-[10px] text-zinc-500 hover:text-cyan-400 transition-colors flex items-center gap-1 font-mono"
+                                  title="Copy address"
+                                >
+                                  {copiedAddress === asset.id ? (
+                                    <span className="text-emerald-400 flex items-center gap-0.5"><Check className="w-2.5 h-2.5" /> Copied</span>
+                                  ) : (
+                                    <span className="flex items-center gap-0.5"><Copy className="w-2.5 h-2.5" /> Copy</span>
+                                  )}
+                                </button>
+                              )}
+                            </div>
+
+                            {/* Description */}
+                            <p className="text-zinc-400 text-xs text-left leading-relaxed line-clamp-2 min-h-[2.5rem]">
+                              {asset.description || 'Verified decentralized intellectual property asset secured by continuous cryptographic smart covenants.'}
+                            </p>
+
+                            {/* Compact Licensing Parameters Grid */}
+                            <div className="grid grid-cols-3 gap-2 bg-[#08080d] p-3 rounded-2xl border border-zinc-900 text-left font-mono">
+                              <div className="space-y-0.5">
+                                <span className="text-[9px] uppercase text-zinc-500 font-bold block flex items-center gap-1">
+                                  <Clock className="w-2.5 h-2.5 text-cyan-400" /> Duration
+                                </span>
+                                <span className="text-[11px] font-bold text-zinc-200 block truncate">{assetDuration}</span>
+                              </div>
+
+                              <div className="space-y-0.5">
+                                <span className="text-[9px] uppercase text-zinc-500 font-bold block flex items-center gap-1">
+                                  <Scale className="w-2.5 h-2.5 text-cyan-400" /> Royalty
+                                </span>
+                                <span className="text-[11px] font-bold text-cyan-400 block">{asset.royalty}% split</span>
+                              </div>
+
+                              <div className="space-y-0.5">
+                                <span className="text-[9px] uppercase text-zinc-500 font-bold block flex items-center gap-1">
+                                  <Layers className="w-2.5 h-2.5 text-cyan-400" /> Rights
+                                </span>
+                                <span className="text-[11px] font-bold text-zinc-300 block truncate" title={assetUsages.join(', ')}>
+                                  {assetUsages.length} Standard
+                                </span>
+                              </div>
+                            </div>
+
+                            {asset.customClause && (
+                              <div className="text-left bg-zinc-900/40 p-2.5 rounded-xl border border-zinc-850 text-[10px] text-zinc-400 italic line-clamp-1">
+                                &ldquo;{asset.customClause}&rdquo;
+                              </div>
+                            )}
+                          </div>
+                        </div>
+
+                        {/* Interactive Footer & Action Buttons */}
+                        <div className="p-6 pt-0 space-y-2">
+                          {isOwner ? (
+                            <div className="space-y-2">
+                              <div className="py-2 px-3 bg-emerald-950/30 rounded-xl border border-emerald-500/20 text-center">
+                                <span className="text-[10px] uppercase font-mono tracking-wider text-emerald-300 flex items-center justify-center gap-1.5 font-bold">
+                                  <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
+                                  Ownership Authenticated
+                                </span>
+                              </div>
+                              <div className="grid grid-cols-2 gap-2">
+                                <Button
+                                  onClick={() => handleOpenCustomizing(asset)}
+                                  className="rounded-xl bg-zinc-900 hover:bg-zinc-850 border border-zinc-800 text-cyan-400 hover:text-cyan-300 text-xs font-bold font-mono h-10"
+                                >
+                                  Configure Terms
+                                </Button>
+                                <Button
+                                  onClick={() => setInspectingAsset(asset)}
+                                  variant="outline"
+                                  className="rounded-xl border-zinc-850 bg-zinc-950 text-zinc-400 hover:text-white text-xs font-semibold h-10"
+                                >
+                                  Inspect Rights
+                                </Button>
+                              </div>
+                            </div>
+                          ) : asset.isForSale ? (
+                            <div className="space-y-2">
+                              <div className="grid grid-cols-2 gap-2">
+                                <Button 
+                                  onClick={() => handlePurchase(asset)}
+                                  disabled={loadingId === asset.id}
+                                  className="rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-bold text-xs uppercase tracking-wider h-10 flex items-center justify-center gap-1.5 shadow-md shadow-cyan-950/60 active:scale-95 transition-all"
+                                >
+                                  {loadingId === asset.id ? (
+                                    <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                                  ) : (
+                                    <>
+                                      Instant Buy
+                                      <ArrowRight className="w-3 h-3" />
+                                    </>
+                                  )}
+                                </Button>
+                                
+                                <Button
+                                  onClick={() => {
+                                    setNegotiatingAsset(asset);
+                                    setProposalStatus('idle');
+                                    setNegoForm({
+                                      senderName: '',
+                                      senderContact: '',
+                                      proposedPrice: asset.price ? asset.price.toString() : '0.1',
+                                      requestedDuration: assetDuration,
+                                      requestedUsages: assetUsages,
+                                      proposalMessage: ''
+                                    });
+                                  }}
+                                  variant="outline"
+                                  className="rounded-xl border-zinc-800 bg-zinc-900/80 text-purple-300 hover:text-purple-200 hover:bg-zinc-850 text-xs font-bold h-10 flex items-center justify-center gap-1.5 active:scale-95 transition-all"
+                                >
+                                  <Mail className="w-3.5 h-3.5 text-purple-400" />
+                                  Request Terms
+                                </Button>
+                              </div>
+                              
+                              <Button
+                                onClick={() => {
+                                  setDemoSelectedAsset(asset);
+                                  setDemoStep('sign');
+                                  setDemoWalletConnected(true);
+                                  setDemoLogs([
+                                    `[SANDBOX] Target asset selected: "${asset.title}"`,
+                                    `[SANDBOX] Smart Contract: Loaded split covenants (${asset.royalty}% artist, ${100 - asset.royalty}% platform).`,
+                                    `[SANDBOX] Price parameter: ${asset.price || 0.05} ETH.`,
+                                    `[SANDBOX] Custom duration: ${assetDuration}.`,
+                                    `[SANDBOX] Ready for continuous session signature...`
+                                  ]);
+                                  setDemoProgress(25);
+                                  setDemoArtistPay('0.00');
+                                  setDemoPlatformPay('0.00');
+                                  setDemoTxHash('');
+                                }}
+                                variant="outline"
+                                className="w-full rounded-xl border-zinc-900 bg-zinc-950/40 text-zinc-400 hover:text-cyan-300 hover:border-cyan-500/30 text-[10px] font-mono h-8 flex items-center justify-center gap-1.5 transition-all"
+                              >
+                                <Sparkles className="w-3 h-3 text-cyan-400" />
+                                Test in Demo Sandbox
+                              </Button>
+                            </div>
+                          ) : (
+                            <div className="space-y-2">
+                              <div className="py-2 bg-zinc-900/30 rounded-xl border border-zinc-850 text-center">
+                                <span className="text-[10px] uppercase font-mono tracking-wider text-zinc-500">
+                                  Private Creator Vault
+                                </span>
+                              </div>
+                              <Button
+                                onClick={() => {
+                                  setNegotiatingAsset(asset);
+                                  setProposalStatus('idle');
+                                  setNegoForm({
+                                    senderName: '',
+                                    senderContact: '',
+                                    proposedPrice: '0.1',
+                                    requestedDuration: assetDuration,
+                                    requestedUsages: assetUsages,
+                                    proposalMessage: ''
+                                  });
+                                }}
+                                variant="outline"
+                                className="w-full rounded-xl border-zinc-800 bg-zinc-900 text-purple-300 hover:text-purple-200 hover:bg-zinc-850 text-xs font-bold h-10 flex items-center justify-center gap-1.5 active:scale-95 transition-all"
+                              >
+                                <Mail className="w-3.5 h-3.5 text-purple-400" />
+                                Submit Private Licensing Offer
+                              </Button>
+                            </div>
+                          )}
+                        </div>
+
+                      </motion.div>
+                    );
+                  })}
                 </AnimatePresence>
               </div>
             )}
@@ -1680,6 +2045,183 @@ Secure cryptographic hash tunnel verified by Sovranly IP.`;
 
             <div className="text-center pt-1 border-t border-zinc-900">
               <span className="text-[8px] uppercase font-mono text-zinc-650 tracking-[0.2em] block font-black">SOVRANLY ZERO TRUST HANDSHAKE ACTIVE</span>
+            </div>
+
+          </div>
+        </div>
+      )}
+
+      {/* --- ASSET DETAILS / CRYPTOGRAPHIC INSPECTION MODAL --- */}
+      {inspectingAsset && (
+        <div className="fixed inset-0 bg-black/85 backdrop-blur-md z-50 flex items-center justify-center p-4">
+          <div className="bg-zinc-950 border border-zinc-800 rounded-3xl p-6 md:p-8 max-w-xl w-full relative space-y-6 shadow-2xl animate-in fade-in zoom-in duration-200 text-left max-h-[90vh] overflow-y-auto">
+            
+            {/* Modal Header */}
+            <div className="flex items-start justify-between border-b border-zinc-900 pb-4">
+              <div className="space-y-1">
+                <div className="flex items-center gap-2">
+                  <span className="bg-cyan-950/60 text-cyan-300 border border-cyan-500/30 px-2.5 py-0.5 rounded-lg text-[10px] font-mono font-bold">
+                    {inspectingAsset.type}
+                  </span>
+                  <span className="text-zinc-500 text-[10px] font-mono">
+                    Token #SVIP-{(inspectingAsset.id.charCodeAt(0) * 892 + 104).toString().slice(0, 5)}
+                  </span>
+                </div>
+                <h3 className="text-xl font-bold text-white tracking-tight">{inspectingAsset.title}</h3>
+              </div>
+              <button 
+                onClick={() => setInspectingAsset(null)} 
+                className="p-1.5 text-zinc-500 hover:text-white rounded-xl bg-zinc-900 border border-zinc-800 transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Ownership & Verified Status Banner */}
+            <div className={`p-4 rounded-2xl border flex items-center justify-between gap-3 ${
+              walletAddress && inspectingAsset.ownerAddress?.toLowerCase() === walletAddress.toLowerCase()
+                ? 'bg-emerald-950/30 border-emerald-500/30 text-emerald-300'
+                : inspectingAsset.isForSale
+                ? 'bg-cyan-950/30 border-cyan-500/30 text-cyan-300'
+                : 'bg-zinc-900/40 border-zinc-800 text-zinc-400'
+            }`}>
+              <div className="flex items-center gap-2.5">
+                <ShieldCheck className="w-5 h-5 shrink-0" />
+                <div className="font-mono text-xs">
+                  <div className="font-bold">
+                    {walletAddress && inspectingAsset.ownerAddress?.toLowerCase() === walletAddress.toLowerCase()
+                      ? 'You Are The Authenticated Owner'
+                      : inspectingAsset.isForSale
+                      ? 'Available for Instant Licensing'
+                      : 'Private Vaulted IP'}
+                  </div>
+                  <div className="text-[10px] text-zinc-400">Continuous On-Chain Verification</div>
+                </div>
+              </div>
+              {inspectingAsset.isForSale && (
+                <div className="text-right font-mono">
+                  <div className="text-sm font-black text-emerald-400">{inspectingAsset.price} ETH</div>
+                  <div className="text-[9px] text-zinc-500">Fixed rate</div>
+                </div>
+              )}
+            </div>
+
+            {/* Description */}
+            <div className="space-y-1.5">
+              <span className="text-[10px] uppercase font-mono tracking-wider text-zinc-500 font-bold block">Asset Description & Scope</span>
+              <p className="text-xs text-zinc-300 leading-relaxed bg-zinc-900/40 p-3.5 rounded-xl border border-zinc-850">
+                {inspectingAsset.description || 'No additional descriptive metadata provided for this registered intellectual property.'}
+              </p>
+            </div>
+
+            {/* Cryptographic Specifications Grid */}
+            <div className="grid grid-cols-2 gap-3 text-xs font-mono">
+              <div className="bg-[#08080d] p-3 rounded-xl border border-zinc-900 space-y-1">
+                <span className="text-[9px] text-zinc-500 uppercase block">Creator Address</span>
+                <div className="text-zinc-200 font-bold truncate">
+                  {inspectingAsset.ownerAddress || '0xSovranly...Master'}
+                </div>
+              </div>
+
+              <div className="bg-[#08080d] p-3 rounded-xl border border-zinc-900 space-y-1">
+                <span className="text-[9px] text-zinc-500 uppercase block">License Duration</span>
+                <div className="text-cyan-400 font-bold">
+                  {inspectingAsset.duration || '3 Years Standard'}
+                </div>
+              </div>
+
+              <div className="bg-[#08080d] p-3 rounded-xl border border-zinc-900 space-y-1">
+                <span className="text-[9px] text-zinc-500 uppercase block">Creator Royalty Retained</span>
+                <div className="text-emerald-400 font-bold">
+                  {inspectingAsset.royalty}% Perpetual
+                </div>
+              </div>
+
+              <div className="bg-[#08080d] p-3 rounded-xl border border-zinc-900 space-y-1">
+                <span className="text-[9px] text-zinc-500 uppercase block">Security Classification</span>
+                <div className="text-zinc-300 font-bold">
+                  Class 42 IP Covenants
+                </div>
+              </div>
+            </div>
+
+            {/* Permitted Commercial Rights */}
+            <div className="space-y-2">
+              <span className="text-[10px] uppercase font-mono tracking-wider text-zinc-500 font-bold block">Included Usage Rights</span>
+              <div className="grid grid-cols-2 gap-2">
+                {(inspectingAsset.usages || ['Streaming & Broadcasting', 'Derivative Works', 'Commercial Distribution']).map((usage, idx) => (
+                  <div key={idx} className="flex items-center gap-2 bg-zinc-900/60 border border-zinc-800 px-3 py-2 rounded-xl text-xs text-zinc-300">
+                    <CheckCircle className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
+                    <span className="truncate">{usage}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Custom Legal Clause */}
+            {inspectingAsset.customClause && (
+              <div className="space-y-1.5">
+                <span className="text-[10px] uppercase font-mono tracking-wider text-zinc-500 font-bold block">Creator Legal Clause</span>
+                <div className="text-xs text-zinc-300 italic bg-zinc-900/30 p-3 rounded-xl border border-zinc-850">
+                  &ldquo;{inspectingAsset.customClause}&rdquo;
+                </div>
+              </div>
+            )}
+
+            {/* Action Buttons */}
+            <div className="flex gap-3 pt-4 border-t border-zinc-900">
+              <Button 
+                onClick={() => setInspectingAsset(null)}
+                variant="outline"
+                className="flex-1 rounded-xl border-zinc-800 bg-zinc-900 text-zinc-300 hover:text-white text-xs h-11 font-bold"
+              >
+                Close View
+              </Button>
+
+              {walletAddress && inspectingAsset.ownerAddress?.toLowerCase() === walletAddress.toLowerCase() ? (
+                <Button 
+                  onClick={() => {
+                    const target = inspectingAsset;
+                    setInspectingAsset(null);
+                    handleOpenCustomizing(target);
+                  }}
+                  className="flex-1 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-bold text-xs uppercase h-11"
+                >
+                  Configure Terms
+                </Button>
+              ) : inspectingAsset.isForSale ? (
+                <Button 
+                  onClick={() => {
+                    const target = inspectingAsset;
+                    setInspectingAsset(null);
+                    handlePurchase(target);
+                  }}
+                  className="flex-1 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-bold text-xs uppercase h-11 flex items-center justify-center gap-1.5 shadow-md shadow-cyan-950"
+                >
+                  Instant Buy ({inspectingAsset.price} ETH)
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </Button>
+              ) : (
+                <Button 
+                  onClick={() => {
+                    const target = inspectingAsset;
+                    setInspectingAsset(null);
+                    setNegotiatingAsset(target);
+                    setProposalStatus('idle');
+                    setNegoForm({
+                      senderName: '',
+                      senderContact: '',
+                      proposedPrice: '0.1',
+                      requestedDuration: target.duration || '3 Years',
+                      requestedUsages: target.usages || ['Streaming & Broadcasting'],
+                      proposalMessage: ''
+                    });
+                  }}
+                  className="flex-1 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs uppercase h-11"
+                >
+                  Submit Proposal
+                </Button>
+              )}
             </div>
 
           </div>

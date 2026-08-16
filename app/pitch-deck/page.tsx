@@ -26,8 +26,6 @@ import {
   Cpu
 } from 'lucide-react';
 import { SovranlyLogo } from '@/components/SovranlyLogo';
-import { useLanguage } from '@/components/LanguageProvider';
-import LanguageSelector from '@/components/LanguageSelector';
 import { motion, AnimatePresence } from 'motion/react';
 
 // Pitch Deck Slides Data
@@ -141,7 +139,6 @@ const PITCH_SLIDES = [
 
 export default function PitchDeckPage() {
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
-  const { t } = useLanguage();
 
   const currentSlide = PITCH_SLIDES[currentSlideIndex];
 
@@ -381,7 +378,6 @@ export default function PitchDeckPage() {
 
       {/* Footer */}
       <footer className="border-t border-white/5 py-12 bg-zinc-950/60 relative z-10 flex flex-col items-center justify-center gap-6 text-center mt-20">
-        <LanguageSelector />
         <div className="flex flex-wrap items-center justify-center gap-4 text-zinc-500 text-xs px-4">
           <Link href="/pitch-deck" className="text-cyan-400 font-medium transition-colors">Pitch Deck</Link>
           <span>•</span>
@@ -391,7 +387,7 @@ export default function PitchDeckPage() {
           <span>•</span>
           <Link href="/privacy" className="hover:text-cyan-400 transition-colors">Privacy Policy</Link>
         </div>
-        <p className="text-zinc-600 text-xs">{t('copyright') || '© 2026 Sovranly IP. Sovereign intellectual property systems. Zero Trust Secured.'}</p>
+        <p className="text-zinc-600 text-xs">© 2026 Sovranly IP. Sovereign intellectual property systems. Zero Trust Secured.</p>
       </footer>
     </div>
   );

@@ -19,16 +19,13 @@ import DataTokenizationHub from '@/components/DataTokenizationHub';
 import CreatorNetwork from '@/components/CreatorNetwork';
 import MobileBottomNav from '@/components/MobileBottomNav';
 import { useAuth } from '@/components/auth/FirebaseProvider';
-import { useLanguage } from '@/components/LanguageProvider';
 import { SignIn } from '@/components/auth/SignIn';
-import LanguageSelector from '@/components/LanguageSelector';
 import { SovranlyLogo } from '@/components/SovranlyLogo';
 import Link from 'next/link';
 import { ShieldCheck } from 'lucide-react';
 
 export default function DashboardPage() {
   const { user, loading } = useAuth();
-  const { t } = useLanguage();
   const [activePage, setActivePage] = useState(0); // Default to Command Center
   const [currentAccount, setCurrentAccount] = useState<string | null>(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -44,7 +41,7 @@ export default function DashboardPage() {
           <div className="absolute inset-0 border-4 border-cyan-500/10 rounded-full" />
           <div className="absolute inset-0 border-4 border-cyan-400 border-t-transparent rounded-full animate-spin" />
         </div>
-        <p className="text-zinc-650 font-mono text-[9px] uppercase tracking-[0.25em] animate-pulse">{t('establishingIdentity')}</p>
+        <p className="text-zinc-650 font-mono text-[9px] uppercase tracking-[0.25em] animate-pulse">Establishing Sovereign Identity Session...</p>
       </div>
     );
   }
@@ -61,10 +58,10 @@ export default function DashboardPage() {
           <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
             <div className="flex items-center gap-3">
               <SovranlyLogo size="sm" />
-              <span className="font-bold tracking-tighter text-white uppercase text-lg">{t('brandName')}</span>
+              <span className="font-bold tracking-tighter text-white uppercase text-lg">SOVRANLY IP</span>
             </div>
             <Link href="/" className="text-xs text-zinc-500 hover:text-white transition-colors uppercase tracking-wider font-extrabold flex items-center gap-2">
-              {t('returnHome')}
+              Return to Website
             </Link>
           </div>
         </header>
@@ -76,8 +73,7 @@ export default function DashboardPage() {
 
         {/* Footer */}
         <footer className="border-t border-white/5 py-8 flex flex-col items-center justify-center gap-4 text-center text-zinc-700 text-[9px] font-mono">
-          <LanguageSelector />
-          <span>{t('sessionContinuous')}</span>
+          <span>Sovranly Continuous Verification Environment</span>
         </footer>
       </div>
     );
@@ -95,18 +91,18 @@ export default function DashboardPage() {
       <div className="flex-1 flex flex-col overflow-hidden w-full">
         <Header 
           pageTitle={
-            activePage === 0 ? t('commandCenter') :
-            activePage === 1 ? t('userProfile') :
-            activePage === 2 ? t('ipAssetRegistry') : 
-            activePage === 3 ? t('analytics') :
-            activePage === 4 ? t('licensingCompacts') :
-            activePage === 5 ? t('royaltySandbox') :
-            activePage === 6 ? (t('creatorInbox') || 'Creator Inbox') :
+            activePage === 0 ? 'Command Center' :
+            activePage === 1 ? 'User Profile' :
+            activePage === 2 ? 'IP Asset Registry' : 
+            activePage === 3 ? 'Economics & Analytics' :
+            activePage === 4 ? 'Licensing Compacts' :
+            activePage === 5 ? 'Royalty Sandbox' :
+            activePage === 6 ? 'Creator Inbox' :
             activePage === 7 ? 'Google Slides Gateway' :
-            activePage === 8 ? (t('launchPlanner') || 'Launch Planner') :
-            activePage === 9 ? (t('techStackLedger') || 'Tech Stack Ledger') :
+            activePage === 8 ? 'Launch Planner' :
+            activePage === 9 ? 'Tech Stack Ledger' :
             activePage === 10 ? 'About Platform' :
-            activePage === 11 ? (t('aiLicensing') || 'AI Training Vault') :
+            activePage === 11 ? 'AI Training Vault' :
             activePage === 12 ? 'Sovereign Tokenizer' :
             'Creator Network'
           } 

@@ -5,13 +5,9 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { ShieldCheck, ArrowLeft, ArrowRight, Sparkles, Youtube, Facebook, Instagram, Linkedin } from 'lucide-react';
 import AboutUs from '@/components/AboutUs';
-import LanguageSelector from '@/components/LanguageSelector';
-import { useLanguage } from '@/components/LanguageProvider';
 import NewsletterSignup from '@/components/NewsletterSignup';
 
 export default function AboutPage() {
-  const { t } = useLanguage();
-
   return (
     <div className="min-h-screen bg-black text-zinc-100 font-sans selection:bg-cyan-500/20 selection:text-cyan-300">
       {/* Ambient background glows */}
@@ -31,7 +27,7 @@ export default function AboutPage() {
             </div>
           </div>
           <div className="flex items-center gap-4">
-            <Button asChild variant="outline" className="border-zinc-850 text-zinc-300 hover:text-white hover:bg-zinc-900 rounded-full text-xs">
+            <Button asChild variant="outline" className="border-zinc-855 text-zinc-300 hover:text-white hover:bg-zinc-900 rounded-full text-xs">
               <Link href="/" className="flex items-center gap-1.5">
                 <ArrowLeft className="w-3.5 h-3.5" /> Return Home
               </Link>
@@ -108,8 +104,6 @@ export default function AboutPage() {
           </div>
         </div>
         
-        <LanguageSelector />
-        
         <div className="flex items-center gap-4 text-zinc-500 text-xs">
           <Link href="/about" className="text-cyan-400 hover:text-cyan-300 font-medium transition-colors">About Us</Link>
           <span>•</span>
@@ -117,7 +111,7 @@ export default function AboutPage() {
           <span>•</span>
           <Link href="/privacy" className="hover:text-cyan-400 transition-colors">Privacy Policy</Link>
         </div>
-        <p className="text-zinc-600 text-xs">{t('copyright') || '© 2026 Sovranly IP. Sovereign intellectual property systems. Zero Trust Secured.'}</p>
+        <p className="text-zinc-600 text-xs">© 2026 Sovranly IP. Sovereign intellectual property systems. Zero Trust Secured.</p>
       </footer>
     </div>
   );

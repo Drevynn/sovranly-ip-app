@@ -38,7 +38,6 @@ import {
   ChevronRight,
   ChevronLeft
 } from 'lucide-react';
-import { useLanguage } from './LanguageProvider';
 import { motion, AnimatePresence } from 'motion/react';
 
 export type Asset = { 
@@ -118,7 +117,6 @@ const GET_SIMULATED_SLIDES = (asset: Asset) => [
 
 export default function GoogleSlidesManager() {
   const { user, isSandboxMode, accessToken, signInWithGoogle } = useAuth();
-  const { t, language } = useLanguage();
 
   const [assets, setAssets] = useState<Asset[]>([]);
   const [selectedAsset, setSelectedAsset] = useState<Asset | null>(null);

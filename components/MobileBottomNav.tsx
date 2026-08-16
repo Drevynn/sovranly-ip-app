@@ -2,7 +2,6 @@
 
 import React from 'react';
 import { Gauge, FileText, BarChart3, Scale, Menu } from 'lucide-react';
-import { useLanguage } from './LanguageProvider';
 import { motion } from 'motion/react';
 
 interface MobileBottomNavProps {
@@ -16,34 +15,32 @@ export default function MobileBottomNav({
   setActivePage,
   onOpenMenu,
 }: MobileBottomNavProps) {
-  const { t, language } = useLanguage();
-
   // Primary navigation tabs
   const navItems = [
     {
       id: 0,
-      label: language === 'es' ? 'Comando' : language === 'ja' ? '司令部' : language === 'fr' ? 'Commandement' : 'Overview',
+      label: 'Overview',
       shortLabel: 'Overview',
       icon: Gauge,
       color: 'text-cyan-400',
     },
     {
       id: 2,
-      label: language === 'es' ? 'Registro' : language === 'ja' ? 'レジストリ' : language === 'fr' ? 'Registre' : 'Registry',
+      label: 'Registry',
       shortLabel: 'Registry',
       icon: FileText,
       color: 'text-emerald-400',
     },
     {
       id: 3,
-      label: language === 'es' ? 'Analítica' : language === 'ja' ? '分析' : language === 'fr' ? 'Analytique' : 'Analytics',
+      label: 'Analytics',
       shortLabel: 'Analytics',
       icon: BarChart3,
       color: 'text-amber-400',
     },
     {
       id: 4,
-      label: language === 'es' ? 'Pactos' : language === 'ja' ? 'ライセンス' : language === 'fr' ? 'Contrats' : 'Compacts',
+      label: 'Compacts',
       shortLabel: 'Compacts',
       icon: Scale,
       color: 'text-violet-400',

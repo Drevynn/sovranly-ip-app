@@ -1,7 +1,6 @@
 import './globals.css';
 import { Metadata, Viewport } from 'next';
 import { FirebaseProvider } from '@/components/auth/FirebaseProvider';
-import { LanguageProvider } from '@/components/LanguageProvider';
 import { NotificationProvider } from '@/components/NotificationProvider';
 import CookieComplianceBanner from '@/components/CookieComplianceBanner';
 
@@ -91,13 +90,27 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className="dark" suppressHydrationWarning>
+      <head>
+        {/* Google Analytics Tracking Tag */}
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZGGTSS0QFN" />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', 'G-ZGGTSS0QFN');
+            `,
+          }}
+        />
+      </head>
       <body className="antialiased bg-zinc-950 text-zinc-100 min-h-screen font-sans">
-        <LanguageProvider>
-          <FirebaseProvider>
+        <FirebaseProvider>
+          <NotificationProvider>
             {children}
             <CookieComplianceBanner />
-          </FirebaseProvider>
-        </LanguageProvider>
+          </NotificationProvider>
+        </FirebaseProvider>
       </body>
     </html>
   );

@@ -22,7 +22,6 @@ import {
   UserCheck
 } from 'lucide-react';
 import Link from 'next/link';
-import LanguageSelector from '@/components/LanguageSelector';
 
 type FAQItem = {
   id: string;
@@ -501,7 +500,6 @@ export default function FAQPage() {
 
       {/* Footer Element */}
       <footer className="border-t border-zinc-900/60 py-12 flex flex-col items-center justify-center gap-6 text-center text-zinc-650 text-xs bg-zinc-950/50 mt-16">
-        <LanguageSelector />
         <div className="flex items-center gap-4 text-zinc-500">
           <Link href="/about" className="hover:text-cyan-400 transition-colors">About Us</Link>
           <span>•</span>

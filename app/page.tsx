@@ -24,8 +24,6 @@ import {
   CheckCircle2
 } from 'lucide-react';
 import Link from 'next/link';
-import { useLanguage } from '@/components/LanguageProvider';
-import LanguageSelector from '@/components/LanguageSelector';
 import SlideStack from '@/components/SlideStack';
 import NewsletterSignup from '@/components/NewsletterSignup';
 import AppOverviewShowcase from '@/components/AppOverviewShowcase';
@@ -35,7 +33,6 @@ import { motion } from 'motion/react';
 export default function HomePage() {
   const [submitted, setSubmitted] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
-  const { t } = useLanguage();
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -59,18 +56,18 @@ export default function HomePage() {
           </div>
           <nav className="hidden md:flex items-center gap-6">
             <Link href="/pitch-deck" className="text-sm text-cyan-400 font-semibold hover:text-cyan-300 transition-colors flex items-center gap-1.5"><Presentation className="w-4 h-4" /> Pitch Deck</Link>
-            <Link href="/dashboard" className="text-sm text-zinc-400 hover:text-white transition-colors">{t('commandCenter')}</Link>
+            <Link href="/dashboard" className="text-sm text-zinc-400 hover:text-white transition-colors">Command Center</Link>
             <Link href="/pricing" className="text-sm text-zinc-400 hover:text-white transition-colors">Pricing Plan</Link>
-            <Link href="/marketplace" className="text-sm text-zinc-400 hover:text-white transition-colors">{t('marketplace')}</Link>
-            <Link href="/wiki" className="text-sm text-zinc-400 hover:text-white transition-colors">{t('wiki')}</Link>
-            <Link href="/faq" className="text-sm text-zinc-400 hover:text-white transition-colors">{t('faq')}</Link>
+            <Link href="/marketplace" className="text-sm text-zinc-400 hover:text-white transition-colors">Marketplace</Link>
+            <Link href="/wiki" className="text-sm text-zinc-400 hover:text-white transition-colors">Wiki / Help</Link>
+            <Link href="/faq" className="text-sm text-zinc-400 hover:text-white transition-colors">FAQ</Link>
           </nav>
           <div className="flex items-center gap-4">
             <Button asChild variant="outline" className="border-zinc-800 bg-transparent text-white hover:bg-zinc-900 transition-all rounded-full hidden sm:inline-flex">
-              <Link href="/marketplace">{t('marketplace')}</Link>
+              <Link href="/marketplace">Marketplace</Link>
             </Button>
             <Button asChild className="bg-gradient-to-r from-cyan-500 to-violet-500 hover:brightness-110 text-white font-medium shadow-lg shadow-cyan-950/40 rounded-full">
-              <Link href="/dashboard">{t('launchConsole')}</Link>
+              <Link href="/dashboard">Launch Console</Link>
             </Button>
           </div>
         </div>
@@ -137,7 +134,7 @@ export default function HomePage() {
           
           <div className="inline-flex items-center gap-2.5 px-4 py-2 bg-zinc-900 border border-zinc-800 rounded-full text-xs sm:text-sm text-zinc-400 mb-2">
             <Sparkles className="w-4 h-4 text-cyan-400" />
-            <span className="font-mono tracking-wider uppercase text-[10px] sm:text-xs">{t('zeroTrustTag')}</span>
+            <span className="font-mono tracking-wider uppercase text-[10px] sm:text-xs">Zero Trust Blockchain Sovereign IP Authority</span>
           </div>
           
           {/* Primary H1 Application Title Matching OAuth Consent Screen */}
@@ -146,20 +143,20 @@ export default function HomePage() {
               Sovranly IP
             </h1>
             <p className="text-2xl sm:text-4xl md:text-5xl font-extrabold tracking-tight bg-gradient-to-r from-cyan-400 via-sky-400 to-violet-400 bg-clip-text text-transparent">
-              {t('heroMainTitleSub')}
+              Sovereign Intellectual Property &amp; Zero Trust Creator Rights Authority
             </p>
           </div>
           
           <p className="text-xl sm:text-2xl md:text-3xl text-zinc-400 max-w-5xl mx-auto leading-relaxed font-light">
-            {t('heroDescription')}
+            Sovranly IP brings robust, Zero Trust Architecture to intellectual property. Register, license, and seamlessly commercialize your assets with automated smart contracts, immutable proof of ownership, and Google Workspace presentation deck integration.
           </p>
           
           <div className="flex flex-col sm:flex-row flex-wrap justify-center items-center gap-4 pt-10">
             <Button asChild size="lg" className="w-full sm:w-auto px-8 py-7 rounded-full bg-gradient-to-r from-cyan-500 to-violet-500 text-white font-bold text-base hover:brightness-110 shadow-xl shadow-cyan-950/60 transition duration-300">
-              <Link href="/dashboard">{t('deployIpBtn')} <ArrowRight className="ml-2 h-5 w-5" /></Link>
+              <Link href="/dashboard">Deploy IP Asset <ArrowRight className="ml-2 h-5 w-5" /></Link>
             </Button>
             <Button asChild size="lg" variant="outline" className="w-full sm:w-auto px-8 py-7 rounded-full border-zinc-800 bg-zinc-950 text-white hover:bg-zinc-900 font-bold text-base transition duration-300">
-              <Link href="/marketplace">{t('exploreMarketplaceBtn')}</Link>
+              <Link href="/marketplace">Explore Marketplace</Link>
             </Button>
           </div>
 
@@ -269,25 +266,25 @@ export default function HomePage() {
         {/* Feature Highlights Grid */}
         <section className="space-y-12">
           <div className="text-center space-y-4">
-            <h3 className="text-3xl font-extrabold tracking-tight text-white">{t('trustNoone')}</h3>
-            <p className="text-zinc-400 max-w-lg mx-auto">{t('featureSubtitle')}</p>
+            <h3 className="text-3xl font-extrabold tracking-tight text-white">Trust Nothing. Authenticate Everything.</h3>
+            <p className="text-zinc-400 max-w-lg mx-auto">We secure the creator economy through robust technological structures.</p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
               { 
                 icon: ShieldCheck, 
-                title: t('feat1Title'), 
-                desc: t('feat1Desc') 
+                title: "Zero Trust Governance", 
+                desc: "Continuously validated, cryptographically secure permissions system protecting access and viewing rights for sensitive media and data." 
               },
               { 
                 icon: Zap, 
-                title: t('feat2Title'), 
-                desc: t('feat2Desc') 
+                title: "Automated Royalty Splits", 
+                desc: "Self-executing smart contract layers dispatch direct peer-to-peer micro-licensing fees and royalty fractions instantly on-chain." 
               },
               { 
                 icon: Lock, 
-                 title: t('feat3Title'), 
-                desc: t('feat3Desc') 
+                 title: "Immutable Digital Fingerprint", 
+                desc: "Permanent timestamp registry storing high-fidelity cryptographic hashes of media files, offering ironclad courtroom proof of authorship." 
               },
             ].map((feature, i) => (
               <div key={i} className="group p-8 bg-zinc-900/40 border border-zinc-800/60 rounded-3xl text-left hover:border-zinc-700/80 transition-all duration-300 shadow-xl shadow-zinc-950/20 backdrop-blur-sm">
@@ -308,13 +305,13 @@ export default function HomePage() {
               <div className="inline-flex p-3 bg-cyan-950/30 border border-cyan-800/30 rounded-2xl mb-6">
                 <MessageSquare className="h-6 w-6 text-cyan-400" />
               </div>
-              <h4 className="text-2xl font-bold text-white mb-2">{t('aiHubTitle')}</h4>
+              <h4 className="text-2xl font-bold text-white mb-2">Smart AI Onboarding</h4>
               <p className="text-sm text-zinc-400 leading-relaxed max-w-sm mb-6">
-                {t('aiHubDesc')}
+                Have questions about registering your copyright, smart-licensing, or setting up your wallet? Our continuous AI companion is ready to guide you.
               </p>
             </div>
             <Button asChild variant="secondary" className="w-full bg-zinc-800 hover:bg-zinc-700 text-zinc-100 rounded-xl py-5">
-              <Link href="/onboarding">{t('aiHubBtn')} <ExternalLink className="ml-2 w-4 h-4"/></Link>
+              <Link href="/onboarding">Launch AI Chat Help <ExternalLink className="ml-2 w-4 h-4"/></Link>
             </Button>
           </Card>
           
@@ -323,13 +320,13 @@ export default function HomePage() {
               <div className="inline-flex p-3 bg-violet-950/30 border border-violet-800/30 rounded-2xl mb-6">
                 <BookOpen className="h-6 w-6 text-violet-400" />
               </div>
-              <h4 className="text-2xl font-bold text-white mb-2">{t('wikiHubTitle')}</h4>
+              <h4 className="text-2xl font-bold text-white mb-2">Wiki &amp; FAQ Center</h4>
               <p className="text-sm text-zinc-400 leading-relaxed max-w-sm mb-6">
-                {t('wikiHubDesc')}
+                Dive deep into documentation, regulatory compliance checklists, and technical blueprints describing how Sovranly IP works.
               </p>
             </div>
             <Button asChild variant="secondary" className="w-full bg-zinc-800 hover:bg-zinc-700 text-zinc-100 rounded-xl py-5">
-              <Link href="/wiki">{t('wikiHubBtn')} <ExternalLink className="ml-2 w-4 h-4"/></Link>
+              <Link href="/wiki">Browse Sovranly Wiki <ExternalLink className="ml-2 w-4 h-4"/></Link>
             </Button>
           </Card>
         </section>
@@ -341,9 +338,9 @@ export default function HomePage() {
           <div className="max-w-2xl mx-auto space-y-8">
             <div className="text-center space-y-3">
               <h3 className="text-3xl font-extrabold text-white tracking-tight flex justify-center items-center gap-3">
-                <Mail className="text-cyan-400 w-8 h-8"/> {t('contactSupportTitle')}
+                <Mail className="text-cyan-400 w-8 h-8"/> Contact Developer Support
               </h3>
-              <p className="text-zinc-400 max-w-md mx-auto">{t('contactSupportDesc')}</p>
+              <p className="text-zinc-400 max-w-md mx-auto">Ready to customize or have questions? Get in touch with our team directly.</p>
             </div>
 
             {!submitted ? (
@@ -351,20 +348,20 @@ export default function HomePage() {
                 <form onSubmit={(e) => { e.preventDefault(); setSubmitted(true); }} className="space-y-6">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                     <div className="space-y-2">
-                      <Label className="text-zinc-400 text-xs font-semibold uppercase tracking-wider">{t('formName')}</Label>
-                      <Input className="bg-zinc-950/60 border-zinc-800 text-white rounded-xl py-5 px-4 focus-visible:ring-cyan-500" required placeholder={t('formNamePlaceholder')} />
+                      <Label className="text-zinc-400 text-xs font-semibold uppercase tracking-wider">Name</Label>
+                      <Input className="bg-zinc-950/60 border-zinc-800 text-white rounded-xl py-5 px-4 focus-visible:ring-cyan-500" required placeholder="e.g., Jane Doe" />
                     </div>
                     <div className="space-y-2">
-                      <Label className="text-zinc-400 text-xs font-semibold uppercase tracking-wider">{t('formEmail')}</Label>
-                      <Input type="email" className="bg-zinc-950/60 border-zinc-800 text-white rounded-xl py-5 px-4 focus-visible:ring-cyan-500" required placeholder={t('formEmailPlaceholder')} />
+                      <Label className="text-zinc-400 text-xs font-semibold uppercase tracking-wider">Email Address</Label>
+                      <Input type="email" className="bg-zinc-950/60 border-zinc-800 text-white rounded-xl py-5 px-4 focus-visible:ring-cyan-500" required placeholder="create@sovranlyip.com" />
                     </div>
                   </div>
                   <div className="space-y-2">
-                    <Label className="text-zinc-400 text-xs font-semibold uppercase tracking-wider">{t('formDetails')}</Label>
-                    <Textarea className="bg-zinc-950/60 border-zinc-800 text-white rounded-xl p-4 focus-visible:ring-cyan-500" rows={5} required placeholder={t('formDetailsPlaceholder')} />
+                    <Label className="text-zinc-400 text-xs font-semibold uppercase tracking-wider">Inquiry Details</Label>
+                    <Textarea className="bg-zinc-950/60 border-zinc-800 text-white rounded-xl p-4 focus-visible:ring-cyan-500" rows={5} required placeholder="Describe what you want to achieve or any questions you have about the architecture..." />
                   </div>
                   <Button type="submit" className="w-full py-6 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-bold transition-all shadow-md shadow-cyan-950/20">
-                    {t('submitBtn')}
+                    Send Support Message
                   </Button>
                 </form>
               ) : (
@@ -373,8 +370,8 @@ export default function HomePage() {
             ) : (
               <div className="text-center py-12 px-6 bg-zinc-950/80 rounded-2xl border border-emerald-500/20 shadow-xl">
                 <div className="w-12 h-12 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 rounded-full flex items-center justify-center text-xl mx-auto mb-4">✓</div>
-                <p className="text-white text-lg font-bold mb-2">{t('dispatchedTitle')}</p>
-                <p className="text-zinc-400 text-sm">{t('dispatchedDesc')} <span className="font-semibold text-zinc-300">create@sovranlyip.com</span></p>
+                <p className="text-white text-lg font-bold mb-2">Message Dispatched Securely</p>
+                <p className="text-zinc-400 text-sm">We have received your request and will follow up with you shortly. <span className="font-semibold text-zinc-300">create@sovranlyip.com</span></p>
               </div>
             )}
           </div>
@@ -402,7 +399,6 @@ export default function HomePage() {
           </div>
         </div>
         
-        <LanguageSelector />
         <div className="flex flex-wrap items-center justify-center gap-4 text-zinc-500 text-xs px-4">
           <Link href="#app-purpose" className="hover:text-cyan-400 transition-colors">App Purpose &amp; OAuth</Link>
           <span>•</span>
@@ -414,7 +410,7 @@ export default function HomePage() {
           <span>•</span>
           <Link href="/privacy" className="hover:text-cyan-400 transition-colors">Privacy Policy</Link>
         </div>
-        <p className="text-zinc-600 text-xs">{t('copyright')}</p>
+        <p className="text-zinc-600 text-xs">© 2026 Creative Sovereignty LLC. Sovereign Management and Zero Trust Blockchain Protection. All work protected on-chain.</p>
       </footer>
     </div>
   );

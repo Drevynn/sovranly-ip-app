@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { useLanguage, TranslationKey } from './LanguageProvider';
 import { Input } from './ui/input';
 import { Button } from './ui/button';
 import { motion, AnimatePresence } from 'motion/react';
@@ -24,7 +23,6 @@ interface Subscriber {
 }
 
 export default function NewsletterSignup() {
-  const { t, language } = useLanguage();
   const [email, setEmail] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -52,17 +50,11 @@ export default function NewsletterSignup() {
   const validateEmail = (value: string): boolean => {
     const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     if (!value) {
-      setError(language === 'ja' ? 'メールアドレスを入力してください。' : 
-                language === 'es' ? 'Por favor ingrese un correo electrónico.' :
-                language === 'fr' ? 'Veuillez entrer une adresse e-mail.' :
-                'Please enter an email address.');
+      setError('Please enter an email address.');
       return false;
     }
     if (!regex.test(value)) {
-      setError(language === 'ja' ? '有効なメールアドレスを入力してください。' : 
-                language === 'es' ? 'Por favor ingrese un correo válido.' :
-                language === 'fr' ? 'Veuillez entrer une adresse e-mail valide.' :
-                'Please enter a valid email address.');
+      setError('Please enter a valid email address.');
       return false;
     }
     setError('');
@@ -120,11 +112,11 @@ export default function NewsletterSignup() {
         <div className="flex items-center justify-center md:justify-start gap-2">
           <div className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
           <h3 className="text-xs font-mono font-black text-cyan-400 uppercase tracking-widest">
-            {t('newsletterTitle' as TranslationKey)}
+            Sovereign Dispatch
           </h3>
         </div>
         <p className="text-xs text-zinc-400 font-sans leading-relaxed">
-          {t('newsletterDesc' as TranslationKey)}
+          Subscribe to continuous cryptographic intelligence and platform updates on creator IP rights.
         </p>
       </div>
 
@@ -149,7 +141,7 @@ export default function NewsletterSignup() {
                       setEmail(e.target.value);
                       if (error) setError('');
                     }}
-                    placeholder={t('newsletterPlaceholder' as TranslationKey)}
+                    placeholder="Enter your cryptographically secured email"
                     className={`bg-zinc-950/80 border-zinc-900 pl-10 pr-4 py-5 text-xs text-white rounded-xl placeholder:text-zinc-600 focus-visible:ring-cyan-500 focus-visible:border-cyan-500/50 transition-all ${
                       error ? 'border-red-500/50 focus-visible:ring-red-500' : ''
                     }`}
@@ -160,7 +152,7 @@ export default function NewsletterSignup() {
                   className="bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-mono font-bold uppercase rounded-xl px-5 py-5 transition-all flex items-center justify-center gap-2 cursor-pointer shadow-md shadow-cyan-950/25 shrink-0"
                 >
                   <Send className="w-3.5 h-3.5" />
-                  {t('newsletterBtn' as TranslationKey)}
+                  Secure Subscription
                 </Button>
               </div>
 
@@ -211,10 +203,10 @@ export default function NewsletterSignup() {
               </div>
               <div className="space-y-1">
                 <h4 className="text-xs font-mono font-bold text-white uppercase tracking-wider">
-                  {t('newsletterSuccessTitle' as TranslationKey)}
+                  Identity Registered on Feed
                 </h4>
                 <p className="text-[11px] text-zinc-400 leading-normal max-w-sm mx-auto">
-                  {t('newsletterSuccessDesc' as TranslationKey)}
+                  Your cryptographic email has been securely registered to receive automated platform dispatches.
                 </p>
               </div>
               <button

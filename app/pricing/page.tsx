@@ -20,11 +20,8 @@ import {
   DollarSign
 } from 'lucide-react';
 import Link from 'next/link';
-import { useLanguage } from '@/components/LanguageProvider';
-import LanguageSelector from '@/components/LanguageSelector';
 
 export default function PricingPage() {
-  const { t } = useLanguage();
   const [billingPeriod, setBillingPeriod] = useState<'monthly' | 'annual'>('monthly');
 
   const plans = [
@@ -121,22 +118,22 @@ export default function PricingPage() {
             <div className="w-9 h-9 bg-zinc-950 border border-cyan-500/30 rounded-xl flex items-center justify-center shadow-lg shadow-cyan-950/20">
               <ShieldCheck className="w-5 h-5 text-cyan-400 drop-shadow-[0_0_8px_rgba(34,211,238,0.4)]" />
             </div>
-            <Link href="/" className="font-bold tracking-tighter text-white text-xl uppercase">{t('brandName')}</Link>
+            <Link href="/" className="font-bold tracking-tighter text-white text-xl uppercase">SOVRANLY IP</Link>
           </div>
           <nav className="hidden md:flex items-center gap-8">
-            <Link href="/dashboard" className="text-sm text-zinc-400 hover:text-white transition-colors">{t('commandCenter')}</Link>
+            <Link href="/dashboard" className="text-sm text-zinc-400 hover:text-white transition-colors">Command Center</Link>
             <Link href="/pricing" className="text-sm text-white font-bold transition-colors">Pricing</Link>
-            <Link href="/marketplace" className="text-sm text-zinc-400 hover:text-white transition-colors">{t('marketplace')}</Link>
-            <Link href="/onboarding" className="text-sm text-zinc-400 hover:text-white transition-colors">{t('chatHelp')}</Link>
-            <Link href="/wiki" className="text-sm text-zinc-400 hover:text-white transition-colors">{t('wiki')}</Link>
-            <Link href="/faq" className="text-sm text-zinc-400 hover:text-white transition-colors">{t('faq')}</Link>
+            <Link href="/marketplace" className="text-sm text-zinc-400 hover:text-white transition-colors">Marketplace</Link>
+            <Link href="/onboarding" className="text-sm text-zinc-400 hover:text-white transition-colors">Chat Support</Link>
+            <Link href="/wiki" className="text-sm text-zinc-400 hover:text-white transition-colors">Wiki / Help</Link>
+            <Link href="/faq" className="text-sm text-zinc-400 hover:text-white transition-colors">FAQ</Link>
           </nav>
           <div className="flex items-center gap-4">
             <Button asChild variant="outline" className="border-zinc-800 bg-transparent text-white hover:bg-zinc-900 transition-all rounded-full hidden sm:inline-flex">
-              <Link href="/marketplace">{t('marketplace')}</Link>
+              <Link href="/marketplace">Marketplace</Link>
             </Button>
             <Button asChild className="bg-gradient-to-r from-cyan-500 to-violet-500 hover:brightness-110 text-white font-medium shadow-lg shadow-cyan-950/40 rounded-full">
-              <Link href="/dashboard">{t('launchConsole')}</Link>
+              <Link href="/dashboard">Launch Console</Link>
             </Button>
           </div>
         </div>
@@ -332,7 +329,6 @@ export default function PricingPage() {
 
       {/* Public Page Footer */}
       <footer className="border-t border-white/5 py-12 bg-zinc-950/45 flex flex-col items-center justify-center gap-6 text-center text-zinc-500 text-xs">
-        <LanguageSelector />
         <div className="flex items-center gap-4 text-zinc-500">
           <Link href="/about" className="hover:text-cyan-400 transition-colors">About Us</Link>
           <span>•</span>
@@ -340,7 +336,7 @@ export default function PricingPage() {
           <span>•</span>
           <Link href="/privacy" className="hover:text-cyan-400 transition-colors">Privacy Policy</Link>
         </div>
-        <p>{t('copyright')}</p>
+        <p>© 2026 Sovranly IP. Sovereign intellectual property systems. Zero Trust Secured.</p>
       </footer>
     </div>
   );
