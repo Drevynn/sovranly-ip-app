@@ -16,9 +16,20 @@ import {
   QrCode, 
   ExternalLink,
   ChevronRight,
-  Info
+  Info,
+  Zap,
+  Sparkles,
+  Lock,
+  Coins
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
+import SovranSmartWalletModal from '@/components/SovranSmartWalletModal';
+import { 
+  SovranSmartAccountData, 
+  getStoredSmartAccount, 
+  createSovranSmartAccount 
+} from '@/lib/sovran-smart-wallet';
+import { useAuth } from '@/components/auth/FirebaseProvider';
 
 interface WalletOption {
   id: string;
@@ -30,15 +41,14 @@ interface WalletOption {
 }
 
 export default function WalletConnect({ onConnect }: { onConnect: (address: string) => void }) {
+  const { user } = useAuth();
   const [mounted, setMounted] = useState(false);
-  useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setMounted(true);
-    return () => setMounted(false);
-  }, []);
-
   const [address, setAddress] = useState<string | null>(null);
+  const [smartAccount, setSmartAccount] = useState<SovranSmartAccountData | null>(null);
+  const [isSmartWallet, setIsSmartWallet] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const [isSmartModalOpen, setIsSmartModalOpen] = useState(false);
+
   const [detectedExtension] = useState<string | null>(() => {
     if (typeof window !== 'undefined') {
       const win = window as any;
@@ -55,14 +65,47 @@ export default function WalletConnect({ onConnect }: { onConnect: (address: stri
     }
     return null;
   });
+
   const [isConnecting, setIsConnecting] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<'connect' | 'docs'>('connect');
-  
-  // Mobile / QR Code bridge simulation state
   const [step, setStep] = useState<'selection' | 'qr' | 'sandbox_input'>('selection');
   const [selectedWallet, setSelectedWallet] = useState<string | null>(null);
   const [customAddress, setCustomAddress] = useState('');
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setMounted(true);
+    const stored = getStoredSmartAccount();
+    if (stored) {
+      setSmartAccount(stored);
+      setAddress(stored.address);
+      setIsSmartWallet(true);
+      onConnect(stored.address);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const handleLaunchSovranSmartAccount = () => {
+    setIsConnecting(true);
+    setErrorMessage(null);
+    try {
+      let currentAcc = smartAccount;
+      if (!currentAcc) {
+        currentAcc = createSovranSmartAccount(undefined, user?.email || undefined);
+        setSmartAccount(currentAcc);
+      }
+      setAddress(currentAcc.address);
+      setIsSmartWallet(true);
+      onConnect(currentAcc.address);
+      setIsOpen(false);
+      setIsSmartModalOpen(true);
+    } catch (err: any) {
+      setErrorMessage(err?.message || 'Failed to initialize Sovran Smart Account');
+    } finally {
+      setIsConnecting(false);
+    }
+  };
 
   const connectDirectExtension = async (targetWallet?: string) => {
     setErrorMessage(null);
@@ -74,7 +117,6 @@ export default function WalletConnect({ onConnect }: { onConnect: (address: stri
 
     let injectedProvider = (window as any).ethereum;
 
-    // Search and target specific wallet sub-providers if multi-wallets are concurrently active
     if (targetWallet === 'Coinbase Wallet' && (window as any).coinbaseWalletExtension) {
       injectedProvider = (window as any).coinbaseWalletExtension;
     } else if (targetWallet === 'Trust Wallet' && (window as any).trustWallet) {
@@ -97,6 +139,7 @@ export default function WalletConnect({ onConnect }: { onConnect: (address: stri
         const signer = await provider.getSigner();
         const userAddress = await signer.getAddress();
         setAddress(userAddress);
+        setIsSmartWallet(false);
         onConnect(userAddress);
         setIsOpen(false);
       } catch (error: any) {
@@ -115,7 +158,6 @@ export default function WalletConnect({ onConnect }: { onConnect: (address: stri
     setSelectedWallet(option.name);
     setErrorMessage(null);
 
-    // If they clicked on Browser Extension or MetaMask direct and it's available
     if (option.id === 'extension') {
       if (detectedExtension) {
         await connectDirectExtension(detectedExtension);
@@ -125,7 +167,6 @@ export default function WalletConnect({ onConnect }: { onConnect: (address: stri
     } else if (option.id === 'metamask') {
       await connectDirectExtension('MetaMask');
     } else if (option.id === 'coinbase') {
-      // Try to connect directly to the extension, or fallback to the mobile QR code bridge
       if (detectedExtension === 'Coinbase Wallet' || (window as any).coinbaseWalletExtension) {
         await connectDirectExtension('Coinbase Wallet');
       } else {
@@ -138,11 +179,8 @@ export default function WalletConnect({ onConnect }: { onConnect: (address: stri
         setStep('qr');
       }
     } else if (option.id === 'walletconnect' || option.id === 'cryptocom') {
-      // Simulate/Trigger dynamic QR bridge for mobile app logins
       setStep('qr');
-    }
-    // Sandbox wallet
-    else if (option.id === 'sandbox') {
+    } else if (option.id === 'sandbox') {
       setStep('sandbox_input');
     }
   };
@@ -150,12 +188,12 @@ export default function WalletConnect({ onConnect }: { onConnect: (address: stri
   const handleSimulatedBridgeConnect = () => {
     setIsConnecting(true);
     setTimeout(() => {
-      // Generate a dynamic cryptographic test address
       const randomAlphanumeric = Array.from({ length: 40 }, () => 
         '0123456789abcdef'[Math.floor(Math.random() * 16)]
       ).join('');
       const mockAddress = `0x${randomAlphanumeric}`;
       setAddress(mockAddress);
+      setIsSmartWallet(false);
       onConnect(mockAddress);
       setIsConnecting(false);
       setIsOpen(false);
@@ -167,6 +205,7 @@ export default function WalletConnect({ onConnect }: { onConnect: (address: stri
     const cleanAddr = customAddress.trim();
     if (/^0x[a-fA-F0-9]{40}$/.test(cleanAddr)) {
       setAddress(cleanAddr);
+      setIsSmartWallet(false);
       onConnect(cleanAddr);
       setIsOpen(false);
     } else {
@@ -180,17 +219,19 @@ export default function WalletConnect({ onConnect }: { onConnect: (address: stri
     ).join('');
     const mockAddress = `0x${randomHex}`;
     setAddress(mockAddress);
+    setIsSmartWallet(false);
     onConnect(mockAddress);
     setIsOpen(false);
   };
 
   const handleDisconnect = () => {
     setAddress(null);
+    setIsSmartWallet(false);
     onConnect('');
     setIsOpen(false);
+    setIsSmartModalOpen(false);
   };
 
-  // List of high-fidelity compatible options
   const walletOptions: WalletOption[] = [
     {
       id: 'extension',
@@ -226,7 +267,7 @@ export default function WalletConnect({ onConnect }: { onConnect: (address: stri
       name: 'Universal WalletConnect',
       icon: '⚡',
       description: 'Scan QR with Trust Wallet, Ledger, or 100+ other mobile wallets.',
-      badge: 'EIP-1193 Compatible'
+      badge: 'EIP-1193'
     },
     {
       id: 'sandbox',
@@ -242,13 +283,19 @@ export default function WalletConnect({ onConnect }: { onConnect: (address: stri
       {/* Primary Wallet Trigger Button */}
       <Button 
         onClick={() => {
-          setStep('selection');
-          setErrorMessage(null);
-          setIsOpen(true);
+          if (address && isSmartWallet) {
+            setIsSmartModalOpen(true);
+          } else {
+            setStep('selection');
+            setErrorMessage(null);
+            setIsOpen(true);
+          }
         }} 
-        className={`rounded-full transition-all duration-300 font-mono text-[11px] font-bold tracking-wider relative group ${
+        className={`rounded-full transition-all duration-300 font-mono text-[11px] font-bold tracking-wider relative group cursor-pointer ${
           address 
-            ? "bg-zinc-950 border border-emerald-500/30 text-emerald-400 hover:bg-zinc-900 px-5 py-2.5" 
+            ? isSmartWallet
+              ? "bg-cyan-950/80 border border-cyan-500/50 text-cyan-300 hover:bg-cyan-900/60 shadow-lg shadow-cyan-950/50 px-4 py-2"
+              : "bg-zinc-950 border border-emerald-500/30 text-emerald-400 hover:bg-zinc-900 px-5 py-2.5" 
             : "bg-white text-zinc-950 hover:bg-zinc-100 hover:shadow-[0_0_20px_rgba(255,255,255,0.15)] px-6 py-3"
         }`}
         id="wallet-trigger-button"
@@ -256,8 +303,22 @@ export default function WalletConnect({ onConnect }: { onConnect: (address: stri
         <span className="flex items-center gap-2">
           {address ? (
             <>
-              <span className="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse"></span>
-              {address.substring(0, 6)}...{address.substring(38)}
+              {isSmartWallet ? (
+                <>
+                  <span className="p-1 rounded-full bg-cyan-500/20 text-cyan-400">
+                    <Cpu className="w-3 h-3" />
+                  </span>
+                  <span>SOVRAN SMART VAULT</span>
+                  <span className="text-[9px] text-cyan-400 font-mono opacity-80">
+                    ({address.substring(0, 4)}...{address.substring(38)})
+                  </span>
+                </>
+              ) : (
+                <>
+                  <span className="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse"></span>
+                  {address.substring(0, 6)}...{address.substring(38)}
+                </>
+              )}
             </>
           ) : (
             <>
@@ -268,221 +329,247 @@ export default function WalletConnect({ onConnect }: { onConnect: (address: stri
         </span>
       </Button>
 
+      {/* Sovran Smart Wallet Detailed Management Modal */}
+      <SovranSmartWalletModal
+        isOpen={isSmartModalOpen}
+        onClose={() => setIsSmartModalOpen(false)}
+        smartAccount={smartAccount}
+        onUpdateAccount={(updated) => {
+          setSmartAccount(updated);
+          setAddress(updated.address);
+          onConnect(updated.address);
+        }}
+        onDisconnect={handleDisconnect}
+      />
+
       {/* Multi-Wallet Zero Trust Selection Portal */}
       {mounted && typeof document !== 'undefined' ? createPortal(
         <AnimatePresence>
           {isOpen && (
             <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4">
-            {/* Dark blur overlay */}
-            <motion.div 
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setIsOpen(false)}
-              className="absolute inset-0 bg-[#020202]/85 backdrop-blur-sm"
-              id="wallet-modal-overlay"
-            />
+              {/* Dark blur overlay */}
+              <motion.div 
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                onClick={() => setIsOpen(false)}
+                className="absolute inset-0 bg-[#020202]/85 backdrop-blur-sm"
+                id="wallet-modal-overlay"
+              />
 
-            {/* Portal Window */}
-            <motion.div 
-              initial={{ opacity: 0, scale: 0.95, y: 15 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: 15 }}
-              transition={{ duration: 0.25, ease: 'easeOut' }}
-              className="relative w-full max-w-xl bg-zinc-950 border border-zinc-900/80 rounded-2xl p-6 shadow-2xl overflow-hidden max-h-[85vh] flex flex-col z-10"
-              id="wallet-portal-window"
-            >
-              {/* Top ambient color bar styling */}
-              <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-cyan-500 via-zinc-800 to-emerald-500" />
-              
-              {/* Header */}
-              <div className="flex items-center justify-between border-b border-zinc-900 pb-4 mb-4">
-                <div>
-                  <h3 className="text-sm font-black uppercase tracking-widest text-white flex items-center gap-2">
-                    <Cpu className="w-4 h-4 text-cyan-400" />
-                    Secure Wallet Gateway
-                  </h3>
-                  <p className="text-[10px] text-zinc-500 font-mono uppercase mt-0.5 tracking-tight">
-                    Zero Trust Decentralized Verification Node
-                  </p>
-                </div>
-                <button 
-                  onClick={() => setIsOpen(false)}
-                  className="p-1 px-1.5 rounded-lg border border-zinc-900 bg-zinc-950 hover:bg-zinc-900 text-zinc-500 hover:text-white transition-all"
-                  id="close-wallet-portal"
-                >
-                  <X className="w-3.5 h-3.5" />
-                </button>
-              </div>
-
-              {/* Tabs selector */}
-              <div className="flex border-b border-zinc-900 mb-5 gap-1 p-1 bg-zinc-950 rounded-lg">
-                <button
-                  onClick={() => {
-                    setActiveTab('connect');
-                    setStep('selection');
-                  }}
-                  className={`flex-1 text-center py-2 px-3 text-[10px] font-mono uppercase tracking-wider font-bold rounded-md transition-all ${
-                    activeTab === 'connect'
-                      ? 'bg-zinc-900 text-cyan-400 border border-zinc-800'
-                      : 'text-zinc-500 hover:text-zinc-300'
-                  }`}
-                >
-                  Quick Connect
-                </button>
-                <button
-                  onClick={() => setActiveTab('docs')}
-                  className={`flex-1 text-center py-2 px-3 text-[10px] font-mono uppercase tracking-wider font-bold rounded-md transition-all ${
-                    activeTab === 'docs'
-                      ? 'bg-zinc-900 text-cyan-400 border border-zinc-800'
-                      : 'text-zinc-500 hover:text-zinc-300'
-                  }`}
-                >
-                  Integration Docs (Web3Modal/RainbowKit)
-                </button>
-              </div>
-
-              {/* Error Alert Bar */}
-              {errorMessage && (
-                <div className="mb-4 bg-red-950/25 border border-red-500/20 rounded-xl p-3 text-[11px] font-mono text-red-400 flex items-start gap-2 animate-shake">
-                  <AlertCircle className="w-4 h-4 shrink-0 text-red-500" />
-                  <div>
-                    <span className="font-extrabold uppercase">Registry Exception: </span>
-                    {errorMessage}
-                  </div>
-                </div>
-              )}
-
-              {/* Main Dynamic View Panels */}
-              <div className="flex-1 overflow-y-auto pr-1 space-y-4">
+              {/* Portal Window */}
+              <motion.div 
+                initial={{ opacity: 0, scale: 0.95, y: 15 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.95, y: 15 }}
+                transition={{ duration: 0.25, ease: 'easeOut' }}
+                className="relative w-full max-w-xl bg-zinc-950 border border-zinc-900/80 rounded-2xl p-6 shadow-2xl overflow-hidden max-h-[88vh] flex flex-col z-10"
+                id="wallet-portal-window"
+              >
+                {/* Top ambient color bar styling */}
+                <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-cyan-500 via-zinc-800 to-emerald-500" />
                 
-                {activeTab === 'connect' && (
-                  <>
-                    {/* 1. SELECTION MAIN STEP */}
-                    {step === 'selection' && (
-                      <>
-                        {/* Active Injected Info Banner */}
-                        {detectedExtension ? (
-                          <div className="bg-emerald-950/15 border border-emerald-500/10 rounded-xl p-3 flex items-center justify-between">
-                            <div className="flex items-center gap-2.5">
-                              <div className="w-2 h-2 bg-emerald-400 rounded-full animate-ping" />
-                              <div>
-                                <p className="text-[10px] font-bold uppercase tracking-wider text-emerald-400">
-                                  Active Hot-Extension Detected
-                                </p>
-                                <p className="text-[9px] text-zinc-400">
-                                  Your browser has {detectedExtension} installed & active.
-                                </p>
-                              </div>
-                            </div>
-                            <Button 
-                              onClick={() => connectDirectExtension(detectedExtension)} 
-                              className="bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 text-[10px] font-mono px-3.5 py-1.5 rounded-lg border border-emerald-500/20 h-auto"
-                            >
-                              Auto Connect
-                            </Button>
-                          </div>
-                        ) : (
-                          <div className="bg-cyan-950/10 border border-cyan-500/10 rounded-xl p-3.5 flex items-start gap-2.5">
-                            <Info className="w-4 h-4 text-cyan-400 shrink-0 mt-0.5" />
-                            <div>
-                              <p className="text-[10px] font-bold uppercase tracking-wider text-cyan-400">
-                                No Browser Extensions Installed?
-                              </p>
-                              <p className="text-[9px] text-zinc-400 leading-relaxed">
-                                No worries! Choose <strong className="text-zinc-200">Sovereign Sandbox Hub</strong> below to instantly generate or input a compliance address for testing. Perfect for mobile or fast-browsing.
-                              </p>
-                            </div>
-                          </div>
-                        )}
+                {/* Header */}
+                <div className="flex items-center justify-between border-b border-zinc-900 pb-4 mb-4">
+                  <div>
+                    <h3 className="text-sm font-black uppercase tracking-widest text-white flex items-center gap-2">
+                      <Cpu className="w-4 h-4 text-cyan-400" />
+                      Sovereign Key Gateway
+                    </h3>
+                    <p className="text-[10px] text-zinc-500 font-mono uppercase mt-0.5 tracking-tight">
+                      Zero Trust Decentralized Verification Node
+                    </p>
+                  </div>
+                  <button 
+                    onClick={() => setIsOpen(false)}
+                    className="p-1 px-1.5 rounded-lg border border-zinc-900 bg-zinc-950 hover:bg-zinc-900 text-zinc-500 hover:text-white transition-all cursor-pointer"
+                    id="close-wallet-portal"
+                  >
+                    <X className="w-3.5 h-3.5" />
+                  </button>
+                </div>
 
-                        {/* Options list */}
-                        <div className="grid grid-cols-1 gap-2.5">
-                          {walletOptions.map((opt) => (
-                            <button
-                              key={opt.id}
-                              onClick={() => selectWalletOption(opt)}
-                              className="w-full text-left bg-zinc-950 hover:bg-zinc-900 border border-zinc-900 hover:border-zinc-800 rounded-xl p-3.5 transition-all flex items-center justify-between group relative"
-                            >
-                              <div className="flex items-center gap-3.5">
-                                <span className="text-xl shrink-0 select-none">{opt.icon}</span>
+                {/* Tabs selector */}
+                <div className="flex border-b border-zinc-900 mb-4 gap-1 p-1 bg-zinc-950 rounded-lg">
+                  <button
+                    onClick={() => {
+                      setActiveTab('connect');
+                      setStep('selection');
+                    }}
+                    className={`flex-1 text-center py-2 px-3 text-[10px] font-mono uppercase tracking-wider font-bold rounded-md transition-all cursor-pointer ${
+                      activeTab === 'connect'
+                        ? 'bg-zinc-900 text-cyan-400 border border-zinc-800'
+                        : 'text-zinc-500 hover:text-zinc-300'
+                    }`}
+                  >
+                    Wallet Options
+                  </button>
+                  <button
+                    onClick={() => setActiveTab('docs')}
+                    className={`flex-1 text-center py-2 px-3 text-[10px] font-mono uppercase tracking-wider font-bold rounded-md transition-all cursor-pointer ${
+                      activeTab === 'docs'
+                        ? 'bg-zinc-900 text-cyan-400 border border-zinc-800'
+                        : 'text-zinc-500 hover:text-zinc-300'
+                    }`}
+                  >
+                    ERC-4337 Architecture
+                  </button>
+                </div>
+
+                {/* Error Alert Bar */}
+                {errorMessage && (
+                  <div className="mb-4 bg-red-950/25 border border-red-500/20 rounded-xl p-3 text-[11px] font-mono text-red-400 flex items-start gap-2 animate-shake">
+                    <AlertCircle className="w-4 h-4 shrink-0 text-red-500" />
+                    <div>
+                      <span className="font-extrabold uppercase">Registry Exception: </span>
+                      {errorMessage}
+                    </div>
+                  </div>
+                )}
+
+                {/* Main Dynamic View Panels */}
+                <div className="flex-1 overflow-y-auto pr-1 space-y-4">
+                  {activeTab === 'connect' && (
+                    <>
+                      {step === 'selection' && (
+                        <>
+                          {/* FEATURED: Sovran Sovereign Smart Wallet (ERC-4337) */}
+                          <div className="p-4 rounded-2xl bg-gradient-to-br from-cyan-950/40 via-zinc-900/80 to-zinc-950 border border-cyan-500/40 hover:border-cyan-400/80 transition-all shadow-xl shadow-cyan-950/30 group relative">
+                            <div className="flex items-start justify-between gap-3">
+                              <div className="flex items-center gap-3">
+                                <div className="p-2.5 rounded-xl bg-cyan-950 border border-cyan-500/50 text-cyan-400 group-hover:scale-105 transition-transform">
+                                  <Sparkles className="w-5 h-5 text-cyan-300 animate-pulse" />
+                                </div>
                                 <div>
                                   <div className="flex items-center gap-2">
-                                    <span className="text-xs font-bold text-white tracking-wide group-hover:text-cyan-300 transition-colors">
-                                      {opt.name}
+                                    <h4 className="text-xs font-black uppercase text-white tracking-wide">
+                                      Sovran Sovereign Smart Wallet
+                                    </h4>
+                                    <span className="text-[8px] font-mono uppercase px-1.5 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 font-bold border border-cyan-500/40">
+                                      Recommended (ERC-4337)
                                     </span>
-                                    {opt.badge && (
-                                      <span className={`text-[8px] font-mono uppercase px-1.5 py-0.5 rounded-full ${
-                                        opt.id === 'sandbox' 
-                                          ? 'bg-cyan-950 text-cyan-400 border border-cyan-500/20' 
-                                          : opt.badge.includes('Active') || opt.badge.includes('Detected')
-                                            ? 'bg-emerald-950 text-emerald-400 border border-emerald-500/20'
-                                            : 'bg-zinc-900 text-zinc-400'
-                                      }`}>
-                                        {opt.badge}
-                                      </span>
-                                    )}
                                   </div>
-                                  <p className="text-[10px] text-zinc-500 mt-0.5 leading-relaxed pr-6">
-                                    {opt.description}
+                                  <p className="text-[10px] text-zinc-400 mt-1 leading-relaxed">
+                                    Built directly into Sovranly IP. Zero extensions required. Features **100% sponsored gas**, instant **85/15 royalty splits**, and social guardian recovery.
                                   </p>
                                 </div>
                               </div>
-                              <ChevronRight className="w-4 h-4 text-zinc-700 group-hover:text-zinc-400 group-hover:translate-x-0.5 transition-all shrink-0" />
-                            </button>
-                          ))}
-                        </div>
+                            </div>
 
-                        {/* Disconnect context if already authenticated */}
-                        {address && (
-                          <div className="pt-2 border-t border-zinc-900 flex items-center justify-between text-xs text-zinc-500">
-                            <span className="font-mono text-[9px] uppercase tracking-wide">
-                              Currently Linked: {address.substring(0, 10)}...{address.substring(34)}
-                            </span>
-                            <Button 
-                              variant="destructive" 
-                              onClick={handleDisconnect}
-                              className="text-[9px] uppercase tracking-widest font-mono bg-red-950/30 hover:bg-red-950/60 border border-red-500/10 text-red-500 rounded-lg px-3 py-1.5 h-auto"
-                            >
-                              Disassociate
-                            </Button>
+                            <div className="mt-3.5 pt-3 border-t border-cyan-500/20 flex items-center justify-between">
+                              <div className="flex items-center gap-3 text-[9px] font-mono text-zinc-400">
+                                <span className="flex items-center gap-1 text-emerald-400">
+                                  <Zap className="w-3 h-3" /> Gasless
+                                </span>
+                                <span className="flex items-center gap-1 text-cyan-400">
+                                  <Coins className="w-3 h-3" /> 85% Splits
+                                </span>
+                                <span className="flex items-center gap-1 text-violet-400">
+                                  <Lock className="w-3 h-3" /> Non-Custodial
+                                </span>
+                              </div>
+                              <Button
+                                onClick={handleLaunchSovranSmartAccount}
+                                disabled={isConnecting}
+                                className="bg-cyan-500 hover:bg-cyan-400 text-black font-bold text-xs uppercase tracking-wider py-1.5 px-4 rounded-xl shadow-lg shadow-cyan-500/20 cursor-pointer"
+                              >
+                                {isConnecting ? (
+                                  <span className="flex items-center gap-1">
+                                    <RefreshCw className="w-3 h-3 animate-spin" /> Minting...
+                                  </span>
+                                ) : smartAccount ? (
+                                  'Open Smart Vault'
+                                ) : (
+                                  'Create Smart Wallet'
+                                )}
+                              </Button>
+                            </div>
                           </div>
-                        )}
-                      </>
-                    )}
 
-                    {/* 2. QR CODE / MOBILE BRIDGE SIMULATION STEP */}
-                    {step === 'qr' && (
-                      <div className="flex flex-col items-center justify-center p-4 text-center max-w-sm mx-auto space-y-5">
-                        <div>
-                          <p className="text-xs font-bold text-white uppercase tracking-wider">
-                            Bridge Connecting via {selectedWallet}
-                          </p>
-                          <p className="text-[10px] text-zinc-500 uppercase font-mono tracking-wider mt-0.5">
-                            Scan utilizing your mobile web3 app
-                          </p>
-                        </div>
+                          {/* Divider */}
+                          <div className="flex items-center gap-3 my-2">
+                            <div className="h-[1px] flex-1 bg-zinc-900" />
+                            <span className="text-[9px] font-mono uppercase text-zinc-600 font-bold">
+                              Or Connect External Wallet
+                            </span>
+                            <div className="h-[1px] flex-1 bg-zinc-900" />
+                          </div>
 
-                        {/* Interactive QR graphic that connects on click */}
-                        <div 
-                          onClick={handleSimulatedBridgeConnect}
-                          className="relative p-6 rounded-2xl bg-white border border-zinc-800 flex flex-col items-center justify-center cursor-pointer hover:shadow-[0_0_25px_rgba(34,211,238,0.3)] transition-all group"
-                          title="Click to authorize mobile wallet bridge"
-                        >
-                          <QrCode className="w-44 h-44 text-zinc-950 group-hover:scale-105 transition-transform" />
-                          
-                          {/* Top status indicator overlays on QR code */}
-                          <span className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-zinc-950 text-cyan-400 border border-cyan-800 rounded-xl text-[10px] font-mono tracking-widest uppercase font-black px-2 py-1 shadow-md">
-                            CLICK TO LINK
-                          </span>
-                        </div>
+                          {/* Options list */}
+                          <div className="grid grid-cols-1 gap-2">
+                            {walletOptions.map((opt) => (
+                              <button
+                                key={opt.id}
+                                onClick={() => selectWalletOption(opt)}
+                                className="w-full text-left bg-zinc-950 hover:bg-zinc-900 border border-zinc-900 hover:border-zinc-800 rounded-xl p-3 transition-all flex items-center justify-between group relative cursor-pointer"
+                              >
+                                <div className="flex items-center gap-3">
+                                  <span className="text-lg shrink-0 select-none">{opt.icon}</span>
+                                  <div>
+                                    <div className="flex items-center gap-2">
+                                      <span className="text-xs font-bold text-white tracking-wide group-hover:text-cyan-300 transition-colors">
+                                        {opt.name}
+                                      </span>
+                                      {opt.badge && (
+                                        <span className={`text-[8px] font-mono uppercase px-1.5 py-0.5 rounded-full ${
+                                          opt.id === 'sandbox' 
+                                            ? 'bg-cyan-950 text-cyan-400 border border-cyan-500/20' 
+                                            : opt.badge.includes('Active') || opt.badge.includes('Detected')
+                                              ? 'bg-emerald-950 text-emerald-400 border border-emerald-500/20'
+                                              : 'bg-zinc-900 text-zinc-400'
+                                        }`}>
+                                          {opt.badge}
+                                        </span>
+                                      )}
+                                    </div>
+                                    <p className="text-[10px] text-zinc-500 mt-0.5 leading-relaxed pr-6">
+                                      {opt.description}
+                                    </p>
+                                  </div>
+                                </div>
+                                <ChevronRight className="w-4 h-4 text-zinc-700 group-hover:text-zinc-400 group-hover:translate-x-0.5 transition-all shrink-0" />
+                              </button>
+                            ))}
+                          </div>
 
-                        <div className="space-y-3.5 w-full">
-                          <div className="text-[10px] text-zinc-400 leading-relaxed font-mono">
-                            <p className="uppercase text-emerald-400 font-extrabold text-[9px] mb-1 flex items-center justify-center gap-1">
-                              <ShieldCheck className="w-3.5 h-3.5" /> SECURE DECENTRALIZED BRIDGE READY
+                          {/* Disconnect context if already authenticated */}
+                          {address && (
+                            <div className="pt-2 border-t border-zinc-900 flex items-center justify-between text-xs text-zinc-500">
+                              <span className="font-mono text-[9px] uppercase tracking-wide">
+                                Active: {address.substring(0, 8)}...{address.substring(34)}
+                              </span>
+                              <Button 
+                                variant="destructive" 
+                                onClick={handleDisconnect}
+                                className="text-[9px] uppercase tracking-widest font-mono bg-red-950/30 hover:bg-red-950/60 border border-red-500/10 text-red-500 rounded-lg px-3 py-1.5 h-auto cursor-pointer"
+                              >
+                                Disassociate
+                              </Button>
+                            </div>
+                          )}
+                        </>
+                      )}
+
+                      {/* QR / Bridge step */}
+                      {step === 'qr' && (
+                        <div className="flex flex-col items-center justify-center p-4 text-center max-w-sm mx-auto space-y-5">
+                          <div>
+                            <p className="text-xs font-bold text-white uppercase tracking-wider">
+                              Bridge Connecting via {selectedWallet}
                             </p>
-                            Open your {selectedWallet} app to scan, or click the QR code / button below to instantly authorize the bridge connection.
+                            <p className="text-[10px] text-zinc-500 uppercase font-mono tracking-wider mt-0.5">
+                              Scan utilizing your mobile web3 app
+                            </p>
+                          </div>
+
+                          <div 
+                            onClick={handleSimulatedBridgeConnect}
+                            className="relative p-6 rounded-2xl bg-white border border-zinc-800 flex flex-col items-center justify-center cursor-pointer hover:shadow-[0_0_25px_rgba(34,211,238,0.3)] transition-all group"
+                          >
+                            <QrCode className="w-40 h-40 text-zinc-950 group-hover:scale-105 transition-transform" />
+                            <span className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-zinc-950 text-cyan-400 border border-cyan-800 rounded-xl text-[10px] font-mono tracking-widest uppercase font-black px-2 py-1 shadow-md">
+                              CLICK TO LINK
+                            </span>
                           </div>
 
                           <div className="flex gap-2 justify-center w-full">
@@ -498,72 +585,41 @@ export default function WalletConnect({ onConnect }: { onConnect: (address: stri
                               disabled={isConnecting}
                               className="bg-emerald-500 hover:bg-emerald-600 text-zinc-950 font-mono text-[9px] uppercase tracking-widest font-black flex-1 py-4 shadow-lg shadow-emerald-500/20"
                             >
-                              {isConnecting ? (
-                                <span className="flex items-center gap-1">
-                                  <RefreshCw className="w-3 h-3 animate-spin" /> LINKING WALLET...
-                                </span>
-                              ) : (
-                                "Authorize Wallet Bridge"
-                              )}
+                              {isConnecting ? 'Linking...' : 'Authorize Bridge'}
                             </Button>
                           </div>
                         </div>
-                      </div>
-                    )}
+                      )}
 
-                    {/* 3. SOVEREIGN SANDBOX PLAYGROUND METHOD */}
-                    {step === 'sandbox_input' && (
-                      <div className="space-y-5">
-                        <div className="bg-zinc-900/30 border border-zinc-850 p-4 rounded-xl">
-                          <h4 className="text-xs font-extrabold text-white uppercase tracking-wider mb-1 flex items-center gap-1.5 font-mono">
-                            <Cpu className="w-3.5 h-3.5 text-cyan-400" /> Web3 Sandbox Testing Suite
-                          </h4>
-                          <p className="text-[10px] text-zinc-400 leading-relaxed font-mono uppercase">
-                            Generate compliant mock addresses or configure your private production keys. Perfect for high-speed testing on mobile or staging mirrors.
-                          </p>
-                        </div>
-
-                        {/* Random Fast Generator */}
-                        <div className="bg-zinc-950 border border-zinc-900 p-4 rounded-xl space-y-3 flex flex-col">
-                          <div>
+                      {/* Sandbox step */}
+                      {step === 'sandbox_input' && (
+                        <div className="space-y-4">
+                          <div className="bg-zinc-950 border border-zinc-900 p-4 rounded-xl space-y-3">
                             <h5 className="text-[11px] font-bold text-zinc-200 uppercase tracking-wide">
-                              Option A: Zero Trust Fast Generate
+                              Zero Trust Fast Mock Key
                             </h5>
-                            <p className="text-[9px] text-zinc-500 font-mono uppercase">
-                              Click to instantly spawn a secure ephemeral compliance test-rig address.
-                            </p>
+                            <Button 
+                              onClick={handleGenerateSandboxRandom}
+                              className="bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-400 border border-cyan-500/20 text-[10px] font-mono font-bold uppercase tracking-wider py-3 h-auto w-full flex items-center justify-center gap-1.5"
+                            >
+                              <RefreshCw className="w-3.5 h-3.5" />
+                              Generate Test Identity
+                            </Button>
                           </div>
-                          <Button 
-                            onClick={handleGenerateSandboxRandom}
-                            className="bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-400 border border-cyan-500/20 text-[10px] font-mono font-bold uppercase tracking-wider py-4 h-auto w-full flex items-center justify-center gap-1.5"
-                          >
-                            <RefreshCw className="w-3.5 h-3.5" />
-                            INSTANT SECURE MOCK IDENTITY
-                          </Button>
-                        </div>
 
-                        {/* Manual Address Injection */}
-                        <form onSubmit={handleAddManualAddress} className="bg-zinc-950 border border-zinc-900 p-4 rounded-xl space-y-3.5">
-                          <div>
+                          <form onSubmit={handleAddManualAddress} className="bg-zinc-950 border border-zinc-900 p-4 rounded-xl space-y-3">
                             <h5 className="text-[11px] font-bold text-zinc-200 uppercase tracking-wide">
-                              Option B: Manual Compliance Input
+                              Manual Compliance Address Input
                             </h5>
-                            <p className="text-[9px] text-zinc-500 font-mono uppercase">
-                              Enter your exact production cryptographic address safely without sharing private keys.
-                            </p>
-                          </div>
-                          
-                          <div className="space-y-2">
                             <input
                               type="text"
-                              placeholder="e.g., 0x71C7656EC7ab88b098defB751B7401B5f6d8976F"
+                              placeholder="0x..."
                               value={customAddress}
                               onChange={(e) => setCustomAddress(e.target.value)}
-                              className="w-full bg-zinc-900 border border-zinc-800 rounded-lg p-2.5 text-xs text-cyan-400 placeholder-zinc-700 focus:outline-none focus:border-cyan-500 font-mono"
+                              className="w-full bg-zinc-900 border border-zinc-800 rounded-lg p-2.5 text-xs text-cyan-400 placeholder-zinc-700 font-mono"
                               required
-                              id="manual-wallet-address"
                             />
-                            <div className="flex gap-2 mt-5">
+                            <div className="flex gap-2">
                               <Button 
                                 type="button"
                                 onClick={() => setStep('selection')} 
@@ -576,98 +632,53 @@ export default function WalletConnect({ onConnect }: { onConnect: (address: stri
                                 type="submit"
                                 className="bg-white text-zinc-950 hover:bg-zinc-200 font-mono text-[9px] uppercase tracking-widest font-black py-2 h-auto flex-1"
                               >
-                                Link Manual Address
+                                Link Address
                               </Button>
                             </div>
-                          </div>
-                        </form>
-                      </div>
-                    )}
-                  </>
-                )}
+                          </form>
+                        </div>
+                      )}
+                    </>
+                  )}
 
-                {activeTab === 'docs' && (
-                  <div className="space-y-4 font-mono text-[10px] text-zinc-300">
-                    <div className="p-3.5 bg-zinc-900/30 border border-zinc-800/80 rounded-xl space-y-1.5">
-                      <div className="flex items-center gap-1.5 text-cyan-400 font-extrabold uppercase text-[10px]">
-                        <Cpu className="w-3.5 h-3.5" />
-                        Multi-Wallet Protocol Layer
+                  {activeTab === 'docs' && (
+                    <div className="space-y-3 font-mono text-[10px] text-zinc-300">
+                      <div className="p-3.5 bg-zinc-900/30 border border-zinc-800/80 rounded-xl space-y-1.5">
+                        <div className="flex items-center gap-1.5 text-cyan-400 font-extrabold uppercase text-[10px]">
+                          <Cpu className="w-3.5 h-3.5" />
+                          Sovranly Account Abstraction (ERC-4337)
+                        </div>
+                        <p className="text-[9px] text-zinc-400 leading-relaxed">
+                          Sovranly IP uses open-source smart contract accounts (EIP-4337) to eliminate all seed phrase hurdles, sponsor gas fees for creators, and guarantee an unalterable 85% creator royalty distribution via on-chain smart contracts.
+                        </p>
                       </div>
-                      <p className="text-[9px] text-zinc-500 uppercase tracking-wide leading-relaxed">
-                        To add native visual and cryptographic connection support for Coinbase Wallet, Crypto.com DeFi, and WalletConnect standard apps on Web, integrate with industry gold standards like RainbowKit or Web3Modal.
-                      </p>
+
+                      <div className="p-3 bg-zinc-950 border border-zinc-900 rounded-xl space-y-2">
+                        <span className="text-white font-bold uppercase text-[10px]">Architecture Highlights:</span>
+                        <ul className="space-y-1 text-zinc-400 text-[9px] list-disc list-inside">
+                          <li><strong className="text-cyan-400">Zero License Fees:</strong> Built on open-source public Ethereum standards.</li>
+                          <li><strong className="text-emerald-400">Gasless Paymaster:</strong> Platform sponsors IP registration gas fees.</li>
+                          <li><strong className="text-teal-400">Automated 85/15 Router:</strong> Built-in split logic executed on payment reception.</li>
+                          <li><strong className="text-violet-400">Social Guardians:</strong> 2-of-N multi-sig recovery in case of lost devices.</li>
+                        </ul>
+                      </div>
                     </div>
+                  )}
+                </div>
 
-                    <div className="space-y-4">
-                      <div className="space-y-1.5">
-                        <span className="text-[9px] font-extrabold text-zinc-400 uppercase tracking-wider">1. Deploy the dependencies</span>
-                        <pre className="bg-zinc-900/40 p-3 rounded-lg border border-zinc-900 text-cyan-400 overflow-x-auto text-[9px] select-all">
-                          npm install @rainbow-me/rainbowkit wagmi viem @tanstack/react-query
-                        </pre>
-                      </div>
-
-                      <div className="space-y-1.5">
-                        <span className="text-[9px] font-extrabold text-zinc-400 uppercase tracking-wider">2. Instantiate App Providers (`app/providers.tsx`)</span>
-                        <pre className="bg-zinc-900/40 p-3 rounded-lg border border-zinc-900 text-zinc-400 overflow-x-auto text-[8px] leading-relaxed max-h-44 overflow-y-auto select-all">
-{`import '@rainbow-me/rainbowkit/styles.css';
-import { getDefaultConfig, RainbowKitProvider } from '@rainbow-me/rainbowkit';
-import { WagmiProvider } from 'wagmi';
-import { mainnet, polygon } from 'wagmi/chains';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-
-const config = getDefaultConfig({
-  appName: 'Sovranly IP',
-  projectId: 'YOUR_WALLETCONNECT_PROJECT_ID',
-  chains: [mainnet, polygon],
-  ssr: true,
-});
-
-const queryClient = new QueryClient();
-
-export function Providers({ children }: { children: React.ReactNode }) {
-  return (
-    <WagmiProvider config={config}>
-      <QueryClientProvider client={queryClient}>
-        <RainbowKitProvider>
-          {children}
-        </RainbowKitProvider>
-      </QueryClientProvider>
-    </WagmiProvider>
+                {/* Portal Footer Stamp */}
+                <div className="border-t border-zinc-900 pt-3.5 mt-4 text-center">
+                  <span className="text-[8px] font-mono text-zinc-700 tracking-wider uppercase flex items-center justify-center gap-1">
+                    <ShieldCheck className="w-3.5 h-3.5 text-emerald-500/70" />
+                    Sovranly Zero Trust Cryptographic Proof Enforced
+                  </span>
+                </div>
+              </motion.div>
+            </div>
+          )}
+        </AnimatePresence>,
+        document.body
+      ) : null}
+    </>
   );
-}`}
-                        </pre>
-                      </div>
-
-                      <div className="space-y-1.5">
-                        <span className="text-[9px] font-extrabold text-zinc-400 uppercase tracking-wider">3. Call the standardized component</span>
-                        <pre className="bg-zinc-900/40 p-3 rounded-lg border border-zinc-900 text-zinc-400 overflow-x-auto text-[8px] select-all">
-{`import { ConnectButton } from '@rainbow-me/rainbowkit';
-
-export default function MyConnect() {
-  return <ConnectButton label="CONNECT SOVEREIGN KEY" />;
-}`}
-                        </pre>
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-              </div>
-
-              {/* Portal Footer Stamp */}
-              <div className="border-t border-zinc-900 pt-3.5 mt-4 text-center">
-                <span className="text-[8px] font-mono text-zinc-700 tracking-wider uppercase flex items-center justify-center gap-1">
-                  <ShieldCheck className="w-3.5 h-3.5 text-emerald-500/70" />
-                  Sovranly Zero Trust Cryptographic Proof Enforced
-                </span>
-              </div>
-            </motion.div>
-          </div>
-        )}
-      </AnimatePresence>,
-      document.body
-    ) : null}
-  </>
-);
 }
-
