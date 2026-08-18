@@ -118,6 +118,85 @@ export default function LandingPage() {
           <SlideStack />
         </section>
 
+        {/* Visual Protected Asset Ecosystem Showcase */}
+        <section className="space-y-8">
+          <div className="text-center space-y-2">
+            <span className="text-xs font-mono text-cyan-400 uppercase tracking-widest">Sovereign Ecosystem Assets</span>
+            <h3 className="text-3xl font-extrabold text-white">Cryptographically Shielded Creative Works</h3>
+            <p className="text-zinc-400 text-sm max-w-xl mx-auto">
+              From modular synthesizer audio stems to full codebases and 3D digital artworks, Sovranly IP delivers continuous Zero Trust authentication.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="bg-zinc-900/60 border border-zinc-800 rounded-2xl overflow-hidden group hover:border-cyan-500/50 transition-all duration-300">
+              <div className="relative w-full h-44 overflow-hidden border-b border-zinc-800 bg-zinc-950">
+                <Image 
+                  src="/images/audio_stem_vault.jpg" 
+                  alt="Audio Sample Pack Vault" 
+                  fill 
+                  className="object-cover group-hover:scale-105 transition-transform duration-700"
+                  referrerPolicy="no-referrer"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/20 to-transparent" />
+                <span className="absolute top-2.5 left-2.5 px-2.5 py-0.5 rounded-full bg-black/80 border border-cyan-500/40 text-cyan-300 text-[10px] font-mono">
+                  AUDIO STEM VAULT
+                </span>
+              </div>
+              <div className="p-5 space-y-2">
+                <h4 className="font-bold text-white text-base">Sovereign Symphony Beat #08</h4>
+                <p className="text-xs text-zinc-400 leading-relaxed">
+                  High-fidelity modular analog synthesizer loops with SHA-256 fingerprinting and 85% creator royalty distribution.
+                </p>
+              </div>
+            </div>
+
+            <div className="bg-zinc-900/60 border border-zinc-800 rounded-2xl overflow-hidden group hover:border-violet-500/50 transition-all duration-300">
+              <div className="relative w-full h-44 overflow-hidden border-b border-zinc-800 bg-zinc-950">
+                <Image 
+                  src="/images/cybernetic_framework.jpg" 
+                  alt="Cybernetic Framework Codebase" 
+                  fill 
+                  className="object-cover group-hover:scale-105 transition-transform duration-700"
+                  referrerPolicy="no-referrer"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/20 to-transparent" />
+                <span className="absolute top-2.5 left-2.5 px-2.5 py-0.5 rounded-full bg-black/80 border border-violet-500/40 text-violet-300 text-[10px] font-mono">
+                  EVM PROTOCOL
+                </span>
+              </div>
+              <div className="p-5 space-y-2">
+                <h4 className="font-bold text-white text-base">Cybernetic Aegis UI Framework</h4>
+                <p className="text-xs text-zinc-400 leading-relaxed">
+                  Enterprise React &amp; Tailwind codebase with automated royalty distribution hooks and anti-scrape defenses.
+                </p>
+              </div>
+            </div>
+
+            <div className="bg-zinc-900/60 border border-zinc-800 rounded-2xl overflow-hidden group hover:border-emerald-500/50 transition-all duration-300">
+              <div className="relative w-full h-44 overflow-hidden border-b border-zinc-800 bg-zinc-950">
+                <Image 
+                  src="/images/digital_art_protection.jpg" 
+                  alt="Digital Art Protection Render" 
+                  fill 
+                  className="object-cover group-hover:scale-105 transition-transform duration-700"
+                  referrerPolicy="no-referrer"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/20 to-transparent" />
+                <span className="absolute top-2.5 left-2.5 px-2.5 py-0.5 rounded-full bg-black/80 border border-emerald-500/40 text-emerald-300 text-[10px] font-mono">
+                  4K ARTWORK MASTER
+                </span>
+              </div>
+              <div className="p-5 space-y-2">
+                <h4 className="font-bold text-white text-base">Ethereal Cosmic Horizon</h4>
+                <p className="text-xs text-zinc-400 leading-relaxed">
+                  Procedurally rendered 3D visual canvas with strict AI fine-tuning exclusion rules and decentralized IPFS pinning.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
         <section className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <Card className="bg-zinc-900 border border-zinc-800">
             <CardHeader><CardTitle className="text-white">Need Help?</CardTitle></CardHeader>

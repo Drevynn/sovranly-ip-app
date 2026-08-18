@@ -202,34 +202,85 @@ export default function HomePage() {
 
             {/* 3 Core Purpose Pillars */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
-              <div className="p-6 bg-zinc-950/60 border border-zinc-800 rounded-2xl space-y-3 hover:border-cyan-500/40 transition-all">
-                <div className="w-10 h-10 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center">
-                  <Database className="w-5 h-5 text-cyan-400" />
+              <div className="bg-zinc-950/60 border border-zinc-800 rounded-3xl overflow-hidden hover:border-cyan-500/50 transition-all duration-300 flex flex-col group shadow-xl shadow-black/40">
+                <div className="relative w-full h-48 overflow-hidden border-b border-zinc-800/80 bg-zinc-900">
+                  <Image 
+                    src="/images/audio_stem_vault.jpg" 
+                    alt="Intellectual Property Protection and Audio Stem Vault" 
+                    fill 
+                    className="object-cover group-hover:scale-105 transition-transform duration-700"
+                    referrerPolicy="no-referrer"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/20 to-transparent" />
+                  <div className="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-black/80 backdrop-blur-md border border-cyan-500/40 text-cyan-300 text-[10px] font-mono uppercase">
+                    IPFS &amp; SHA-256 Vault
+                  </div>
                 </div>
-                <h3 className="text-lg font-bold text-white">01. Intellectual Property Protection</h3>
-                <p className="text-xs sm:text-sm text-zinc-400 leading-relaxed">
-                  Creators upload their digital works (audio stems, codebases, artwork) to generate SHA-256 cryptographic fingerprints and decentralized IPFS certificates, establishing indisputable proof of authorship and ownership.
-                </p>
+                <div className="p-6 space-y-3 flex-1 flex flex-col justify-between">
+                  <div className="space-y-3">
+                    <div className="w-10 h-10 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center">
+                      <Database className="w-5 h-5 text-cyan-400" />
+                    </div>
+                    <h3 className="text-lg font-bold text-white">01. Intellectual Property Protection</h3>
+                    <p className="text-xs sm:text-sm text-zinc-400 leading-relaxed">
+                      Creators upload their digital works (audio stems, codebases, artwork) to generate SHA-256 cryptographic fingerprints and decentralized IPFS certificates, establishing indisputable proof of authorship and ownership.
+                    </p>
+                  </div>
+                </div>
               </div>
 
-              <div className="p-6 bg-zinc-950/60 border border-zinc-800 rounded-2xl space-y-3 hover:border-violet-500/40 transition-all">
-                <div className="w-10 h-10 rounded-xl bg-violet-500/10 border border-violet-500/30 flex items-center justify-center">
-                  <FileText className="w-5 h-5 text-violet-400" />
+              <div className="bg-zinc-950/60 border border-zinc-800 rounded-3xl overflow-hidden hover:border-violet-500/50 transition-all duration-300 flex flex-col group shadow-xl shadow-black/40">
+                <div className="relative w-full h-48 overflow-hidden border-b border-zinc-800/80 bg-zinc-900">
+                  <Image 
+                    src="/images/cybernetic_framework.jpg" 
+                    alt="Smart Licensing and AI Model Protection Architecture" 
+                    fill 
+                    className="object-cover group-hover:scale-105 transition-transform duration-700"
+                    referrerPolicy="no-referrer"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/20 to-transparent" />
+                  <div className="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-black/80 backdrop-blur-md border border-violet-500/40 text-violet-300 text-[10px] font-mono uppercase">
+                    Smart Sync &amp; AI Defense
+                  </div>
                 </div>
-                <h3 className="text-lg font-bold text-white">02. Smart Licensing &amp; AI Defense</h3>
-                <p className="text-xs sm:text-sm text-zinc-400 leading-relaxed">
-                  Design commercial sync agreements, set explicit AI model training consent or opt-out rules, and automate multi-party royalty distributions without traditional intermediaries or accounting delays.
-                </p>
+                <div className="p-6 space-y-3 flex-1 flex flex-col justify-between">
+                  <div className="space-y-3">
+                    <div className="w-10 h-10 rounded-xl bg-violet-500/10 border border-violet-500/30 flex items-center justify-center">
+                      <FileText className="w-5 h-5 text-violet-400" />
+                    </div>
+                    <h3 className="text-lg font-bold text-white">02. Smart Licensing &amp; AI Defense</h3>
+                    <p className="text-xs sm:text-sm text-zinc-400 leading-relaxed">
+                      Design commercial sync agreements, set explicit AI model training consent or opt-out rules, and automate multi-party royalty distributions without traditional intermediaries or accounting delays.
+                    </p>
+                  </div>
+                </div>
               </div>
 
-              <div className="p-6 bg-zinc-950/60 border border-zinc-800 rounded-2xl space-y-3 hover:border-emerald-500/40 transition-all">
-                <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center">
-                  <Presentation className="w-5 h-5 text-emerald-400" />
+              <div className="bg-zinc-950/60 border border-zinc-800 rounded-3xl overflow-hidden hover:border-emerald-500/50 transition-all duration-300 flex flex-col group shadow-xl shadow-black/40">
+                <div className="relative w-full h-48 overflow-hidden border-b border-zinc-800/80 bg-zinc-900">
+                  <Image 
+                    src="/images/slides_deck_export.jpg" 
+                    alt="Google Workspace Slides Deck & Verified Presentation Integration" 
+                    fill 
+                    className="object-cover group-hover:scale-105 transition-transform duration-700"
+                    referrerPolicy="no-referrer"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/20 to-transparent" />
+                  <div className="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-black/80 backdrop-blur-md border border-emerald-500/40 text-emerald-300 text-[10px] font-mono uppercase">
+                    Google Slides Sync
+                  </div>
                 </div>
-                <h3 className="text-lg font-bold text-white">03. Google Workspace Slides Integration</h3>
-                <p className="text-xs sm:text-sm text-zinc-400 leading-relaxed">
-                  <strong className="text-emerald-300">Why we request Google OAuth:</strong> Sovranly IP integrates with Google Workspace (Google Slides API) to enable creators and legal teams to export verified IP ownership certificates, licensing compacts, and royalty reports directly into <strong className="text-white">Google Slides presentations</strong> for client proposals and pitch decks.
-                </p>
+                <div className="p-6 space-y-3 flex-1 flex flex-col justify-between">
+                  <div className="space-y-3">
+                    <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center">
+                      <Presentation className="w-5 h-5 text-emerald-400" />
+                    </div>
+                    <h3 className="text-lg font-bold text-white">03. Google Workspace Slides Integration</h3>
+                    <p className="text-xs sm:text-sm text-zinc-400 leading-relaxed">
+                      <strong className="text-emerald-300">Why we request Google OAuth:</strong> Sovranly IP integrates with Google Workspace (Google Slides API) to enable creators and legal teams to export verified IP ownership certificates, licensing compacts, and royalty reports directly into <strong className="text-white">Google Slides presentations</strong> for client proposals and pitch decks.
+                    </p>
+                  </div>
+                </div>
               </div>
             </div>
 

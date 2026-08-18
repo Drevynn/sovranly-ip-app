@@ -40,6 +40,8 @@ interface SampleAsset {
   status: 'Verified' | 'Minted' | 'Protected';
   description: string;
   date: string;
+  image: string;
+  tag: string;
 }
 
 const SAMPLE_ASSETS: SampleAsset[] = [
@@ -53,7 +55,9 @@ const SAMPLE_ASSETS: SampleAsset[] = [
     tokenId: 'NFT-L2-10049',
     status: 'Minted',
     description: 'High-fidelity modular analog synthesizer loops with complete copyright clearance and Zero Trust continuous audio stream encryption.',
-    date: '2026-07-28'
+    date: '2026-07-28',
+    image: '/images/audio_stem_vault.jpg',
+    tag: 'Audio Master Stem'
   },
   {
     id: 'asset-02',
@@ -65,7 +69,9 @@ const SAMPLE_ASSETS: SampleAsset[] = [
     tokenId: 'NFT-L2-10052',
     status: 'Verified',
     description: 'Enterprise React & Tailwind assembly with cryptographic wallet connectors and automated royalty distribution hooks.',
-    date: '2026-07-30'
+    date: '2026-07-30',
+    image: '/images/cybernetic_framework.jpg',
+    tag: 'EVM Smart Protocol'
   },
   {
     id: 'asset-03',
@@ -77,7 +83,9 @@ const SAMPLE_ASSETS: SampleAsset[] = [
     tokenId: 'NFT-L2-10058',
     status: 'Protected',
     description: 'Procedurally generated 3D visual canvas for immersive gallery exhibitions with strict AI model fine-tuning exclusion rules.',
-    date: '2026-08-01'
+    date: '2026-08-01',
+    image: '/images/digital_art_protection.jpg',
+    tag: '4K Render Master'
   }
 ];
 
@@ -162,21 +170,33 @@ export default function AppOverviewShowcase() {
                   <div
                     key={asset.id}
                     onClick={() => setSelectedAsset(asset)}
-                    className={`p-4 rounded-2xl border cursor-pointer transition-all ${
+                    className={`p-3 sm:p-4 rounded-2xl border cursor-pointer transition-all flex items-center gap-3.5 ${
                       selectedAsset.id === asset.id
                         ? 'bg-cyan-950/30 border-cyan-500/60 shadow-lg shadow-cyan-950/30'
                         : 'bg-zinc-950/60 border-zinc-800 hover:border-zinc-700'
                     }`}
                   >
-                    <div className="flex items-center justify-between mb-1">
-                      <h4 className="font-bold text-white text-sm">{asset.title}</h4>
-                      <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-400">
-                        {asset.status}
-                      </span>
+                    <div className="relative w-14 h-14 rounded-xl overflow-hidden shrink-0 border border-zinc-700/80 bg-zinc-900">
+                      <Image 
+                        src={asset.image} 
+                        alt={asset.title} 
+                        fill 
+                        className="object-cover"
+                        referrerPolicy="no-referrer"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
                     </div>
-                    <div className="flex items-center justify-between text-xs text-zinc-400">
-                      <span>{asset.type}</span>
-                      <span className="font-mono text-[11px] text-zinc-500">{asset.tokenId}</span>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center justify-between mb-1">
+                        <h4 className="font-bold text-white text-sm truncate">{asset.title}</h4>
+                        <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 shrink-0">
+                          {asset.status}
+                        </span>
+                      </div>
+                      <div className="flex items-center justify-between text-xs text-zinc-400">
+                        <span className="truncate">{asset.type}</span>
+                        <span className="font-mono text-[11px] text-zinc-500 shrink-0">{asset.tokenId}</span>
+                      </div>
                     </div>
                   </div>
                 ))}
@@ -184,6 +204,36 @@ export default function AppOverviewShowcase() {
             </div>
 
             <div className="lg:col-span-7 bg-zinc-950 border border-zinc-800 rounded-2xl p-6 space-y-6">
+              {/* Asset Hero Media Preview Banner */}
+              <div className="relative w-full h-44 sm:h-52 rounded-xl overflow-hidden border border-zinc-800 shadow-xl group">
+                <Image 
+                  src={selectedAsset.image} 
+                  alt={selectedAsset.title} 
+                  fill 
+                  className="object-cover group-hover:scale-105 transition-transform duration-700"
+                  referrerPolicy="no-referrer"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/40 to-transparent" />
+                <div className="absolute top-3 left-3 flex items-center gap-2">
+                  <span className="px-2.5 py-1 rounded-full bg-black/80 backdrop-blur-md border border-cyan-500/40 text-cyan-300 text-[10px] font-mono uppercase tracking-wider">
+                    {selectedAsset.tag}
+                  </span>
+                  <span className="px-2.5 py-1 rounded-full bg-black/80 backdrop-blur-md border border-emerald-500/40 text-emerald-400 text-[10px] font-mono flex items-center gap-1">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                    Zero Trust Sealed
+                  </span>
+                </div>
+                <div className="absolute bottom-3 left-4 right-4 flex items-center justify-between">
+                  <div className="text-left">
+                    <span className="text-[10px] font-mono text-zinc-400 uppercase tracking-widest block">Anchored In Provenance</span>
+                    <h4 className="text-base sm:text-lg font-bold text-white drop-shadow-md truncate">{selectedAsset.title}</h4>
+                  </div>
+                  <span className="text-xs font-mono px-3 py-1 rounded-lg bg-cyan-950/80 border border-cyan-500/40 text-cyan-300 backdrop-blur-sm shrink-0">
+                    SHA-256 Validated
+                  </span>
+                </div>
+              </div>
+
               <div className="flex items-center justify-between border-b border-zinc-800 pb-4">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center">
@@ -191,7 +241,7 @@ export default function AppOverviewShowcase() {
                   </div>
                   <div>
                     <span className="text-[10px] font-mono text-zinc-500 uppercase tracking-widest">Sovereign Asset Certificate</span>
-                    <h4 className="text-lg font-bold text-white">{selectedAsset.title}</h4>
+                    <h4 className="text-base font-bold text-white">{selectedAsset.title}</h4>
                   </div>
                 </div>
                 <span className="text-xs font-mono text-emerald-400 bg-emerald-950/40 border border-emerald-500/30 px-3 py-1 rounded-full">
@@ -477,8 +527,32 @@ export default function AppOverviewShowcase() {
               </div>
             </div>
 
-            <div className="lg:col-span-6 bg-zinc-950 border border-zinc-800 rounded-2xl p-6 space-y-6">
-              <div className="flex items-center justify-between border-b border-zinc-800 pb-4">
+            <div className="lg:col-span-6 bg-zinc-950 border border-zinc-800 rounded-2xl p-6 space-y-5">
+              {/* Zero Trust Shield Visual HUD */}
+              <div className="relative w-full h-40 rounded-xl overflow-hidden border border-cyan-500/30 shadow-lg group">
+                <Image 
+                  src="/images/zero_trust_shield.jpg" 
+                  alt="Zero Trust Security Shield and Telemetry" 
+                  fill 
+                  className="object-cover group-hover:scale-105 transition-transform duration-700"
+                  referrerPolicy="no-referrer"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/40 to-transparent" />
+                <div className="absolute top-2.5 left-3 flex items-center gap-2">
+                  <span className="px-2 py-0.5 rounded-full bg-cyan-950/80 border border-cyan-500/40 text-cyan-300 text-[10px] font-mono">
+                    ACTIVE ZERO TRUST SHIELD
+                  </span>
+                  <span className="px-2 py-0.5 rounded-full bg-emerald-950/80 border border-emerald-500/40 text-emerald-400 text-[10px] font-mono">
+                    EVM LAYER-2 SYNC
+                  </span>
+                </div>
+                <div className="absolute bottom-2.5 left-3 right-3 flex items-center justify-between text-[11px] font-mono text-zinc-300">
+                  <span className="text-cyan-400">STATUS: REPELLING UNAUTHORIZED BOTS</span>
+                  <span className="text-zinc-400">LATENCY: 12ms</span>
+                </div>
+              </div>
+
+              <div className="flex items-center justify-between border-b border-zinc-800 pb-3">
                 <span className="text-xs font-mono text-cyan-400 uppercase">Architecture Flow Diagram</span>
                 <span className="text-xs font-mono text-emerald-400 bg-emerald-950/40 border border-emerald-500/30 px-2.5 py-0.5 rounded-full">
                   Zero Trust Active

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import { 
   Globe, 
   DollarSign, 
@@ -13,7 +13,6 @@ import {
   Sparkles, 
   X, 
   Compass, 
-  Lock, 
   Cpu,
   BadgeCheck
 } from 'lucide-react';
