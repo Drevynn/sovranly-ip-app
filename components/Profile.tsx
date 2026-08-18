@@ -61,7 +61,7 @@ export default function Profile() {
   const [isEditMode, setIsEditMode] = useState(false);
   const [displayName, setDisplayName] = useState('');
   const [bio, setBio] = useState('Verified Sovereign IP Creator');
-  const [profilePic, setProfilePic] = useState('https://picsum.photos/seed/abstract_neon/150/150');
+  const [profilePic, setProfilePic] = useState('/duane_portrait.jpg');
   const [website, setWebsite] = useState('');
   const [twitter, setTwitter] = useState('');
   const [instagram, setInstagram] = useState('');

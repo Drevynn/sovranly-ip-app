@@ -168,7 +168,7 @@ export function FirebaseProvider({ children }: { children: React.ReactNode }) {
       uid: 'sandbox-guest-agent-007',
       displayName: 'Sovereign Sandbox Agent',
       email: 'create@sovranlyip.com',
-      photoURL: '/sovranly-logo-v2.png',
+      photoURL: '/duane_portrait.jpg',
       emailVerified: true,
       metadata: {},
       providerData: [],

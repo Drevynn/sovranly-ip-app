@@ -11,6 +11,7 @@ import { SovranlyLogo } from '@/components/SovranlyLogo';
 import Link from 'next/link';
 import SlideStack from '@/components/SlideStack';
 import { motion } from 'motion/react';
+import { PublicNavbarHamburger } from '@/components/PublicNavbarHamburger';
 
 export default function LandingPage() {
   const [submitted, setSubmitted] = useState(false);
@@ -24,12 +25,13 @@ export default function LandingPage() {
           </div>
           <span className="font-bold tracking-tighter text-white text-xl uppercase">SOVRANLY IP</span>
         </div>
-        <div className="space-x-4">
-          <Link href="/faq" className="text-zinc-400 hover:text-white transition-colors">FAQ</Link>
-          <Link href="/wiki" className="text-zinc-400 hover:text-white transition-colors">Wiki</Link>
-          <Button asChild variant="outline" className="border-zinc-700 bg-transparent text-white hover:bg-zinc-800">
+        <div className="flex items-center gap-3">
+          <Link href="/faq" className="text-zinc-400 hover:text-white transition-colors text-sm hidden sm:inline">FAQ</Link>
+          <Link href="/wiki" className="text-zinc-400 hover:text-white transition-colors text-sm hidden sm:inline">Wiki</Link>
+          <Button asChild variant="outline" className="border-zinc-700 bg-transparent text-white hover:bg-zinc-800 text-xs">
             <Link href="/">Launch App</Link>
           </Button>
+          <PublicNavbarHamburger />
         </div>
       </header>
 

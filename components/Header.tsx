@@ -2,12 +2,13 @@
 
 'use client';
 
-import { Shield, Menu, ShieldCheck, LogIn, LogOut, User as UserIcon, Sparkles } from 'lucide-react';
+import { Shield, Menu, ShieldCheck, LogIn, LogOut, User as UserIcon, Sparkles, Globe } from 'lucide-react';
 import WalletConnect from './WalletConnect';
 import Image from 'next/image';
 import { SovranlyLogo } from '@/components/SovranlyLogo';
 import { useAuth } from '@/components/auth/FirebaseProvider';
 import { useState } from 'react';
+import { PublicPagesHamburgerMenu } from '@/components/PublicPagesHamburgerMenu';
 
 export default function Header({ 
   pageTitle, 
@@ -23,6 +24,7 @@ export default function Header({
   const { user, signInWithGoogle, logout, isSandboxMode } = useAuth();
   const [signingIn, setSigningIn] = useState(false);
   const [founderNumber] = useState('042');
+  const [showPublicMenu, setShowPublicMenu] = useState(false);
 
   const handleGoogleAuth = async () => {
     setSigningIn(true);
@@ -37,8 +39,8 @@ export default function Header({
 
   return (
     <header className="h-20 border-b border-zinc-900 px-4 md:px-6 flex items-center justify-between bg-zinc-950/50 backdrop-blur-md relative z-30">
-      {/* Left: Hamburger menu + Page Title */}
-      <div className="flex items-center gap-4 z-40">
+      {/* Left: Hamburger menu + Public Directory + Page Title */}
+      <div className="flex items-center gap-3 z-40">
         <button 
           onClick={onToggleSidebar}
           className="p-2 -ml-2 rounded-xl text-zinc-400 hover:text-white hover:bg-zinc-900/50 transition-all focus:outline-none cursor-pointer"
@@ -47,10 +49,24 @@ export default function Header({
         >
           <Menu className="w-5 h-5 text-cyan-400" />
         </button>
+
+        <button
+          onClick={() => setShowPublicMenu(true)}
+          className="px-3 py-1.5 bg-cyan-950/40 hover:bg-cyan-900/50 border border-cyan-500/30 text-cyan-300 text-xs font-mono font-bold rounded-xl flex items-center gap-1.5 transition-all shadow-sm cursor-pointer"
+          title="View all public pages, pricing, and documentation"
+          id="public-pages-directory-btn"
+        >
+          <Globe className="w-3.5 h-3.5 text-cyan-400 animate-pulse" />
+          <span className="hidden md:inline">Public Pages &amp; Pricing</span>
+          <span className="md:hidden">Public</span>
+        </button>
+
         <div className="hidden sm:block">
           <h1 className="text-xs font-mono font-medium text-zinc-400 tracking-wider lg:tracking-[0.15em] uppercase">{pageTitle}</h1>
         </div>
       </div>
+
+      <PublicPagesHamburgerMenu isOpen={showPublicMenu} onClose={() => setShowPublicMenu(false)} />
 
       {/* Center: Centered Logo and Brand */}
       <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 flex items-center gap-2.5 z-10 pointer-events-none">

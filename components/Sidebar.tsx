@@ -1,10 +1,12 @@
 'use client';
 
-import { Gauge, BarChart3, User, Users, FileText, LogOut, ShieldAlert, Scale, Sliders, Mail, X, Presentation, Rocket, Shield, Building2, Brain, ShieldCheck, Database } from 'lucide-react';
+import { Gauge, BarChart3, User, Users, FileText, LogOut, ShieldAlert, Scale, Sliders, Mail, X, Presentation, Rocket, Shield, Building2, Brain, ShieldCheck, Database, Globe } from 'lucide-react';
 import Image from 'next/image';
 import { useAuth } from './auth/FirebaseProvider';
 import { SovranlyLogo } from '@/components/SovranlyLogo';
 import { motion, AnimatePresence } from 'motion/react';
+import { useState } from 'react';
+import { PublicPagesHamburgerMenu } from '@/components/PublicPagesHamburgerMenu';
 
 export default function Sidebar({ 
   activePage, 
@@ -20,8 +22,11 @@ export default function Sidebar({
   onClose: () => void 
 }) {
   const { user, logout } = useAuth();
+  const [showPublicDirectory, setShowPublicDirectory] = useState(false);
 
   return (
+    <>
+      <PublicPagesHamburgerMenu isOpen={showPublicDirectory} onClose={() => setShowPublicDirectory(false)} />
     <AnimatePresence>
       {isOpen && (
         <>
@@ -60,6 +65,23 @@ export default function Sidebar({
             </div>
 
             <div className="flex-1 px-4 py-5 space-y-6 overflow-y-auto custom-scrollbar">
+              {/* Public Pages & Pricing Quick Access Box */}
+              <div className="bg-gradient-to-r from-cyan-950/40 via-zinc-900/60 to-emerald-950/40 border border-cyan-500/30 rounded-2xl p-3.5 shadow-lg">
+                <button
+                  onClick={() => setShowPublicDirectory(true)}
+                  className="w-full flex items-center justify-between px-3 py-2.5 bg-cyan-950/60 hover:bg-cyan-900/80 border border-cyan-500/40 rounded-xl text-cyan-300 font-mono text-xs font-bold transition-all shadow-sm cursor-pointer group"
+                >
+                  <span className="flex items-center gap-2">
+                    <Globe className="w-4 h-4 text-cyan-400 animate-pulse group-hover:rotate-45 transition-transform" />
+                    Public Pages &amp; Pricing
+                  </span>
+                  <span className="text-[10px] bg-cyan-500/20 px-2 py-0.5 rounded text-cyan-200">Index</span>
+                </button>
+                <p className="text-[10px] text-zinc-400 font-mono mt-2 px-1 leading-relaxed">
+                  Instant access to public pricing, Wiki, FAQ, legal terms, and compliance disclosures.
+                </p>
+              </div>
+
               {/* Main Hub */}
               <div className="space-y-1">
                 <button 
@@ -242,5 +264,6 @@ export default function Sidebar({
         </>
       )}
     </AnimatePresence>
+    </>
   );
 }

@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { ShieldCheck, ArrowLeft, ArrowRight, Sparkles, Youtube, Facebook, Instagram, Linkedin } from 'lucide-react';
 import AboutUs from '@/components/AboutUs';
 import NewsletterSignup from '@/components/NewsletterSignup';
+import { PublicNavbarHamburger } from '@/components/PublicNavbarHamburger';
 
 export default function AboutPage() {
   return (
@@ -26,8 +27,8 @@ export default function AboutPage() {
               <span className="text-[10px] uppercase font-mono text-cyan-400 tracking-wider">Corporate & Investor About</span>
             </div>
           </div>
-          <div className="flex items-center gap-4">
-            <Button asChild variant="outline" className="border-zinc-855 text-zinc-300 hover:text-white hover:bg-zinc-900 rounded-full text-xs">
+          <div className="flex items-center gap-3">
+            <Button asChild variant="outline" className="border-zinc-800 text-zinc-300 hover:text-white hover:bg-zinc-900 rounded-full text-xs hidden sm:flex">
               <Link href="/" className="flex items-center gap-1.5">
                 <ArrowLeft className="w-3.5 h-3.5" /> Return Home
               </Link>
@@ -37,6 +38,7 @@ export default function AboutPage() {
                 Go to Dashboard <ArrowRight className="w-3.5 h-3.5" />
               </Link>
             </Button>
+            <PublicNavbarHamburger />
           </div>
         </div>
       </nav>
