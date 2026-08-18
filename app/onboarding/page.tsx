@@ -198,12 +198,11 @@ export default function OnboardingVoiceAgent() {
     let selectedVoice = null;
 
     if (activeVoice === 'adrienne') {
-      selectedVoice = voices.find(v => v.lang.startsWith('en-US') && (v.name.toLowerCase().includes('natural') || v.name.toLowerCase().includes('google') || v.name.toLowerCase().includes('female'))) ||
-                      voices.find(v => v.lang.startsWith('en-US') && v.name.toLowerCase().includes('zira')) ||
+      selectedVoice = voices.find(v => v.lang.startsWith('en') && (v.name.toLowerCase().includes('neural') || v.name.toLowerCase().includes('natural') || v.name.toLowerCase().includes('samantha') || v.name.toLowerCase().includes('google us english') || v.name.toLowerCase().includes('zira'))) ||
                       voices.find(v => v.lang.startsWith('en-US')) ||
                       voices[0];
-      utterance.pitch = 0.84; // Deeper, warm mature tone
-      utterance.rate = 0.83;  // Soulful, slower pacing representing an older wise woman
+      utterance.pitch = 0.92; // Warm, soulful, mature conversational tone
+      utterance.rate = 0.94;  // Smooth, natural phrasing with expressive cadence
     } else if (activeVoice === 'oracle') {
       selectedVoice = voices.find(v => v.lang.startsWith('en-GB') && v.name.toLowerCase().includes('male')) ||
                       voices.find(v => v.lang.startsWith('en-GB')) ||

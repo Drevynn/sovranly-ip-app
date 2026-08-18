@@ -261,9 +261,15 @@ export default function Profile() {
             </div>
 
             {/* Verification Badge */}
-            <div className="inline-flex items-center gap-1.5 bg-cyan-950/50 border border-cyan-500/20 px-3 py-1 rounded-full text-[10px] font-mono text-cyan-400 font-bold mb-3">
-              <BadgeCheck className="w-3.5 h-3.5" />
-              Verified Sovereign Creator
+            <div className="flex flex-wrap items-center justify-center gap-2 mb-3">
+              <div className="inline-flex items-center gap-1.5 bg-cyan-950/50 border border-cyan-500/20 px-3 py-1 rounded-full text-[10px] font-mono text-cyan-400 font-bold">
+                <BadgeCheck className="w-3.5 h-3.5" />
+                Verified Sovereign Creator
+              </div>
+              <div className="inline-flex items-center gap-1.5 bg-gradient-to-r from-amber-500/20 via-orange-500/20 to-yellow-500/20 border border-amber-500/40 px-3 py-1 rounded-full text-[10px] font-mono text-amber-300 font-bold shadow-sm" title="Founders Beta Creator (Top 100 Early Adopters)">
+                <Sparkles className="w-3.5 h-3.5 text-amber-400 animate-pulse" />
+                Founders Beta #042
+              </div>
             </div>
 
             {/* Display Name */}

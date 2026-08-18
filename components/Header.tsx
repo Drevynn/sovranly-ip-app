@@ -2,7 +2,7 @@
 
 'use client';
 
-import { Shield, Menu, ShieldCheck, LogIn, LogOut, User as UserIcon } from 'lucide-react';
+import { Shield, Menu, ShieldCheck, LogIn, LogOut, User as UserIcon, Sparkles } from 'lucide-react';
 import WalletConnect from './WalletConnect';
 import Image from 'next/image';
 import { SovranlyLogo } from '@/components/SovranlyLogo';
@@ -22,6 +22,7 @@ export default function Header({
 }) {
   const { user, signInWithGoogle, logout, isSandboxMode } = useAuth();
   const [signingIn, setSigningIn] = useState(false);
+  const [founderNumber] = useState('042');
 
   const handleGoogleAuth = async () => {
     setSigningIn(true);
@@ -59,8 +60,13 @@ export default function Header({
         </span>
       </div>
 
-      {/* Right: Google Sign In + Security Status + Wallet Connect */}
-      <div className="flex items-center gap-3 z-40">
+      {/* Right: Founders Beta Badge + Google Sign In + Security Status + Wallet Connect */}
+      <div className="flex items-center gap-2.5 z-40">
+        <div className="px-2.5 py-1 bg-gradient-to-r from-amber-500/20 via-orange-500/20 to-yellow-500/20 border border-amber-500/40 text-amber-300 text-[10px] font-mono font-bold rounded-lg hidden sm:flex items-center gap-1.5 shadow-sm" title="Founders Beta Creator (Top 100 Early Adopters)">
+          <Sparkles className="w-3 h-3 text-amber-400 animate-pulse" />
+          <span>FOUNDERS BETA #{founderNumber}</span>
+        </div>
+
         <div className="px-3 py-1.5 bg-emerald-950/30 border border-emerald-500/15 text-emerald-400 text-[9px] uppercase tracking-widest rounded-full items-center gap-2 hidden xl:flex">
           <span className="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse"></span>
           {walletAddress || user ? 'Zero Trust Authed' : 'Network Secure'}
