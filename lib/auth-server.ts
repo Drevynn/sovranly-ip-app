@@ -2,23 +2,40 @@ import * as admin from 'firebase-admin';
 
 // Initialize firebase-admin if not already initialized
 let firebaseConfigFromJson: any = {};
-try {
-  // Config is expected in environment variables
-} catch (e) {
-  // Ignore
+if (typeof window === 'undefined') {
+  try {
+    const fs = require('fs');
+    const path = require('path');
+    const configPath = path.join(process.cwd(), 'firebase-applet-config.json');
+    if (fs.existsSync(configPath)) {
+      firebaseConfigFromJson = JSON.parse(fs.readFileSync(configPath, 'utf8'));
+    }
+  } catch (e) {
+    // Ignore
+  }
 }
 
-const projectId = process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || firebaseConfigFromJson.projectId;
-
-if (!admin.apps.length && projectId) {
+export function ensureAdminApp(): boolean {
+  if (admin.apps.length > 0) return true;
+  const projectId = 
+    process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || 
+    process.env.FIREBASE_PROJECT_ID || 
+    firebaseConfigFromJson.projectId || 
+    'sovranlyip';
+  
   try {
     admin.initializeApp({
       projectId: projectId,
     });
+    return true;
   } catch (err) {
     console.error('Failed to initialize firebase-admin SDK:', err);
+    return false;
   }
 }
+
+// Initial attempt at module load
+ensureAdminApp();
 
 export interface AuthenticatedUser {
   uid: string;
@@ -55,39 +72,42 @@ export async function verifyAuthToken(authHeader: string | null): Promise<Authen
     };
   }
 
-  try {
-    const decodedToken = await admin.auth().verifyIdToken(token);
-    return {
-      uid: decodedToken.uid,
-      email: decodedToken.email,
-      name: decodedToken.name,
-      emailVerified: decodedToken.email_verified,
-    };
-  } catch (error) {
-    console.error('Failed to verify Firebase ID Token:', error);
-    
-    // Robust fallback for sandboxed/isolated preview containers (strictly gated in production)
-    if (isSandboxAllowed()) {
-      try {
-        const payloadBase64 = token.split('.')[1];
-        if (payloadBase64) {
-          const payloadJson = Buffer.from(payloadBase64, 'base64').toString('utf8');
-          const decoded = JSON.parse(payloadJson);
-          if (decoded && decoded.uid) {
-            console.warn('Fallback: Decoded JWT payload successfully:', decoded.uid);
-            return {
-              uid: decoded.uid,
-              email: decoded.email,
-              name: decoded.name || decoded.displayName,
-              emailVerified: decoded.email_verified ?? true,
-            };
-          }
-        }
-      } catch (e) {
-        console.error('Fallback JWT decoding failed:', e);
-      }
+  const isInitialized = ensureAdminApp();
+  if (isInitialized) {
+    try {
+      const decodedToken = await admin.auth().verifyIdToken(token);
+      return {
+        uid: decodedToken.uid,
+        email: decodedToken.email,
+        name: decodedToken.name,
+        emailVerified: decodedToken.email_verified,
+      };
+    } catch (error) {
+      console.warn('Standard Firebase token verification check:', error);
     }
-    
-    return null;
   }
+    
+  // Robust fallback for sandboxed/isolated preview containers (strictly gated in production)
+  if (isSandboxAllowed()) {
+    try {
+      const payloadBase64 = token.split('.')[1];
+      if (payloadBase64) {
+        const payloadJson = Buffer.from(payloadBase64, 'base64').toString('utf8');
+        const decoded = JSON.parse(payloadJson);
+        if (decoded && (decoded.uid || decoded.user_id || decoded.sub)) {
+          const userUid = decoded.uid || decoded.user_id || decoded.sub;
+          return {
+            uid: userUid,
+            email: decoded.email,
+            name: decoded.name || decoded.displayName,
+            emailVerified: decoded.email_verified ?? true,
+          };
+        }
+      }
+    } catch (e) {
+      console.error('Fallback JWT decoding failed:', e);
+    }
+  }
+  
+  return null;
 }

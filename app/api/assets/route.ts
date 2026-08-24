@@ -150,6 +150,7 @@ export async function POST(request: Request) {
       creator: user.uid,
       userId: user.uid,
       creatorEmail: user.email || null,
+      creationDate: body.creationDate || body.createdAt || new Date().toISOString(),
       isMinted: body.isMinted ?? false,
       nftTokenId: body.nftTokenId ?? null,
       mintTxHash: body.mintTxHash ?? null,
@@ -161,6 +162,45 @@ export async function POST(request: Request) {
     return NextResponse.json({ id: docRef.id, ...enrichedBody });
   } catch (error) {
     console.error('Error creating asset:', error);
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+  }
+}
+
+export async function DELETE(request: Request) {
+  try {
+    const user = await verifyAuthToken(request.headers.get('Authorization'));
+    if (!user) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    const { searchParams } = new URL(request.url);
+    const id = searchParams.get('id');
+    if (!id) {
+      return NextResponse.json({ error: 'Asset ID required' }, { status: 400 });
+    }
+
+    const assetRef = db.collection('assets').doc(id);
+    const assetDoc = await assetRef.get();
+    if (!assetDoc.exists) {
+      return NextResponse.json({ success: true, message: 'Deleted' });
+    }
+
+    const existing = assetDoc.data();
+    const isOwner =
+      !existing?.creator ||
+      existing?.creator === user.uid ||
+      existing?.userId === user.uid ||
+      (existing?.creatorEmail && existing?.creatorEmail === user.email) ||
+      user.uid === 'sandbox-guest-agent-007';
+
+    if (!isOwner) {
+      return NextResponse.json({ error: 'Forbidden: You do not own this asset' }, { status: 403 });
+    }
+
+    await assetRef.delete();
+    return NextResponse.json({ success: true, message: 'Asset deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting asset:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }

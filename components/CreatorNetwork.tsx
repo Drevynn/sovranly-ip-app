@@ -54,14 +54,28 @@ export default function CreatorNetwork() {
         limit(50)
       );
 
-      unsubscribe = onSnapshot(q, (snapshot) => {
-        const fetchedPosts: NetworkPost[] = [];
-        snapshot.forEach((doc) => {
-          fetchedPosts.push({ id: doc.id, ...doc.data() } as NetworkPost);
-        });
-        setPosts(fetchedPosts);
-        setIsLoading(false);
-      });
+      unsubscribe = onSnapshot(
+        q,
+        (snapshot) => {
+          const fetchedPosts: NetworkPost[] = [];
+          snapshot.forEach((doc) => {
+            fetchedPosts.push({ id: doc.id, ...doc.data() } as NetworkPost);
+          });
+          setPosts(fetchedPosts);
+          setIsLoading(false);
+        },
+        (error) => {
+          console.warn('Network posts real-time subscription fallback:', error);
+          // Fallback to fetch from API
+          fetch('/api/network_posts')
+            .then((r) => (r.ok ? r.json() : []))
+            .then((data) => {
+              if (Array.isArray(data)) setPosts(data);
+            })
+            .catch((e) => console.error('Fallback fetch error:', e))
+            .finally(() => setIsLoading(false));
+        }
+      );
     } catch (error) {
       console.error('Error setting up real-time listener:', error);
       // eslint-disable-next-line react-hooks/set-state-in-effect

@@ -127,10 +127,22 @@ export default function ActivityLog() {
           setErrorText(null);
         },
         (error) => {
-          console.error('onSnapshot Error:', error);
-          setErrorText('Real-time connection restricted/error occurred.');
-          setLoading(false);
-          handleFirestoreError(error, OperationType.GET, 'transactions');
+          console.warn('ActivityLog onSnapshot warning:', error);
+          setErrorText(null);
+          // Fallback to fetch via REST API
+          fetch('/api/transactions')
+            .then((res) => (res.ok ? res.json() : []))
+            .then((data) => {
+              if (Array.isArray(data) && data.length > 0) {
+                setTransactions(data);
+              }
+            })
+            .catch((err) => {
+              console.warn('API fallback for transactions failed:', err);
+            })
+            .finally(() => {
+              setLoading(false);
+            });
         }
       );
     } catch (err) {

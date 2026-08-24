@@ -16,7 +16,7 @@ steps:
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push', 'gcr.io/$PROJECT_ID/sovranly-ip:latest']
 
-  # 4. Deploy the image to Cloud Run
+  # 4. Deploy the image to Cloud Run with optimal production parameters
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: 'gcloud'
     args: [
@@ -24,7 +24,13 @@ steps:
       '--image', 'gcr.io/$PROJECT_ID/sovranly-ip:$COMMIT_SHA',
       '--region', 'us-west1',
       '--platform', 'managed',
-      '--allow-unauthenticated'
+      '--allow-unauthenticated',
+      '--port', '3000',
+      '--memory', '1Gi',
+      '--cpu', '1',
+      '--timeout', '300',
+      '--min-instances', '0',
+      '--max-instances', '10'
     ]
 
 options:

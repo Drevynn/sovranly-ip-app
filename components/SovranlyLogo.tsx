@@ -31,6 +31,10 @@ export function SovranlyLogo({
   const candidateVideo = videoSrc || (useVideo ? '/sovranly-hero-loop.mp4' : null);
 
   const fallbackList = [
+    '/sovranly-shield-transparent.png',
+    '/sovranly-logo-transparent.png',
+    '/sovranly-shield-v3.webp',
+    '/sovranly-shield-v3.png',
     variant === 'isolated' ? '/sovranly-shield-hero.jpg' : variant === 'v3' ? '/sovranly-shield-v3.jpg' : '/sovranly-logo-v2.png',
     '/sovranly-logo-v2.png',
     '/sovranly-shield-v3.jpg',

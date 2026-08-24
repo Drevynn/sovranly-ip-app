@@ -29,6 +29,7 @@ export default function DashboardPage() {
   const [activePage, setActivePage] = useState(0); // Default to Command Center
   const [currentAccount, setCurrentAccount] = useState<string | null>(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [selectedAssetForLicensing, setSelectedAssetForLicensing] = useState<any>(null);
 
   const walletStatus = currentAccount 
     ? `${currentAccount.slice(0, 6)}...${currentAccount.slice(-4)}` 
@@ -114,9 +115,22 @@ export default function DashboardPage() {
         <main className="flex-1 overflow-auto p-4 sm:p-6 md:p-8 pb-28 md:pb-8 bg-[#09090b]">
           {activePage === 0 && <Overview onNavigate={setActivePage} />}
           {activePage === 1 && <Profile />}
-          {activePage === 2 && <AssetManager walletAddress={currentAccount} />}
+          {activePage === 2 && (
+            <AssetManager 
+              walletAddress={currentAccount} 
+              onNavigateToLicensing={(asset) => {
+                setSelectedAssetForLicensing(asset);
+                setActivePage(4);
+              }}
+            />
+          )}
           {activePage === 3 && <Analytics />}
-          {activePage === 4 && <LicensingAgreementBuilder walletAddress={currentAccount} />}
+          {activePage === 4 && (
+            <LicensingAgreementBuilder 
+              walletAddress={currentAccount} 
+              initialAsset={selectedAssetForLicensing} 
+            />
+          )}
           {activePage === 5 && <RoyaltySandbox />}
           {activePage === 6 && <Inbox walletAddress={currentAccount} />}
           {activePage === 7 && <GoogleSlidesManager />}

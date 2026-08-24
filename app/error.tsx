@@ -1,26 +1,25 @@
 'use client';
 
 import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
 import { ShieldAlert, RefreshCw, Home } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
-export default function GlobalError({
+export default function ErrorBoundary({
   error,
   reset,
 }: {
   error: Error & { digest?: string };
   reset: () => void;
 }) {
-  const router = useRouter();
-
   useEffect(() => {
     // Log the error securely for telemetry & developer review
-    console.error('Unhandled application exception captured by root boundary:', error);
+    console.error('Unhandled application exception captured by route boundary:', error);
   }, [error]);
 
   const handleReturnHome = () => {
-    router.push('/');
+    if (typeof window !== 'undefined') {
+      window.location.href = '/';
+    }
   };
 
   return (
@@ -52,10 +51,10 @@ export default function GlobalError({
           </div>
           <div className="space-y-1.5 break-words">
             <p>
-              <span className="text-zinc-600">ID:</span> {error.digest || 'N/A_SYSTEM_DEFAULT'}
+              <span className="text-zinc-600">ID:</span> {error?.digest || 'N/A_SYSTEM_DEFAULT'}
             </p>
             <p>
-              <span className="text-zinc-600">MSG:</span> {error.message || 'An unexpected fault occurred.'}
+              <span className="text-zinc-600">MSG:</span> {error?.message || 'An unexpected fault occurred.'}
             </p>
           </div>
         </div>
@@ -81,7 +80,7 @@ export default function GlobalError({
         </div>
       </div>
 
-      {/* Humble Footer */}
+      {/* Footer */}
       <div className="mt-8 text-zinc-600 font-mono text-[10px] tracking-widest uppercase">
         Sovranly IP • Cryptographic Core
       </div>

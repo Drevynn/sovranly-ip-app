@@ -1,5 +1,5 @@
 import { initializeApp, getApps } from 'firebase/app';
-import { initializeFirestore } from 'firebase/firestore';
+import { initializeFirestore, getFirestore } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
 
 // Safely attempt to load firebase-applet-config.json on the server side
@@ -42,9 +42,21 @@ let db: any = null;
 export const getDb = () => {
   const app = getFirebaseApp();
   if (!db) {
-    db = initializeFirestore(app, {
-      experimentalForceLongPolling: true,
-    }, firebaseConfig.firestoreDatabaseId);
+    const rawDbId = firebaseConfig.firestoreDatabaseId?.trim();
+    const databaseId = rawDbId && rawDbId !== '' && rawDbId !== '(default)' ? rawDbId : undefined;
+    try {
+      if (databaseId) {
+        db = initializeFirestore(app, {
+          experimentalForceLongPolling: true,
+        }, databaseId);
+      } else {
+        db = initializeFirestore(app, {
+          experimentalForceLongPolling: true,
+        });
+      }
+    } catch {
+      db = databaseId ? getFirestore(app, databaseId) : getFirestore(app);
+    }
   }
   return db;
 };

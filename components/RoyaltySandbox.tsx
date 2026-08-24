@@ -27,7 +27,9 @@ import {
   Briefcase,
   HelpCircle,
   TrendingDown,
-  ArrowRightLeft
+  ArrowRightLeft,
+  Download,
+  FileSpreadsheet
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -304,6 +306,167 @@ export default function RoyaltySandbox() {
 
   const creatorRetainedRevenue = totalGmv - totalTransactionalCommissions;
 
+  const [exportSuccess, setExportSuccess] = useState(false);
+
+  // Export Simulation Results to CSV for Tax Reporting
+  const exportSimulationToCsv = (exportScope?: 'current' | 'splits' | 'monetization') => {
+    const timestamp = new Date().toISOString();
+    const dateStr = timestamp.split('T')[0];
+    const ethRate = 2855; // Benchmark USD per ETH
+
+    const rows: (string | number)[][] = [];
+
+    // Header & Compliance Metadata Block
+    rows.push(['SOVRANLY IP - ZERO-TRUST ROYALTY & TAX REPORTING SCHEDULE']);
+    rows.push(['Operating Entity', 'Creative Sovereignty LLC']);
+    rows.push(['Report Generated At (UTC)', timestamp]);
+    rows.push(['Architecture', 'Zero-Trust Multi-Sig Smart Contract Protocol']);
+    rows.push(['Benchmark Exchange Rate', `1 ETH = $${ethRate.toLocaleString()} USD`]);
+    rows.push(['Export Scope', exportScope || activeTab]);
+    rows.push([]);
+
+    // Tab 1 / Splits Section: Multi-Party Covenant Royalty Split Tax Schedule
+    rows.push(['============================================================']);
+    rows.push(['1. MULTI-PARTY ROYALTY COVENANT SPLIT TAX SCHEDULE']);
+    rows.push(['============================================================']);
+    rows.push(['Simulated License Inbound Payment (ETH)', `${normalizedInput.toFixed(4)} ETH`]);
+    rows.push(['Simulated License Inbound Payment (USD Value)', `$${(normalizedInput * ethRate).toFixed(2)} USD`]);
+    rows.push(['Latest Ledger Block Height', transactionHeight]);
+    rows.push([]);
+
+    // Recipient Tax Breakdown Table
+    rows.push([
+      'Recipient Name',
+      'Tax Role Classification',
+      'Public Wallet Address',
+      'Allocation Percentage (%)',
+      'Simulated Payout (ETH)',
+      'Simulated Payout (USD Value)',
+      'Updated Ledger Balance (ETH)',
+      'Updated Ledger Balance (USD Value)',
+      'Tax Reporting Form / Classification'
+    ]);
+
+    recipients.forEach(r => {
+      const payoutEth = (normalizedInput * r.percentage) / 100;
+      const payoutUsd = payoutEth * ethRate;
+      const balanceUsd = r.balance * ethRate;
+      const taxForm = 
+        r.role === 'CREATOR_PRIMARY' ? 'Form 1099-MISC / Royalty Box 2 (Schedule E)' :
+        r.role === 'PROTOCOL_CONTRIBUTOR' ? 'Form 1099-NEC / Nonemployee Compensation' :
+        r.role === 'SYSTEM_STAKEHOLDER' ? 'Corporate Infrastructure Protocol Reserve' :
+        'Form 1099-B / Oracle Validator Staking Yield';
+
+      rows.push([
+        r.name,
+        r.role,
+        r.address,
+        `${r.percentage}%`,
+        payoutEth.toFixed(4),
+        `$${payoutUsd.toFixed(2)}`,
+        r.balance.toFixed(4),
+        `$${balanceUsd.toFixed(2)}`,
+        taxForm
+      ]);
+    });
+
+    rows.push([]);
+
+    // Cryptographic Settlement Receipts & Audit Trail
+    rows.push(['============================================================']);
+    rows.push(['2. CRYPTOGRAPHIC SETTLEMENT RECEIPTS & AUDIT LOGS']);
+    rows.push(['============================================================']);
+    if (sandboxLogs.length === 0) {
+      rows.push(['No dynamic transactions simulated in current session yet.']);
+    } else {
+      rows.push([
+        'Receipt ID',
+        'Settlement Timestamp (UTC)',
+        'Block Number',
+        'Gas Limit Consumed',
+        'Gross Amount (ETH)',
+        'Gross Amount (USD)',
+        'Recipient Split Payout Breakdown'
+      ]);
+
+      sandboxLogs.forEach(log => {
+        const grossEth = parseFloat(log.amount) || normalizedInput;
+        const grossUsd = grossEth * ethRate;
+        const splitsSummary = log.recipientSplits.map(s => `${s.name}: ${s.amount}`).join(' | ');
+
+        rows.push([
+          log.id,
+          log.timestamp,
+          log.blockNumber,
+          log.gasUsed,
+          log.amount,
+          `$${grossUsd.toFixed(2)}`,
+          splitsSummary
+        ]);
+      });
+    }
+
+    rows.push([]);
+
+    // Tab 2 / Monetization Section: Corporate Tax & Pro-Forma Revenue Projections
+    rows.push(['============================================================']);
+    rows.push(['3. CREATIVE SOVEREIGNTY LLC MONETIZATION & TAX PRO-FORMA']);
+    rows.push(['============================================================']);
+    rows.push(['Monetization Strategy', monetizationModel]);
+    rows.push(['Total Active Subscribers', subsCount]);
+    rows.push(['Starter Tier ($29/mo) Count', `${starterCount} (${starterPct}%)`]);
+    rows.push(['Starter Tier Monthly Revenue (USD)', `$${(isSaaSEnabled ? starterCount * 29 : 0).toLocaleString()}`]);
+    rows.push(['Growth Studio ($99/mo) Count', `${growthCount} (${growthPct}%)`]);
+    rows.push(['Growth Studio Monthly Revenue (USD)', `$${(isSaaSEnabled ? growthCount * 99 : 0).toLocaleString()}`]);
+    rows.push(['Enterprise Tier ($299/mo) Count', `${enterpriseCount} (${enterprisePct}%)`]);
+    rows.push(['Enterprise Tier Monthly Revenue (USD)', `$${(isSaaSEnabled ? enterpriseCount * 299 : 0).toLocaleString()}`]);
+    rows.push(['Total Monthly Recurring Revenue (MRR USD)', `$${totalMrr.toLocaleString()}`]);
+    rows.push(['Annual Recurring Revenue (ARR USD)', `$${arrForecast.toLocaleString()}`]);
+    rows.push([]);
+    rows.push(['--- TRANSACTION COMMISSIONS & MARKETPLACE TAX BREAKDOWN ---']);
+    rows.push(['Active Retail Sellers', activeSellersCount]);
+    rows.push(['Sales Per Active Creator / Month', avgTxCount]);
+    rows.push(['Average License Sale Price (USD)', `$${avgPriceUsd}`]);
+    rows.push(['Total Monthly GMV (USD)', `$${totalGmv.toLocaleString()}`]);
+    rows.push(['Domestic Market GMV (USD)', `$${domesticGmv.toLocaleString()}`]);
+    rows.push(['Part A Domestic Commission Rate (%)', `${(domesticRate * 100).toFixed(1)}%`]);
+    rows.push(['Part A Domestic Commission (USD)', `$${Math.round(domesticCommission).toLocaleString()}`]);
+    rows.push(['Part D Overseas GMV (USD)', `$${overseasGmv.toLocaleString()}`]);
+    rows.push(['Part D Overseas Commission Rate (%)', `${(overseasRate * 100).toFixed(1)}%`]);
+    rows.push(['Part D Overseas Customs & Withholding Surcharge (USD)', `$${Math.round(overseasCommissionTotal).toLocaleString()}`]);
+    rows.push(['Total Platform Surcharge Fees (USD/mo)', `$${Math.round(totalTransactionalCommissions).toLocaleString()}`]);
+    rows.push(['Creator Retained Net Earnings (USD/mo)', `$${Math.round(creatorRetainedRevenue).toLocaleString()}`]);
+    rows.push(['Combined LLC Monthly Gross Revenue (USD)', `$${Math.round(totalMonthlyLLCRevenue).toLocaleString()}`]);
+    rows.push(['Combined LLC Annualized Projected Revenue (USD)', `$${Math.round(totalAnnualLLCRevenue).toLocaleString()}`]);
+
+    // Build CSV formatted string
+    const csvContent = rows
+      .map(row => 
+        row.map(val => {
+          const str = String(val ?? '');
+          if (str.includes(',') || str.includes('"') || str.includes('\n') || str.includes('\r')) {
+            return `"${str.replace(/"/g, '""')}"`;
+          }
+          return str;
+        }).join(',')
+      )
+      .join('\r\n');
+
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    const fileName = `sovranly-royalty-tax-report-${dateStr}.csv`;
+    link.setAttribute('download', fileName);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+
+    setExportSuccess(true);
+    setTimeout(() => setExportSuccess(false), 3000);
+  };
+
   return (
     <div className="space-y-12 max-w-7xl mx-auto pb-24 text-left">
       
@@ -325,13 +488,37 @@ export default function RoyaltySandbox() {
             </p>
           </div>
           
-          <Button 
-            onClick={resetSandboxToDefault}
-            variant="outline"
-            className="border-zinc-800 bg-zinc-900/40 text-xs text-zinc-350 hover:text-white hover:bg-zinc-900"
-          >
-            <RotateCcw className="w-3.5 h-3.5 mr-1" /> Reset Parameters
-          </Button>
+          <div className="flex flex-wrap items-center gap-3">
+            <Button
+              id="export-simulation-tax-csv-btn"
+              onClick={() => exportSimulationToCsv()}
+              className={`text-xs font-bold transition-all px-4 py-2 rounded-xl flex items-center gap-2 shadow-lg ${
+                exportSuccess
+                  ? 'bg-emerald-600 text-white hover:bg-emerald-500'
+                  : 'bg-gradient-to-r from-teal-500 to-cyan-600 text-white hover:brightness-110 shadow-teal-950/40'
+              }`}
+            >
+              {exportSuccess ? (
+                <>
+                  <CheckCircle2 className="w-4 h-4 text-white" />
+                  Tax CSV Exported!
+                </>
+              ) : (
+                <>
+                  <Download className="w-4 h-4" />
+                  Export Tax Report (CSV)
+                </>
+              )}
+            </Button>
+
+            <Button 
+              onClick={resetSandboxToDefault}
+              variant="outline"
+              className="border-zinc-800 bg-zinc-900/40 text-xs text-zinc-350 hover:text-white hover:bg-zinc-900 rounded-xl"
+            >
+              <RotateCcw className="w-3.5 h-3.5 mr-1" /> Reset Parameters
+            </Button>
+          </div>
         </div>
       </div>
 
@@ -599,13 +786,23 @@ export default function RoyaltySandbox() {
 
       {/* Sandbox Transaction Receipt Logs Archive */}
       <Card className="bg-zinc-950 border border-zinc-900 rounded-[32px] p-8 md:p-10 shadow-2xl space-y-6">
-        <div>
-          <h3 className="text-xl md:text-2xl font-extrabold text-white tracking-tight flex items-center gap-2">
-            <Receipt className="w-5 h-5 text-teal-400" /> Dynamic Settle Receipts Audit Logs
-          </h3>
-          <p className="text-xs text-zinc-400 font-light mt-1">
-            Browse cryptographic transaction block records emitted by the sandbox simulation splitter. All receipts are locked index proofs.
-          </p>
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <h3 className="text-xl md:text-2xl font-extrabold text-white tracking-tight flex items-center gap-2">
+              <Receipt className="w-5 h-5 text-teal-400" /> Dynamic Settle Receipts Audit Logs
+            </h3>
+            <p className="text-xs text-zinc-400 font-light mt-1">
+              Browse cryptographic transaction block records emitted by the sandbox simulation splitter. All receipts are locked index proofs.
+            </p>
+          </div>
+          <Button
+            onClick={() => exportSimulationToCsv('splits')}
+            variant="outline"
+            className="border-zinc-800 bg-zinc-900/60 text-xs text-teal-400 hover:text-white hover:bg-zinc-800 rounded-xl shrink-0 self-start sm:self-auto"
+          >
+            <FileSpreadsheet className="w-3.5 h-3.5 mr-1.5 text-teal-400" />
+            Export Split Ledger (CSV)
+          </Button>
         </div>
 
         {sandboxLogs.length === 0 ? (
@@ -916,14 +1113,24 @@ export default function RoyaltySandbox() {
               <div className="absolute top-0 right-0 w-80 h-80 bg-emerald-500/5 rounded-full blur-[80px]" />
               
               <div className="relative z-10 space-y-8 text-left">
-                <div>
-                  <span className="text-[10px] uppercase font-mono tracking-wider bg-emerald-950/40 text-emerald-400 border border-emerald-900/30 px-3 py-1 rounded-full font-bold">
-                    Pro-Forma Projection Model
-                  </span>
-                  <h2 className="text-2xl font-black text-white mt-3 tracking-tight">Creative Sovereignty LLC Ledger Revenue</h2>
-                  <p className="text-xs text-zinc-400 mt-1">
-                    Calculated dynamically across subscription metrics and transaction commission allocations.
-                  </p>
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                  <div>
+                    <span className="text-[10px] uppercase font-mono tracking-wider bg-emerald-950/40 text-emerald-400 border border-emerald-900/30 px-3 py-1 rounded-full font-bold">
+                      Pro-Forma Projection Model
+                    </span>
+                    <h2 className="text-2xl font-black text-white mt-3 tracking-tight">Creative Sovereignty LLC Ledger Revenue</h2>
+                    <p className="text-xs text-zinc-400 mt-1">
+                      Calculated dynamically across subscription metrics and transaction commission allocations.
+                    </p>
+                  </div>
+                  <Button
+                    onClick={() => exportSimulationToCsv('monetization')}
+                    variant="outline"
+                    className="border-zinc-800 bg-zinc-900/60 text-xs text-emerald-400 hover:text-white hover:bg-zinc-800 rounded-xl shrink-0 self-start sm:self-auto"
+                  >
+                    <FileSpreadsheet className="w-3.5 h-3.5 mr-1.5 text-emerald-400" />
+                    Export Pro-Forma (CSV)
+                  </Button>
                 </div>
 
                 {/* Big aggregates display board */}

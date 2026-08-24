@@ -309,7 +309,7 @@ export default function MarketplacePage() {
         setFavoritedAssetIds(ids);
         setFavoritesMap(map);
       }, (error) => {
-        handleFirestoreError(error, OperationType.LIST, 'favorites');
+        console.warn("Marketplace favorites listener warning:", error);
       });
 
       return () => unsubscribe();

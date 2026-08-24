@@ -22,7 +22,8 @@ import {
   ArrowRight,
   Sparkles,
   Lock,
-  Coins
+  Coins,
+  Hourglass
 } from 'lucide-react';
 
 export type Asset = { 
@@ -38,42 +39,56 @@ export type Asset = {
 export default function Overview({ onNavigate }: { onNavigate?: (pageId: number) => void }) {
   const { user, isSandboxMode } = useAuth();
   const [assets, setAssets] = useState<Asset[]>([]);
+  const [royalties, setRoyalties] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     let isMounted = true;
-    const fetchUserAssets = async () => {
+    const fetchOverviewData = async () => {
       try {
         const headers = await getAuthHeaders(user, isSandboxMode);
-        const res = await fetch('/api/assets', {
-          headers: {
-            ...headers
-          }
-        });
-        if (res.ok) {
-          const data = await res.json();
-          if (isMounted) {
-            setAssets(Array.isArray(data) ? data : []);
-          }
+        const [assetsRes, royaltiesRes] = await Promise.all([
+          fetch('/api/assets', { headers: { ...headers } }),
+          fetch('/api/royalties', { headers: { ...headers } })
+        ]);
+
+        if (assetsRes.ok) {
+          const data = await assetsRes.json();
+          if (isMounted) setAssets(Array.isArray(data) ? data : []);
         }
+
+        if (royaltiesRes.ok) {
+          const rData = await royaltiesRes.json();
+          if (isMounted) setRoyalties(Array.isArray(rData) ? rData : []);
+        }
+
       } catch (err) {
-        console.error('Error fetching user assets for overview:', err);
+        console.error('Error fetching overview metrics:', err);
       } finally {
         if (isMounted) setLoading(false);
       }
     };
 
-    fetchUserAssets();
+    fetchOverviewData();
     return () => {
       isMounted = false;
     };
   }, [user, isSandboxMode]);
 
-  // Compute actual metrics from user's registered IP assets
+  // Compute actual metrics from user's registered IP assets & royalty records
   const totalAssetsCount = assets.length;
   const activeLicensesCount = assets.filter(a => a.isMinted || a.isForSale).length;
-  const totalEarningsVal = assets.reduce((acc, curr) => acc + (curr.price || 0), 0);
-  const pendingRoyaltiesVal = assets.reduce((acc, curr) => acc + ((curr.price || 0) * (curr.royalty || 0) / 100), 0);
+
+  const totalSettledEarningsETH = royalties
+    .filter(r => r.status === 'SETTLED')
+    .reduce((sum, r) => sum + (r.netCreatorEarnings || 0), 0);
+
+  const totalPendingEarningsETH = royalties
+    .filter(r => r.status === 'PENDING')
+    .reduce((sum, r) => sum + (r.netCreatorEarnings || 0), 0);
+
+  const totalSettledUSD = totalSettledEarningsETH * 2500;
+  const totalPendingUSD = totalPendingEarningsETH * 2500;
 
   const cards = [
     { 
@@ -83,9 +98,9 @@ export default function Overview({ onNavigate }: { onNavigate?: (pageId: number)
     },
     { 
       title: 'Total Earnings', 
-      value: loading ? '...' : `$${totalEarningsVal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`, 
+      value: loading ? '...' : totalSettledEarningsETH > 0 ? `${totalSettledEarningsETH.toFixed(3)} ETH` : '$0.00', 
       color: 'text-emerald-400',
-      subtext: '85% direct creator share'
+      subtext: totalSettledEarningsETH > 0 ? `≈ $${totalSettledUSD.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} USD` : 'Settled to creator'
     },
     { 
       title: 'Active Licenses', 
@@ -95,8 +110,9 @@ export default function Overview({ onNavigate }: { onNavigate?: (pageId: number)
     },
     { 
       title: 'Pending Royalties', 
-      value: loading ? '...' : `$${pendingRoyaltiesVal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
-      subtext: 'In contract buffer'
+      value: loading ? '...' : totalPendingEarningsETH > 0 ? `${totalPendingEarningsETH.toFixed(3)} ETH` : '$0.00',
+      color: 'text-amber-400',
+      subtext: totalPendingEarningsETH > 0 ? `≈ $${totalPendingUSD.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} USD buffer` : 'In contract buffer'
     },
   ];
 
@@ -132,156 +148,155 @@ export default function Overview({ onNavigate }: { onNavigate?: (pageId: number)
         </div>
       </div>
 
-      {/* The 3-Step Creator Flow (Crystal-clear & Uncrowded) */}
+      {/* The 3-Step Creator Flow */}
       <div className="space-y-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
             <h2 className="text-sm font-bold text-white uppercase tracking-wider font-mono">The 3-Step Creation Journey</h2>
           </div>
-          <span className="text-[11px] font-mono text-zinc-500">Everything in 3 simple steps</span>
+          <span className="text-[10px] text-zinc-500 font-mono">From Idea to On-Chain Monetization</span>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {/* Step 1 */}
-          <div className="p-5 rounded-2xl bg-zinc-900/60 border border-emerald-500/20 hover:border-emerald-500/50 transition-all group flex flex-col justify-between space-y-4">
+          <div 
+            onClick={() => onNavigate && onNavigate(2)}
+            className="group relative bg-zinc-900/40 hover:bg-zinc-900/80 border border-zinc-800 hover:border-cyan-500/50 rounded-2xl p-5 transition-all cursor-pointer space-y-3 flex flex-col justify-between"
+          >
             <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <span className="px-2.5 py-0.5 rounded-md bg-emerald-950/80 text-emerald-400 border border-emerald-800/50 text-[10px] font-mono font-bold">
+                <span className="text-[10px] font-mono font-bold text-cyan-400 bg-cyan-950/50 px-2 py-0.5 rounded border border-cyan-500/30">
                   STEP 01
                 </span>
-                <Lock className="w-4 h-4 text-emerald-400" />
+                <PlusCircle className="w-4 h-4 text-zinc-500 group-hover:text-cyan-400 transition-colors" />
               </div>
-              <h3 className="text-base font-bold text-white group-hover:text-emerald-300 transition-colors">
-                1. Upload &amp; Timestamp
+              <h3 className="text-base font-bold text-white group-hover:text-cyan-300 transition-colors">
+                1. Register IP Work
               </h3>
-              <p className="text-xs text-zinc-400 leading-relaxed">
-                Upload your video, beat, artwork, screenplay, or code to mint a permanent SHA-256 blockchain certificate establishing proof of creation.
+              <p className="text-xs text-zinc-400 font-light leading-relaxed">
+                Upload your asset details, title, description, category, creation date, and hash on-chain.
               </p>
             </div>
-            <button
-              onClick={() => onNavigate?.(2)}
-              className="w-full py-2.5 px-4 rounded-xl bg-emerald-500/10 hover:bg-emerald-500 text-emerald-400 hover:text-black font-bold text-xs flex items-center justify-center gap-2 border border-emerald-500/30 transition-all cursor-pointer"
-            >
-              <PlusCircle className="w-3.5 h-3.5" />
-              Timestamp Work <ArrowRight className="w-3 h-3 ml-auto" />
-            </button>
+            <div className="pt-3 border-t border-zinc-800/80 flex items-center justify-between text-xs font-mono text-cyan-400 font-medium">
+              <span>Launch Asset Manager</span>
+              <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+            </div>
           </div>
 
           {/* Step 2 */}
-          <div className="p-5 rounded-2xl bg-zinc-900/60 border border-cyan-500/20 hover:border-cyan-500/50 transition-all group flex flex-col justify-between space-y-4">
+          <div 
+            onClick={() => onNavigate && onNavigate(4)}
+            className="group relative bg-zinc-900/40 hover:bg-zinc-900/80 border border-zinc-800 hover:border-emerald-500/50 rounded-2xl p-5 transition-all cursor-pointer space-y-3 flex flex-col justify-between"
+          >
             <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <span className="px-2.5 py-0.5 rounded-md bg-cyan-950/80 text-cyan-400 border border-cyan-800/50 text-[10px] font-mono font-bold">
+                <span className="text-[10px] font-mono font-bold text-emerald-400 bg-emerald-950/50 px-2 py-0.5 rounded border border-emerald-500/30">
                   STEP 02
                 </span>
-                <Scale className="w-4 h-4 text-cyan-400" />
+                <Scale className="w-4 h-4 text-zinc-500 group-hover:text-emerald-400 transition-colors" />
               </div>
-              <h3 className="text-base font-bold text-white group-hover:text-cyan-300 transition-colors">
-                2. Licensing &amp; AI Shield
+              <h3 className="text-base font-bold text-white group-hover:text-emerald-300 transition-colors">
+                2. Define License & Royalties
               </h3>
-              <p className="text-xs text-zinc-400 leading-relaxed">
-                Set commercial pricing, define remix permissions, and attach an anti-scraping tag to prevent AI crawlers from scraping your work.
+              <p className="text-xs text-zinc-400 font-light leading-relaxed">
+                Set duration, permitted usage rights, royalty splits, and associate terms with your registered IP works.
               </p>
             </div>
-            <button
-              onClick={() => onNavigate?.(4)}
-              className="w-full py-2.5 px-4 rounded-xl bg-cyan-500/10 hover:bg-cyan-500 text-cyan-400 hover:text-black font-bold text-xs flex items-center justify-center gap-2 border border-cyan-500/30 transition-all cursor-pointer"
-            >
-              <Scale className="w-3.5 h-3.5" />
-              Configure Compact <ArrowRight className="w-3 h-3 ml-auto" />
-            </button>
+            <div className="pt-3 border-t border-zinc-800/80 flex items-center justify-between text-xs font-mono text-emerald-400 font-medium">
+              <span>Open Licensing Hub</span>
+              <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+            </div>
           </div>
 
           {/* Step 3 */}
-          <div className="p-5 rounded-2xl bg-zinc-900/60 border border-teal-500/20 hover:border-teal-500/50 transition-all group flex flex-col justify-between space-y-4">
+          <div 
+            onClick={() => onNavigate && onNavigate(5)}
+            className="group relative bg-zinc-900/40 hover:bg-zinc-900/80 border border-zinc-800 hover:border-violet-500/50 rounded-2xl p-5 transition-all cursor-pointer space-y-3 flex flex-col justify-between"
+          >
             <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <span className="px-2.5 py-0.5 rounded-md bg-teal-950/80 text-teal-400 border border-teal-800/50 text-[10px] font-mono font-bold">
+                <span className="text-[10px] font-mono font-bold text-violet-400 bg-violet-950/50 px-2 py-0.5 rounded border border-violet-500/30">
                   STEP 03
                 </span>
-                <Coins className="w-4 h-4 text-teal-400" />
+                <Sliders className="w-4 h-4 text-zinc-500 group-hover:text-violet-400 transition-colors" />
               </div>
-              <h3 className="text-base font-bold text-white group-hover:text-teal-300 transition-colors">
-                3. Royalties &amp; Splits
+              <h3 className="text-base font-bold text-white group-hover:text-violet-300 transition-colors">
+                3. Sandbox & Simulate Payouts
               </h3>
-              <p className="text-xs text-zinc-400 leading-relaxed">
-                Enjoy instant 85% creator payouts directly to your wallet/account. Automatically split earnings with collaborators and producers.
+              <p className="text-xs text-zinc-400 font-light leading-relaxed">
+                Simulate streaming payouts, AI scraping licensing revenue, and test on-chain automated payouts.
               </p>
             </div>
-            <button
-              onClick={() => onNavigate?.(5)}
-              className="w-full py-2.5 px-4 rounded-xl bg-teal-500/10 hover:bg-teal-500 text-teal-400 hover:text-black font-bold text-xs flex items-center justify-center gap-2 border border-teal-500/30 transition-all cursor-pointer"
-            >
-              <Sliders className="w-3.5 h-3.5" />
-              Split Sheets &amp; Math <ArrowRight className="w-3 h-3 ml-auto" />
-            </button>
+            <div className="pt-3 border-t border-zinc-800/80 flex items-center justify-between text-xs font-mono text-violet-400 font-medium">
+              <span>Launch Simulator</span>
+              <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Real-time Metric Cards */}
+      {/* Top 4 Stats Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {cards.map((card, i) => (
-          <Card key={i} className="bg-zinc-900/50 border border-zinc-800/80 p-1 shadow-lg backdrop-blur-sm hover:border-zinc-700 transition">
-            <CardContent className="p-4 space-y-1">
-              <p className="text-[10px] uppercase tracking-[0.15em] text-zinc-500 font-mono font-bold">{card.title}</p>
-              <div className="flex items-center gap-2">
-                {loading && <Loader2 className="w-4 h-4 animate-spin text-cyan-400" />}
-                <p className={`text-3xl font-light tracking-tight ${card.color || 'text-white'}`}>{card.value}</p>
+          <Card key={i} className="bg-zinc-900/40 border-zinc-800 text-white rounded-2xl overflow-hidden hover:border-zinc-700 transition-all">
+            <CardContent className="p-5 flex flex-col justify-between h-full space-y-2">
+              <span className="text-xs font-mono text-zinc-400 uppercase tracking-wider">{card.title}</span>
+              <div className="space-y-0.5">
+                <div className={`text-2xl font-extrabold tracking-tight font-mono ${card.color || 'text-white'}`}>
+                  {card.value}
+                </div>
+                <p className="text-[11px] text-zinc-500 font-light">{card.subtext}</p>
               </div>
-              <p className="text-[10px] text-zinc-500 font-mono">{card.subtext}</p>
             </CardContent>
           </Card>
         ))}
       </div>
 
-      {/* Quick Access Tools Directory (All features preserved, cleanly organized) */}
+      {/* Quick Tools Grid */}
       <div className="space-y-3">
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Sparkles className="w-3.5 h-3.5 text-violet-400" />
-            <h2 className="text-xs font-bold text-white uppercase tracking-wider font-mono">Creator Tool Suite</h2>
-          </div>
-          <span className="text-[11px] font-mono text-zinc-500">6 Additional Modules</span>
+          <h2 className="text-xs font-mono uppercase tracking-widest text-zinc-400 font-bold">
+            Creator Utility Matrix
+          </h2>
+          <span className="text-[10px] text-zinc-500 font-mono">Instant Access</span>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5">
           {quickTools.map((tool) => {
             const Icon = tool.icon;
             return (
-              <button
+              <div
                 key={tool.id}
-                onClick={() => onNavigate?.(tool.id)}
-                className={`p-4 rounded-2xl bg-zinc-900/40 border border-zinc-800/80 ${tool.border} transition-all text-left flex items-start gap-3.5 group cursor-pointer`}
+                onClick={() => onNavigate && onNavigate(tool.id)}
+                className={`bg-zinc-900/30 hover:bg-zinc-900/70 border border-zinc-850 ${tool.border} p-4 rounded-2xl transition-all cursor-pointer group flex items-start gap-3.5`}
               >
-                <div className="p-2.5 rounded-xl bg-zinc-950 border border-zinc-800 shrink-0 group-hover:scale-105 transition-transform">
-                  <Icon className={`w-4 h-4 ${tool.color}`} />
+                <div className={`p-2.5 rounded-xl bg-zinc-900 border border-zinc-800 ${tool.color} shrink-0 group-hover:scale-105 transition-transform`}>
+                  <Icon className="w-4 h-4" />
                 </div>
-                <div className="min-w-0 flex-1">
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold text-white group-hover:text-cyan-300 transition-colors">
-                      {tool.title}
-                    </span>
-                    <ArrowRight className="w-3 h-3 text-zinc-600 group-hover:text-white transition-colors" />
-                  </div>
-                  <p className="text-[11px] text-zinc-500 truncate mt-0.5">
+                <div className="space-y-1 min-w-0">
+                  <h4 className="text-xs font-bold text-zinc-200 group-hover:text-white transition-colors truncate">
+                    {tool.title}
+                  </h4>
+                  <p className="text-[11px] text-zinc-400 font-light leading-snug line-clamp-2">
                     {tool.desc}
                   </p>
                 </div>
-              </button>
+              </div>
             );
           })}
         </div>
       </div>
 
-      {/* System Latency & Activity Logs */}
-      <div className="space-y-6 pt-2">
-        <ApiLatencyMonitor />
-        <ActivityLog />
+      {/* Live System Log & API Latency */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 pt-2">
+        <div className="lg:col-span-2">
+          <ActivityLog />
+        </div>
+        <div>
+          <ApiLatencyMonitor />
+        </div>
       </div>
     </div>
   );
 }
-
-
