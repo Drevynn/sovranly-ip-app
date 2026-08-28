@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { ShieldAlert, RefreshCw, Home } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
@@ -11,14 +12,14 @@ export default function GlobalError({
   error: Error & { digest?: string };
   reset: () => void;
 }) {
+  const router = useRouter();
+
   useEffect(() => {
     console.error('Root application fault intercepted:', error);
   }, [error]);
 
   const handleReturnHome = () => {
-    if (typeof window !== 'undefined') {
-      window.location.href = '/';
-    }
+    router.push('/');
   };
 
   return (

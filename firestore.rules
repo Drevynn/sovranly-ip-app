@@ -81,6 +81,12 @@ service cloud.firestore {
       allow delete: if isSignedIn() && isAgreementOwner(resource.data);
     }
 
+    match /permissions/{permissionId} {
+      allow read: if true; // Publicly verifiable for content platforms & YouTube descriptions
+      allow create: if isSignedIn();
+      allow update, delete: if isSignedIn();
+    }
+
     match /transactions/{transactionId} {
       allow read: if isSignedIn();
       allow create: if isSignedIn() && isValidTransaction(request.resource.data);

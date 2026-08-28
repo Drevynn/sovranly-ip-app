@@ -166,7 +166,7 @@ export default function GoogleSlidesManager() {
     return () => {
       isMounted = false;
     };
-  }, []);
+  }, [user, isSandboxMode]);
 
   // Fetch slide decks from Google Drive once accessToken is loaded
   const fetchDrivePresentations = async () => {

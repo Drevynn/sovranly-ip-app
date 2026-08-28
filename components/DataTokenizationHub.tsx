@@ -800,6 +800,7 @@ export default function DataTokenizationHub() {
                         ) : (
                           generatedArtUrl && (
                             <>
+                              {/* eslint-disable-next-line @next/next/no-img-element */}
                               <img
                                 src={generatedArtUrl}
                                 alt="Generated Album Cover"
@@ -889,6 +890,7 @@ export default function DataTokenizationHub() {
                     {/* Rendered Image in Card */}
                     {generatedArtUrl && (
                       <div className="relative w-40 h-40 mx-auto rounded-xl overflow-hidden border border-zinc-800 shadow-lg">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img src={generatedArtUrl} alt="Minted Cover Art" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
                       </div>
                     )}

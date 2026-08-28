@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { ShieldAlert, RefreshCw, Home } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
@@ -11,15 +12,15 @@ export default function ErrorBoundary({
   error: Error & { digest?: string };
   reset: () => void;
 }) {
+  const router = useRouter();
+
   useEffect(() => {
     // Log the error securely for telemetry & developer review
     console.error('Unhandled application exception captured by route boundary:', error);
   }, [error]);
 
   const handleReturnHome = () => {
-    if (typeof window !== 'undefined') {
-      window.location.href = '/';
-    }
+    router.push('/');
   };
 
   return (

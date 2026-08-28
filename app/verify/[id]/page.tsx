@@ -28,6 +28,30 @@ interface AssetData {
   isMinted?: boolean;
   nftTokenId?: string;
   mintTxHash?: string;
+  grantee?: string;
+  projectTitle?: string;
+  platform?: string;
+  clearanceCode?: string;
+  verificationHash?: string;
+}
+
+interface PermissionData {
+  clearanceCode: string;
+  assetTitle: string;
+  assetType?: string;
+  grantorName?: string;
+  grantorWallet?: string;
+  granteeName: string;
+  granteeSocialHandle: string;
+  projectTitle: string;
+  projectUrl?: string;
+  platform: string;
+  scopeTitle: string;
+  pricingType: string;
+  status: string;
+  verificationHash: string;
+  issuedAt: string;
+  notes?: string;
 }
 
 const VERIFICATION_LOGS = [
@@ -42,7 +66,10 @@ export default function PublicVerificationPage() {
   const { id } = useParams() as { id: string };
   const [loading, setLoading] = useState(true);
   const [asset, setAsset] = useState<AssetData | null>(null);
+  const [isPermission, setIsPermission] = useState(false);
+  const [permission, setPermission] = useState<PermissionData | null>(null);
   const [verifiedAt, setVerifiedAt] = useState<string>('');
+  const [copiedAttribution, setCopiedAttribution] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [verificationLogs, setVerificationLogs] = useState<string[]>([]);
   const [currentLogIndex, setCurrentLogIndex] = useState(0);
@@ -63,6 +90,10 @@ export default function PublicVerificationPage() {
         }
         const data = await res.json();
         setAsset(data.asset);
+        setIsPermission(Boolean(data.isPermission));
+        if (data.permission) {
+          setPermission(data.permission);
+        }
         setVerifiedAt(data.issuedAt);
       } catch (err: any) {
         setError(err.message || 'An error occurred during ledger verification.');
@@ -132,16 +163,22 @@ export default function PublicVerificationPage() {
           <motion.div 
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
-            className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-950/40 border border-emerald-800/30 text-emerald-400 text-xs font-mono uppercase tracking-wider"
+            className={`flex items-center gap-2 px-3 py-1.5 rounded-full border text-xs font-mono uppercase tracking-wider ${
+              isPermission 
+                ? 'bg-cyan-950/40 border-cyan-500/40 text-cyan-300' 
+                : 'bg-emerald-950/40 border-emerald-800/30 text-emerald-400'
+            }`}
           >
-            <ShieldCheck className="w-4 h-4 text-emerald-400 animate-pulse" />
-            Ledger Signature Active & Valid
+            <ShieldCheck className={`w-4 h-4 animate-pulse ${isPermission ? 'text-cyan-400' : 'text-emerald-400'}`} />
+            {isPermission ? 'Micro-Permission Active & Authenticated' : 'Ledger Signature Active & Valid'}
           </motion.div>
           <h1 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
-            Sovereign Proof Certificate
+            {isPermission ? 'Instant Rights Clearance Proof' : 'Sovereign Proof Certificate'}
           </h1>
           <p className="text-zinc-400 text-sm max-w-lg leading-relaxed">
-            Public registry verification system of <span className="text-white font-medium">Sovranly IP</span>. This cryptographic certificate proves register-time authenticity and integrity.
+            {isPermission 
+              ? `Lightweight video and social media clearance issued via Sovranly IP. Cryptographically authorizes the creator to use this audio/creative work.`
+              : `Public registry verification system of Sovranly IP. This cryptographic certificate proves register-time authenticity and integrity.`}
           </p>
         </div>
 
@@ -172,10 +209,12 @@ export default function PublicVerificationPage() {
             
             <div className="mt-6 text-center space-y-2">
               <span className="text-[10px] font-mono text-cyan-400 tracking-wider uppercase bg-cyan-950/30 px-2.5 py-1 rounded-full border border-cyan-800/20">
-                VERIFIABLE LINK
+                {isPermission ? 'CLEARED PERMISSION' : 'VERIFIABLE LINK'}
               </span>
               <p className="text-zinc-500 text-[11px] max-w-[200px] leading-relaxed">
-                Scan QR with any secure reader to verify directly on the Sovranly IP chain.
+                {isPermission 
+                  ? 'Continuous Zero-Trust attestation for YouTube & social video rights.'
+                  : 'Scan QR with any secure reader to verify directly on the Sovranly IP chain.'}
               </p>
             </div>
           </div>
@@ -184,15 +223,40 @@ export default function PublicVerificationPage() {
           <div className="md:col-span-8 flex flex-col justify-between space-y-6">
             <div className="space-y-4">
               <div>
-                <span className="text-[10px] font-mono text-zinc-500 uppercase tracking-widest">Asset Name & Identity</span>
+                <span className="text-[10px] font-mono text-zinc-500 uppercase tracking-widest">
+                  {isPermission ? 'Cleared Music / Audio Work' : 'Asset Name & Identity'}
+                </span>
                 <h2 className="text-2xl font-bold text-white mt-1">{asset.title}</h2>
               </div>
+
+              {isPermission && (
+                <div className="p-3.5 bg-cyan-950/20 border border-cyan-500/20 rounded-xl space-y-2">
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="text-zinc-400 font-mono">PERMITTED CREATOR:</span>
+                    <span className="text-white font-bold">{permission?.granteeName || asset.grantee || 'Content Creator'}</span>
+                  </div>
+                  {permission?.granteeSocialHandle && (
+                    <div className="flex items-center justify-between text-xs">
+                      <span className="text-zinc-400 font-mono">CHANNEL / HANDLE:</span>
+                      <span className="text-cyan-400 font-mono">{permission.granteeSocialHandle}</span>
+                    </div>
+                  )}
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="text-zinc-400 font-mono">PROJECT / VIDEO:</span>
+                    <span className="text-zinc-200">{permission?.projectTitle || asset.projectTitle || 'Video Content'}</span>
+                  </div>
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="text-zinc-400 font-mono">PLATFORM:</span>
+                    <span className="text-emerald-400 font-semibold">{permission?.platform || asset.platform || 'YouTube'}</span>
+                  </div>
+                </div>
+              )}
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
                 <div className="p-3 bg-zinc-950/30 border border-zinc-800/40 rounded-xl flex items-start gap-2.5">
                   <Award className="w-4 h-4 text-cyan-400 mt-0.5 shrink-0" />
                   <div>
-                    <div className="text-[10px] font-mono text-zinc-500 uppercase">License Class</div>
+                    <div className="text-[10px] font-mono text-zinc-500 uppercase">License / Scope</div>
                     <div className="text-xs font-semibold text-zinc-200 mt-0.5">{asset.license || 'Proprietary Sovereign License'}</div>
                   </div>
                 </div>
@@ -200,8 +264,10 @@ export default function PublicVerificationPage() {
                 <div className="p-3 bg-zinc-950/30 border border-zinc-800/40 rounded-xl flex items-start gap-2.5">
                   <Scale className="w-4 h-4 text-emerald-400 mt-0.5 shrink-0" />
                   <div>
-                    <div className="text-[10px] font-mono text-zinc-500 uppercase">Royalty Split</div>
-                    <div className="text-xs font-semibold text-zinc-200 mt-0.5">{asset.royalty !== undefined ? `${asset.royalty}%` : '100% Original Allocation'}</div>
+                    <div className="text-[10px] font-mono text-zinc-500 uppercase">{isPermission ? 'Clearance Status' : 'Royalty Split'}</div>
+                    <div className="text-xs font-semibold text-emerald-400 mt-0.5">
+                      {isPermission ? '100% Authorized & Whitelisted' : (asset.royalty !== undefined ? `${asset.royalty}%` : '100% Original Allocation')}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -209,20 +275,27 @@ export default function PublicVerificationPage() {
               {/* Technical Signatures */}
               <div className="border-t border-zinc-800/60 pt-4 space-y-3">
                 <div className="flex items-center justify-between text-xs">
-                  <span className="text-zinc-500 flex items-center gap-1.5 font-mono"><User className="w-3.5 h-3.5" /> OWNER</span>
+                  <span className="text-zinc-500 flex items-center gap-1.5 font-mono"><User className="w-3.5 h-3.5" /> {isPermission ? 'RIGHTS HOLDER' : 'OWNER'}</span>
                   <span className="text-zinc-300 font-mono truncate max-w-[220px] sm:max-w-[320px]" title={asset.ownerAddress}>
-                    {asset.ownerAddress || '0x495F...7B5E (Verified Creator Signature)'}
+                    {permission?.grantorName || asset.ownerAddress || '0x495F...7B5E (Verified Creator Signature)'}
                   </span>
                 </div>
 
                 <div className="flex items-center justify-between text-xs">
-                  <span className="text-zinc-500 flex items-center gap-1.5 font-mono"><Hash className="w-3.5 h-3.5" /> IPFS HASH</span>
-                  <span className="text-cyan-400 font-mono truncate max-w-[220px] sm:max-w-[320px]" title={asset.ipfsHash}>
-                    {asset.ipfsHash || 'QmHashPendingVerifiedLedgerIntegrity'}
+                  <span className="text-zinc-500 flex items-center gap-1.5 font-mono"><Hash className="w-3.5 h-3.5" /> ZERO-TRUST HASH</span>
+                  <span className="text-cyan-400 font-mono truncate max-w-[220px] sm:max-w-[320px]" title={permission?.verificationHash || asset.ipfsHash}>
+                    {permission?.verificationHash || asset.verificationHash || asset.ipfsHash || 'QmHashPendingVerifiedLedgerIntegrity'}
                   </span>
                 </div>
 
-                {asset.isMinted && (
+                {isPermission && permission?.clearanceCode && (
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="text-zinc-500 flex items-center gap-1.5 font-mono"><Award className="w-3.5 h-3.5 text-cyan-400" /> CLEARANCE CODE</span>
+                    <span className="text-cyan-300 font-mono font-bold">{permission.clearanceCode}</span>
+                  </div>
+                )}
+
+                {asset.isMinted && !isPermission && (
                   <>
                     <div className="flex items-center justify-between text-xs">
                       <span className="text-zinc-500 flex items-center gap-1.5 font-mono"><Cpu className="w-3.5 h-3.5" /> TOKEN ID</span>
@@ -236,6 +309,23 @@ export default function PublicVerificationPage() {
                   </>
                 )}
               </div>
+
+              {isPermission && (
+                <div className="mt-4 pt-3 border-t border-zinc-800/40">
+                  <button
+                    onClick={() => {
+                      const snippet = `🎵 Music in video: "${asset.title}" by ${permission?.grantorName || 'Artist'}\nCleared via Sovranly IP Instant Permission #${permission?.clearanceCode || id}\nContinuous Verification: ${typeof window !== 'undefined' ? window.location.href : ''}`;
+                      navigator.clipboard.writeText(snippet);
+                      setCopiedAttribution(true);
+                      setTimeout(() => setCopiedAttribution(false), 2500);
+                    }}
+                    className="w-full py-2.5 px-4 bg-cyan-950/60 hover:bg-cyan-900/80 border border-cyan-500/40 rounded-xl text-cyan-300 text-xs font-mono font-bold flex items-center justify-center gap-2 transition-all cursor-pointer shadow-sm"
+                  >
+                    <FileText className="w-3.5 h-3.5" />
+                    {copiedAttribution ? 'Copied Attribution to Clipboard!' : 'Copy YouTube / Video Description Tag'}
+                  </button>
+                </div>
+              )}
             </div>
 
             {/* Timestamps */}

@@ -23,7 +23,8 @@ import {
   Sparkles,
   Lock,
   Coins,
-  Hourglass
+  Hourglass,
+  Zap
 } from 'lucide-react';
 
 export type Asset = { 
@@ -117,6 +118,7 @@ export default function Overview({ onNavigate }: { onNavigate?: (pageId: number)
   ];
 
   const quickTools = [
+    { id: 14, title: 'Permissions Hub', desc: '1-click video & social media sync rights clearance', icon: Zap, color: 'text-amber-400', border: 'hover:border-amber-500/40' },
     { id: 11, title: 'AI Training Vault', desc: 'Crawler opt-out & AI licensing tags', icon: Brain, color: 'text-violet-400', border: 'hover:border-violet-500/40' },
     { id: 12, title: 'Sovereign Tokenizer', desc: 'Tokenize digital media & datasets', icon: Database, color: 'text-cyan-400', border: 'hover:border-cyan-500/40' },
     { id: 6, title: 'Creator Inbox', desc: 'Notarization alerts & client messages', icon: Mail, color: 'text-purple-400', border: 'hover:border-purple-500/40' },

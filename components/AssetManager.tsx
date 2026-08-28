@@ -35,7 +35,8 @@ import {
   FileSignature, 
   HelpCircle, 
   Lock, 
-  Coins 
+  Coins,
+  Zap
 } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -102,9 +103,10 @@ function generateRandomNftTokenId(): string {
 interface AssetManagerProps {
   walletAddress: string | null;
   onNavigateToLicensing?: (asset: Asset) => void;
+  onNavigateToPermissions?: (asset: Asset) => void;
 }
 
-export default function AssetManager({ walletAddress, onNavigateToLicensing }: AssetManagerProps) {
+export default function AssetManager({ walletAddress, onNavigateToLicensing, onNavigateToPermissions }: AssetManagerProps) {
   const { user, isSandboxMode } = useAuth();
   
   // Search, Filter, Sort & View Mode
@@ -936,12 +938,27 @@ export default function AssetManager({ walletAddress, onNavigateToLicensing }: A
                         <FileSignature className="w-3.5 h-3.5" /> License IP
                       </Button>
 
+                      {/* Quick Permission */}
+                      <Button
+                        onClick={() => {
+                          if (onNavigateToPermissions) {
+                            onNavigateToPermissions(asset);
+                          }
+                        }}
+                        className="bg-amber-950/40 border border-amber-500/30 hover:bg-amber-900/40 text-amber-300 text-xs py-1.5 h-9 font-mono font-bold flex items-center justify-center gap-1.5"
+                        title="Issue lightweight video sync clearance"
+                      >
+                        <Zap className="w-3.5 h-3.5" /> Permissions
+                      </Button>
+                    </div>
+
+                    <div className="grid grid-cols-3 gap-2">
                       {/* Mint Button */}
                       <Button
                         onClick={() => handleMint(asset)}
                         disabled={mintingId === asset.id || asset.isMinted}
                         variant="outline"
-                        className={`border-zinc-800 text-xs py-1.5 h-9 font-mono font-bold flex items-center justify-center gap-1.5 ${asset.isMinted ? 'bg-zinc-900/50 text-zinc-500 border-zinc-850' : 'hover:border-emerald-500/40 text-emerald-400 hover:bg-emerald-950/20'}`}
+                        className={`border-zinc-800 text-xs py-1.5 h-8 font-mono font-bold flex items-center justify-center gap-1.5 ${asset.isMinted ? 'bg-zinc-900/50 text-zinc-500 border-zinc-850' : 'hover:border-emerald-500/40 text-emerald-400 hover:bg-emerald-950/20'}`}
                       >
                         {mintingId === asset.id ? (
                           <Loader2 className="w-3.5 h-3.5 animate-spin" />
@@ -950,11 +967,9 @@ export default function AssetManager({ walletAddress, onNavigateToLicensing }: A
                         ) : (
                           <Sparkles className="w-3.5 h-3.5" />
                         )}
-                        {asset.isMinted ? 'Minted' : 'Mint NFT'}
+                        {asset.isMinted ? 'Minted' : 'Mint'}
                       </Button>
-                    </div>
 
-                    <div className="grid grid-cols-3 gap-2">
                       {/* Certificate */}
                       <Button
                         onClick={() => {
@@ -963,9 +978,9 @@ export default function AssetManager({ walletAddress, onNavigateToLicensing }: A
                           setLedgerVerificationResult(null);
                         }}
                         variant="outline"
-                        className="col-span-2 border-zinc-850 hover:border-cyan-500/30 text-zinc-400 hover:text-white text-[11px] h-8 flex items-center justify-center gap-1.5"
+                        className="border-zinc-850 hover:border-cyan-500/30 text-zinc-400 hover:text-white text-[11px] h-8 flex items-center justify-center gap-1.5"
                       >
-                        <Award className="w-3.5 h-3.5 text-cyan-400" /> Certificate
+                        <Award className="w-3.5 h-3.5 text-cyan-400" /> Cert
                       </Button>
 
                       {/* Delete */}
@@ -1041,6 +1056,18 @@ export default function AssetManager({ walletAddress, onNavigateToLicensing }: A
                       </td>
                       <td className="p-4 text-right">
                         <div className="flex items-center justify-end gap-2">
+                          <Button
+                            onClick={() => {
+                              if (onNavigateToPermissions) {
+                                onNavigateToPermissions(asset);
+                              }
+                            }}
+                            variant="outline"
+                            className="border-amber-500/40 bg-amber-950/30 hover:bg-amber-900/40 text-amber-300 hover:text-white text-xs h-8 px-2.5"
+                            title="Issue lightweight video sync clearance"
+                          >
+                            <Zap className="w-3.5 h-3.5 mr-1 text-amber-400" /> Perms
+                          </Button>
                           <Button
                             onClick={() => {
                               const preGeneratedHash = asset.ipfsHash || 'Qm' + Math.random().toString(36).substring(2, 15).toUpperCase();

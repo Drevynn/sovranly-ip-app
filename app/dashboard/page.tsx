@@ -17,6 +17,7 @@ import AboutUs from '@/components/AboutUs';
 import AiLicensingCenter from '@/components/AiLicensingCenter';
 import DataTokenizationHub from '@/components/DataTokenizationHub';
 import CreatorNetwork from '@/components/CreatorNetwork';
+import Permissions from '@/components/Permissions';
 import MobileBottomNav from '@/components/MobileBottomNav';
 import { useAuth } from '@/components/auth/FirebaseProvider';
 import { SignIn } from '@/components/auth/SignIn';
@@ -105,7 +106,9 @@ export default function DashboardPage() {
             activePage === 10 ? 'About Platform' :
             activePage === 11 ? 'AI Training Vault' :
             activePage === 12 ? 'Sovereign Tokenizer' :
-            'Creator Network'
+            activePage === 13 ? 'Creator Network' :
+            activePage === 14 ? 'Permissions Hub (Instant Video Rights)' :
+            'Permissions Hub'
           } 
           setWalletAddress={setCurrentAccount} 
           walletAddress={currentAccount} 
@@ -121,6 +124,10 @@ export default function DashboardPage() {
               onNavigateToLicensing={(asset) => {
                 setSelectedAssetForLicensing(asset);
                 setActivePage(4);
+              }}
+              onNavigateToPermissions={(asset) => {
+                setSelectedAssetForLicensing(asset);
+                setActivePage(14);
               }}
             />
           )}
@@ -140,6 +147,13 @@ export default function DashboardPage() {
           {activePage === 11 && <AiLicensingCenter />}
           {activePage === 12 && <DataTokenizationHub />}
           {activePage === 13 && <CreatorNetwork />}
+          {activePage === 14 && (
+            <Permissions 
+              initialAsset={selectedAssetForLicensing}
+              walletAddress={currentAccount}
+              onNavigate={setActivePage}
+            />
+          )}
         </main>
 
         <MobileBottomNav 

@@ -25,32 +25,25 @@ export default function CookieComplianceBanner() {
   const [isHovered, setIsHovered] = useState(false);
 
   useEffect(() => {
-    // Read previous settings from localStorage or client cookies
-    const storedConsent = localStorage.getItem('sovranly_cookie_consent_receipt');
-    if (storedConsent) {
-      try {
-        const parsed = JSON.parse(storedConsent);
-        /* eslint-disable-next-line react-hooks/set-state-in-effect */
-        setReceipt(parsed);
-        /* eslint-disable-next-line react-hooks/set-state-in-effect */
-        setAnalytics(parsed.analytics);
-        /* eslint-disable-next-line react-hooks/set-state-in-effect */
-        setPreferences(parsed.preferences);
-        // Do not display banner if consent is already recorded
-        /* eslint-disable-next-line react-hooks/set-state-in-effect */
-        setIsVisible(false);
-      } catch (e) {
-        /* eslint-disable-next-line react-hooks/set-state-in-effect */
+    // Read previous settings from localStorage after initial hydration
+    const timer = setTimeout(() => {
+      const storedConsent = typeof window !== 'undefined' ? localStorage.getItem('sovranly_cookie_consent_receipt') : null;
+      if (storedConsent) {
+        try {
+          const parsed = JSON.parse(storedConsent);
+          setReceipt(parsed);
+          setAnalytics(parsed.analytics);
+          setPreferences(parsed.preferences);
+          setIsVisible(false);
+        } catch {
+          setIsVisible(true);
+        }
+      } else {
         setIsVisible(true);
       }
-    } else {
-      // First-time visitor, display consent suite after a brief aesthetic delay
-      const timer = setTimeout(() => {
-        /* eslint-disable-next-line react-hooks/set-state-in-effect */
-        setIsVisible(true);
-      }, 1500);
-      return () => clearTimeout(timer);
-    }
+    }, 1200);
+
+    return () => clearTimeout(timer);
   }, []);
 
   // Helper to generate a deterministic pseudo-SHA-256 hash for our Zero-Trust consent signature

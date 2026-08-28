@@ -1,6 +1,6 @@
 'use client';
 
-import { Gauge, BarChart3, User, Users, FileText, LogOut, ShieldAlert, Scale, Sliders, Mail, X, Presentation, Rocket, Shield, Building2, Brain, ShieldCheck, Database, Globe } from 'lucide-react';
+import { Gauge, BarChart3, User, Users, FileText, LogOut, ShieldAlert, Scale, Sliders, Mail, X, Presentation, Rocket, Shield, Building2, Brain, ShieldCheck, Database, Globe, Zap } from 'lucide-react';
 import Image from 'next/image';
 import { useAuth } from './auth/FirebaseProvider';
 import { SovranlyLogo } from '@/components/SovranlyLogo';
@@ -109,12 +109,22 @@ export default function Sidebar({
                   <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-emerald-950/60 text-emerald-400 border border-emerald-800/40">Stamp</span>
                 </button>
                 <button 
+                  onClick={() => { setActivePage(14); onClose(); }}
+                  className={`w-full flex items-center justify-between px-4 py-2.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${activePage === 14 ? 'bg-zinc-900 border border-zinc-800 text-white shadow-lg' : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900/40'}`}
+                >
+                  <span className="flex items-center gap-3">
+                    <Zap className="w-4 h-4 text-amber-400 shrink-0" />
+                    2. Permissions Hub
+                  </span>
+                  <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-amber-950/60 text-amber-400 border border-amber-800/40">Quick</span>
+                </button>
+                <button 
                   onClick={() => { setActivePage(4); onClose(); }}
                   className={`w-full flex items-center justify-between px-4 py-2.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${activePage === 4 ? 'bg-zinc-900 border border-zinc-800 text-white shadow-lg' : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900/40'}`}
                 >
                   <span className="flex items-center gap-3">
                     <Scale className="w-4 h-4 text-cyan-400 shrink-0" />
-                    2. Licensing Compacts
+                    3. Licensing Compacts
                   </span>
                   <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-cyan-950/60 text-cyan-400 border border-cyan-800/40">Terms</span>
                 </button>
@@ -124,7 +134,7 @@ export default function Sidebar({
                 >
                   <span className="flex items-center gap-3">
                     <Sliders className="w-4 h-4 text-teal-400 shrink-0" />
-                    3. Royalty Sandbox
+                    4. Royalty Sandbox
                   </span>
                   <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-teal-950/60 text-teal-400 border border-teal-800/40">85/15</span>
                 </button>

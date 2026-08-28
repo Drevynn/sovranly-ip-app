@@ -197,7 +197,7 @@ export default function AiLicensingCenter() {
     return () => {
       isMounted = false;
     };
-  }, []);
+  }, [user, isSandboxMode]);
 
   // When changing assets, fill state parameters
   const handleAssetSelect = (id: string) => {

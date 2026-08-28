@@ -77,7 +77,7 @@ export default function Inbox({ walletAddress }: { walletAddress: string | null 
     return () => {
       active = false;
     };
-  }, [walletAddress]);
+  }, [walletAddress, user, isSandboxMode]);
 
   const fetchInquiries = async () => {
     if (!walletAddress) return;

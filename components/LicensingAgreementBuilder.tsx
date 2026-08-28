@@ -267,10 +267,14 @@ export default function LicensingAgreementBuilder({ walletAddress, initialAsset 
           if (isMounted) {
             const list = Array.isArray(data) ? data : [];
             setAssets(list);
-            if (!selectedAsset && list.length > 0) {
-              setSelectedAsset(list[0]);
-              if (list[0].royalty) setRoyaltyRate(list[0].royalty);
-            }
+            setSelectedAsset(prev => {
+              if (prev) return prev;
+              if (list.length > 0) {
+                if (list[0].royalty) setRoyaltyRate(list[0].royalty);
+                return list[0];
+              }
+              return null;
+            });
           }
         }
       } catch (err) {
