@@ -63,10 +63,10 @@ export async function GET(request: Request) {
       return NextResponse.json(DEFAULT_FOLDERS);
     }
 
-    const folders: FolderItem[] = [];
-    snapshot.forEach(doc => {
-      folders.push({ id: doc.id, ...doc.data() } as FolderItem);
-    });
+    const folders: FolderItem[] = snapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data()
+    } as FolderItem));
 
     // Merge default folders if not already present
     const existingNames = new Set(folders.map(f => f.name.toLowerCase()));
