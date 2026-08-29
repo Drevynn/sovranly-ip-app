@@ -174,10 +174,10 @@ export default function Overview({ onNavigate }: { onNavigate?: (pageId: number)
                 <PlusCircle className="w-4 h-4 text-zinc-500 group-hover:text-cyan-400 transition-colors" />
               </div>
               <h3 className="text-base font-bold text-white group-hover:text-cyan-300 transition-colors">
-                1. Register IP Work
+                1. Asset Management & Folders
               </h3>
               <p className="text-xs text-zinc-400 font-light leading-relaxed">
-                Upload your asset details, title, description, category, creation date, and hash on-chain.
+                Upload files, assign rich metadata &amp; tags, and organize your sovereign portfolio into custom folders.
               </p>
             </div>
             <div className="pt-3 border-t border-zinc-800/80 flex items-center justify-between text-xs font-mono text-cyan-400 font-medium">

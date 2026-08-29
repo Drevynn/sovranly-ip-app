@@ -1,6 +1,6 @@
 'use client';
 
-import { Gauge, BarChart3, User, Users, FileText, LogOut, ShieldAlert, Scale, Sliders, Mail, X, Presentation, Rocket, Shield, Building2, Brain, ShieldCheck, Database, Globe, Zap } from 'lucide-react';
+import { Gauge, BarChart3, User, Users, FileText, LogOut, ShieldAlert, Scale, Sliders, Mail, X, Presentation, Rocket, Shield, Building2, Brain, ShieldCheck, Database, Globe, Zap, FolderOpen } from 'lucide-react';
 import Image from 'next/image';
 import { useAuth } from './auth/FirebaseProvider';
 import { SovranlyLogo } from '@/components/SovranlyLogo';
@@ -103,10 +103,10 @@ export default function Sidebar({
                   className={`w-full flex items-center justify-between px-4 py-2.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${activePage === 2 ? 'bg-zinc-900 border border-zinc-800 text-white shadow-lg' : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900/40'}`}
                 >
                   <span className="flex items-center gap-3">
-                    <FileText className="w-4 h-4 text-emerald-400 shrink-0" />
-                    1. IP Asset Registry
+                    <FolderOpen className="w-4 h-4 text-emerald-400 shrink-0" />
+                    1. Asset Management
                   </span>
-                  <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-emerald-950/60 text-emerald-400 border border-emerald-800/40">Stamp</span>
+                  <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-emerald-950/60 text-emerald-400 border border-emerald-800/40">Hub</span>
                 </button>
                 <button 
                   onClick={() => { setActivePage(14); onClose(); }}

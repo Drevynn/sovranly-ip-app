@@ -95,7 +95,7 @@ export default function DashboardPage() {
           pageTitle={
             activePage === 0 ? 'Command Center' :
             activePage === 1 ? 'User Profile' :
-            activePage === 2 ? 'IP Asset Registry' : 
+            activePage === 2 ? 'Asset Management (Folders & Metadata)' : 
             activePage === 3 ? 'Economics & Analytics' :
             activePage === 4 ? 'Licensing Compacts' :
             activePage === 5 ? 'Royalty Sandbox' :
