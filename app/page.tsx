@@ -31,6 +31,7 @@ import SlideStack from '@/components/SlideStack';
 import NewsletterSignup from '@/components/NewsletterSignup';
 import AppOverviewShowcase from '@/components/AppOverviewShowcase';
 import { SovranlyLogo } from '@/components/SovranlyLogo';
+import ThemeToggle from '@/components/ThemeToggle';
 import { motion } from 'motion/react';
 
 
@@ -93,7 +94,8 @@ export default function HomePage() {
             <Link href="/wiki" className="text-sm text-zinc-400 hover:text-white transition-colors">Wiki / Help</Link>
             <Link href="/faq" className="text-sm text-zinc-400 hover:text-white transition-colors">FAQ</Link>
           </nav>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3 sm:gap-4">
+            <ThemeToggle showLabel={false} />
             <Button asChild variant="outline" className="border-zinc-800 bg-transparent text-white hover:bg-zinc-900 transition-all rounded-full hidden sm:inline-flex">
               <Link href="/marketplace">Explore listings</Link>
             </Button>

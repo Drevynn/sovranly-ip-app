@@ -3,6 +3,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { Menu, X, Home, Info, HelpCircle, FileText, Shield, DollarSign, BookOpen, Compass } from 'lucide-react';
+import ThemeToggle from '@/components/ThemeToggle';
 
 export function PublicNavbarHamburger() {
   const [isOpen, setIsOpen] = useState(false);
@@ -60,6 +61,10 @@ export function PublicNavbarHamburger() {
                 <span>{link.name}</span>
               </Link>
             ))}
+          </div>
+          <div className="px-4 py-2 border-t border-zinc-900 flex items-center justify-between">
+            <span className="text-xs text-zinc-400 font-mono">Theme</span>
+            <ThemeToggle showLabel={true} />
           </div>
           <div className="px-4 py-2.5 border-t border-zinc-900 bg-zinc-900/40">
             <Link

@@ -17,6 +17,7 @@ import {
   BadgeCheck
 } from 'lucide-react';
 import Link from 'next/link';
+import ThemeToggle from '@/components/ThemeToggle';
 
 interface PublicPagesHamburgerMenuProps {
   isOpen: boolean;
@@ -178,7 +179,10 @@ export function PublicPagesHamburgerMenu({ isOpen, onClose }: PublicPagesHamburg
 
         {/* Footer */}
         <div className="p-4 border-t border-zinc-900 bg-zinc-900/60 flex items-center justify-between text-xs text-zinc-500 font-mono">
-          <span>Sovranly IP Zero Trust Public Index</span>
+          <div className="flex items-center gap-3">
+            <span>Theme:</span>
+            <ThemeToggle showLabel={true} />
+          </div>
           <button
             onClick={onClose}
             className="px-4 py-1.5 bg-cyan-600 hover:bg-cyan-500 text-white font-semibold rounded-xl transition-colors cursor-pointer"

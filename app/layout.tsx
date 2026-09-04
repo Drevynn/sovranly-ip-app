@@ -3,6 +3,7 @@ import { Metadata, Viewport } from 'next';
 import Script from 'next/script';
 import { FirebaseProvider } from '@/components/auth/FirebaseProvider';
 import { NotificationProvider } from '@/components/NotificationProvider';
+import { ThemeProvider } from '@/components/ThemeProvider';
 import CookieComplianceBanner from '@/components/CookieComplianceBanner';
 
 export const metadata: Metadata = {
@@ -90,7 +91,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className="dark" suppressHydrationWarning>
+    <html lang="en" className="light" suppressHydrationWarning>
       <body className="antialiased bg-zinc-950 text-zinc-100 min-h-screen font-sans">
         {/* Google Analytics Tracking Tag */}
         <Script
@@ -105,12 +106,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             gtag('config', 'G-ZGGTSS0QFN');
           `}
         </Script>
-        <FirebaseProvider>
-          <NotificationProvider>
-            {children}
-            <CookieComplianceBanner />
-          </NotificationProvider>
-        </FirebaseProvider>
+        <ThemeProvider>
+          <FirebaseProvider>
+            <NotificationProvider>
+              {children}
+              <CookieComplianceBanner />
+            </NotificationProvider>
+          </FirebaseProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

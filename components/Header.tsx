@@ -1,7 +1,5 @@
 'use client';
 
-'use client';
-
 import { Shield, Menu, ShieldCheck, LogIn, LogOut, User as UserIcon, Sparkles, Globe } from 'lucide-react';
 import WalletConnect from './WalletConnect';
 import Image from 'next/image';
@@ -9,6 +7,7 @@ import { SovranlyLogo } from '@/components/SovranlyLogo';
 import { useAuth } from '@/components/auth/FirebaseProvider';
 import { useState } from 'react';
 import { PublicPagesHamburgerMenu } from '@/components/PublicPagesHamburgerMenu';
+import ThemeToggle from '@/components/ThemeToggle';
 
 export default function Header({ 
   pageTitle, 
@@ -76,8 +75,9 @@ export default function Header({
         </span>
       </div>
 
-      {/* Right: Founders Beta Badge + Google Sign In + Security Status + Wallet Connect */}
+      {/* Right: Founders Beta Badge + Google Sign In + Security Status + Wallet Connect + ThemeToggle */}
       <div className="flex items-center gap-2.5 z-40">
+        <ThemeToggle />
         <div className="px-2.5 py-1 bg-gradient-to-r from-amber-500/20 via-orange-500/20 to-yellow-500/20 border border-amber-500/40 text-amber-300 text-[10px] font-mono font-bold rounded-lg hidden sm:flex items-center gap-1.5 shadow-sm" title="Founders Beta Creator (Top 100 Early Adopters)">
           <Sparkles className="w-3 h-3 text-amber-400 animate-pulse" />
           <span>FOUNDERS BETA #{founderNumber}</span>
