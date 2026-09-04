@@ -1,6 +1,8 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
+import type { Variants } from 'motion/react';
 import { useAuth } from '@/components/auth/FirebaseProvider';
 import { getAuthHeaders } from '@/lib/auth-client';
 import Image from 'next/image';
@@ -764,6 +766,29 @@ export default function WikiPage() {
     return sec.category === activeTab && matchesSearch;
   });
 
+  const sectionContainerVariants: Variants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.07,
+        delayChildren: 0.05,
+      },
+    },
+  };
+
+  const sectionCardVariants: Variants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.45,
+        ease: 'easeOut',
+      },
+    },
+  };
+
   return (
     <div className="min-h-screen bg-[#050505] text-[#e0e0e0] font-sans selection:bg-cyan-500/20 selection:text-cyan-300">
       
@@ -884,82 +909,103 @@ export default function WikiPage() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
           
           {/* Main Wiki Accordion Cards */}
-          <div className="lg:col-span-2 space-y-6">
+          <motion.div 
+            key={`${activeTab}-${searchQuery}`}
+            variants={sectionContainerVariants}
+            initial="hidden"
+            animate="visible"
+            className="lg:col-span-2 space-y-6"
+          >
             {filteredSections.length === 0 ? (
-              <div className="text-center py-16 bg-[#09090b] rounded-2xl border border-zinc-900 border-dashed">
+              <motion.div 
+                variants={sectionCardVariants}
+                className="text-center py-16 bg-[#09090b] rounded-2xl border border-zinc-900 border-dashed"
+              >
                 <HelpCircle className="w-8 h-8 text-cyan-500/30 mx-auto mb-3" />
                 <p className="text-zinc-500 text-xs">No matching support wiki guidelines found.</p>
-              </div>
+              </motion.div>
             ) : (
               filteredSections.map(sec => {
                 const isOpen = openSections[sec.id] ?? false;
                 return (
-                  <Card key={sec.id} id={sec.id} className="bg-[#09090b] border border-zinc-900 overflow-hidden shadow-xl hover:border-zinc-850 transition duration-200">
-                    
-                    <button 
-                      onClick={() => toggleSection(sec.id)}
-                      className="w-full text-left p-6 flex justify-between items-start gap-4 hover:bg-zinc-900/15 transition"
-                    >
-                      <div className="flex items-start gap-4">
-                        <div className="p-2.5 bg-zinc-900 border border-zinc-800 rounded-xl text-cyan-400 flex-shrink-0 mt-0.5">
-                          <sec.icon className="w-5 h-5 text-cyan-400" />
-                        </div>
-                        <div>
-                          <h3 className="text-lg font-bold text-white tracking-tight">{sec.title}</h3>
-                          <p className="text-xs text-zinc-500 mt-1 line-clamp-1">{sec.subtitle}</p>
-                        </div>
-                      </div>
-                      <ChevronDown className={`w-5 h-5 text-zinc-500 transition-transform flex-shrink-0 mt-2 ${isOpen ? 'rotate-180' : ''}`} />
-                    </button>
-
-                    {isOpen && (
-                      <div className="px-6 pb-6 pt-2 border-t border-zinc-900 space-y-4 text-sm leading-relaxed text-zinc-350">
-                        {sec.content.map((paragraph, index) => (
-                          <p key={index} className="leading-relaxed text-xs sm:text-sm">{paragraph}</p>
-                        ))}
-
-                        {/* Bullet Points */}
-                        {sec.bulletPoints && (
-                          <div className="mt-6 space-y-4 bg-zinc-950 p-5 rounded-2xl border border-zinc-900/80 font-sans">
-                            {sec.bulletPoints.map((bp, bpIdx) => (
-                              <div key={bpIdx} className="flex gap-3">
-                                <span className="text-cyan-400 font-mono text-[10px] mt-1 uppercase tracking-widest bg-cyan-950/45 border border-cyan-800/15 px-2 py-0.5 rounded-md h-fit font-bold whitespace-nowrap">
-                                  {bp.label}
-                                </span>
-                                <p className="text-zinc-300 text-xs sm:text-sm leading-relaxed">{bp.text}</p>
-                              </div>
-                            ))}
+                  <motion.div key={sec.id} variants={sectionCardVariants}>
+                    <Card id={sec.id} className="bg-[#09090b] border border-zinc-900 overflow-hidden shadow-xl hover:border-zinc-850 transition duration-200">
+                      
+                      <button 
+                        onClick={() => toggleSection(sec.id)}
+                        className="w-full text-left p-6 flex justify-between items-start gap-4 hover:bg-zinc-900/15 transition"
+                      >
+                        <div className="flex items-start gap-4">
+                          <div className="p-2.5 bg-zinc-900 border border-zinc-800 rounded-xl text-cyan-400 flex-shrink-0 mt-0.5">
+                            <sec.icon className="w-5 h-5 text-cyan-400" />
                           </div>
-                        )}
+                          <div>
+                            <h3 className="text-lg font-bold text-white tracking-tight">{sec.title}</h3>
+                            <p className="text-xs text-zinc-500 mt-1 line-clamp-1">{sec.subtitle}</p>
+                          </div>
+                        </div>
+                        <ChevronDown className={`w-5 h-5 text-zinc-500 transition-transform flex-shrink-0 mt-2 ${isOpen ? 'rotate-180' : ''}`} />
+                      </button>
 
-                        {/* Checklist Section */}
-                        {sec.checklist && (
-                          <div className="mt-4 pt-4 border-t border-zinc-900 space-y-2">
-                            <h4 className="text-xs uppercase font-mono text-zinc-500 tracking-wider">Sovereign Action Checklist</h4>
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-2">
-                              {sec.checklist.map((item, chIdx) => (
-                                <div key={chIdx} className="flex items-center gap-2.5 bg-zinc-950/80 border border-zinc-900/60 p-3 rounded-lg">
-                                  <CheckCircle className="w-4 h-4 text-cyan-500 flex-shrink-0" />
-                                  <span className="text-zinc-400 text-xs truncate" title={item}>{item}</span>
-                                </div>
+                      <AnimatePresence initial={false}>
+                        {isOpen && (
+                          <motion.div
+                            initial={{ opacity: 0, height: 0 }}
+                            animate={{ opacity: 1, height: 'auto' }}
+                            exit={{ opacity: 0, height: 0 }}
+                            transition={{ duration: 0.25, ease: [0.4, 0, 0.2, 1] }}
+                            className="overflow-hidden"
+                          >
+                            <div className="px-6 pb-6 pt-2 border-t border-zinc-900 space-y-4 text-sm leading-relaxed text-zinc-350">
+                              {sec.content.map((paragraph, index) => (
+                                <p key={index} className="leading-relaxed text-xs sm:text-sm">{paragraph}</p>
                               ))}
+
+                              {/* Bullet Points */}
+                              {sec.bulletPoints && (
+                                <div className="mt-6 space-y-4 bg-zinc-950 p-5 rounded-2xl border border-zinc-900/80 font-sans">
+                                  {sec.bulletPoints.map((bp, bpIdx) => (
+                                    <div key={bpIdx} className="flex gap-3">
+                                      <span className="text-cyan-400 font-mono text-[10px] mt-1 uppercase tracking-widest bg-cyan-950/45 border border-cyan-800/15 px-2 py-0.5 rounded-md h-fit font-bold whitespace-nowrap">
+                                        {bp.label}
+                                      </span>
+                                      <p className="text-zinc-300 text-xs sm:text-sm leading-relaxed">{bp.text}</p>
+                                    </div>
+                                  ))}
+                                </div>
+                              )}
+
+                              {/* Checklist Section */}
+                              {sec.checklist && (
+                                <div className="mt-4 pt-4 border-t border-zinc-900 space-y-2">
+                                  <h4 className="text-xs uppercase font-mono text-zinc-500 tracking-wider">Sovereign Action Checklist</h4>
+                                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-2">
+                                    {sec.checklist.map((item, chIdx) => (
+                                      <div key={chIdx} className="flex items-center gap-2.5 bg-zinc-950/80 border border-zinc-900/60 p-3 rounded-lg">
+                                        <CheckCircle className="w-4 h-4 text-cyan-500 flex-shrink-0" />
+                                        <span className="text-zinc-400 text-xs truncate" title={item}>{item}</span>
+                                      </div>
+                                    ))}
+                                  </div>
+                                </div>
+                              )}
+
+                              {sec.id === 'api-overview' && (
+                                <div className="mt-6 pt-6 border-t border-zinc-900/80">
+                                  <DeveloperKeyPortal />
+                                </div>
+                              )}
+
                             </div>
-                          </div>
+                          </motion.div>
                         )}
-
-                        {sec.id === 'api-overview' && (
-                          <div className="mt-6 pt-6 border-t border-zinc-900/80">
-                            <DeveloperKeyPortal />
-                          </div>
-                        )}
-
-                      </div>
-                    )}
-                  </Card>
+                      </AnimatePresence>
+                    </Card>
+                  </motion.div>
                 );
               })
             )}
-          </div>
+          </motion.div>
 
           {/* Interactive AI Agent Chat Sidebar Console */}
           <div className="space-y-6">

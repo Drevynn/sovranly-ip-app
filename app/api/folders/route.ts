@@ -63,7 +63,7 @@ export async function GET(request: Request) {
       return NextResponse.json(DEFAULT_FOLDERS);
     }
 
-    const folders: FolderItem[] = snapshot.docs.map(doc => ({
+    const folders: FolderItem[] = snapshot.docs.map((doc: any) => ({
       id: doc.id,
       ...doc.data()
     } as FolderItem));

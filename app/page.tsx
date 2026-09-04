@@ -21,7 +21,10 @@ import {
   Database,
   FileText,
   Presentation,
-  CheckCircle2
+  CheckCircle2,
+  Share2,
+  ListOrdered,
+  Layers
 } from 'lucide-react';
 import Link from 'next/link';
 import SlideStack from '@/components/SlideStack';
@@ -29,6 +32,7 @@ import NewsletterSignup from '@/components/NewsletterSignup';
 import AppOverviewShowcase from '@/components/AppOverviewShowcase';
 import { SovranlyLogo } from '@/components/SovranlyLogo';
 import { motion } from 'motion/react';
+
 
 export default function HomePage() {
   const [submitted, setSubmitted] = useState(false);
@@ -38,6 +42,32 @@ export default function HomePage() {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsMounted(true);
   }, []);
+
+  const handleAnalyticsEvent = (eventName: string) => {
+    try {
+      console.log('[Analytics Event]', eventName);
+      if (typeof window !== 'undefined' && (window as any).gtag) {
+        (window as any).gtag('event', eventName, { event_category: 'Landing Page' });
+      }
+    } catch (e) {
+      // ignore
+    }
+  };
+
+  const scrollToWorkflow = () => {
+    handleAnalyticsEvent('landing_how_it_works_clicked');
+    const el = document.getElementById('how-it-works');
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  const scrollToContact = () => {
+    const el = document.getElementById('contact-section');
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
 
   return (
     <div className="min-h-screen bg-black text-zinc-100 font-sans selection:bg-cyan-500/20 selection:text-cyan-300">
@@ -55,29 +85,30 @@ export default function HomePage() {
             <Link href="/" className="font-bold tracking-tighter text-white text-xl uppercase">Sovranly IP</Link>
           </div>
           <nav className="hidden md:flex items-center gap-6">
-            <Link href="/pitch-deck" className="text-sm text-cyan-400 font-semibold hover:text-cyan-300 transition-colors flex items-center gap-1.5"><Presentation className="w-4 h-4" /> Pitch Deck</Link>
-            <Link href="/dashboard" className="text-sm text-zinc-400 hover:text-white transition-colors">Command Center</Link>
-            <Link href="/pricing" className="text-sm text-zinc-400 hover:text-white transition-colors">Pricing Plan</Link>
-            <Link href="/marketplace" className="text-sm text-zinc-400 hover:text-white transition-colors">Marketplace</Link>
+            <button onClick={scrollToWorkflow} className="text-sm text-zinc-400 hover:text-white transition-colors cursor-pointer">
+              How it works
+            </button>
+            <Link href="/onboarding" className="text-sm text-zinc-400 hover:text-white transition-colors">For creators</Link>
+            <Link href="/marketplace" className="text-sm text-zinc-400 hover:text-white transition-colors">Explore listings</Link>
             <Link href="/wiki" className="text-sm text-zinc-400 hover:text-white transition-colors">Wiki / Help</Link>
             <Link href="/faq" className="text-sm text-zinc-400 hover:text-white transition-colors">FAQ</Link>
           </nav>
           <div className="flex items-center gap-4">
             <Button asChild variant="outline" className="border-zinc-800 bg-transparent text-white hover:bg-zinc-900 transition-all rounded-full hidden sm:inline-flex">
-              <Link href="/marketplace">Marketplace</Link>
+              <Link href="/marketplace">Explore listings</Link>
             </Button>
             <Button asChild className="bg-gradient-to-r from-cyan-500 to-violet-500 hover:brightness-110 text-white font-medium shadow-lg shadow-cyan-950/40 rounded-full">
-              <Link href="/dashboard">Launch Console</Link>
+              <Link href="/dashboard">Sign in</Link>
             </Button>
           </div>
         </div>
       </header>
 
       {/* Hero Section */}
-      <main className="relative max-w-7xl mx-auto px-6 py-24 md:py-40 space-y-44">
-        <section className="text-center space-y-12 max-w-6xl mx-auto">
+      <main className="relative max-w-7xl mx-auto px-6 py-24 md:py-36 space-y-36">
+        <section className="text-center space-y-10 max-w-5xl mx-auto">
           {/* Sovereign IP Emblem Logo Hero Display */}
-          <div className="relative group w-72 h-72 sm:w-88 sm:h-88 md:w-[420px] md:h-[420px] mx-auto mb-8 flex items-center justify-center select-none">
+          <div className="relative group w-64 h-64 sm:w-80 sm:h-80 md:w-[380px] md:h-[380px] mx-auto mb-6 flex items-center justify-center select-none">
             {/* Multi-layer animated backlight glow */}
             <motion.div 
               animate={{
@@ -132,36 +163,62 @@ export default function HomePage() {
             </motion.div>
           </div>
           
-          <div className="inline-flex items-center gap-2.5 px-4 py-2 bg-zinc-900 border border-zinc-800 rounded-full text-xs sm:text-sm text-zinc-400 mb-2">
+          <div className="inline-flex items-center gap-2.5 px-4 py-2 bg-zinc-900 border border-zinc-800 rounded-full text-xs sm:text-sm text-zinc-400 mb-2 font-mono tracking-wider uppercase">
             <Sparkles className="w-4 h-4 text-cyan-400" />
-            <span className="font-mono tracking-wider uppercase text-[10px] sm:text-xs">Zero Trust Blockchain Sovereign IP Authority</span>
+            <span>CREATOR LICENSING PROTOCOL // v1.2 SECURE</span>
           </div>
           
-          {/* Primary H1 Application Title Matching OAuth Consent Screen */}
+          {/* Primary H1 Headline */}
           <div className="space-y-4">
-            <h1 className="text-6xl sm:text-8xl md:text-9xl font-black tracking-tight text-white leading-none drop-shadow-sm">
-              Sovranly IP
+            <h1 className="text-4xl sm:text-6xl md:text-7xl font-black tracking-tight text-white leading-tight drop-shadow-sm max-w-4xl mx-auto">
+              Turn your creative work into a clear, shareable licensing offer.
             </h1>
-            <p className="text-2xl sm:text-4xl md:text-5xl font-extrabold tracking-tight bg-gradient-to-r from-cyan-400 via-sky-400 to-violet-400 bg-clip-text text-transparent">
-              Sovereign Intellectual Property &amp; Zero Trust Creator Rights Authority
-            </p>
           </div>
           
-          <p className="text-xl sm:text-2xl md:text-3xl text-zinc-400 max-w-5xl mx-auto leading-relaxed font-light">
-            Sovranly IP brings robust, Zero Trust Architecture to intellectual property. Register, license, and seamlessly commercialize your assets with automated smart contracts, immutable proof of ownership, and Google Workspace presentation deck integration.
+          <p className="text-lg sm:text-xl md:text-2xl text-zinc-400 max-w-3xl mx-auto leading-relaxed font-light">
+            Register an asset, define the permissions you want to grant, and send one professional licensing link to the people who want to use your work. Sovranly gives independent creators a secure home for ownership records, licensing terms, and buyer requests.
           </p>
+
+          {/* Microcopy */}
+          <div className="space-y-1 text-xs sm:text-sm text-cyan-400/90 font-mono">
+            <p>Built for independent producers, musicians, sound designers, and digital creators.</p>
+            <p className="text-zinc-500">Start with one asset. Keep ownership. Set the terms.</p>
+          </div>
           
-          <div className="flex flex-col sm:flex-row flex-wrap justify-center items-center gap-4 pt-10">
-            <Button asChild size="lg" className="w-full sm:w-auto px-8 py-7 rounded-full bg-gradient-to-r from-cyan-500 to-violet-500 text-white font-bold text-base hover:brightness-110 shadow-xl shadow-cyan-950/60 transition duration-300">
-              <Link href="/dashboard">Deploy IP Asset <ArrowRight className="ml-2 h-5 w-5" /></Link>
+          <div className="flex flex-col sm:flex-row flex-wrap justify-center items-center gap-4 pt-6">
+            <Button 
+              asChild 
+              size="lg" 
+              className="w-full sm:w-auto px-8 py-7 rounded-full bg-gradient-to-r from-cyan-500 to-violet-500 text-white font-bold text-base hover:brightness-110 shadow-xl shadow-cyan-950/60 transition duration-300"
+              onClick={() => handleAnalyticsEvent('landing_primary_cta_clicked')}
+            >
+              <Link href="/onboarding">Create your first license listing <ArrowRight className="ml-2 h-5 w-5" /></Link>
             </Button>
-            <Button asChild size="lg" variant="outline" className="w-full sm:w-auto px-8 py-7 rounded-full border-zinc-800 bg-zinc-950 text-white hover:bg-zinc-900 font-bold text-base transition duration-300">
-              <Link href="/marketplace">Explore Marketplace</Link>
+            <Button 
+              size="lg" 
+              variant="outline" 
+              onClick={scrollToWorkflow}
+              className="w-full sm:w-auto px-8 py-7 rounded-full border-zinc-800 bg-zinc-950 text-white hover:bg-zinc-900 font-bold text-base transition duration-300 cursor-pointer"
+            >
+              See how licensing works
             </Button>
           </div>
 
-          {/* Product Hunt Review Badge matching theme */}
-          <div className="pt-6 flex justify-center items-center">
+          {/* Compact Trust / Status Row */}
+          <div className="pt-4 flex flex-wrap justify-center items-center gap-3 sm:gap-6 text-xs font-mono text-zinc-400">
+            <span className="px-3 py-1.5 rounded-lg bg-zinc-900/80 border border-zinc-800 flex items-center gap-2">
+              <span className="text-cyan-400 font-bold">[SECURE]</span> Creator-controlled records
+            </span>
+            <span className="px-3 py-1.5 rounded-lg bg-zinc-900/80 border border-zinc-800 flex items-center gap-2">
+              <span className="text-violet-400 font-bold">[CLEAR TERMS]</span> Buyer-facing permission summaries
+            </span>
+            <span className="px-3 py-1.5 rounded-lg bg-zinc-900/80 border border-zinc-800 flex items-center gap-2">
+              <span className="text-emerald-400 font-bold">[SHAREABLE]</span> One link for every licensing conversation
+            </span>
+          </div>
+
+          {/* Product Hunt Review Badge */}
+          <div className="pt-4 flex justify-center items-center">
             <div className="p-1 rounded-2xl bg-zinc-900/80 border border-cyan-500/20 shadow-lg shadow-cyan-950/40 hover:border-cyan-500/40 transition-all duration-300 hover:scale-105">
               <a
                 href="https://www.producthunt.com/products/sovranly-ip/reviews/new?utm_source=badge-product_review&utm_medium=badge&utm_source=badge-sovranly&#0045;ip"
@@ -183,121 +240,98 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* Dedicated Application Purpose & OAuth Disclosure Section for Compliance */}
-        <section id="app-purpose" className="relative max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="bg-gradient-to-b from-zinc-900/90 to-zinc-950/90 border border-cyan-500/30 rounded-3xl p-6 sm:p-10 md:p-12 shadow-2xl shadow-cyan-950/20 backdrop-blur-md space-y-10">
-            {/* Header / Title */}
-            <div className="space-y-4 border-b border-zinc-800/80 pb-8 text-left">
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-cyan-950/50 border border-cyan-500/40 text-cyan-400 text-xs font-mono uppercase tracking-widest">
-                <ShieldCheck className="w-4 h-4" />
-                <span>Application Purpose &amp; OAuth Compliance Specification</span>
-              </div>
-              <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-white">
-                What is <span className="text-cyan-400">Sovranly IP</span> &amp; Why We Exist
-              </h2>
-              <p className="text-base sm:text-lg text-zinc-300 leading-relaxed max-w-4xl font-light">
-                <strong className="text-white font-semibold">Sovranly IP</strong> is a decentralized, Zero Trust intellectual property management and licensing platform built for creators, musicians, software developers, visual artists, and legal rights holders. Our application provides tools to register creative assets, generate cryptographic proof of ownership, configure automated commercial licensing compacts, and distribute peer-to-peer royalties transparently.
+        {/* HOW IT WORKS SECTION */}
+        <section id="how-it-works" className="space-y-16 pt-12">
+          <div className="text-center space-y-4 max-w-3xl mx-auto">
+            <span className="text-xs font-mono uppercase tracking-widest text-cyan-400 px-3 py-1 bg-cyan-950/50 border border-cyan-800/30 rounded-full">
+              THE CREATOR WORKFLOW
+            </span>
+            <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-white">
+              From asset to licensing conversation in three steps.
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="bg-zinc-900/40 border border-zinc-800 rounded-3xl p-8 space-y-4 relative group hover:border-cyan-500/50 transition-all">
+              <div className="text-xs font-mono text-cyan-400 uppercase tracking-widest">Step 01</div>
+              <h3 className="text-2xl font-bold text-white">Add your asset</h3>
+              <p className="text-sm text-zinc-400 leading-relaxed">
+                Create a record for a beat, track, sample pack, stems, or other creative work. Add the details a prospective licensee needs to understand what they are viewing.
               </p>
             </div>
 
-            {/* 3 Core Purpose Pillars */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
-              <div className="bg-zinc-950/60 border border-zinc-800 rounded-3xl overflow-hidden hover:border-cyan-500/50 transition-all duration-300 flex flex-col group shadow-xl shadow-black/40">
-                <div className="relative w-full h-48 overflow-hidden border-b border-zinc-800/80 bg-zinc-900">
-                  <Image 
-                    src="/images/audio_stem_vault.jpg" 
-                    alt="Intellectual Property Protection and Audio Stem Vault" 
-                    fill 
-                    className="object-cover group-hover:scale-105 transition-transform duration-700"
-                    referrerPolicy="no-referrer"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/20 to-transparent" />
-                  <div className="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-black/80 backdrop-blur-md border border-cyan-500/40 text-cyan-300 text-[10px] font-mono uppercase">
-                    IPFS &amp; SHA-256 Vault
-                  </div>
-                </div>
-                <div className="p-6 space-y-3 flex-1 flex flex-col justify-between">
-                  <div className="space-y-3">
-                    <div className="w-10 h-10 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center">
-                      <Database className="w-5 h-5 text-cyan-400" />
-                    </div>
-                    <h3 className="text-lg font-bold text-white">01. Intellectual Property Protection</h3>
-                    <p className="text-xs sm:text-sm text-zinc-400 leading-relaxed">
-                      Creators upload their digital works (audio stems, codebases, artwork) to generate SHA-256 cryptographic fingerprints and decentralized IPFS certificates, establishing indisputable proof of authorship and ownership.
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="bg-zinc-950/60 border border-zinc-800 rounded-3xl overflow-hidden hover:border-violet-500/50 transition-all duration-300 flex flex-col group shadow-xl shadow-black/40">
-                <div className="relative w-full h-48 overflow-hidden border-b border-zinc-800/80 bg-zinc-900">
-                  <Image 
-                    src="/images/cybernetic_framework.jpg" 
-                    alt="Smart Licensing and AI Model Protection Architecture" 
-                    fill 
-                    className="object-cover group-hover:scale-105 transition-transform duration-700"
-                    referrerPolicy="no-referrer"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/20 to-transparent" />
-                  <div className="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-black/80 backdrop-blur-md border border-violet-500/40 text-violet-300 text-[10px] font-mono uppercase">
-                    Smart Sync &amp; AI Defense
-                  </div>
-                </div>
-                <div className="p-6 space-y-3 flex-1 flex flex-col justify-between">
-                  <div className="space-y-3">
-                    <div className="w-10 h-10 rounded-xl bg-violet-500/10 border border-violet-500/30 flex items-center justify-center">
-                      <FileText className="w-5 h-5 text-violet-400" />
-                    </div>
-                    <h3 className="text-lg font-bold text-white">02. Smart Licensing &amp; AI Defense</h3>
-                    <p className="text-xs sm:text-sm text-zinc-400 leading-relaxed">
-                      Design commercial sync agreements, set explicit AI model training consent or opt-out rules, and automate multi-party royalty distributions without traditional intermediaries or accounting delays.
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="bg-zinc-950/60 border border-zinc-800 rounded-3xl overflow-hidden hover:border-emerald-500/50 transition-all duration-300 flex flex-col group shadow-xl shadow-black/40">
-                <div className="relative w-full h-48 overflow-hidden border-b border-zinc-800/80 bg-zinc-900">
-                  <Image 
-                    src="/images/slides_deck_export.jpg" 
-                    alt="Google Workspace Slides Deck & Verified Presentation Integration" 
-                    fill 
-                    className="object-cover group-hover:scale-105 transition-transform duration-700"
-                    referrerPolicy="no-referrer"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/20 to-transparent" />
-                  <div className="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-black/80 backdrop-blur-md border border-emerald-500/40 text-emerald-300 text-[10px] font-mono uppercase">
-                    Google Slides Sync
-                  </div>
-                </div>
-                <div className="p-6 space-y-3 flex-1 flex flex-col justify-between">
-                  <div className="space-y-3">
-                    <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center">
-                      <Presentation className="w-5 h-5 text-emerald-400" />
-                    </div>
-                    <h3 className="text-lg font-bold text-white">03. Google Workspace Slides Integration</h3>
-                    <p className="text-xs sm:text-sm text-zinc-400 leading-relaxed">
-                      <strong className="text-emerald-300">Why we request Google OAuth:</strong> Sovranly IP integrates with Google Workspace (Google Slides API) to enable creators and legal teams to export verified IP ownership certificates, licensing compacts, and royalty reports directly into <strong className="text-white">Google Slides presentations</strong> for client proposals and pitch decks.
-                    </p>
-                  </div>
-                </div>
-              </div>
+            <div className="bg-zinc-900/40 border border-zinc-800 rounded-3xl p-8 space-y-4 relative group hover:border-violet-500/50 transition-all">
+              <div className="text-xs font-mono text-violet-400 uppercase tracking-widest">Step 02</div>
+              <h3 className="text-2xl font-bold text-white">Set clear permissions</h3>
+              <p className="text-sm text-zinc-400 leading-relaxed">
+                Start with structured licensing terms, including commercial use, attribution, derivative use, exclusivity, and pricing or inquiry options.
+              </p>
             </div>
 
-            {/* Google OAuth & Data Privacy Transparency Note */}
-            <div className="p-6 bg-black/60 border border-zinc-800/80 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-left">
-              <div className="space-y-1">
-                <div className="flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-                  <span className="text-xs font-mono text-emerald-400 font-bold uppercase">Google OAuth &amp; Data Sovereignty Guarantee</span>
-                </div>
-                <p className="text-xs text-zinc-400 leading-relaxed">
-                  Sovranly IP only accesses Google Slides presentation scopes when explicitly authorized by the user. We never read your emails, personal files, or unrelated drive contents. All data remains cryptographically protected under our Zero Trust Architecture.
-                </p>
+            <div className="bg-zinc-900/40 border border-zinc-800 rounded-3xl p-8 space-y-4 relative group hover:border-emerald-500/50 transition-all">
+              <div className="text-xs font-mono text-emerald-400 uppercase tracking-widest">Step 03</div>
+              <h3 className="text-2xl font-bold text-white">Share one licensing link</h3>
+              <p className="text-sm text-zinc-400 leading-relaxed">
+                Send a professional page to a prospect. They can preview the asset, understand the offered use, and submit a licensing request directly to you.
+              </p>
+            </div>
+          </div>
+
+          <div className="p-4 bg-zinc-950/80 border border-zinc-900 rounded-2xl max-w-3xl mx-auto text-center">
+            <p className="text-xs text-zinc-500 leading-relaxed font-mono">
+              Sovranly records creator-provided asset and permissions information. Creators remain responsible for confirming they own or control the rights they offer.
+            </p>
+          </div>
+        </section>
+
+        {/* PRIMARY PRODUCT BENEFITS SECTION */}
+        <section className="space-y-12 pt-8">
+          <div className="text-center space-y-4 max-w-3xl mx-auto">
+            <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-white">
+              Everything you need for a cleaner licensing conversation.
+            </h2>
+            <p className="text-zinc-400 text-base">Designed around the real workflows of independent music and digital creators.</p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="p-8 bg-zinc-900/40 border border-zinc-800/60 rounded-3xl space-y-4 hover:border-zinc-700 transition-all">
+              <div className="w-10 h-10 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center">
+                <FileText className="w-5 h-5 text-cyan-400" />
               </div>
-              <Button asChild size="sm" variant="outline" className="border-zinc-700 bg-zinc-900 text-white hover:bg-zinc-800 font-mono text-xs shrink-0">
-                <Link href="/wiki">View Security Specs</Link>
-              </Button>
+              <h3 className="text-xl font-bold text-white">Publish with confidence</h3>
+              <p className="text-sm text-zinc-400 leading-relaxed">
+                Create a professional, shareable listing for an asset you own or control.
+              </p>
+            </div>
+
+            <div className="p-8 bg-zinc-900/40 border border-zinc-800/60 rounded-3xl space-y-4 hover:border-zinc-700 transition-all">
+              <div className="w-10 h-10 rounded-xl bg-violet-500/10 border border-violet-500/30 flex items-center justify-center">
+                <CheckCircle2 className="w-5 h-5 text-violet-400" />
+              </div>
+              <h3 className="text-xl font-bold text-white">Make terms understandable</h3>
+              <p className="text-sm text-zinc-400 leading-relaxed">
+                Give prospective licensees a plain-language summary of permitted use before they contact you.
+              </p>
+            </div>
+
+            <div className="p-8 bg-zinc-900/40 border border-zinc-800/60 rounded-3xl space-y-4 hover:border-zinc-700 transition-all">
+              <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center">
+                <Database className="w-5 h-5 text-emerald-400" />
+              </div>
+              <h3 className="text-xl font-bold text-white">Keep the record connected</h3>
+              <p className="text-sm text-zinc-400 leading-relaxed">
+                Maintain an organized record of the asset, its creator-supplied metadata, licensing options, and buyer inquiries.
+              </p>
+            </div>
+
+            <div className="p-8 bg-zinc-900/40 border border-zinc-800/60 rounded-3xl space-y-4 hover:border-zinc-700 transition-all">
+              <div className="w-10 h-10 rounded-xl bg-sky-500/10 border border-sky-500/30 flex items-center justify-center">
+                <Lock className="w-5 h-5 text-sky-400" />
+              </div>
+              <h3 className="text-xl font-bold text-white">Protect access by design</h3>
+              <p className="text-sm text-zinc-400 leading-relaxed">
+                Use Sovranly’s zero-trust security model to control access and safeguard sensitive creative information.
+              </p>
             </div>
           </div>
         </section>
@@ -314,36 +348,45 @@ export default function HomePage() {
           <SlideStack />
         </section>
 
-        {/* Feature Highlights Grid */}
-        <section className="space-y-12">
-          <div className="text-center space-y-4">
-            <h3 className="text-3xl font-extrabold tracking-tight text-white">Trust Nothing. Authenticate Everything.</h3>
-            <p className="text-zinc-400 max-w-lg mx-auto">We secure the creator economy through robust technological structures.</p>
+        {/* SECURITY / DIFFERENTIATION SECTION */}
+        <section className="space-y-12 bg-zinc-900/20 border border-zinc-800/60 p-8 sm:p-12 rounded-3xl">
+          <div className="text-center space-y-4 max-w-3xl mx-auto">
+            <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-white">
+              Creator-first licensing. Security built underneath.
+            </h2>
+            <p className="text-zinc-400 text-sm sm:text-base leading-relaxed">
+              Licensing should feel simple to the people using it. Behind the scenes, Sovranly applies a security-first infrastructure designed to make ownership records, access, and permissions more resilient.
+            </p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
               { 
                 icon: ShieldCheck, 
-                title: "Zero Trust Governance", 
-                desc: "Continuously validated, cryptographically secure permissions system protecting access and viewing rights for sensitive media and data." 
-              },
-              { 
-                icon: Zap, 
-                title: "Automated Royalty Splits", 
-                desc: "Self-executing smart contract layers dispatch direct peer-to-peer micro-licensing fees and royalty fractions instantly on-chain." 
+                title: "Creator-controlled permission records", 
+                desc: "You maintain authority over what terms are displayed and when access is updated." 
               },
               { 
                 icon: Lock, 
-                 title: "Immutable Digital Fingerprint", 
-                desc: "Permanent timestamp registry storing high-fidelity cryptographic hashes of media files, offering ironclad courtroom proof of authorship." 
+                title: "Cryptographic asset fingerprinting", 
+                desc: "Timestamped cryptographic records can help document an asset’s history." 
+              },
+              { 
+                icon: Zap, 
+                title: "Automated licensing infrastructure", 
+                desc: "Smart-contract and automation capabilities are being developed to support structured licensing workflows." 
+              },
+              { 
+                icon: Database, 
+                title: "Secure asset and metadata storage", 
+                desc: "Security features complement—not replace—legal advice, rights clearance, or creator due diligence." 
               },
             ].map((feature, i) => (
-              <div key={i} className="group p-8 bg-zinc-900/40 border border-zinc-800/60 rounded-3xl text-left hover:border-zinc-700/80 transition-all duration-300 shadow-xl shadow-zinc-950/20 backdrop-blur-sm">
-                <div className="inline-flex p-3 bg-zinc-950 border border-zinc-800 rounded-2xl mb-6 group-hover:scale-105 transition-all">
-                  <feature.icon className="h-6 h-6 text-cyan-400 group-hover:text-cyan-300" />
+              <div key={i} className="p-6 bg-zinc-950/60 border border-zinc-800/80 rounded-2xl text-left space-y-3">
+                <div className="inline-flex p-2.5 bg-zinc-900 border border-zinc-800 rounded-xl">
+                  <feature.icon className="h-5 w-5 text-cyan-400" />
                 </div>
-                <h4 className="text-xl font-bold text-white mb-3">{feature.title}</h4>
-                <p className="text-zinc-500 leading-relaxed text-sm">{feature.desc}</p>
+                <h4 className="text-base font-bold text-white">{feature.title}</h4>
+                <p className="text-zinc-500 text-xs leading-relaxed">{feature.desc}</p>
               </div>
             ))}
           </div>
@@ -382,16 +425,47 @@ export default function HomePage() {
           </Card>
         </section>
 
+        {/* EARLY CREATOR ACCESS / DESIGN PARTNER SECTION */}
+        <section className="relative bg-gradient-to-r from-cyan-950/30 via-zinc-900/40 to-violet-950/30 rounded-3xl p-8 md:p-14 border border-cyan-500/30 text-center space-y-6 shadow-2xl">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-cyan-950/60 border border-cyan-500/40 text-cyan-400 text-xs font-mono uppercase tracking-widest">
+            <span>EARLY CREATOR ACCESS</span>
+          </div>
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white tracking-tight">
+            License one asset with Sovranly.
+          </h2>
+          <p className="text-zinc-300 max-w-2xl mx-auto text-base leading-relaxed">
+            We’re onboarding a focused group of independent producers and creators who want a cleaner way to present assets and permissions to real prospects. Create one listing, share it, and help shape the workflow.
+          </p>
+          <div className="flex flex-col sm:flex-row justify-center items-center gap-4 pt-4">
+            <Button 
+              asChild 
+              size="lg" 
+              className="px-8 py-6 rounded-full bg-cyan-500 hover:bg-cyan-400 text-black font-bold text-base shadow-lg transition-all"
+              onClick={() => handleAnalyticsEvent('landing_early_access_clicked')}
+            >
+              <Link href="/onboarding">Create your first listing <ArrowRight className="ml-2 w-5 h-5" /></Link>
+            </Button>
+            <Button 
+              size="lg" 
+              variant="outline" 
+              onClick={scrollToContact}
+              className="px-8 py-6 rounded-full border-zinc-700 bg-transparent text-white hover:bg-zinc-900 font-bold text-base cursor-pointer"
+            >
+              Talk to the team
+            </Button>
+          </div>
+        </section>
+
         {/* Contact/Support Form Section */}
-        <section className="relative bg-zinc-900/30 rounded-3xl p-8 md:p-12 border border-zinc-800/60 backdrop-blur-sm">
+        <section id="contact-section" className="relative bg-zinc-900/30 rounded-3xl p-8 md:p-12 border border-zinc-800/60 backdrop-blur-sm">
           <div className="absolute top-0 right-0 w-[300px] h-[300px] bg-violet-500/5 rounded-full blur-[100px] pointer-events-none" />
           
           <div className="max-w-2xl mx-auto space-y-8">
             <div className="text-center space-y-3">
               <h3 className="text-3xl font-extrabold text-white tracking-tight flex justify-center items-center gap-3">
-                <Mail className="text-cyan-400 w-8 h-8"/> Contact Developer Support
+                <Mail className="text-cyan-400 w-8 h-8"/> Talk to Sovranly
               </h3>
-              <p className="text-zinc-400 max-w-md mx-auto">Ready to customize or have questions? Get in touch with our team directly.</p>
+              <p className="text-zinc-400 max-w-md mx-auto">Questions about launching your first listing, licensing workflow, or platform access? Connect with the Sovranly team.</p>
             </div>
 
             {!submitted ? (
@@ -409,7 +483,7 @@ export default function HomePage() {
                   </div>
                   <div className="space-y-2">
                     <Label className="text-zinc-400 text-xs font-semibold uppercase tracking-wider">Inquiry Details</Label>
-                    <Textarea className="bg-zinc-950/60 border-zinc-800 text-white rounded-xl p-4 focus-visible:ring-cyan-500" rows={5} required placeholder="Describe what you want to achieve or any questions you have about the architecture..." />
+                    <Textarea className="bg-zinc-950/60 border-zinc-800 text-white rounded-xl p-4 focus-visible:ring-cyan-500" rows={5} required placeholder="Describe your creative work or any questions about launching your first licensing offer..." />
                   </div>
                   <Button type="submit" className="w-full py-6 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-bold transition-all shadow-md shadow-cyan-950/20">
                     Send Support Message
@@ -451,10 +525,6 @@ export default function HomePage() {
         </div>
         
         <div className="flex flex-wrap items-center justify-center gap-4 text-zinc-500 text-xs px-4">
-          <Link href="#app-purpose" className="hover:text-cyan-400 transition-colors">App Purpose &amp; OAuth</Link>
-          <span>•</span>
-          <Link href="#app-overview" className="hover:text-cyan-400 transition-colors">App Overview</Link>
-          <span>•</span>
           <Link href="/about" className="hover:text-cyan-400 transition-colors">About Us</Link>
           <span>•</span>
           <Link href="/terms" className="hover:text-cyan-400 transition-colors">Terms of Service</Link>
@@ -466,3 +536,4 @@ export default function HomePage() {
     </div>
   );
 }
+

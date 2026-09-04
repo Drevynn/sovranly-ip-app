@@ -43,24 +43,27 @@ import { getDb } from './firebase';
 
 class DocumentSnapshotCompat {
   constructor(private _snap: any) {}
-  get exists() {
+  get exists(): boolean {
     return this._snap.exists();
   }
-  get id() {
+  get id(): string {
     return this._snap.id;
   }
-  data() {
+  data(): any {
     return this._snap.data();
   }
 }
 
 class QuerySnapshotCompat {
   constructor(private _snap: any) {}
-  get empty() {
+  get empty(): boolean {
     return this._snap.empty;
   }
-  get docs() {
+  get docs(): DocumentSnapshotCompat[] {
     return this._snap.docs.map((d: any) => new DocumentSnapshotCompat(d));
+  }
+  forEach(callback: (doc: DocumentSnapshotCompat) => void): void {
+    this.docs.forEach(callback);
   }
 }
 
