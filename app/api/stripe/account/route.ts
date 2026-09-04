@@ -44,7 +44,6 @@ export async function POST(req: NextRequest) {
      * - Only use the specified properties.
      * - Never pass type: 'express' | 'standard' | 'custom' at the top level.
      */
-    // @ts-expect-error Stripe V2 core accounts API in current SDK typings
     const account = await stripeClient.v2.core.accounts.create({
       display_name: displayName,
       contact_email: contactEmail,
@@ -141,7 +140,6 @@ export async function GET(req: NextRequest) {
      * Retrieve V2 Account with required expansions:
      * include: ["configuration.merchant", "requirements"]
      */
-    // @ts-expect-error Stripe V2 core accounts API in current SDK typings
     const account = await stripeClient.v2.core.accounts.retrieve(accountId, {
       include: ['configuration.merchant', 'requirements'],
     });

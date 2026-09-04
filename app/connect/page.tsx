@@ -41,14 +41,8 @@ interface ProductItem {
 }
 
 export default function ConnectHubPage() {
-  // State for active connected account initialized lazily
-  const [accountId, setAccountId] = useState<string>(() => {
-    if (typeof window !== 'undefined') {
-      const params = new URLSearchParams(window.location.search);
-      return params.get('accountId') || localStorage.getItem('sovranly_stripe_account_id') || '';
-    }
-    return '';
-  });
+  // State for active connected account initialized safely for SSR
+  const [accountId, setAccountId] = useState<string>('');
   const [displayName, setDisplayName] = useState<string>('Sovranly Creator Studio');
   const [contactEmail, setContactEmail] = useState<string>('creator@sovranlyip.com');
 
@@ -64,19 +58,30 @@ export default function ConnectHubPage() {
   const [accountStatus, setAccountStatus] = useState<AccountStatus | null>(null);
   const [products, setProducts] = useState<ProductItem[]>([]);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [successMessage, setSuccessMessage] = useState<string | null>(() => {
-    if (typeof window !== 'undefined') {
-      const params = new URLSearchParams(window.location.search);
-      if (params.get('subscription_success')) {
-        return 'Successfully subscribed to platform membership plan!';
-      }
-      if (params.get('returned')) {
-        return 'Returned from Stripe onboarding flow. Fetching latest verification status...';
-      }
-    }
-    return null;
-  });
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [copiedCli, setCopiedCli] = useState<boolean>(false);
+
+  // Read URL search params and local storage on client mount
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      try {
+        const params = new URLSearchParams(window.location.search);
+        const acc = params.get('accountId') || localStorage.getItem('sovranly_stripe_account_id') || '';
+        if (acc) {
+          setAccountId(acc);
+        }
+
+        if (params.get('subscription_success')) {
+          setSuccessMessage('Successfully subscribed to platform membership plan!');
+        } else if (params.get('returned')) {
+          setSuccessMessage('Returned from Stripe onboarding flow. Fetching latest verification status...');
+        }
+      } catch {
+        // ignore
+      }
+    }, 0);
+    return () => clearTimeout(timer);
+  }, []);
 
   // Product creation form states
   const [productName, setProductName] = useState<string>('Exclusive Master Recording License');

@@ -92,7 +92,7 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className="light" suppressHydrationWarning>
-      <body className="antialiased bg-zinc-950 text-zinc-100 min-h-screen font-sans">
+      <body className="antialiased bg-zinc-950 text-zinc-100 min-h-screen font-sans" suppressHydrationWarning>
         {/* Google Analytics Tracking Tag */}
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-ZGGTSS0QFN"

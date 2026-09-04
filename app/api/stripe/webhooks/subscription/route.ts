@@ -66,7 +66,6 @@ export async function POST(req: NextRequest) {
         const subscription = event.data.object as Stripe.Subscription;
 
         // Extract the connected account ID (acct_...) using customer_account
-        // @ts-expect-error customer_account is standard for V2 accounts
         const accountId = subscription.customer_account || subscription.customer;
         const currentPriceId = subscription.items?.data?.[0]?.price?.id;
         const quantity = subscription.items?.data?.[0]?.quantity ?? 1;
@@ -107,7 +106,6 @@ export async function POST(req: NextRequest) {
        */
       case 'customer.subscription.deleted': {
         const subscription = event.data.object as Stripe.Subscription;
-        // @ts-expect-error customer_account is standard for V2 accounts
         const accountId = subscription.customer_account || subscription.customer;
 
         console.log(`[Subscription Deleted] Revoking membership for account: ${accountId}`);

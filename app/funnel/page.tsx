@@ -1,6 +1,6 @@
 'use client';
 import { Button } from '@/components/ui/button';
-import { ArrowRight, ShieldCheck, Zap, Lock } from 'lucide-react';
+import { ArrowRight, ShieldCheck, Coins, Blocks } from 'lucide-react';
 import Link from 'next/link';
 
 export default function LandingPage() {
@@ -34,12 +34,36 @@ export default function LandingPage() {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-20">
           {[
-            { icon: ShieldCheck, title: "Zero Trust Security", desc: "Authenticated and authorized access to all intellectual property." },
-            { icon: Zap, title: "Automated Royalties", desc: "Smart contract-driven payments meant for immediate compensation." },
-            { icon: Lock, title: "Immutable Ownership", desc: "Blockchain-based registry providing definitive proof of creation." },
+            {
+              icon: ShieldCheck,
+              title: "Zero Trust Security",
+              desc: "Authenticated and authorized access to all intellectual property.",
+              color: "text-emerald-400",
+              bgColor: "bg-emerald-500/10 border-emerald-500/20"
+            },
+            {
+              icon: Coins,
+              title: "Automated Royalties",
+              desc: "Smart contract-driven payments meant for immediate compensation.",
+              color: "text-amber-400",
+              bgColor: "bg-amber-500/10 border-amber-500/20"
+            },
+            {
+              icon: Blocks,
+              title: "Immutable Ownership",
+              desc: "Blockchain-based registry providing definitive proof of creation.",
+              color: "text-sky-400",
+              bgColor: "bg-sky-500/10 border-sky-500/20"
+            },
           ].map((feature, i) => (
-            <div key={i} className="p-8 bg-zinc-900 rounded-3xl border border-zinc-800 text-left">
-              <feature.icon className="h-10 w-10 text-emerald-400 mb-4" />
+            <div
+              key={i}
+              id={`funnel-feature-card-${i}`}
+              className="p-8 bg-zinc-900 rounded-3xl border border-zinc-800 text-left transition-all duration-300 ease-out hover:scale-105 hover:border-zinc-700 hover:shadow-xl hover:shadow-black/50 cursor-pointer group"
+            >
+              <div className={`w-14 h-14 rounded-2xl border flex items-center justify-center mb-6 ${feature.bgColor} transition-transform duration-300 group-hover:scale-110`}>
+                <feature.icon className={`h-7 w-7 ${feature.color}`} />
+              </div>
               <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>
               <p className="text-zinc-500">{feature.desc}</p>
             </div>

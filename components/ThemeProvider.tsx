@@ -17,19 +17,7 @@ const ThemeContext = createContext<ThemeContextType>({
 });
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [theme, setThemeState] = useState<Theme>(() => {
-    if (typeof window !== 'undefined') {
-      try {
-        const saved = localStorage.getItem('sovranly_theme') as Theme | null;
-        if (saved === 'dark' || saved === 'light') {
-          return saved;
-        }
-      } catch (e) {
-        // ignore
-      }
-    }
-    return 'light';
-  });
+  const [theme, setThemeState] = useState<Theme>('light');
 
   const applyTheme = (t: Theme) => {
     if (typeof document === 'undefined') return;
@@ -51,11 +39,23 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   };
 
   useEffect(() => {
-    applyTheme(theme);
-  }, [theme]);
+    try {
+      const saved = localStorage.getItem('sovranly_theme') as Theme | null;
+      if (saved === 'dark' || saved === 'light') {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        setThemeState(saved);
+        applyTheme(saved);
+        return;
+      }
+    } catch (e) {
+      // ignore
+    }
+    applyTheme('light');
+  }, []);
 
   const setTheme = (t: Theme) => {
     setThemeState(t);
+    applyTheme(t);
     try {
       localStorage.setItem('sovranly_theme', t);
     } catch (e) {

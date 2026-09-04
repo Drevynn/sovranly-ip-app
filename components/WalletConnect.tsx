@@ -48,23 +48,7 @@ export default function WalletConnect({ onConnect }: { onConnect: (address: stri
   const [isSmartWallet, setIsSmartWallet] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [isSmartModalOpen, setIsSmartModalOpen] = useState(false);
-
-  const [detectedExtension] = useState<string | null>(() => {
-    if (typeof window !== 'undefined') {
-      const win = window as any;
-      if (win.ethereum) {
-        const ethVal = win.ethereum;
-        if (ethVal.isMetaMask) return 'MetaMask';
-        if (ethVal.isCoinbaseWallet) return 'Coinbase Wallet';
-        if (ethVal.isTrust) return 'Trust Wallet';
-        if (ethVal.isBraveWallet) return 'Brave Wallet';
-        return 'Active Provider';
-      }
-      if (win.coinbaseWalletExtension) return 'Coinbase Wallet';
-      if (win.trustWallet) return 'Trust Wallet';
-    }
-    return null;
-  });
+  const [detectedExtension, setDetectedExtension] = useState<string | null>(null);
 
   const [isConnecting, setIsConnecting] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -76,6 +60,23 @@ export default function WalletConnect({ onConnect }: { onConnect: (address: stri
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setMounted(true);
+
+    if (typeof window !== 'undefined') {
+      const win = window as any;
+      if (win.ethereum) {
+        const ethVal = win.ethereum;
+        if (ethVal.isMetaMask) setDetectedExtension('MetaMask');
+        else if (ethVal.isCoinbaseWallet) setDetectedExtension('Coinbase Wallet');
+        else if (ethVal.isTrust) setDetectedExtension('Trust Wallet');
+        else if (ethVal.isBraveWallet) setDetectedExtension('Brave Wallet');
+        else setDetectedExtension('Active Provider');
+      } else if (win.coinbaseWalletExtension) {
+        setDetectedExtension('Coinbase Wallet');
+      } else if (win.trustWallet) {
+        setDetectedExtension('Trust Wallet');
+      }
+    }
+
     const stored = getStoredSmartAccount();
     if (stored) {
       setSmartAccount(stored);

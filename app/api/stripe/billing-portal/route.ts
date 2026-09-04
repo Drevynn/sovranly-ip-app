@@ -45,7 +45,6 @@ export async function POST(req: NextRequest) {
      * Create Billing Portal Session:
      * Note: In V2 accounts, `customer_account: accountId` is passed directly.
      */
-    // @ts-expect-error customer_account is standard for V2 accounts in modern Stripe
     const session = await stripeClient.billingPortal.sessions.create({
       customer_account: accountId,
       return_url: `${origin}/connect?accountId=${accountId}`,

@@ -52,7 +52,6 @@ export async function POST(req: NextRequest) {
      * - refresh_url: Where the user returns if the link expires or needs refresh
      * - return_url: Where the user returns upon finishing the onboarding steps
      */
-    // @ts-expect-error Stripe V2 account links typings in current SDK
     const accountLink = await stripeClient.v2.core.accountLinks.create({
       account: accountId,
       use_case: {

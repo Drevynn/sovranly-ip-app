@@ -11,13 +11,22 @@ interface ThemeToggleProps {
 
 export default function ThemeToggle({ className = '', showLabel = false }: ThemeToggleProps) {
   const { theme, toggleTheme } = useTheme();
-  const isLight = theme === 'light';
+  const [mounted, setMounted] = React.useState(false);
+
+  React.useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setMounted(true);
+  }, []);
+
+  // Use light theme as baseline during SSR/hydration to guarantee 100% HTML parity
+  const isLight = mounted ? theme === 'light' : true;
 
   return (
     <button
       onClick={toggleTheme}
       id="theme-toggle-btn"
       type="button"
+      suppressHydrationWarning
       aria-label={`Switch to ${isLight ? 'dark' : 'light'} mode`}
       title={`Currently in ${isLight ? 'Light' : 'Dark'} mode. Click to toggle ${isLight ? 'Dark' : 'Light'} mode.`}
       className={`relative inline-flex items-center justify-center gap-2 px-3 py-2 rounded-xl border text-xs font-mono font-medium transition-all duration-200 cursor-pointer select-none focus:outline-none focus:ring-2 focus:ring-cyan-500/40 ${

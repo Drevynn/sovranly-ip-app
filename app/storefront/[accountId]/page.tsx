@@ -51,13 +51,19 @@ export default function StorefrontPage({
   const [loading, setLoading] = useState<boolean>(() => Boolean(accountId));
   const [buyingProductId, setBuyingProductId] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [checkoutSuccess, setCheckoutSuccess] = useState<boolean>(() => {
-    if (typeof window !== 'undefined') {
+  const [checkoutSuccess, setCheckoutSuccess] = useState<boolean>(false);
+
+  useEffect(() => {
+    try {
       const searchParams = new URLSearchParams(window.location.search);
-      return searchParams.get('success') === 'true';
+      if (searchParams.get('success') === 'true') {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        setCheckoutSuccess(true);
+      }
+    } catch {
+      // ignore
     }
-    return false;
-  });
+  }, []);
 
   useEffect(() => {
     let ignore = false;

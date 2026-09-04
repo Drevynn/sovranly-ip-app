@@ -76,7 +76,6 @@ export async function POST(req: NextRequest) {
      * Retrieve the full event data from Stripe V2 Core API:
      * Using event.type to determine which requirement or capability changed.
      */
-    // @ts-expect-error Stripe V2 core events typings in current SDK
     const event = await stripeClient.v2.core.events.retrieve(eventId);
 
     console.log(`[Stripe Thin Webhook] Processing event type: ${event.type} (ID: ${event.id})`);
@@ -93,7 +92,6 @@ export async function POST(req: NextRequest) {
 
         // Fetch fresh account details directly from V2 API
         if (accountId) {
-          // @ts-expect-error V2 accounts retrieve
           const account = await stripeClient.v2.core.accounts.retrieve(accountId, {
             include: ['requirements', 'configuration.merchant'],
           });
@@ -131,7 +129,6 @@ export async function POST(req: NextRequest) {
         console.log(`[Merchant Capability Status Updated] Account ID: ${accountId}`);
 
         if (accountId) {
-          // @ts-expect-error V2 accounts retrieve
           const account = await stripeClient.v2.core.accounts.retrieve(accountId, {
             include: ['configuration.merchant'],
           });

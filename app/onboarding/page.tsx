@@ -61,13 +61,9 @@ type TourStep = {
 
 export default function OnboardingVoiceAgent() {
   const { user, isSandboxMode } = useAuth();
-  // Speech Recognition support pre-check
-  const [speechSupported] = useState(() => {
-    if (typeof window !== 'undefined') {
-      return !!((window as any).SpeechRecognition || (window as any).webkitSpeechRecognition);
-    }
-    return false;
-  });
+  // Speech Recognition support pre-check safely initialized for SSR
+  const [speechSupported, setSpeechSupported] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
   // State Declarations
   const [activeTab, setActiveTab] = useState<'voice' | 'subagents' | 'console'>('voice');
@@ -382,11 +378,14 @@ export default function OnboardingVoiceAgent() {
 
   // Setup Speech Web APIs
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setMounted(true);
     if (typeof window !== 'undefined') {
       synthRef.current = window.speechSynthesis;
       
       const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
       if (SpeechRecognition) {
+        setSpeechSupported(true);
         const rec = new SpeechRecognition();
         rec.continuous = false;
         rec.interimResults = true;
@@ -1205,7 +1204,7 @@ export default function OnboardingVoiceAgent() {
                         Speech error: {recognitionError}. Attempting textual recovery.
                       </span>
                     )}
-                    {!speechSupported && (
+                    {mounted && !speechSupported && (
                       <span className="inline-flex items-center gap-1 bg-zinc-900 text-zinc-500 border border-zinc-800 text-[9px] font-mono px-3 py-1 rounded-full select-none">
                         Speech recognition is disabled in standard iframe mode. Use keyboard console.
                       </span>

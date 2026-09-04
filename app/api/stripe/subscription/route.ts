@@ -76,7 +76,6 @@ export async function POST(req: NextRequest) {
      * Note: We specify `customer_account: accountId` (acct_...)
      */
     const session = await stripeClient.checkout.sessions.create({
-      // @ts-expect-error customer_account is standard for V2 accounts in modern Stripe
       customer_account: accountId,
       mode: 'subscription',
       line_items: [

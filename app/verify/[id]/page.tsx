@@ -74,10 +74,14 @@ export default function PublicVerificationPage() {
   const [verificationLogs, setVerificationLogs] = useState<string[]>([]);
   const [currentLogIndex, setCurrentLogIndex] = useState(0);
   const [isMounted, setIsMounted] = useState(false);
+  const [currentUrl, setCurrentUrl] = useState('');
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsMounted(true);
+    if (typeof window !== 'undefined') {
+      setCurrentUrl(window.location.href);
+    }
   }, []);
 
   useEffect(() => {
@@ -198,7 +202,7 @@ export default function PublicVerificationPage() {
           <div className="md:col-span-4 flex flex-col items-center justify-center p-6 bg-zinc-950/50 rounded-2xl border border-zinc-800/40 relative">
             <div className="p-3 bg-white rounded-xl shadow-lg relative group">
               <Image 
-                src={`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(typeof window !== 'undefined' ? window.location.href : '')}`}
+                src={`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(currentUrl)}`}
                 alt="Verification QR Code"
                 width={150}
                 height={150}
@@ -314,7 +318,7 @@ export default function PublicVerificationPage() {
                 <div className="mt-4 pt-3 border-t border-zinc-800/40">
                   <button
                     onClick={() => {
-                      const snippet = `🎵 Music in video: "${asset.title}" by ${permission?.grantorName || 'Artist'}\nCleared via Sovranly IP Instant Permission #${permission?.clearanceCode || id}\nContinuous Verification: ${typeof window !== 'undefined' ? window.location.href : ''}`;
+                      const snippet = `🎵 Music in video: "${asset.title}" by ${permission?.grantorName || 'Artist'}\nCleared via Sovranly IP Instant Permission #${permission?.clearanceCode || id}\nContinuous Verification: ${currentUrl || (typeof window !== 'undefined' ? window.location.href : '')}`;
                       navigator.clipboard.writeText(snippet);
                       setCopiedAttribution(true);
                       setTimeout(() => setCopiedAttribution(false), 2500);
