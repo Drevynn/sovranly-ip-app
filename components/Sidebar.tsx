@@ -1,7 +1,8 @@
 'use client';
 
-import { Gauge, BarChart3, User, Users, FileText, LogOut, ShieldAlert, Scale, Sliders, Mail, X, Presentation, Rocket, Shield, Building2, Brain, ShieldCheck, Database, Globe, Zap, FolderOpen } from 'lucide-react';
+import { Gauge, BarChart3, User, Users, FileText, LogOut, ShieldAlert, Scale, Sliders, Mail, X, Presentation, Rocket, Shield, Building2, Brain, ShieldCheck, Database, Globe, Zap, FolderOpen, CreditCard } from 'lucide-react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useAuth } from './auth/FirebaseProvider';
 import { SovranlyLogo } from '@/components/SovranlyLogo';
 import { motion, AnimatePresence } from 'motion/react';
@@ -138,6 +139,17 @@ export default function Sidebar({
                   </span>
                   <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-teal-950/60 text-teal-400 border border-teal-800/40">85/15</span>
                 </button>
+                <Link 
+                  href="/connect"
+                  onClick={onClose}
+                  className="w-full flex items-center justify-between px-4 py-2.5 rounded-xl text-xs font-semibold transition-all text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900/40 cursor-pointer"
+                >
+                  <span className="flex items-center gap-3">
+                    <CreditCard className="w-4 h-4 text-emerald-400 shrink-0" />
+                    5. Stripe Connect Hub
+                  </span>
+                  <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-emerald-950/60 text-emerald-400 border border-emerald-800/40">V2 Pay</span>
+                </Link>
               </div>
 
               {/* Category 2: Protection & Distribution */}

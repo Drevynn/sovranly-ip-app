@@ -29,6 +29,13 @@ export function PublicPagesHamburgerMenu({ isOpen, onClose }: PublicPagesHamburg
 
   const publicPages = [
     {
+      title: "Stripe Connect & Storefront Hub",
+      path: "/connect",
+      description: "Manage Stripe V2 connected accounts, automated onboarding, creator storefronts, platform subscriptions, and billing portal.",
+      icon: <DollarSign className="w-5 h-5 text-emerald-400" />,
+      tag: "Payments & Connect"
+    },
+    {
       title: "Transparent Pricing & Tiers",
       path: "/pricing",
       description: "Complete public disclosure of Sovranly IP subscription tiers, creator royalty splits (85/15), and zero-trust verification fees.",
