@@ -14,7 +14,9 @@ import {
   X, 
   Compass, 
   Cpu,
-  BadgeCheck
+  BadgeCheck,
+  CreditCard,
+  FileCode
 } from 'lucide-react';
 import Link from 'next/link';
 import ThemeToggle from '@/components/ThemeToggle';
@@ -27,13 +29,16 @@ interface PublicPagesHamburgerMenuProps {
 export function PublicPagesHamburgerMenu({ isOpen, onClose }: PublicPagesHamburgerMenuProps) {
   if (!isOpen) return null;
 
+  const customerPortalUrl = process.env.NEXT_PUBLIC_CUSTOMER_PORTAL_URL || '/pricing';
+
   const publicPages = [
     {
-      title: "Stripe Connect & Storefront Hub",
-      path: "/connect",
-      description: "Manage Stripe V2 connected accounts, automated onboarding, creator storefronts, platform subscriptions, and billing portal.",
-      icon: <DollarSign className="w-5 h-5 text-emerald-400" />,
-      tag: "Payments & Connect"
+      title: "Customer Billing Portal",
+      path: customerPortalUrl,
+      description: "Direct self-service customer billing portal to update payment methods, download invoices, and manage subscriptions.",
+      icon: <CreditCard className="w-5 h-5 text-emerald-400" />,
+      tag: "Billing & Invoices",
+      isExternal: true
     },
     {
       title: "Transparent Pricing & Tiers",
@@ -55,6 +60,13 @@ export function PublicPagesHamburgerMenu({ isOpen, onClose }: PublicPagesHamburg
       description: "Our vision for empowering creators, eliminating AI scraping, and securing zero-trust blockchain music & art rights.",
       icon: <Globe className="w-5 h-5 text-blue-400" />,
       tag: "Company"
+    },
+    {
+      title: "Official Developer Documentation",
+      path: "/docs",
+      description: "Architecture blueprints, Solidity smart contracts, REST API reference, and Zero Trust C2PA security specifications.",
+      icon: <FileCode className="w-5 h-5 text-cyan-400" />,
+      tag: "Developer Docs"
     },
     {
       title: "Knowledge Wiki & Technical Docs",
@@ -151,36 +163,62 @@ export function PublicPagesHamburgerMenu({ isOpen, onClose }: PublicPagesHamburg
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-2">
-            {publicPages.map((page, idx) => (
-              <Link
-                key={idx}
-                href={page.path}
-                onClick={onClose}
-                className="group p-4 bg-zinc-900/40 hover:bg-zinc-900 border border-zinc-800 hover:border-cyan-500/40 rounded-2xl transition-all duration-200 flex flex-col justify-between shadow-sm hover:shadow-md"
-              >
-                <div>
-                  <div className="flex items-center justify-between mb-2">
-                    <div className="p-2 rounded-xl bg-zinc-950 border border-zinc-800 group-hover:border-cyan-500/30 transition-colors">
-                      {page.icon}
+            {publicPages.map((page, idx) => {
+              const isExt = page.path.startsWith('http');
+              const content = (
+                <>
+                  <div>
+                    <div className="flex items-center justify-between mb-2">
+                      <div className="p-2 rounded-xl bg-zinc-950 border border-zinc-800 group-hover:border-cyan-500/30 transition-colors">
+                        {page.icon}
+                      </div>
+                      <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-zinc-800 text-zinc-300 group-hover:bg-cyan-950/50 group-hover:text-cyan-300 transition-colors">
+                        {page.tag}
+                      </span>
                     </div>
-                    <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-zinc-800 text-zinc-300 group-hover:bg-cyan-950/50 group-hover:text-cyan-300 transition-colors">
-                      {page.tag}
+                    <h3 className="text-sm font-bold text-white group-hover:text-cyan-400 transition-colors flex items-center justify-between">
+                      {page.title}
+                      <ExternalLink className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity text-cyan-400" />
+                    </h3>
+                    <p className="text-xs text-zinc-400 mt-1.5 leading-relaxed">
+                      {page.description}
+                    </p>
+                  </div>
+                  <div className="mt-4 pt-3 border-t border-zinc-800/60 flex items-center justify-between text-[11px] font-mono text-cyan-400">
+                    <span className="truncate">{page.path}</span>
+                    <span className="font-bold underline group-hover:translate-x-0.5 transition-transform">
+                      {isExt ? 'Open Portal ↗' : 'Visit Page →'}
                     </span>
                   </div>
-                  <h3 className="text-sm font-bold text-white group-hover:text-cyan-400 transition-colors flex items-center justify-between">
-                    {page.title}
-                    <ExternalLink className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity text-cyan-400" />
-                  </h3>
-                  <p className="text-xs text-zinc-400 mt-1.5 leading-relaxed">
-                    {page.description}
-                  </p>
-                </div>
-                <div className="mt-4 pt-3 border-t border-zinc-800/60 flex items-center justify-between text-[11px] font-mono text-cyan-400">
-                  <span className="truncate">{page.path}</span>
-                  <span className="font-bold underline group-hover:translate-x-0.5 transition-transform">Visit Page &rarr;</span>
-                </div>
-              </Link>
-            ))}
+                </>
+              );
+
+              if (isExt) {
+                return (
+                  <a
+                    key={idx}
+                    href={page.path}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={onClose}
+                    className="group p-4 bg-zinc-900/40 hover:bg-zinc-900 border border-zinc-800 hover:border-cyan-500/40 rounded-2xl transition-all duration-200 flex flex-col justify-between shadow-sm hover:shadow-md cursor-pointer"
+                  >
+                    {content}
+                  </a>
+                );
+              }
+
+              return (
+                <Link
+                  key={idx}
+                  href={page.path}
+                  onClick={onClose}
+                  className="group p-4 bg-zinc-900/40 hover:bg-zinc-900 border border-zinc-800 hover:border-cyan-500/40 rounded-2xl transition-all duration-200 flex flex-col justify-between shadow-sm hover:shadow-md"
+                >
+                  {content}
+                </Link>
+              );
+            })}
           </div>
         </div>
 

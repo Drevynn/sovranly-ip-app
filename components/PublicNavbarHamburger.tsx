@@ -2,7 +2,7 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
-import { Menu, X, Home, Info, HelpCircle, FileText, Shield, DollarSign, BookOpen, Compass } from 'lucide-react';
+import { Menu, X, Home, Info, HelpCircle, FileText, Shield, DollarSign, BookOpen, Compass, FileCode } from 'lucide-react';
 import ThemeToggle from '@/components/ThemeToggle';
 
 export function PublicNavbarHamburger() {
@@ -22,12 +22,13 @@ export function PublicNavbarHamburger() {
 
   const publicLinks = [
     { name: 'Home', href: '/', icon: <Home className="w-4 h-4 text-cyan-400" /> },
+    { name: 'Documentation', href: '/docs', icon: <FileCode className="w-4 h-4 text-cyan-400" /> },
+    { name: 'Knowledge Wiki', href: '/wiki', icon: <BookOpen className="w-4 h-4 text-violet-400" /> },
+    { name: 'Pricing', href: '/pricing', icon: <DollarSign className="w-4 h-4 text-emerald-400" /> },
     { name: 'About', href: '/about', icon: <Info className="w-4 h-4 text-blue-400" /> },
     { name: 'FAQ', href: '/faq', icon: <HelpCircle className="w-4 h-4 text-amber-400" /> },
-    { name: 'Pricing', href: '/pricing', icon: <DollarSign className="w-4 h-4 text-emerald-400" /> },
     { name: 'Terms of Service', href: '/terms', icon: <FileText className="w-4 h-4 text-rose-400" /> },
     { name: 'Privacy Policy', href: '/privacy', icon: <Shield className="w-4 h-4 text-teal-400" /> },
-    { name: 'Knowledge Wiki', href: '/wiki', icon: <BookOpen className="w-4 h-4 text-violet-400" /> },
   ];
 
   return (
