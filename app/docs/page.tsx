@@ -40,6 +40,7 @@ import { Input } from '@/components/ui/input';
 import { PublicNavbarHamburger } from '@/components/PublicNavbarHamburger';
 import NewsletterSignup from '@/components/NewsletterSignup';
 import { SovranlyLogo } from '@/components/SovranlyLogo';
+import ApiPlayground from '@/components/ApiPlayground';
 
 type CategoryId = 'all' | 'overview' | 'quickstart' | 'contracts' | 'api' | 'security' | 'legal' | 'sdk';
 
@@ -57,12 +58,6 @@ export default function DocumentationPage() {
   const [selectedCategory, setSelectedCategory] = useState<CategoryId>('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [copiedCodeId, setCopiedCodeId] = useState<string | null>(null);
-  
-  // Interactive API playground states
-  const [apiActiveLang, setApiActiveLang] = useState<'curl' | 'ts' | 'python'>('curl');
-  const [selectedEndpointIndex, setSelectedEndpointIndex] = useState(0);
-  const [simulatedResponse, setSimulatedResponse] = useState<string | null>(null);
-  const [isSimulating, setIsSimulating] = useState(false);
 
   const copyToClipboard = (text: string, id: string) => {
     navigator.clipboard.writeText(text);
@@ -80,142 +75,6 @@ export default function DocumentationPage() {
     { id: 'legal', label: 'Licensing & Splits', icon: <Scale className="w-4 h-4 text-rose-400" />, count: 1 },
     { id: 'sdk', label: 'SDK & Webhooks', icon: <Code className="w-4 h-4 text-violet-400" />, count: 1 },
   ];
-
-  const apiEndpoints = [
-    {
-      method: 'POST',
-      path: '/api/assets',
-      title: 'Register IP Asset',
-      description: 'Ingest audio or artwork metadata, generate SHA-256 fingerprint, and record creator ownership.',
-      payload: JSON.stringify({
-        title: "Sovereign Symphony No. 1",
-        creator: "Duane & Co.",
-        category: "Master Recording",
-        sha256: "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-        syncRateUsd: 450,
-        commercialUse: true
-      }, null, 2),
-      mockResponse: {
-        success: true,
-        assetId: "sov-asset-99827",
-        fingerprint: "0xe3b0c442...991b7852b855",
-        status: "NOTARIZED",
-        verificationUrl: "https://www.sovranlyip.com/verify/sov-asset-99827",
-        timestamp: "2026-09-11T19:24:00Z",
-        splitProtocol: {
-          creatorSharePercent: 85,
-          protocolFeePercent: 15
-        }
-      }
-    },
-    {
-      method: 'GET',
-      path: '/api/assets',
-      title: 'List Registered Catalog',
-      description: 'Query verified creator assets, on-chain provenance records, and sync availability.',
-      payload: null,
-      mockResponse: {
-        success: true,
-        count: 2,
-        assets: [
-          {
-            id: "sov-asset-101",
-            title: "Cyberpunk Horizon (Original Mix)",
-            creator: "Sovranly Collective",
-            status: "VERIFIED",
-            fingerprint: "0x4a9b...77f1",
-            royaltySplit: "85/15"
-          },
-          {
-            id: "sov-asset-102",
-            title: "Zero Trust Visual Identity 4K",
-            creator: "Duane",
-            status: "VERIFIED",
-            fingerprint: "0x89e2...001c",
-            royaltySplit: "85/15"
-          }
-        ]
-      }
-    },
-    {
-      method: 'POST',
-      path: '/api/notarization',
-      title: 'Cryptographic Notarization',
-      description: 'Submit raw content hash to generate an immutable proof-of-existence timestamp.',
-      payload: JSON.stringify({
-        contentHash: "8f434346648f6b96df89dda901c5176b10a6d83961dd3c1ac88b59b2dc327aa4",
-        assetTitle: "Zero Trust Architecture Audio Master",
-        metadata: {
-          isrc: "US-SVR-26-00014",
-          bpm: 128,
-          key: "C Minor"
-        }
-      }, null, 2),
-      mockResponse: {
-        success: true,
-        notarizationId: "ntz-2026-8819",
-        blockNumber: 19842031,
-        txHash: "0x7719ab23de4190cbb9182304918230918230198230198230198230198230abcd",
-        timestamp: "2026-09-11T19:25:12Z",
-        antiScrapingC2PAAttached: true
-      }
-    },
-    {
-      method: 'POST',
-      path: '/api/agreements',
-      title: 'Generate Digital Sync Compact',
-      description: 'Produce a cryptographically signed licensing agreement with customized sync clauses.',
-      payload: JSON.stringify({
-        assetId: "sov-asset-99827",
-        licenseeName: "Vanguard Media Productions LLC",
-        licenseType: "Commercial Sync (Broadcast & Digital)",
-        termYears: 3,
-        feeUsd: 1250,
-        aiTrainingProhibited: true
-      }, null, 2),
-      mockResponse: {
-        success: true,
-        agreementId: "agr-sync-7712",
-        status: "EXECUTED_LOCKED",
-        pdfCertificateUrl: "/api/certificates/agr-sync-7712.pdf",
-        clausesEnforced: [
-          "Zero AI Ingestion Guarantee",
-          "85/15 Instant Royalty Routing",
-          "Worldwide Non-Exclusive Synchronization"
-        ]
-      }
-    },
-    {
-      method: 'GET',
-      path: '/api/certificates/verify/:id',
-      title: 'Verify Asset Authenticity',
-      description: 'Query cryptographic proof-of-existence, mint hashes, and smart contract verification state.',
-      payload: JSON.stringify({
-        certificateId: "sov-cert-7712",
-        verifyOnChain: true
-      }, null, 2),
-      mockResponse: {
-        verified: true,
-        assetId: "sov-asset-99827",
-        fingerprint: "0x89e27c...001c",
-        notarizationTimestamp: "2026-09-11T19:25:12Z",
-        status: "AUTHENTICATED_IMMUTABLE",
-        royaltySplit: {
-          creatorShare: "85%",
-          protocolOperations: "15%"
-        }
-      }
-    }
-  ];
-
-  const handleSimulateApi = () => {
-    setIsSimulating(true);
-    setSimulatedResponse(null);
-    setTimeout(() => {
-      setSimulatedResponse(JSON.stringify(apiEndpoints[selectedEndpointIndex].mockResponse, null, 2));
-      setIsSimulating(false);
-    }, 600);
-  };
 
   const docSections: DocSection[] = useMemo(() => [
     {
@@ -276,7 +135,7 @@ export default function DocumentationPage() {
       title: '2. Quickstart Guide: Protecting Your First Asset',
       badge: '5-Minute Workflow',
       description: 'Step-by-step walkthrough to upload an original piece of IP, generate cryptographic verification, and initiate instant sync sales.',
-      tags: ['quickstart', 'onboarding', 'tutorial', 'verification', 'licensing'],
+      tags: ['quickstart', 'onboarding', 'tutorial', 'verification', 'paylinks'],
       content: (
         <div className="space-y-6 text-zinc-300 text-sm leading-relaxed">
           <div className="space-y-4">
@@ -321,9 +180,9 @@ export default function DocumentationPage() {
                 04
               </span>
               <div className="space-y-1">
-                <h5 className="font-bold text-white text-sm">Activate Public Verification &amp; Direct Licensing</h5>
+                <h5 className="font-bold text-white text-sm">Activate Instant PayLinks &amp; Public Verification</h5>
                 <p className="text-xs text-zinc-400">
-                  Share your public verification link (<code className="text-cyan-300 font-mono text-[11px]">/verify/[assetId]</code>) and provide verified licensing terms directly to music supervisors, game developers, or video editors for rapid settlement.
+                  Share your public verification link (<code className="text-cyan-300 font-mono text-[11px]">/verify/[assetId]</code>) and send direct PayLinks directly to music supervisors, game developers, or video editors for one-click settlement.
                 </p>
               </div>
             </div>
@@ -407,7 +266,7 @@ function splitPayment(uint256 assetId) external payable nonReentrant;`}</pre>
       title: '4. REST API & Endpoint Reference',
       badge: 'HTTP / JSON APIs',
       description: 'Complete documentation of server endpoints for programmatic catalog integration, notarization, and verification.',
-      tags: ['api', 'rest', 'endpoints', 'json', 'certificates', 'verification'],
+      tags: ['api', 'rest', 'endpoints', 'json', 'certificates', 'paylinks'],
       content: (
         <div className="space-y-6 text-zinc-300 text-sm leading-relaxed">
           <p>
@@ -509,7 +368,7 @@ function splitPayment(uint256 assetId) external payable nonReentrant;`}</pre>
               <div className="space-y-1">
                 <h5 className="font-bold text-white text-xs uppercase">85 / 15 Upfront Sync Fee Division</h5>
                 <p className="text-xs text-zinc-400">
-                  When a licensee purchases a synchronization license via fiat or crypto checkout, 85% goes directly to the creator without escrow delays. The remaining 15% covers merchant processing, hosting, and blockchain notarization.
+                  When a licensee purchases a synchronization license via direct PayLink or crypto checkout, 85% goes directly to the creator without escrow delays. The remaining 15% covers merchant processing, hosting, and blockchain notarization.
                 </p>
               </div>
             </div>
@@ -586,8 +445,6 @@ export async function verifyAssetFingerprint(assetId: string) {
       return matchesCategory && matchesSearch;
     });
   }, [selectedCategory, searchQuery, docSections]);
-
-  const activeEndpoint = apiEndpoints[selectedEndpointIndex];
 
   return (
     <div className="min-h-screen bg-black text-zinc-100 font-sans selection:bg-cyan-500/20 selection:text-cyan-300">
@@ -760,190 +617,8 @@ export async function verifyAssetFingerprint(assetId: string) {
           <div className="lg:col-span-9 space-y-12">
 
             {/* Live Interactive API Simulator / Sandbox */}
-            <div id="interactive-api-runner" className="p-6 md:p-8 rounded-3xl bg-gradient-to-br from-zinc-950 via-zinc-900/40 to-black border border-cyan-500/30 shadow-2xl space-y-6">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-zinc-900 pb-5">
-                <div>
-                  <div className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full bg-teal-950/60 border border-teal-500/30 text-teal-400 text-[10px] font-mono uppercase tracking-wider mb-1">
-                    <Terminal className="w-3 h-3" />
-                    <span>Interactive API Playground</span>
-                  </div>
-                  <h3 className="text-xl font-bold text-white tracking-tight">
-                    Live REST Endpoint Simulator
-                  </h3>
-                  <p className="text-xs text-zinc-400 mt-1">
-                    Select an endpoint, inspect the request payload, and execute a simulated call to preview live response headers.
-                  </p>
-                </div>
-
-                {/* Language Switcher */}
-                <div className="flex items-center gap-1 bg-zinc-900 p-1 rounded-xl border border-zinc-800">
-                  <button
-                    onClick={() => setApiActiveLang('curl')}
-                    className={`px-2.5 py-1 rounded-lg text-xs font-mono font-bold transition-all cursor-pointer ${
-                      apiActiveLang === 'curl' ? 'bg-cyan-500 text-black shadow-sm' : 'text-zinc-400 hover:text-white'
-                    }`}
-                  >
-                    cURL
-                  </button>
-                  <button
-                    onClick={() => setApiActiveLang('ts')}
-                    className={`px-2.5 py-1 rounded-lg text-xs font-mono font-bold transition-all cursor-pointer ${
-                      apiActiveLang === 'ts' ? 'bg-cyan-500 text-black shadow-sm' : 'text-zinc-400 hover:text-white'
-                    }`}
-                  >
-                    TypeScript
-                  </button>
-                  <button
-                    onClick={() => setApiActiveLang('python')}
-                    className={`px-2.5 py-1 rounded-lg text-xs font-mono font-bold transition-all cursor-pointer ${
-                      apiActiveLang === 'python' ? 'bg-cyan-500 text-black shadow-sm' : 'text-zinc-400 hover:text-white'
-                    }`}
-                  >
-                    Python
-                  </button>
-                </div>
-              </div>
-
-              {/* Endpoint Selector Tabs */}
-              <div className="flex flex-wrap gap-2">
-                {apiEndpoints.map((ep, idx) => (
-                  <button
-                    key={idx}
-                    onClick={() => {
-                      setSelectedEndpointIndex(idx);
-                      setSimulatedResponse(null);
-                    }}
-                    className={`flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-mono transition-all cursor-pointer border ${
-                      selectedEndpointIndex === idx
-                        ? 'bg-zinc-900 border-cyan-500 text-white font-bold shadow-sm'
-                        : 'bg-zinc-950 border-zinc-850 text-zinc-400 hover:text-zinc-200 hover:border-zinc-700'
-                    }`}
-                  >
-                    <span className={`px-1.5 py-0.5 rounded text-[10px] font-bold ${
-                      ep.method === 'POST' ? 'bg-cyan-950 text-cyan-400 border border-cyan-800/50' : 'bg-emerald-950 text-emerald-400 border border-emerald-800/50'
-                    }`}>
-                      {ep.method}
-                    </span>
-                    <span>{ep.path}</span>
-                  </button>
-                ))}
-              </div>
-
-              {/* Selected Endpoint Description */}
-              <div className="space-y-1 bg-zinc-950/60 p-3.5 rounded-xl border border-zinc-900">
-                <div className="flex items-center gap-2">
-                  <span className="font-bold text-white text-xs">{activeEndpoint.title}</span>
-                  <span className="text-[10px] font-mono text-zinc-500">{activeEndpoint.method} {activeEndpoint.path}</span>
-                </div>
-                <p className="text-xs text-zinc-400 leading-relaxed">{activeEndpoint.description}</p>
-              </div>
-
-              {/* Request Code Block */}
-              <div className="space-y-2">
-                <div className="flex items-center justify-between text-xs font-mono">
-                  <span className="text-zinc-400 uppercase tracking-wider text-[10px]">Request Snippet</span>
-                  <button
-                    onClick={() => {
-                      let code = '';
-                      if (apiActiveLang === 'curl') {
-                        code = `curl -X ${activeEndpoint.method} https://www.sovranlyip.com${activeEndpoint.path} \\
-  -H "Authorization: Bearer <AUTH_TOKEN>" \\
-  -H "Content-Type: application/json"${activeEndpoint.payload ? ` \\\n  -d '${activeEndpoint.payload.replace(/\n/g, ' ')}'` : ''}`;
-                      } else if (apiActiveLang === 'ts') {
-                        code = `const res = await fetch('https://www.sovranlyip.com${activeEndpoint.path}', {
-  method: '${activeEndpoint.method}',
-  headers: {
-    'Authorization': 'Bearer <AUTH_TOKEN>',
-    'Content-Type': 'application/json'
-  }${activeEndpoint.payload ? `,\n  body: JSON.stringify(${activeEndpoint.payload})` : ''}
-});
-const data = await res.json();`;
-                      } else {
-                        code = `import requests
-
-headers = {
-  "Authorization": "Bearer <AUTH_TOKEN>",
-  "Content-Type": "application/json"
-}
-response = requests.${activeEndpoint.method.toLowerCase()}("https://www.sovranlyip.com${activeEndpoint.path}", headers=headers${activeEndpoint.payload ? `, json=${activeEndpoint.payload}` : ''})
-print(response.json())`;
-                      }
-                      copyToClipboard(code, 'api-runner-copy');
-                    }}
-                    className="flex items-center gap-1 text-cyan-400 hover:text-cyan-300 transition-colors"
-                  >
-                    {copiedCodeId === 'api-runner-copy' ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
-                    {copiedCodeId === 'api-runner-copy' ? 'Copied' : 'Copy'}
-                  </button>
-                </div>
-
-                <div className="p-4 rounded-xl bg-zinc-950 border border-zinc-800 font-mono text-xs text-zinc-300 overflow-x-auto">
-                  {apiActiveLang === 'curl' && (
-                    <pre>{`curl -X ${activeEndpoint.method} https://www.sovranlyip.com${activeEndpoint.path} \\
-  -H "Authorization: Bearer <AUTH_TOKEN>" \\
-  -H "Content-Type: application/json"${activeEndpoint.payload ? ` \\\n  -d '${activeEndpoint.payload}'` : ''}`}</pre>
-                  )}
-                  {apiActiveLang === 'ts' && (
-                    <pre>{`const res = await fetch('https://www.sovranlyip.com${activeEndpoint.path}', {
-  method: '${activeEndpoint.method}',
-  headers: {
-    'Authorization': 'Bearer <AUTH_TOKEN>',
-    'Content-Type': 'application/json'
-  }${activeEndpoint.payload ? `,\n  body: JSON.stringify(${activeEndpoint.payload})` : ''}
-});
-const data = await res.json();`}</pre>
-                  )}
-                  {apiActiveLang === 'python' && (
-                    <pre>{`import requests
-
-headers = {
-  "Authorization": "Bearer <AUTH_TOKEN>",
-  "Content-Type": "application/json"
-}
-response = requests.${activeEndpoint.method.toLowerCase()}(
-  "https://www.sovranlyip.com${activeEndpoint.path}",
-  headers=headers${activeEndpoint.payload ? `,\n  json=${activeEndpoint.payload}` : ''}
-)
-print(response.json())`}</pre>
-                  )}
-                </div>
-              </div>
-
-              {/* Execution Action Bar */}
-              <div className="flex items-center justify-between pt-2">
-                <Button
-                  onClick={handleSimulateApi}
-                  disabled={isSimulating}
-                  className="bg-cyan-500 hover:bg-cyan-400 text-black font-bold font-mono text-xs px-5 py-2.5 rounded-xl flex items-center gap-2 cursor-pointer shadow-lg shadow-cyan-950/50"
-                >
-                  <Play className={`w-3.5 h-3.5 fill-black ${isSimulating ? 'animate-spin' : ''}`} />
-                  {isSimulating ? 'Executing Simulated Call...' : 'Execute Request (Test Runner)'}
-                </Button>
-
-                <div className="text-[11px] font-mono text-zinc-500 hidden sm:block">
-                  Status: <span className="text-emerald-400">200 OK</span> • Latency: <span className="text-cyan-400">32ms</span>
-                </div>
-              </div>
-
-              {/* Response Viewer */}
-              {simulatedResponse && (
-                <div className="space-y-2 animate-in fade-in slide-in-from-top-2 duration-300">
-                  <div className="flex items-center justify-between text-xs font-mono">
-                    <span className="text-emerald-400 font-bold flex items-center gap-1.5">
-                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" /> Response Payload (JSON)
-                    </span>
-                    <button
-                      onClick={() => copyToClipboard(simulatedResponse, 'resp-copy')}
-                      className="text-xs text-zinc-400 hover:text-white"
-                    >
-                      {copiedCodeId === 'resp-copy' ? 'Copied' : 'Copy Response'}
-                    </button>
-                  </div>
-                  <div className="p-4 rounded-xl bg-zinc-950 border border-emerald-500/30 font-mono text-xs text-emerald-300 overflow-x-auto shadow-inner">
-                    <pre>{simulatedResponse}</pre>
-                  </div>
-                </div>
-              )}
+            <div id="interactive-api-runner">
+              <ApiPlayground />
             </div>
 
             {/* Filtered Documentation Sections */}

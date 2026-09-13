@@ -16,7 +16,8 @@ import {
   Cpu,
   BadgeCheck,
   CreditCard,
-  FileCode
+  FileCode,
+  Terminal
 } from 'lucide-react';
 import Link from 'next/link';
 import ThemeToggle from '@/components/ThemeToggle';
@@ -32,6 +33,13 @@ export function PublicPagesHamburgerMenu({ isOpen, onClose }: PublicPagesHamburg
   const customerPortalUrl = process.env.NEXT_PUBLIC_CUSTOMER_PORTAL_URL || '/pricing';
 
   const publicPages = [
+    {
+      title: "Pay Links & Storefront Hub",
+      path: "/connect",
+      description: "Manage creator payment links, custom checkout URLs, storefront product licensing, and sovereign settlements.",
+      icon: <DollarSign className="w-5 h-5 text-emerald-400" />,
+      tag: "Pay Links & Store"
+    },
     {
       title: "Customer Billing Portal",
       path: customerPortalUrl,
@@ -67,6 +75,13 @@ export function PublicPagesHamburgerMenu({ isOpen, onClose }: PublicPagesHamburg
       description: "Architecture blueprints, Solidity smart contracts, REST API reference, and Zero Trust C2PA security specifications.",
       icon: <FileCode className="w-5 h-5 text-cyan-400" />,
       tag: "Developer Docs"
+    },
+    {
+      title: "Interactive API Playground",
+      path: "/playground",
+      description: "Live test runner for authenticated POST and GET requests to Sovranly IP endpoints with real-time JSON formatting.",
+      icon: <Terminal className="w-5 h-5 text-teal-400" />,
+      tag: "API Sandbox"
     },
     {
       title: "Knowledge Wiki & Technical Docs",

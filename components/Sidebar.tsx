@@ -1,6 +1,6 @@
 'use client';
 
-import { Gauge, BarChart3, User, Users, FileText, LogOut, ShieldAlert, Scale, Sliders, Mail, X, Presentation, Rocket, Shield, Building2, Brain, ShieldCheck, Database, Globe, Zap, FolderOpen, CreditCard, FileCode } from 'lucide-react';
+import { Gauge, BarChart3, User, Users, FileText, LogOut, ShieldAlert, Scale, Sliders, Mail, X, Presentation, Rocket, Shield, Building2, Brain, ShieldCheck, Database, Globe, Zap, FolderOpen, CreditCard, FileCode, Terminal } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useAuth } from './auth/FirebaseProvider';
@@ -139,6 +139,17 @@ export default function Sidebar({
                   </span>
                   <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-teal-950/60 text-teal-400 border border-teal-800/40">85/15</span>
                 </button>
+                <Link 
+                  href="/connect"
+                  onClick={onClose}
+                  className="w-full flex items-center justify-between px-4 py-2.5 rounded-xl text-xs font-semibold transition-all text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900/40 cursor-pointer"
+                >
+                  <span className="flex items-center gap-3">
+                    <CreditCard className="w-4 h-4 text-emerald-400 shrink-0" />
+                    5. Pay Links &amp; Checkout
+                  </span>
+                  <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-emerald-950/60 text-emerald-400 border border-emerald-800/40">Pay Links</span>
+                </Link>
               </div>
 
               {/* Category 2: Protection & Distribution */}
@@ -246,6 +257,17 @@ export default function Sidebar({
                     Documentation Hub
                   </span>
                   <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-cyan-950/60 text-cyan-400 border border-cyan-800/40 group-hover:border-cyan-500/50">Docs ↗</span>
+                </Link>
+                <Link 
+                  href="/playground"
+                  onClick={onClose}
+                  className="w-full flex items-center justify-between px-4 py-2.5 rounded-xl text-xs font-semibold transition-all text-zinc-400 hover:text-white hover:bg-zinc-900/40 cursor-pointer group"
+                >
+                  <span className="flex items-center gap-3">
+                    <Terminal className="w-4 h-4 text-teal-400 shrink-0" />
+                    API Playground
+                  </span>
+                  <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-teal-950/60 text-teal-400 border border-teal-800/40 group-hover:border-teal-500/50">Test ↗</span>
                 </Link>
               </div>
             </div>
