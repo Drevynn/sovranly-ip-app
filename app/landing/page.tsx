@@ -37,8 +37,8 @@ export default function LandingPage() {
 
       <main className="max-w-4xl mx-auto space-y-16">
         <section className="text-center space-y-6">
-          {/* Futuristic CSS-based Emblem/Shield with smooth infinite looping motion */}
-          <div className="relative group w-80 h-80 md:w-96 md:h-96 mx-auto mb-6 flex items-center justify-center select-none">
+          {/* Futuristic CSS-based Emblem/Shield with smooth infinite looping motion - Blends into background */}
+          <div className="relative group w-80 h-80 md:w-96 md:h-96 mx-auto mb-6 flex items-center justify-center select-none [mask-image:radial-gradient(circle_at_center,black_68%,transparent_100%)] [-webkit-mask-image:radial-gradient(circle_at_center,black_68%,transparent_100%)]">
             {/* Ambient glows */}
             <motion.div 
               animate={{

@@ -24,8 +24,7 @@ import {
   CheckCircle2,
   Share2,
   ListOrdered,
-  Layers,
-  FileCode
+  Layers
 } from 'lucide-react';
 import Link from 'next/link';
 import SlideStack from '@/components/SlideStack';
@@ -112,8 +111,8 @@ export default function HomePage() {
       {/* Hero Section */}
       <main className="relative max-w-7xl mx-auto px-6 py-20 md:py-32 space-y-36">
         <section className="relative text-center space-y-10 max-w-5xl mx-auto">
-          {/* Sovereign IP Emblem Logo Hero Display */}
-          <div className="relative group w-64 h-64 sm:w-80 sm:h-80 md:w-[380px] md:h-[380px] mx-auto mb-6 flex items-center justify-center select-none">
+          {/* Sovereign IP Emblem Logo Hero Display - Feathers smoothly into background */}
+          <div className="relative group w-64 h-64 sm:w-80 sm:h-80 md:w-[380px] md:h-[380px] mx-auto mb-6 flex items-center justify-center select-none [mask-image:radial-gradient(circle_at_center,black_68%,transparent_100%)] [-webkit-mask-image:radial-gradient(circle_at_center,black_68%,transparent_100%)]">
             {/* Multi-layer animated backlight glow that diffuses into ambient darkness */}
             <motion.div 
               animate={{
@@ -419,19 +418,14 @@ export default function HomePage() {
               <div className="inline-flex p-3 bg-violet-950/30 border border-violet-800/30 rounded-2xl mb-6">
                 <BookOpen className="h-6 w-6 text-violet-400" />
               </div>
-              <h4 className="text-2xl font-bold text-white mb-2">Docs &amp; Wiki Center</h4>
+              <h4 className="text-2xl font-bold text-white mb-2">Wiki &amp; FAQ Center</h4>
               <p className="text-sm text-zinc-400 leading-relaxed max-w-sm mb-6">
-                Dive deep into official technical documentation, REST APIs, Solidity smart contracts, and regulatory compliance checklists.
+                Dive deep into documentation, regulatory compliance checklists, and technical blueprints describing how Sovranly IP works.
               </p>
             </div>
-            <div className="flex flex-col sm:flex-row gap-2.5 w-full">
-              <Button asChild className="flex-1 bg-cyan-500 hover:bg-cyan-400 text-black font-bold rounded-xl py-5 shadow-lg shadow-cyan-950/40">
-                <Link href="/docs">View Docs <FileCode className="ml-2 w-4 h-4"/></Link>
-              </Button>
-              <Button asChild variant="secondary" className="flex-1 bg-zinc-800 hover:bg-zinc-700 text-zinc-100 rounded-xl py-5">
-                <Link href="/wiki">Wiki <ExternalLink className="ml-2 w-4 h-4"/></Link>
-              </Button>
-            </div>
+            <Button asChild variant="secondary" className="w-full bg-zinc-800 hover:bg-zinc-700 text-zinc-100 rounded-xl py-5">
+              <Link href="/wiki">Browse Sovranly Wiki <ExternalLink className="ml-2 w-4 h-4"/></Link>
+            </Button>
           </Card>
         </section>
 

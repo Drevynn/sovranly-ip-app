@@ -15,9 +15,7 @@ import {
   Compass, 
   Cpu,
   BadgeCheck,
-  CreditCard,
-  FileCode,
-  Terminal
+  CreditCard
 } from 'lucide-react';
 import Link from 'next/link';
 import ThemeToggle from '@/components/ThemeToggle';
@@ -30,7 +28,7 @@ interface PublicPagesHamburgerMenuProps {
 export function PublicPagesHamburgerMenu({ isOpen, onClose }: PublicPagesHamburgerMenuProps) {
   if (!isOpen) return null;
 
-  const customerPortalUrl = process.env.NEXT_PUBLIC_CUSTOMER_PORTAL_URL || '/pricing';
+  const customerPortalUrl = process.env.NEXT_PUBLIC_STRIPE_CUSTOMER_PORTAL_URL || 'https://billing.stripe.com/p/login/9B66oHdl8cplfpq1BV2Ji00';
 
   const publicPages = [
     {
@@ -41,9 +39,9 @@ export function PublicPagesHamburgerMenu({ isOpen, onClose }: PublicPagesHamburg
       tag: "Pay Links & Store"
     },
     {
-      title: "Customer Billing Portal",
+      title: "Customer Billing Portal (Stripe)",
       path: customerPortalUrl,
-      description: "Direct self-service customer billing portal to update payment methods, download invoices, and manage subscriptions.",
+      description: "Direct self-service Stripe billing portal to update payment methods, download invoices, and manage subscriptions.",
       icon: <CreditCard className="w-5 h-5 text-emerald-400" />,
       tag: "Billing & Invoices",
       isExternal: true
@@ -68,20 +66,6 @@ export function PublicPagesHamburgerMenu({ isOpen, onClose }: PublicPagesHamburg
       description: "Our vision for empowering creators, eliminating AI scraping, and securing zero-trust blockchain music & art rights.",
       icon: <Globe className="w-5 h-5 text-blue-400" />,
       tag: "Company"
-    },
-    {
-      title: "Official Developer Documentation",
-      path: "/docs",
-      description: "Architecture blueprints, Solidity smart contracts, REST API reference, and Zero Trust C2PA security specifications.",
-      icon: <FileCode className="w-5 h-5 text-cyan-400" />,
-      tag: "Developer Docs"
-    },
-    {
-      title: "Interactive API Playground",
-      path: "/playground",
-      description: "Live test runner for authenticated POST and GET requests to Sovranly IP endpoints with real-time JSON formatting.",
-      icon: <Terminal className="w-5 h-5 text-teal-400" />,
-      tag: "API Sandbox"
     },
     {
       title: "Knowledge Wiki & Technical Docs",

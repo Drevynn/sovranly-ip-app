@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
+import PayLinkButton from '@/components/PayLinkButton';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { 
   ArrowRight, 
@@ -24,7 +25,7 @@ import Link from 'next/link';
 
 export default function PricingPage() {
   const [billingPeriod, setBillingPeriod] = useState<'monthly' | 'annual'>('monthly');
-  const customerPortalUrl = process.env.NEXT_PUBLIC_CUSTOMER_PORTAL_URL || '/pricing';
+  const customerPortalUrl = process.env.NEXT_PUBLIC_STRIPE_CUSTOMER_PORTAL_URL || 'https://billing.stripe.com/p/login/9B66oHdl8cplfpq1BV2Ji00';
 
   const plans = [
     {
@@ -42,7 +43,7 @@ export default function PricingPage() {
       popular: true,
       color: "border-emerald-800 bg-emerald-950/20",
       accent: "text-emerald-400",
-      href: "/dashboard",
+      payLink: "/dashboard",
       buttonText: "Access Founder Console"
     },
     {
@@ -62,8 +63,8 @@ export default function PricingPage() {
       popular: false,
       color: "border-zinc-800 bg-zinc-950/40",
       accent: "text-cyan-400",
-      href: "/dashboard",
-      buttonText: "Get Started"
+      payLink: process.env.NEXT_PUBLIC_PAY_LINK_STARTER || "/connect?plan=starter",
+      buttonText: "Proceed to Pay Link"
     },
     {
       name: "Growth Studio",
@@ -83,8 +84,8 @@ export default function PricingPage() {
       popular: true,
       color: "border-emerald-500/30 bg-zinc-950/60 shadow-2xl shadow-emerald-950/20",
       accent: "text-emerald-400",
-      href: "/dashboard",
-      buttonText: "Upgrade to Growth"
+      payLink: process.env.NEXT_PUBLIC_PAY_LINK_GROWTH || "/connect?plan=growth",
+      buttonText: "Proceed to Pay Link"
     },
     {
       name: "Enterprise Sovereign",
@@ -104,8 +105,8 @@ export default function PricingPage() {
       popular: false,
       color: "border-violet-950/60 bg-zinc-950/40",
       accent: "text-violet-400",
-      href: "/dashboard",
-      buttonText: "Contact Enterprise"
+      payLink: process.env.NEXT_PUBLIC_PAY_LINK_ENTERPRISE || "/connect?plan=enterprise",
+      buttonText: "Proceed to Pay Link"
     }
   ];
 
@@ -139,7 +140,7 @@ export default function PricingPage() {
               target="_blank" 
               rel="noopener noreferrer" 
               className="border border-zinc-800 bg-zinc-950/80 hover:bg-zinc-900 text-zinc-300 hover:text-white px-3.5 py-2 rounded-full text-xs font-mono font-medium flex items-center gap-1.5 transition-all shadow-sm"
-              title="Manage existing subscription, credit card, and invoices in Customer Billing Portal"
+              title="Manage existing subscription, credit card, and invoices in Stripe Billing Portal"
             >
               <CreditCard className="w-3.5 h-3.5 text-emerald-400" />
               <span className="hidden sm:inline">Billing Portal</span>
@@ -233,18 +234,18 @@ export default function PricingPage() {
                        ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-black hover:brightness-110 shadow-lg shadow-emerald-500/10 cursor-pointer' 
                        : 'bg-zinc-900 hover:bg-zinc-800 text-white cursor-pointer'
                    }`}>
-                     {plan.href.startsWith('/') ? (
-                       <Link href={plan.href} className="flex items-center justify-center gap-2">
+                     {plan.payLink.startsWith('/') ? (
+                       <Link href={plan.payLink} className="flex items-center justify-center gap-2">
                          {plan.buttonText} <ArrowRight className="w-4 h-4" />
                        </Link>
                      ) : (
-                       <a href={plan.href} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2">
+                       <a href={plan.payLink} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2">
                          {plan.buttonText} <ExternalLink className="w-4 h-4" />
                        </a>
                      )}
                    </Button>
                    <p className="text-[10px] text-center text-zinc-500 font-mono">
-                     {plan.price === 0 ? "🔓 Founder Priority Enabled" : "🔒 Sovereign Protocol Checkout Synchronized"}
+                     {plan.price === 0 ? "🔓 Founder Priority Enabled" : "🔒 Sovereign Pay Link Integration Synchronized"}
                    </p>
                  </div>
                </CardFooter>
@@ -265,7 +266,7 @@ export default function PricingPage() {
                     Already an Active Subscriber?
                   </h3>
                   <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-950/80 text-emerald-300 border border-emerald-800/60">
-                    Customer Billing Portal
+                    Stripe Customer Portal
                   </span>
                 </div>
                 <p className="text-xs text-zinc-400 leading-relaxed max-w-xl">

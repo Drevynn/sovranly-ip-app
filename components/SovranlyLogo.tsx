@@ -31,13 +31,14 @@ export function SovranlyLogo({
   const candidateVideo = videoSrc || (useVideo ? '/sovranly-hero-loop.mp4' : null);
 
   const fallbackList = [
-    '/sovranly-shield-transparent.png',
-    '/sovranly-shield-isolated.jpg',
     '/sovranly-shield-hero.jpg',
     '/sovranly-shield-v3.png',
     '/sovranly-hero-crest.jpg',
     '/sovranly-shield-v3.jpg',
-    '/sovranly-shield-icon.jpg'
+    '/sovranly-shield-icon.jpg',
+    '/sovranly-shield-transparent.png',
+    '/sovranly-logo-transparent.png',
+    '/sovranly-shield-v3.webp'
   ];
 
   const currentSrc = fallbackList[retryIndex] || fallbackList[0];
@@ -94,7 +95,7 @@ export function SovranlyLogo({
             />
           </div>
         ) : !imgError ? (
-          <div className="relative w-full h-full flex items-center justify-center overflow-visible">
+          <div className="relative w-full h-full flex items-center justify-center overflow-visible mix-blend-screen [mask-image:radial-gradient(circle_at_center,black_50%,transparent_92%)] [-webkit-mask-image:radial-gradient(circle_at_center,black_50%,transparent_92%)]">
             <Image
               src={currentSrc}
               alt="Sovranly IP Zero Trust Shield Crest"
@@ -103,7 +104,7 @@ export function SovranlyLogo({
               priority
               unoptimized={true}
               onError={handleImageError}
-              className="w-full h-full object-contain transition-all duration-700 drop-shadow-[0_0_35px_rgba(34,211,238,0.5)] group-hover/logo:drop-shadow-[0_0_60px_rgba(34,211,238,0.9)] select-none pointer-events-none"
+              className="w-full h-full object-contain transition-all duration-700 drop-shadow-[0_0_30px_rgba(34,211,238,0.45)] group-hover/logo:drop-shadow-[0_0_55px_rgba(34,211,238,0.85)] select-none pointer-events-none"
               referrerPolicy="no-referrer"
             />
           </div>

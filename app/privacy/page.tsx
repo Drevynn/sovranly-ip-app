@@ -462,7 +462,7 @@ export default function PrivacyPolicy() {
                 <span>E. Payment, Billing &amp; Subscription Financial Data</span>
               </h3>
               <ul className="list-disc list-inside text-xs text-zinc-400 space-y-1.5 leading-relaxed pl-1">
-                <li><strong className="text-zinc-200">Fiat Payment Processing:</strong> If you purchase a subscription or license via credit/debit card, all card data is tokenized directly by PCI-DSS Level 1 certified payment processors. Sovranly IP stores only masked customer references, transaction identifiers, billing postal codes, invoice history, and subscription expiration timestamps. <em>Sovranly IP never sees or stores complete credit card numbers, expiration months/years, or CVV/CVC security codes.</em></li>
+                <li><strong className="text-zinc-200">Fiat Payment Processing (via Stripe, Inc.):</strong> If you purchase a subscription or license via credit/debit card, all card data is tokenized directly by Stripe (PCI-DSS Level 1 certified). Sovranly IP stores only masked Stripe customer IDs, payment intent IDs, billing postal codes, invoice history, and subscription expiration timestamps. <em>Sovranly IP never sees or stores complete credit card numbers, expiration months/years, or CVV/CVC security codes.</em></li>
                 <li><strong className="text-zinc-200">Tax &amp; Statutory Accounting Records:</strong> VAT/sales tax registration numbers (for EU/UK creators), corporate business names, and transaction invoices retained to satisfy legal reporting duties.</li>
               </ul>
             </div>
@@ -535,7 +535,7 @@ export default function PrivacyPolicy() {
                   <td className="p-4 font-mono text-emerald-400 font-bold">YES</td>
                   <td className="p-4">Direct from consumer, Google OAuth, Web3 browser wallets.</td>
                   <td className="p-4">User authentication, creator catalog attribution, security defense, transaction notices.</td>
-                  <td className="p-4">Cloud infrastructure (Google Cloud/Firebase), payment processor.</td>
+                  <td className="p-4">Cloud infrastructure (Google Cloud/Firebase), payment processor (Stripe).</td>
                   <td className="p-4 font-mono text-rose-400 font-bold">NONE SOLD / NONE SHARED</td>
                 </tr>
                 <tr>
@@ -544,9 +544,9 @@ export default function PrivacyPolicy() {
                     <span className="block text-[11px] text-zinc-500 font-normal font-sans">Name, signature, masked payment tokens (last 4 digits).</span>
                   </td>
                   <td className="p-4 font-mono text-emerald-400 font-bold">YES</td>
-                  <td className="p-4">Direct from consumer, payment processor.</td>
+                  <td className="p-4">Direct from consumer, Stripe, Inc.</td>
                   <td className="p-4">Executing licensing contracts, subscription billing, payout accounting.</td>
-                  <td className="p-4">Payment processor, banking gateways.</td>
+                  <td className="p-4">Payment processor (Stripe, Inc.), banking gateways.</td>
                   <td className="p-4 font-mono text-rose-400 font-bold">NONE SOLD / NONE SHARED</td>
                 </tr>
                 <tr>
@@ -601,7 +601,7 @@ export default function PrivacyPolicy() {
                   <td className="p-4 font-mono text-emerald-400 font-bold">YES (Coarse only)</td>
                   <td className="p-4">IP address network routing lookup.</td>
                   <td className="p-4">Territorial licensing compliance, VAT/sales tax calculations.</td>
-                  <td className="p-4">Payment processor (tax calculation engine).</td>
+                  <td className="p-4">Stripe, Inc. (tax calculation engine).</td>
                   <td className="p-4 font-mono text-rose-400 font-bold">NONE SOLD / NONE SHARED</td>
                 </tr>
                 <tr>
@@ -656,7 +656,7 @@ export default function PrivacyPolicy() {
                   <td className="p-4 font-mono text-emerald-400 font-bold">YES</td>
                   <td className="p-4">Direct from consumer, Google OAuth credentials.</td>
                   <td className="p-4">Authentication security; statutory 1099/W-8BEN tax filings when required by IRC § 6050W.</td>
-                  <td className="p-4">Payment processor, IRS / statutory tax authorities.</td>
+                  <td className="p-4">Stripe, Inc., IRS / statutory tax authorities.</td>
                   <td className="p-4 font-mono text-rose-400 font-bold">NONE SOLD / NONE SHARED</td>
                 </tr>
               </tbody>
@@ -763,10 +763,10 @@ export default function PrivacyPolicy() {
                   <td className="p-4">Stored in profile until removed; on-chain history is permanent.</td>
                 </tr>
                 <tr>
-                  <td className="p-4 font-mono font-bold text-white">Payment &amp; Billing Records</td>
+                  <td className="p-4 font-mono font-bold text-white">Stripe Billing Records</td>
                   <td className="p-4">Processing subscription fees, managing license purchases, issuing invoices, statutory accounting.</td>
                   <td className="p-4 font-mono text-amber-400">Legal Obligation (Art. 6(1)(c)) &amp; Contract</td>
-                  <td className="p-4">Payment Processor &amp; Billing Gateway</td>
+                  <td className="p-4">Stripe, Inc.</td>
                   <td className="p-4">7 years following transaction date (statutory tax requirement).</td>
                 </tr>
                 <tr>
@@ -823,7 +823,7 @@ export default function PrivacyPolicy() {
                 <Database className="w-4 h-4 text-blue-400" /> 5. Account &amp; Billing Administration
               </h3>
               <p>
-                Managing customer subscriptions, generating invoices, processing upgrade or renewal cycles, and fulfilling mandatory statutory corporate tax, audit, and accounting requirements.
+                Managing Stripe subscriptions, generating invoices, processing upgrade or renewal cycles, and fulfilling mandatory statutory corporate tax, audit, and accounting requirements.
               </p>
             </div>
 
@@ -997,7 +997,7 @@ export default function PrivacyPolicy() {
                   <td className="p-4">United States (Opt-out available via cookie settings or browser DNT headers).</td>
                 </tr>
                 <tr>
-                  <td className="p-4 font-mono font-bold text-white">Authorized Payment Processor</td>
+                  <td className="p-4 font-mono font-bold text-white">Stripe, Inc.</td>
                   <td className="p-4">Fiat payment gateway, subscription management, automated invoicing.</td>
                   <td className="p-4">Billing address, email, card brand/last 4, subscription plan IDs.</td>
                   <td className="p-4">United States / Global (PCI-DSS Level 1 Certified).</td>
@@ -1302,7 +1302,7 @@ export default function PrivacyPolicy() {
                   Demand the irreversible deletion of your personal data and creative catalog records from all Sovranly IP servers:
                 </p>
                 <ul className="list-disc list-inside text-xs text-zinc-400 space-y-1.5 pl-1 leading-relaxed">
-                  <li><strong className="text-zinc-200">What is Purged:</strong> Your name, Google email, avatar, Firestore profile document, unanchored drafts, payment provider customer linkages, telemetry records, and audio stem caches.</li>
+                  <li><strong className="text-zinc-200">What is Purged:</strong> Your name, Google email, avatar, Firestore profile document, unanchored drafts, Stripe customer linkages, telemetry records, and audio stem caches.</li>
                   <li><strong className="text-zinc-200">On-Chain Decoupling:</strong> Smart contract splits and cryptographic hashes confirmed on public EVM blockchains cannot be rolled back, but all off-chain pointers to your identity are permanently erased.</li>
                   <li><strong className="text-zinc-200">Execution Window:</strong> Completed within 30 calendar days of cryptographic verification at zero cost.</li>
                 </ul>
@@ -2027,7 +2027,7 @@ export default function PrivacyPolicy() {
                       <strong className="text-zinc-200">Google Cloud Platform &amp; Firebase:</strong> Provides secure edge hosting, Firestore databases, and Google OAuth. Certified under ISO/IEC 27001, SOC 2 Type II, and adhering to European Commission Standard Contractual Clauses (SCCs) for cross-border data protection.
                     </li>
                     <li>
-                      <strong className="text-zinc-200">Authorized Payment Processors:</strong> Processes fiat subscription payments and licensing invoices as certified PCI-DSS Level 1 Service Providers. Sovranly IP never receives, handles, or stores sensitive credit card credentials.
+                      <strong className="text-zinc-200">Stripe, Inc.:</strong> Processes fiat subscription payments and licensing invoices as a certified PCI-DSS Level 1 Service Provider. Sovranly IP never receives, handles, or stores sensitive credit card credentials.
                     </li>
                     <li>
                       <strong className="text-zinc-200">Google Analytics 4 (G-ZGGTSS0QFN):</strong> Collects anonymized platform interaction metrics with IP anonymization enabled. You can disable telemetry at any time via the Sovereign Storage &amp; Cookie Governance Matrix.
