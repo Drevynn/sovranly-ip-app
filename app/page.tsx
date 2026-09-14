@@ -30,7 +30,6 @@ import Link from 'next/link';
 import SlideStack from '@/components/SlideStack';
 import NewsletterSignup from '@/components/NewsletterSignup';
 import AppOverviewShowcase from '@/components/AppOverviewShowcase';
-import { SovranlyLogo } from '@/components/SovranlyLogo';
 import ThemeToggle from '@/components/ThemeToggle';
 import { motion } from 'motion/react';
 
@@ -111,62 +110,6 @@ export default function HomePage() {
       {/* Hero Section */}
       <main className="relative max-w-7xl mx-auto px-6 py-20 md:py-32 space-y-36">
         <section className="relative text-center space-y-10 max-w-5xl mx-auto">
-          {/* Sovereign IP Emblem Logo Hero Display - Feathers smoothly into background */}
-          <div className="relative group w-64 h-64 sm:w-80 sm:h-80 md:w-[380px] md:h-[380px] mx-auto mb-6 flex items-center justify-center select-none [mask-image:radial-gradient(circle_at_center,black_68%,transparent_100%)] [-webkit-mask-image:radial-gradient(circle_at_center,black_68%,transparent_100%)]">
-            {/* Multi-layer animated backlight glow that diffuses into ambient darkness */}
-            <motion.div 
-              animate={{
-                scale: [1, 1.15, 1],
-                opacity: [0.18, 0.32, 0.18],
-              }}
-              transition={{
-                duration: 5,
-                repeat: Infinity,
-                ease: 'easeInOut',
-              }}
-              className="absolute inset-0 bg-cyan-500 rounded-full blur-[110px] pointer-events-none z-0" 
-            />
-            <motion.div 
-              animate={{
-                scale: [1.08, 0.94, 1.08],
-                opacity: [0.12, 0.24, 0.12],
-              }}
-              transition={{
-                duration: 7,
-                repeat: Infinity,
-                ease: 'easeInOut',
-              }}
-              className="absolute inset-6 bg-violet-600 rounded-full blur-[95px] pointer-events-none z-0" 
-            />
-            
-            {/* Outer cybernetic orbital ring with subtle atmospheric blending */}
-            <motion.div 
-              animate={{ rotate: 360 }}
-              transition={{ duration: 30, repeat: Infinity, ease: 'linear' }}
-              className="absolute inset-2 rounded-full border border-cyan-500/15 pointer-events-none flex items-center justify-center z-0"
-            >
-              <div className="absolute top-0 left-1/2 -translate-x-1/2 w-2 h-2 bg-cyan-400/80 rounded-full shadow-[0_0_12px_#22d3ee]" />
-              <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-2 h-2 bg-violet-500/80 rounded-full shadow-[0_0_12px_#a78bfa]" />
-              <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1.5 h-1.5 bg-cyan-300/80 rounded-full shadow-[0_0_8px_#67e8f9]" />
-              <div className="absolute right-0 top-1/2 -translate-y-1/2 w-1.5 h-1.5 bg-violet-400/80 rounded-full shadow-[0_0_8px_#c084fc]" />
-            </motion.div>
-
-            {/* Core Sovranly IP Emblem Logo with gentle levitation & organic blend */}
-            <motion.div
-              animate={{
-                y: [-5, 6, -5],
-              }}
-              transition={{
-                duration: 5,
-                repeat: Infinity,
-                ease: 'easeInOut',
-              }}
-              className="relative z-10 w-full h-full flex items-center justify-center"
-            >
-              <SovranlyLogo size="hero" glow={false} />
-            </motion.div>
-          </div>
-          
           <div className="inline-flex items-center gap-2.5 px-4 py-2 bg-zinc-950/60 backdrop-blur-md border border-zinc-800/80 rounded-full text-xs sm:text-sm text-zinc-400 mb-2 font-mono tracking-wider uppercase">
             <Sparkles className="w-4 h-4 text-cyan-400" />
             <span>CREATOR LICENSING PROTOCOL // v1.2 SECURE</span>

@@ -1189,6 +1189,55 @@ Secure cryptographic hash tunnel verified by Sovranly IP.`;
                             : 'border-zinc-900/90 hover:border-cyan-500/40 hover:shadow-cyan-950/25'
                         }`}
                       >
+                        {/* Interactive Hover Preview Tooltip Overlay */}
+                        <div className="absolute inset-0 bg-black/92 backdrop-blur-md opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none group-hover:pointer-events-auto p-6 flex flex-col justify-between z-30 rounded-3xl border border-cyan-500/30 shadow-2xl">
+                          <div className="space-y-3">
+                            <div className="flex items-center justify-between border-b border-white/10 pb-2">
+                              <span className="text-[10px] font-mono font-bold uppercase text-cyan-400 flex items-center gap-1.5">
+                                <Sparkles className="w-3.5 h-3.5 text-cyan-400 animate-pulse" />
+                                Instant Licensing Summary
+                              </span>
+                              <span className="text-[9px] font-mono bg-cyan-950/80 text-cyan-300 px-2 py-0.5 rounded border border-cyan-800/50">
+                                Hover Preview
+                              </span>
+                            </div>
+
+                            <div>
+                              <h4 className="text-sm font-bold text-white tracking-tight mb-1">{asset.title}</h4>
+                              <p className="text-[11px] text-zinc-400 line-clamp-2">{asset.description || 'Verified IP asset protected under Sovranly Zero Trust.'}</p>
+                            </div>
+
+                            <div className="space-y-2 pt-1 font-mono">
+                              <div className="bg-zinc-900/90 rounded-xl p-2.5 border border-zinc-800 space-y-1">
+                                <div className="flex justify-between text-[11px]">
+                                  <span className="text-zinc-400">Royalty Split:</span>
+                                  <span className="text-emerald-400 font-bold">{asset.royalty}% Creator / {100 - asset.royalty}% Platform</span>
+                                </div>
+                                <div className="flex justify-between text-[11px]">
+                                  <span className="text-zinc-400">Duration Term:</span>
+                                  <span className="text-cyan-300 font-bold">{assetDuration}</span>
+                                </div>
+                              </div>
+
+                              <div className="space-y-1">
+                                <span className="text-[10px] uppercase text-zinc-500 font-bold block">Permitted Usages:</span>
+                                <div className="flex flex-wrap gap-1">
+                                  {assetUsages.map((usage: string, idx: number) => (
+                                    <span key={idx} className="text-[9px] bg-zinc-900 text-zinc-300 px-2 py-0.5 rounded border border-zinc-800">
+                                      {usage}
+                                    </span>
+                                  ))}
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div className="pt-3 border-t border-white/10 flex items-center justify-between text-[10px] text-zinc-400 font-mono">
+                            <span>Inspect for full compact</span>
+                            <span className="text-cyan-400 font-bold flex items-center gap-1">View Details <ArrowRight className="w-3 h-3" /></span>
+                          </div>
+                        </div>
+
                         {/* Ambient radial glow on hover */}
                         <div className={`absolute -inset-px rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none ${
                           isOwner 

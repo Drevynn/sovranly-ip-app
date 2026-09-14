@@ -13,9 +13,8 @@ import {
   Sparkles, 
   X, 
   Compass, 
-  Cpu,
-  BadgeCheck,
-  CreditCard
+  Cpu, 
+  BadgeCheck
 } from 'lucide-react';
 import Link from 'next/link';
 import ThemeToggle from '@/components/ThemeToggle';
@@ -28,24 +27,7 @@ interface PublicPagesHamburgerMenuProps {
 export function PublicPagesHamburgerMenu({ isOpen, onClose }: PublicPagesHamburgerMenuProps) {
   if (!isOpen) return null;
 
-  const customerPortalUrl = process.env.NEXT_PUBLIC_STRIPE_CUSTOMER_PORTAL_URL || 'https://billing.stripe.com/p/login/9B66oHdl8cplfpq1BV2Ji00';
-
   const publicPages = [
-    {
-      title: "Pay Links & Storefront Hub",
-      path: "/connect",
-      description: "Manage creator payment links, custom checkout URLs, storefront product licensing, and sovereign settlements.",
-      icon: <DollarSign className="w-5 h-5 text-emerald-400" />,
-      tag: "Pay Links & Store"
-    },
-    {
-      title: "Customer Billing Portal (Stripe)",
-      path: customerPortalUrl,
-      description: "Direct self-service Stripe billing portal to update payment methods, download invoices, and manage subscriptions.",
-      icon: <CreditCard className="w-5 h-5 text-emerald-400" />,
-      tag: "Billing & Invoices",
-      isExternal: true
-    },
     {
       title: "Transparent Pricing & Tiers",
       path: "/pricing",

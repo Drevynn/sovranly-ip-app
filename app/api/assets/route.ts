@@ -28,6 +28,7 @@ const DEFAULT_MARKETPLACE_ASSETS = [
     fileName: 'sovereign_synth_loops_96khz.wav',
     fileSize: '42.80 MB',
     fileType: 'audio/wav',
+    imageUrl: '/images/assets/music_audio_asset.jpg',
     ipfsHash: 'QmX9A2b3c4D5e6F7g8H9j0kLmNpQrStUvWxYz123456789',
     createdAt: new Date().toISOString()
   },
@@ -55,6 +56,7 @@ const DEFAULT_MARKETPLACE_ASSETS = [
     fileName: 'cybernetic_aegis_components_v1.zip',
     fileSize: '14.25 MB',
     fileType: 'application/zip',
+    imageUrl: '/images/assets/software_code_asset.jpg',
     ipfsHash: 'QmB7c8D9e0F1g2H3j4k5LmNpQrStUvWxYz987654321',
     createdAt: new Date().toISOString()
   },
@@ -82,6 +84,7 @@ const DEFAULT_MARKETPLACE_ASSETS = [
     fileName: 'ethereal_cityscape_4k_bundle.gltf',
     fileSize: '185.60 MB',
     fileType: 'model/gltf+json',
+    imageUrl: '/images/assets/metaverse_3d_asset.jpg',
     ipfsHash: 'QmZ1a2B3c4D5e6F7g8H9j0kLmNpQrStUvWxYz456789012',
     createdAt: new Date().toISOString()
   },
@@ -109,6 +112,7 @@ const DEFAULT_MARKETPLACE_ASSETS = [
     fileName: 'oracle_telemetry_sdk.ts',
     fileSize: '1.15 MB',
     fileType: 'text/typescript',
+    imageUrl: '/images/assets/software_code_asset.jpg',
     ipfsHash: 'QmK3m4N5p6Q7r8S9t0U1vWxYz234567890123456789',
     createdAt: new Date().toISOString()
   }

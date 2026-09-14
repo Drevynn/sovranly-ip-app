@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
-import PayLinkButton from '@/components/PayLinkButton';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { 
   ArrowRight, 
@@ -18,14 +17,12 @@ import {
   TrendingUp,
   Sliders,
   DollarSign,
-  ExternalLink,
-  CreditCard
+  ExternalLink
 } from 'lucide-react';
 import Link from 'next/link';
 
 export default function PricingPage() {
   const [billingPeriod, setBillingPeriod] = useState<'monthly' | 'annual'>('monthly');
-  const customerPortalUrl = process.env.NEXT_PUBLIC_STRIPE_CUSTOMER_PORTAL_URL || 'https://billing.stripe.com/p/login/9B66oHdl8cplfpq1BV2Ji00';
 
   const plans = [
     {
@@ -43,7 +40,7 @@ export default function PricingPage() {
       popular: true,
       color: "border-emerald-800 bg-emerald-950/20",
       accent: "text-emerald-400",
-      payLink: "/dashboard",
+      href: "/dashboard",
       buttonText: "Access Founder Console"
     },
     {
@@ -63,8 +60,8 @@ export default function PricingPage() {
       popular: false,
       color: "border-zinc-800 bg-zinc-950/40",
       accent: "text-cyan-400",
-      payLink: process.env.NEXT_PUBLIC_PAY_LINK_STARTER || "/connect?plan=starter",
-      buttonText: "Proceed to Pay Link"
+      href: "/onboarding?plan=starter",
+      buttonText: "Get Started"
     },
     {
       name: "Growth Studio",
@@ -84,8 +81,8 @@ export default function PricingPage() {
       popular: true,
       color: "border-emerald-500/30 bg-zinc-950/60 shadow-2xl shadow-emerald-950/20",
       accent: "text-emerald-400",
-      payLink: process.env.NEXT_PUBLIC_PAY_LINK_GROWTH || "/connect?plan=growth",
-      buttonText: "Proceed to Pay Link"
+      href: "/onboarding?plan=growth",
+      buttonText: "Start Growth Tier"
     },
     {
       name: "Enterprise Sovereign",
@@ -105,8 +102,8 @@ export default function PricingPage() {
       popular: false,
       color: "border-violet-950/60 bg-zinc-950/40",
       accent: "text-violet-400",
-      payLink: process.env.NEXT_PUBLIC_PAY_LINK_ENTERPRISE || "/connect?plan=enterprise",
-      buttonText: "Proceed to Pay Link"
+      href: "/onboarding?plan=enterprise",
+      buttonText: "Contact Enterprise"
     }
   ];
 
@@ -135,17 +132,6 @@ export default function PricingPage() {
             <Link href="/faq" className="text-sm text-zinc-400 hover:text-white transition-colors">FAQ</Link>
           </nav>
           <div className="flex items-center gap-3">
-            <a 
-              href={customerPortalUrl} 
-              target="_blank" 
-              rel="noopener noreferrer" 
-              className="border border-zinc-800 bg-zinc-950/80 hover:bg-zinc-900 text-zinc-300 hover:text-white px-3.5 py-2 rounded-full text-xs font-mono font-medium flex items-center gap-1.5 transition-all shadow-sm"
-              title="Manage existing subscription, credit card, and invoices in Stripe Billing Portal"
-            >
-              <CreditCard className="w-3.5 h-3.5 text-emerald-400" />
-              <span className="hidden sm:inline">Billing Portal</span>
-              <ExternalLink className="w-3 h-3 text-zinc-500" />
-            </a>
             <Button asChild variant="outline" className="border-zinc-800 bg-transparent text-white hover:bg-zinc-900 transition-all rounded-full hidden sm:inline-flex">
               <Link href="/marketplace">Marketplace</Link>
             </Button>
@@ -234,56 +220,23 @@ export default function PricingPage() {
                        ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-black hover:brightness-110 shadow-lg shadow-emerald-500/10 cursor-pointer' 
                        : 'bg-zinc-900 hover:bg-zinc-800 text-white cursor-pointer'
                    }`}>
-                     {plan.payLink.startsWith('/') ? (
-                       <Link href={plan.payLink} className="flex items-center justify-center gap-2">
+                     {plan.href.startsWith('/') ? (
+                       <Link href={plan.href} className="flex items-center justify-center gap-2">
                          {plan.buttonText} <ArrowRight className="w-4 h-4" />
                        </Link>
                      ) : (
-                       <a href={plan.payLink} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2">
+                       <a href={plan.href} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2">
                          {plan.buttonText} <ExternalLink className="w-4 h-4" />
                        </a>
                      )}
                    </Button>
                    <p className="text-[10px] text-center text-zinc-500 font-mono">
-                     {plan.price === 0 ? "🔓 Founder Priority Enabled" : "🔒 Sovereign Pay Link Integration Synchronized"}
+                     {plan.price === 0 ? "🔓 Founder Priority Enabled" : "🔒 Sovereign Quota Allocation Synchronized"}
                    </p>
                  </div>
                </CardFooter>
             </Card>
           ))}
-        </section>
-
-        {/* Existing Subscriber Self-Service Billing Portal */}
-        <section className="max-w-5xl mx-auto">
-          <div className="flex flex-col md:flex-row items-center justify-between p-6 sm:p-8 bg-gradient-to-r from-zinc-950 via-zinc-900/60 to-zinc-950 border border-emerald-500/30 rounded-3xl gap-6 text-left shadow-xl shadow-emerald-950/10">
-            <div className="flex items-start sm:items-center gap-4">
-              <div className="p-3.5 bg-emerald-950/80 border border-emerald-500/40 rounded-2xl text-emerald-400 shrink-0">
-                <CreditCard className="w-6 h-6" />
-              </div>
-              <div className="space-y-1">
-                <div className="flex items-center gap-2 flex-wrap">
-                  <h3 className="text-sm sm:text-base font-bold text-white">
-                    Already an Active Subscriber?
-                  </h3>
-                  <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-950/80 text-emerald-300 border border-emerald-800/60">
-                    Stripe Customer Portal
-                  </span>
-                </div>
-                <p className="text-xs text-zinc-400 leading-relaxed max-w-xl">
-                  Manage your subscription tier, update payment methods, download invoices &amp; receipts, or update billing email directly in your secure self-service portal.
-                </p>
-              </div>
-            </div>
-            <a
-              href={customerPortalUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-full md:w-auto px-6 py-3 bg-emerald-500 hover:bg-emerald-400 text-black font-bold text-xs rounded-xl flex items-center justify-center gap-2 transition-all shrink-0 cursor-pointer shadow-lg shadow-emerald-500/20 hover:scale-[1.02]"
-            >
-              <span>Launch Billing Portal</span>
-              <ExternalLink className="w-4 h-4" />
-            </a>
-          </div>
         </section>
 
         {/* Clear hybrid transaction transparency explain pane */}

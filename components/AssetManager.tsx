@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useMemo, useRef } from 'react';
+import Image from 'next/image';
 import { useAuth } from '@/components/auth/FirebaseProvider';
 import { getAuthHeaders } from '@/lib/auth-client';
 import { 
@@ -70,6 +71,7 @@ export type Asset = {
   scarcityPrice?: number | null;
   scarcityTxHash?: string | null;
   createdAt?: string;
+  imageUrl?: string | null;
   fileName?: string | null;
   fileSize?: string | null;
   fileType?: string | null;
@@ -170,6 +172,29 @@ function getCategoryIcon(type: string) {
   if (type.includes('Video') || type.includes('Film') || type.includes('Animation')) return Film;
   if (type.includes('Academic') || type.includes('Research')) return GraduationCap;
   return Layers;
+}
+
+export function getCategoryPlaceholderImage(type?: string | null): string {
+  const normalized = (type || '').toLowerCase();
+  if (normalized.includes('music') || normalized.includes('audio') || normalized.includes('sound') || normalized.includes('stem')) {
+    return '/images/assets/music_audio_asset.jpg';
+  }
+  if (normalized.includes('3d') || normalized.includes('metaverse') || normalized.includes('world') || normalized.includes('model')) {
+    return '/images/assets/metaverse_3d_asset.jpg';
+  }
+  if (normalized.includes('artwork') || normalized.includes('visual') || normalized.includes('design') || normalized.includes('image')) {
+    return '/images/assets/visual_art_asset.jpg';
+  }
+  if (normalized.includes('software') || normalized.includes('code') || normalized.includes('utility') || normalized.includes('contract')) {
+    return '/images/assets/software_code_asset.jpg';
+  }
+  if (normalized.includes('video') || normalized.includes('film') || normalized.includes('animation') || normalized.includes('motion')) {
+    return '/images/assets/video_film_asset.jpg';
+  }
+  if (normalized.includes('text') || normalized.includes('literature') || normalized.includes('manuscript') || normalized.includes('academic') || normalized.includes('research')) {
+    return '/images/assets/manuscript_text_asset.jpg';
+  }
+  return '/images/assets/visual_art_asset.jpg';
 }
 
 function getFolderIcon(iconId?: string) {
@@ -1009,16 +1034,28 @@ export default function AssetManager({ walletAddress, onNavigateToLicensing, onN
               <Label className="text-xs text-zinc-300 font-bold uppercase tracking-wider">
                 Category / IP Classification *
               </Label>
-              <select
-                id="asset-category-select"
-                value={newAsset.type}
-                onChange={(e) => setNewAsset({ ...newAsset, type: e.target.value })}
-                className="w-full bg-zinc-900/90 border border-zinc-800 text-white rounded-xl focus:border-cyan-500 text-xs h-10 px-3 font-mono focus:outline-none"
-              >
-                {CATEGORIES.map(c => (
-                  <option key={c} value={c}>{c}</option>
-                ))}
-              </select>
+              <div className="flex items-center gap-3">
+                <div className="relative w-12 h-10 rounded-xl overflow-hidden border border-zinc-800 shrink-0 bg-zinc-900 shadow-sm">
+                  <Image
+                    src={getCategoryPlaceholderImage(newAsset.type)}
+                    alt={newAsset.type}
+                    fill
+                    className="object-cover"
+                    sizes="48px"
+                    referrerPolicy="no-referrer"
+                  />
+                </div>
+                <select
+                  id="asset-category-select"
+                  value={newAsset.type}
+                  onChange={(e) => setNewAsset({ ...newAsset, type: e.target.value })}
+                  className="w-full bg-zinc-900/90 border border-zinc-800 text-white rounded-xl focus:border-cyan-500 text-xs h-10 px-3 font-mono focus:outline-none"
+                >
+                  {CATEGORIES.map(c => (
+                    <option key={c} value={c}>{c}</option>
+                  ))}
+                </select>
+              </div>
             </div>
 
             {/* Creation Date */}
@@ -1509,10 +1546,10 @@ export default function AssetManager({ walletAddress, onNavigateToLicensing, onN
               return (
                 <div
                   key={asset.id}
-                  className={`bg-zinc-950 border rounded-[24px] p-5 sm:p-6 flex flex-col justify-between space-y-5 transition-all hover:shadow-xl hover:shadow-cyan-950/10 group relative ${isSelected ? 'border-cyan-500/60 bg-cyan-950/10' : 'border-zinc-900 hover:border-zinc-800'}`}
+                  className={`bg-zinc-950 border rounded-[24px] p-5 sm:p-6 flex flex-col justify-between space-y-4 transition-all hover:shadow-xl hover:shadow-cyan-950/10 group relative ${isSelected ? 'border-cyan-500/60 bg-cyan-950/10' : 'border-zinc-900 hover:border-zinc-800'}`}
                 >
-                  <div className="space-y-4">
-                    {/* Top Row: Checkbox, Folder Pill & Category Badge */}
+                  <div className="space-y-3.5">
+                    {/* Top Row: Checkbox, Folder Pill & Date */}
                     <div className="flex items-center justify-between gap-2">
                       <div className="flex items-center gap-2 min-w-0">
                         <button
@@ -1541,14 +1578,50 @@ export default function AssetManager({ walletAddress, onNavigateToLicensing, onN
                       </span>
                     </div>
 
-                    {/* Category Line */}
-                    <div className="flex items-center justify-between">
-                      <span className="inline-flex items-center gap-1.5 text-[11px] font-mono text-cyan-300">
-                        <CategoryIcon className="w-3.5 h-3.5 text-cyan-400" />
-                        {asset.type}
-                      </span>
+                    {/* Professional Placeholder Image Banner */}
+                    <div className="relative w-full h-40 rounded-2xl overflow-hidden bg-zinc-900 border border-zinc-800/80 group-hover:border-cyan-500/40 transition-all shadow-md">
+                      <Image
+                        src={asset.imageUrl || getCategoryPlaceholderImage(asset.type)}
+                        alt={asset.title}
+                        fill
+                        className="object-cover group-hover:scale-105 transition-transform duration-700 select-none pointer-events-none"
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                        referrerPolicy="no-referrer"
+                      />
+                      {/* Subtle dark gradient overlay for depth */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/25 to-transparent pointer-events-none" />
 
-                      {/* Edit Metadata Quick Button */}
+                      {/* Bottom banner badges: Category & Proof Status */}
+                      <div className="absolute bottom-2.5 left-3 right-3 flex items-center justify-between pointer-events-none">
+                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-zinc-950/85 backdrop-blur-md border border-zinc-800/80 text-[10px] font-mono text-cyan-300 font-bold shadow-sm">
+                          <CategoryIcon className="w-3 h-3 text-cyan-400" />
+                          <span>{asset.type}</span>
+                        </span>
+
+                        {asset.fileName && (
+                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg bg-emerald-950/85 backdrop-blur-md border border-emerald-500/40 text-[9px] font-mono text-emerald-300 font-bold">
+                            <FileCheck2 className="w-3 h-3" /> ATTACHED
+                          </span>
+                        )}
+                      </div>
+
+                      {/* Top right badges: Minted or For Sale */}
+                      <div className="absolute top-2.5 right-2.5 flex items-center gap-1.5">
+                        {asset.isMinted && (
+                          <span className="px-2 py-0.5 rounded-md bg-cyan-950/90 backdrop-blur-md text-[9px] font-mono font-bold text-cyan-300 border border-cyan-500/40 shadow-sm">
+                            NFT ANCHORED
+                          </span>
+                        )}
+                        {asset.isForSale && (
+                          <span className="px-2 py-0.5 rounded-md bg-amber-950/90 backdrop-blur-md text-[9px] font-mono font-bold text-amber-300 border border-amber-500/40 shadow-sm">
+                            {asset.price ? `${asset.price} ETH` : 'LISTED'}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Metadata quick edit button line */}
+                    <div className="flex items-center justify-end pt-0.5">
                       <Button
                         type="button"
                         variant="ghost"
@@ -1565,7 +1638,7 @@ export default function AssetManager({ walletAddress, onNavigateToLicensing, onN
                       <h4 className="text-base font-black text-white group-hover:text-cyan-300 transition-colors line-clamp-1">
                         {asset.title}
                       </h4>
-                      <p className="text-xs text-zinc-400 line-clamp-3 leading-relaxed">
+                      <p className="text-xs text-zinc-400 line-clamp-2 leading-relaxed">
                         {asset.description || 'No detailed synopsis provided.'}
                       </p>
                     </div>
@@ -1778,12 +1851,22 @@ export default function AssetManager({ walletAddress, onNavigateToLicensing, onN
                       </td>
                       <td className="p-4">
                         <div className="flex items-center gap-3">
-                          <div className="w-8 h-8 rounded-lg bg-zinc-900 border border-zinc-800 flex items-center justify-center text-cyan-400 shrink-0">
-                            <CategoryIcon className="w-4 h-4" />
+                          <div className="relative w-12 h-12 rounded-xl overflow-hidden border border-zinc-800 shrink-0 bg-zinc-900 group-hover:border-cyan-500/40 transition-colors shadow-sm">
+                            <Image
+                              src={asset.imageUrl || getCategoryPlaceholderImage(asset.type)}
+                              alt={asset.title}
+                              fill
+                              className="object-cover select-none pointer-events-none"
+                              sizes="48px"
+                              referrerPolicy="no-referrer"
+                            />
                           </div>
                           <div>
                             <p className="font-bold text-white text-sm font-sans">{asset.title}</p>
-                            <p className="text-[10px] text-zinc-500 font-mono">{asset.type}</p>
+                            <p className="text-[10px] text-zinc-400 font-mono flex items-center gap-1">
+                              <CategoryIcon className="w-2.5 h-2.5 text-cyan-400" />
+                              {asset.type}
+                            </p>
                           </div>
                         </div>
                       </td>
@@ -2003,6 +2086,22 @@ export default function AssetManager({ walletAddress, onNavigateToLicensing, onN
               >
                 <X className="w-4 h-4" />
               </button>
+            </div>
+
+            {/* Visual Thumbnail Preview */}
+            <div className="relative w-full h-32 rounded-2xl overflow-hidden bg-zinc-900 border border-zinc-800 shadow-inner">
+              <Image
+                src={editingAsset.imageUrl || getCategoryPlaceholderImage(editingAsset.type)}
+                alt={editingAsset.title}
+                fill
+                className="object-cover"
+                sizes="500px"
+                referrerPolicy="no-referrer"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/20 to-transparent" />
+              <div className="absolute bottom-2 left-3 text-[10px] font-mono text-cyan-300 px-2 py-0.5 rounded bg-zinc-950/80 border border-zinc-800">
+                Visual Classification: {editingAsset.type}
+              </div>
             </div>
 
             <div className="space-y-4 font-mono text-xs">

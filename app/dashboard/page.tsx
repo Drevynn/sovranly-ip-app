@@ -13,6 +13,8 @@ import Inbox from '@/components/Inbox';
 import GoogleSlidesManager from '@/components/GoogleSlidesManager';
 import LaunchPlanner from '@/components/LaunchPlanner';
 import TechStackLedger from '@/components/TechStackLedger';
+import CloudflareHandshakeDiagnostics from '@/components/CloudflareHandshakeDiagnostics';
+import OfficialIpNotices from '@/components/OfficialIpNotices';
 import AboutUs from '@/components/AboutUs';
 import AiLicensingCenter from '@/components/AiLicensingCenter';
 import DataTokenizationHub from '@/components/DataTokenizationHub';
@@ -108,6 +110,8 @@ export default function DashboardPage() {
             activePage === 12 ? 'Sovereign Tokenizer' :
             activePage === 13 ? 'Creator Network' :
             activePage === 14 ? 'Permissions Hub (Instant Video Rights)' :
+            activePage === 15 ? 'Cloudflare Handshake & Tunnel Diagnostics' :
+            activePage === 16 ? 'Official IP Communications & Legal Notices' :
             'Permissions Hub'
           } 
           setWalletAddress={setCurrentAccount} 
@@ -154,6 +158,8 @@ export default function DashboardPage() {
               onNavigate={setActivePage}
             />
           )}
+          {activePage === 15 && <CloudflareHandshakeDiagnostics />}
+          {activePage === 16 && <OfficialIpNotices walletAddress={currentAccount} />}
         </main>
 
         <MobileBottomNav 
