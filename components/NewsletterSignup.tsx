@@ -25,6 +25,7 @@ export default function NewsletterSignup() {
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [subscribers, setSubscribers] = useState<Subscriber[]>([]);
+  const [terminalLogs, setTerminalLogs] = useState<string[]>([]);
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
