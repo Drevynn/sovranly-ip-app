@@ -45,10 +45,10 @@ export interface AuthenticatedUser {
 }
 
 function isSandboxAllowed(): boolean {
-  if (process.env.NODE_ENV === 'production') {
-    return process.env.ENABLE_SANDBOX_AUTH === 'true' || process.env.NEXT_PUBLIC_ALLOW_SANDBOX === 'true';
-  }
-  return true;
+  // Sandbox mode is ONLY available in development, never in production.
+  // Removed the ENABLE_SANDBOX_AUTH and NEXT_PUBLIC_ALLOW_SANDBOX env var overrides
+  // that previously allowed bypassing this check in production.
+  return process.env.NODE_ENV !== 'production';
 }
 
 export async function verifyAuthToken(authHeader: string | null): Promise<AuthenticatedUser | null> {
@@ -83,31 +83,12 @@ export async function verifyAuthToken(authHeader: string | null): Promise<Authen
         emailVerified: decodedToken.email_verified,
       };
     } catch (error) {
-      console.warn('Standard Firebase token verification check:', error);
+      console.warn('Firebase token verification failed:', error);
     }
   }
-    
-  // Robust fallback for sandboxed/isolated preview containers (strictly gated in production)
-  if (isSandboxAllowed()) {
-    try {
-      const payloadBase64 = token.split('.')[1];
-      if (payloadBase64) {
-        const payloadJson = Buffer.from(payloadBase64, 'base64').toString('utf8');
-        const decoded = JSON.parse(payloadJson);
-        if (decoded && (decoded.uid || decoded.user_id || decoded.sub)) {
-          const userUid = decoded.uid || decoded.user_id || decoded.sub;
-          return {
-            uid: userUid,
-            email: decoded.email,
-            name: decoded.name || decoded.displayName,
-            emailVerified: decoded.email_verified ?? true,
-          };
-        }
-      }
-    } catch (e) {
-      console.error('Fallback JWT decoding failed:', e);
-    }
-  }
+  
+  // No unsigned JWT fallback — all tokens must be verified by Firebase Admin.
+  // The previous unsigned JWT decoder was a security vulnerability.
   
   return null;
 }

@@ -50,6 +50,9 @@ export async function GET(request: Request) {
 export async function POST(request: Request) {
   try {
     const user = await verifyAuthToken(request.headers.get('Authorization'));
+    if (!user) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
     const body = await request.json();
     const transactionsRef = db.collection('transactions');
     const newTx = {

@@ -11,26 +11,65 @@ const ai = new GoogleGenAI({
   }
 });
 
+// Rate limiting: per-user sliding window (in-memory, resets on server restart)
+const rateLimitMap = new Map<string, number[]>();
+const RATE_LIMIT_WINDOW_MS = 60_000; // 1 minute
+const RATE_LIMIT_MAX_REQUESTS = 15;
+
+function checkRateLimit(userId: string): boolean {
+  const now = Date.now();
+  const timestamps = rateLimitMap.get(userId) || [];
+  const recent = timestamps.filter(t => now - t < RATE_LIMIT_WINDOW_MS);
+  if (recent.length >= RATE_LIMIT_MAX_REQUESTS) return false;
+  recent.push(now);
+  rateLimitMap.set(userId, recent);
+  return true;
+}
+
+const MAX_MESSAGE_LENGTH = 4_000; // ~1,000 tokens max per message
+const MAX_HISTORY_TURNS = 10; // only last 10 turns sent to Gemini
+
 export async function POST(req: Request) {
   try {
-    // Attempt authentication, but allow public/guest visitors for IP consultations & FAQs
     const user = await verifyAuthToken(req.headers.get('Authorization'));
-    const userName = user?.name || user?.email || 'Valued Creator';
+    if (!user) {
+      return NextResponse.json({ error: 'Authentication required' }, { status: 401 });
+    }
+
+    // Rate limit check
+    if (!checkRateLimit(user.uid)) {
+      return NextResponse.json(
+        { error: 'Too many requests. Please wait a moment before sending another message.' },
+        { status: 429 }
+      );
+    }
+
+    const userName = user.name || user.email || 'Valued Creator';
 
     const { message, history } = await req.json();
 
-    if (!message) {
+    if (!message || typeof message !== 'string') {
       return NextResponse.json({ error: 'Message is required' }, { status: 400 });
     }
 
+    // Cap message length to control API costs
+    if (message.length > MAX_MESSAGE_LENGTH) {
+      return NextResponse.json(
+        { error: `Message too long. Please keep messages under ${MAX_MESSAGE_LENGTH} characters.` },
+        { status: 400 }
+      );
+    }
+
     // Format chat history correctly for @google/genai SDK
-    const contents: any[] = [];
+    // Cap history to last N turns to control token usage
+    const contents: { role: string; parts: { text: string }[] }[] = [];
 
     if (history && Array.isArray(history)) {
-      history.forEach((turn: any) => {
+      const cappedHistory = history.slice(-MAX_HISTORY_TURNS);
+      cappedHistory.forEach((turn: { role?: string; text?: string; content?: string }) => {
         contents.push({
           role: turn.role === 'model' || turn.role === 'assistant' ? 'model' : 'user',
-          parts: [{ text: turn.text || turn.content || '' }]
+          parts: [{ text: (turn.text || turn.content || '').slice(0, MAX_MESSAGE_LENGTH) }]
         });
       });
     }
@@ -42,7 +81,7 @@ export async function POST(req: Request) {
     });
 
     const response = await ai.models.generateContent({
-      model: "gemini-3.6-flash",
+      model: process.env.GEMINI_MODEL || "gemini-2.5-flash",
       contents: contents,
       config: {
         systemInstruction: `You are "Adrienne", a wise, warm, encouraging mentor and Chief Sovereign IP Coordinator for "Sovranly IP". You speak with rich proverbs, soulful grounding, crystal-clear explanations, and motherly warmth. You call the user terms of respect/warmth like "Creator", "Child", or "Sweetheart" occasionally, making complex copyright and blockchain concepts simple and accessible so that a 17-year-old creator (whether making their first YouTube video, beat, art, or software) can easily understand and take action.
@@ -82,7 +121,7 @@ export async function POST(req: Request) {
     const seenUrls = new Set<string>();
     const chunks = response.candidates?.[0]?.groundingMetadata?.groundingChunks;
     if (chunks && Array.isArray(chunks)) {
-      chunks.forEach((chunk: any) => {
+      chunks.forEach((chunk: { web?: { uri?: string; title?: string } }) => {
         if (chunk.web && chunk.web.uri) {
           const url = chunk.web.uri;
           if (!seenUrls.has(url)) {

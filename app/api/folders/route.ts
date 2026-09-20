@@ -131,6 +131,12 @@ export async function PUT(request: Request) {
       return NextResponse.json({ success: true, id, ...updates });
     }
 
+    // Verify ownership before updating
+    const existing = doc.data();
+    if (existing?.userId && existing.userId !== user.uid) {
+      return NextResponse.json({ error: 'Forbidden: You do not own this folder' }, { status: 403 });
+    }
+
     await folderRef.update(updates);
     return NextResponse.json({ success: true, id, ...updates });
   } catch (error) {
@@ -155,6 +161,11 @@ export async function DELETE(request: Request) {
     const folderRef = db.collection('folders').doc(id);
     const doc = await folderRef.get();
     if (doc.exists) {
+      // Verify ownership before deleting
+      const existing = doc.data();
+      if (existing?.userId && existing.userId !== user.uid) {
+        return NextResponse.json({ error: 'Forbidden: You do not own this folder' }, { status: 403 });
+      }
       await folderRef.delete();
     }
 

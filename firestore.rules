@@ -82,9 +82,10 @@ service cloud.firestore {
     }
 
     match /permissions/{permissionId} {
-      allow read: if true; // Publicly verifiable for content platforms & YouTube descriptions
-      allow create: if isSignedIn();
-      allow update, delete: if isSignedIn();
+      allow read: if isSignedIn(); // Authenticated users can verify permissions
+      allow create: if isSignedIn() && request.resource.data.creator == request.auth.uid;
+      allow update: if isSignedIn() && resource.data.creator == request.auth.uid;
+      allow delete: if isSignedIn() && resource.data.creator == request.auth.uid;
     }
 
     match /transactions/{transactionId} {
@@ -114,6 +115,26 @@ service cloud.firestore {
       allow create: if isSignedIn() && isValidNotification(request.resource.data);
       allow update: if isSignedIn() && resource.data.userId == request.auth.uid && isValidNotification(request.resource.data) &&
                      request.resource.data.diff(resource.data).affectedKeys().hasOnly(['read']);
+    }
+
+    match /folders/{folderId} {
+      allow read: if isSignedIn() && resource.data.userId == request.auth.uid;
+      allow create: if isSignedIn() && request.resource.data.userId == request.auth.uid;
+      allow update: if isSignedIn() && resource.data.userId == request.auth.uid;
+      allow delete: if isSignedIn() && resource.data.userId == request.auth.uid;
+    }
+
+    match /royalties/{royaltyId} {
+      allow read: if isSignedIn() && resource.data.userId == request.auth.uid;
+      allow create: if isSignedIn() && request.resource.data.userId == request.auth.uid;
+      allow update: if isSignedIn() && resource.data.userId == request.auth.uid;
+      allow delete: if false;
+    }
+
+    match /network_posts/{postId} {
+      allow read: if isSignedIn();
+      allow create: if isSignedIn() && request.resource.data.authorName is string && request.resource.data.content is string && request.resource.data.content.size() <= 5000;
+      allow update, delete: if isSignedIn() && resource.data.authorId == request.auth.uid;
     }
 
     // Default deny
