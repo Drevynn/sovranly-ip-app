@@ -115,7 +115,7 @@ export default function AppOverviewShowcase() {
           <span>Interactive Platform Showcase</span>
         </div>
         <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-white">
-          Explore Sovranly IP <span className="bg-gradient-to-r from-cyan-400 via-sky-400 to-violet-400 bg-clip-text text-transparent">Inside & Out</span>
+          Explore Sovranly IP <span className="text-cyan-400">Inside & Out</span>
         </h2>
         <p className="text-zinc-400 text-base sm:text-lg leading-relaxed max-w-3xl mx-auto">
           We believe in complete architectural transparency. Test drive our core intellectual property tools, inspect real-time royalty split calculations, and explore how our Zero Trust security protocols work before connecting a wallet or creating an account.

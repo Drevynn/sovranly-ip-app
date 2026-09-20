@@ -333,7 +333,7 @@ export default function HomePage() {
                   <feature.icon className="h-5 w-5 text-cyan-400" />
                 </div>
                 <h4 className="text-base font-bold text-white">{feature.title}</h4>
-                <p className="text-zinc-500 text-xs leading-relaxed">{feature.desc}</p>
+                <p className="text-zinc-400 text-xs leading-relaxed">{feature.desc}</p>
               </div>
             ))}
           </div>

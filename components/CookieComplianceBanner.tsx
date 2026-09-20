@@ -134,13 +134,13 @@ export default function CookieComplianceBanner() {
 
       <AnimatePresence>
         {isVisible && (
-          <div className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-end justify-center md:items-center md:justify-end md:p-8">
+          <div className="fixed bottom-0 left-0 right-0 z-50 flex justify-center p-4">
             <motion.div
               initial={{ opacity: 0, y: 50, scale: 0.95 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 30, scale: 0.95 }}
               transition={{ duration: 0.3, ease: 'easeOut' }}
-              className="w-full md:max-w-md bg-[#09090b] border-t md:border border-zinc-800 rounded-t-3xl md:rounded-3xl p-6 shadow-2xl relative overflow-hidden space-y-4 max-h-[90vh] overflow-y-auto"
+              className="w-full max-w-2xl bg-[#09090b] border border-zinc-800 rounded-2xl p-5 shadow-2xl relative overflow-hidden space-y-3"
             >
               {/* Futuristic matrix gradient header overlay */}
               <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-violet-500 via-cyan-500 to-emerald-500" />
@@ -150,13 +150,13 @@ export default function CookieComplianceBanner() {
                 <div className="space-y-1">
                   <div className="flex items-center gap-1.5">
                     <Shield className="w-4 h-4 text-cyan-400" />
-                    <span className="text-[10px] font-mono uppercase tracking-widest text-cyan-400 font-bold">Sovereign Compliance</span>
+                    <span className="text-[10px] font-mono uppercase tracking-widest text-cyan-400 font-bold">Privacy Settings</span>
                   </div>
-                  <h3 className="text-sm font-black text-white uppercase tracking-tight font-sans">
-                    Consent Governance Engine
+                  <h3 className="text-sm font-bold text-white tracking-tight font-sans">
+                    Cookie & Privacy Preferences
                   </h3>
-                  <p className="text-[11px] text-zinc-400 font-sans leading-relaxed">
-                    Sovranly IP uses Zero-Trust parameters. Customize how localized metadata caches behave on your device.
+                  <p className="text-[11px] text-zinc-300 font-sans leading-relaxed">
+                    We use essential cookies to keep the site working, plus optional analytics to improve your experience. You can customize your preferences below.
                   </p>
                 </div>
                 
@@ -179,11 +179,11 @@ export default function CookieComplianceBanner() {
                     <div className="space-y-1">
                       <div className="flex items-center gap-1.5">
                         <Lock className="w-3.5 h-3.5 text-emerald-400" />
-                        <span className="text-[10px] font-mono font-bold text-white uppercase">Essential Cryptographic Core</span>
+                        <span className="text-[10px] font-mono font-bold text-white uppercase">Essential Cookies</span>
                         <span className="text-[8px] font-mono bg-emerald-950/40 text-emerald-400 border border-emerald-900/40 px-1 rounded">IMMUTABLE</span>
                       </div>
                       <p className="text-[10px] text-zinc-500 leading-normal font-sans">
-                        Required to verify smart contract triggers, cache public keys, support Web3 wallet tunnels, and remember your compliance configurations.
+                        Required for the site to function — authentication, security, and saving your preferences.
                       </p>
                     </div>
                   </div>
@@ -207,7 +207,7 @@ export default function CookieComplianceBanner() {
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-1.5">
                             <Database className="w-3.5 h-3.5 text-cyan-400" />
-                            <span className="text-[10px] font-mono font-bold text-white uppercase">Decentralized Analytics</span>
+                            <span className="text-[10px] font-mono font-bold text-white uppercase">Analytics</span>
                           </div>
                           <button
                             onClick={() => setAnalytics(!analytics)}
@@ -223,7 +223,7 @@ export default function CookieComplianceBanner() {
                           </button>
                         </div>
                         <p className="text-[10px] text-zinc-500 leading-normal font-sans">
-                          Permits anonymous telemetry and page speed diagnostics. We do not sell tracking fingerprints or communicate with advertising brokerages.
+                          Anonymous usage data to help us improve the site. We never sell your data or share it with advertisers.
                         </p>
                       </div>
 
@@ -232,7 +232,7 @@ export default function CookieComplianceBanner() {
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-1.5">
                             <Cookie className="w-3.5 h-3.5 text-violet-400" />
-                            <span className="text-[10px] font-mono font-bold text-white uppercase">Visual State Persistence</span>
+                            <span className="text-[10px] font-mono font-bold text-white uppercase">Preferences</span>
                           </div>
                           <button
                             onClick={() => setPreferences(!preferences)}
@@ -248,7 +248,7 @@ export default function CookieComplianceBanner() {
                           </button>
                         </div>
                         <p className="text-[10px] text-zinc-500 leading-normal font-sans">
-                          Saves your interface choices (such as active language settings, side-bar toggles, and layout preferences) directly to localized state.
+                          Saves your interface choices like theme and layout preferences.
                         </p>
                       </div>
                     </motion.div>
@@ -292,7 +292,7 @@ export default function CookieComplianceBanner() {
                       onClick={handleSaveCustom}
                       className="flex-1 py-3 bg-cyan-950/40 hover:bg-cyan-950/70 border border-cyan-500/30 text-[10px] font-mono text-cyan-400 rounded-xl transition-all flex items-center justify-center gap-1.5 cursor-pointer font-bold"
                     >
-                      <Check className="w-3.5 h-3.5" /> Sign Custom State
+                      <Check className="w-3.5 h-3.5" /> Save Preferences
                     </button>
                   </>
                 ) : (
@@ -310,7 +310,7 @@ export default function CookieComplianceBanner() {
                       onClick={handleAcceptAll}
                       className="flex-1 py-3 bg-cyan-600 hover:bg-cyan-500 text-white text-[10px] font-mono rounded-xl transition-all flex items-center justify-center gap-1.5 shadow-lg shadow-cyan-950/35 cursor-pointer font-bold"
                     >
-                      <ShieldCheck className="w-3.5 h-3.5" /> Authorize & Sign All
+                      <ShieldCheck className="w-3.5 h-3.5" /> Accept All
                     </button>
                   </>
                 )}

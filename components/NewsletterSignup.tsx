@@ -8,12 +8,9 @@ import {
   Mail, 
   Send, 
   ShieldCheck, 
-  Database, 
   Terminal, 
   AlertCircle, 
-  CheckCircle2, 
-  Trash2,
-  Lock
+  CheckCircle2
 } from 'lucide-react';
 
 interface Subscriber {
@@ -28,8 +25,6 @@ export default function NewsletterSignup() {
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [subscribers, setSubscribers] = useState<Subscriber[]>([]);
-  const [showVault, setShowVault] = useState(false);
-  const [terminalLogs, setTerminalLogs] = useState<string[]>([]);
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
@@ -94,11 +89,6 @@ export default function NewsletterSignup() {
     setLoading(false);
     setSubmitted(true);
     setEmail('');
-  };
-
-  const clearLeads = () => {
-    setSubscribers([]);
-    localStorage.removeItem('sovranly_newsletter_subscribers');
   };
 
   return (
@@ -222,71 +212,7 @@ export default function NewsletterSignup() {
         <div className="h-[74px] flex items-center justify-center text-xs font-mono text-zinc-600">Loading pipeline security layer...</div>
       )}
 
-      {/* Captured Leads Vault */}
-      <div className="border-t border-zinc-900 pt-4 mt-2">
-        <button
-          onClick={() => setShowVault(!showVault)}
-          className="w-full flex items-center justify-between text-zinc-500 hover:text-zinc-300 text-[10px] font-mono transition-all uppercase tracking-widest bg-zinc-950 border border-zinc-900 px-3.5 py-2 rounded-xl hover:border-zinc-800 cursor-pointer"
-        >
-          <span className="flex items-center gap-1.5 font-bold">
-            <Database className="w-3.5 h-3.5 text-cyan-400" />
-            Local Lead Registry ({isMounted ? subscribers.length : 0})
-          </span>
-          <span className="text-[9px] font-black">{showVault ? '[CLOSE]' : '[INSPECT]'}</span>
-        </button>
 
-        <AnimatePresence>
-          {showVault && (
-            <motion.div
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: 'auto', opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              className="overflow-hidden mt-3"
-            >
-              <div className="bg-zinc-950/50 border border-zinc-900 rounded-xl p-4 space-y-3 font-mono text-[10px]">
-                <div className="flex items-center justify-between border-b border-zinc-900 pb-2">
-                  <span className="text-zinc-400 font-bold flex items-center gap-1">
-                    <Lock className="w-3 h-3 text-cyan-400" />
-                    CAPTURED LEADS IN STORAGE
-                  </span>
-                  {subscribers.length > 0 && (
-                    <button
-                      onClick={clearLeads}
-                      className="text-red-400 hover:text-red-300 flex items-center gap-1 bg-transparent border-0 cursor-pointer"
-                      title="Clear Vault"
-                    >
-                      <Trash2 className="w-3 h-3" />
-                      Clear
-                    </button>
-                  )}
-                </div>
-
-                {subscribers.length === 0 ? (
-                  <div className="text-center py-4 text-zinc-600 italic">
-                    No leads recorded yet. Submit an email above to watch it captured live.
-                  </div>
-                ) : (
-                  <div className="space-y-2 max-h-[150px] overflow-y-auto pr-1">
-                    {subscribers.map((sub, idx) => (
-                      <div key={idx} className="bg-[#09090b] border border-zinc-900 p-2.5 rounded-lg flex flex-col md:flex-row md:items-center justify-between gap-1.5 hover:border-zinc-800 transition-all">
-                        <div className="space-y-0.5">
-                          <div className="text-zinc-200 font-bold text-xs truncate max-w-[200px]">{sub.email}</div>
-                          <div className="text-zinc-500 text-[8px]">{sub.timestamp}</div>
-                        </div>
-                        <div className="text-right">
-                          <span className="bg-zinc-900 text-cyan-400 text-[8px] font-bold px-2 py-0.5 rounded border border-zinc-850">
-                            {sub.hash}
-                          </span>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
     </div>
   );
 }

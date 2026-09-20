@@ -37,7 +37,7 @@ export default function FAQPage() {
     { id: 'all', label: 'All Questions', desc: 'Browse entire knowledge catalog', icon: HelpCircle },
     { id: 'splits', label: 'Payments & Splits', desc: 'On-chain splits & transaction fee', icon: Coins },
     { id: 'legal', label: 'Trademark & Legal', desc: 'Class 42 details & VLA pro-bono', icon: Scale },
-    { id: 'dashboard', label: 'Onboarding & Dashboard', desc: 'Registry and marketplace guides', icon: UserCheck },
+    { id: 'dashboard', label: 'Onboarding', desc: 'Registry and marketplace guides', icon: UserCheck },
     { id: 'security', label: 'Security & Zero Trust', desc: 'Keys, signatures, and cold wallets', icon: ShieldCheck }
   ] as const;
 
@@ -273,7 +273,7 @@ export default function FAQPage() {
           {/* 1. Left Sidebar - Pill-Based Navigation for Filtering Category */}
           <div className="lg:col-span-3 space-y-4 lg:sticky lg:top-24">
             <div className="bg-zinc-950 border border-zinc-900 rounded-3xl p-5 shadow-xl space-y-4">
-              <span className="text-[10px] uppercase font-mono tracking-widest text-zinc-500 font-bold block select-none">
+              <span className="text-[10px] uppercase font-mono tracking-widest text-zinc-400 font-bold block select-none">
                 Category Filters
               </span>
               
@@ -300,7 +300,7 @@ export default function FAQPage() {
                         </div>
                         <div className="overflow-hidden">
                           <span className="block text-xs font-bold leading-none truncate">{cat.label}</span>
-                          <span className="block text-[9px] text-zinc-500 leading-normal truncate mt-1">{cat.desc}</span>
+                          <span className="block text-[9px] text-zinc-400 leading-normal truncate mt-1">{cat.desc}</span>
                         </div>
                       </div>
                       <span className={`text-[9px] font-mono font-bold px-1.5 py-0.5 rounded-md ${
@@ -367,7 +367,7 @@ export default function FAQPage() {
                       className="w-full text-left p-5 flex justify-between items-center gap-4 hover:bg-zinc-900/10 transition"
                     >
                       <span className="text-base font-bold text-white tracking-tight">{item.question}</span>
-                      <ChevronDown className={`w-4 h-4 text-zinc-500 transition-transform flex-shrink-0 ${isOpen ? 'rotate-180' : ''}`} />
+                      <ChevronDown className={`w-4 h-4 text-zinc-400 transition-transform flex-shrink-0 ${isOpen ? 'rotate-180' : ''}`} />
                     </button>
 
                     {isOpen && (
@@ -387,7 +387,7 @@ export default function FAQPage() {
 
                         {item.checklist && (
                           <div className="mt-3 pt-3 border-t border-zinc-900/60 space-y-2">
-                            <span className="text-[10px] uppercase font-mono text-zinc-500 font-bold tracking-wider">Sovereign Action Steps</span>
+                            <span className="text-[10px] uppercase font-mono text-zinc-400 font-bold tracking-wider">Sovereign Action Steps</span>
                             <div className="grid grid-cols-1 gap-2 mt-1">
                               {item.checklist.map((step, idx) => (
                                 <div key={idx} className="flex items-center gap-2.5 bg-zinc-950 border border-zinc-900 p-2.5 rounded-lg text-xs text-zinc-400">
@@ -433,7 +433,7 @@ export default function FAQPage() {
                 <Calculator className="w-4 h-4 text-cyan-400" />
                 <h3 className="text-xs uppercase font-mono tracking-wider font-extrabold text-white">Royalty Payout Simulator</h3>
               </div>
-              <p className="text-zinc-500 text-[11px] mb-4 leading-relaxed font-sans">
+              <p className="text-zinc-400 text-[11px] mb-4 leading-relaxed font-sans">
                 Simulate how transaction collections divide instantly. Change the ETH payment size below to observe automated smart contract results.
               </p>
 
@@ -455,16 +455,16 @@ export default function FAQPage() {
 
                 <div className="bg-[#09090b] p-4.5 rounded-xl border border-zinc-900 space-y-3.5 p-4">
                   <div className="flex justify-between items-center text-xs">
-                    <span className="text-zinc-500">Creator Wallet Wallet (85%):</span>
+                    <span className="text-zinc-400">Creator Wallet (85%):</span>
                     <span className="text-emerald-400 font-black font-mono">{calculatedOutputs.creator} ETH</span>
                   </div>
                   <div className="flex justify-between items-center text-xs">
-                    <span className="text-zinc-500">Platform Reserve pool (15%):</span>
+                    <span className="text-zinc-400">Platform Reserve Pool (15%):</span>
                     <span className="text-zinc-400 font-mono">{calculatedOutputs.platform} ETH</span>
                   </div>
                 </div>
                 
-                <div className="text-[10px] text-zinc-600 leading-relaxed font-mono space-y-1 bg-zinc-900/10 p-2 text-center rounded-lg border border-zinc-900">
+                <div className="text-[10px] text-zinc-400 leading-relaxed font-mono space-y-1 bg-zinc-900/10 p-2 text-center rounded-lg border border-zinc-900">
                   <p>✓ ON-CHAIN ENFORCED IMMUTABLY</p>
                   <p>✓ NO MID-ROUTE ACCOUNT LOCKS</p>
                 </div>
@@ -487,7 +487,7 @@ export default function FAQPage() {
               <h4 className="text-xs uppercase font-mono tracking-wider text-zinc-300 flex items-center gap-1.5 mb-2 font-bold select-none">
                 <ShieldCheck className="w-3.5 h-3.5 text-cyan-400" /> Zero Trust Standards
               </h4>
-              <p className="text-zinc-500 text-[11px] leading-relaxed">
+              <p className="text-zinc-400 text-[11px] leading-relaxed">
                 Security is persistent. Continuous validation ensures no account keys or file assets are exposed publicly. All interactions utilize decentralized ledger signatures to assert authority at every step.
               </p>
             </Card>
@@ -500,7 +500,7 @@ export default function FAQPage() {
 
       {/* Footer Element */}
       <footer className="border-t border-zinc-900/60 py-12 flex flex-col items-center justify-center gap-6 text-center text-zinc-650 text-xs bg-zinc-950/50 mt-16">
-        <div className="flex items-center gap-4 text-zinc-500">
+        <div className="flex items-center gap-4 text-zinc-400">
           <Link href="/about" className="hover:text-cyan-400 transition-colors">About Us</Link>
           <span>•</span>
           <Link href="/terms" className="hover:text-cyan-400 transition-colors">Terms of Service</Link>
