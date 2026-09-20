@@ -128,127 +128,127 @@ export default function Overview({ onNavigate }: { onNavigate?: (pageId: number)
   ];
 
   return (
-    <div className="space-y-8 font-sans max-w-7xl mx-auto">
+    <div className="space-y-10 sm:space-y-12 font-sans max-w-7xl mx-auto">
       {/* Hero Banner */}
-      <div className="relative rounded-3xl overflow-hidden border border-zinc-800 bg-zinc-900/90 shadow-2xl">
-        <div className="absolute inset-0 z-0">
+      <div className="relative rounded-3xl overflow-hidden border border-zinc-800 bg-zinc-900/90 shadow-2xl transition-all">
+        <div className="absolute inset-0 z-0 pointer-events-none">
           <div className="absolute inset-0 bg-[linear-gradient(to_right,#1f293720_1px,transparent_1px),linear-gradient(to_bottom,#1f293720_1px,transparent_1px)] bg-[size:24px_24px]" />
           <div className="absolute inset-0 bg-gradient-to-tr from-cyan-500/10 via-transparent to-violet-500/10" />
           <div className="absolute -top-1/2 left-1/4 w-96 h-96 bg-cyan-500/10 rounded-full blur-[90px]" />
         </div>
-        <div className="relative z-10 p-6 sm:p-10 flex flex-col items-center justify-center text-center space-y-3">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-cyan-950/60 border border-cyan-500/30 text-cyan-400 text-xs font-mono uppercase tracking-wider">
-            <ShieldCheck className="w-3.5 h-3.5" />
+        <div className="relative z-10 p-8 sm:p-12 md:p-14 flex flex-col items-center justify-center text-center space-y-4 sm:space-y-5">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-cyan-950/60 border border-cyan-500/30 text-cyan-400 text-xs font-mono uppercase tracking-wider shadow-sm">
+            <ShieldCheck className="w-4 h-4" />
             <span>Zero Trust Sovereign Creator Authority</span>
           </div>
-          <h1 className="text-2xl sm:text-4xl font-extrabold tracking-tight text-white">
+          <h1 className="text-2xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-white">
             Creator Command Center
           </h1>
-          <p className="text-zinc-400 max-w-2xl text-xs sm:text-sm font-light">
+          <p className="text-zinc-400 max-w-2xl text-xs sm:text-sm md:text-base font-normal leading-relaxed">
             Timestamp your creative works, configure smart commercial licensing with anti-AI scraping tags, and receive instant 85% creator royalty payouts with zero middlemen.
           </p>
         </div>
       </div>
 
       {/* The 3-Step Creator Flow */}
-      <div className="space-y-3">
+      <div className="space-y-5">
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
-            <h2 className="text-sm font-bold text-white uppercase tracking-wider font-mono">The 3-Step Creation Journey</h2>
+          <div className="flex items-center gap-2.5">
+            <span className="w-2.5 h-2.5 rounded-full bg-cyan-400 animate-pulse" />
+            <h2 className="text-sm sm:text-base font-bold text-white uppercase tracking-wider font-mono">The 3-Step Creation Journey</h2>
           </div>
-          <span className="text-[10px] text-zinc-500 font-mono">From Idea to On-Chain Monetization</span>
+          <span className="text-xs text-zinc-500 font-mono hidden sm:inline-block">From Idea to On-Chain Monetization</span>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
           {/* Step 1 */}
           <div 
             onClick={() => onNavigate && onNavigate(2)}
-            className="group relative bg-zinc-900/40 hover:bg-zinc-900/80 border border-zinc-800 hover:border-cyan-500/50 rounded-2xl p-5 transition-all cursor-pointer space-y-3 flex flex-col justify-between"
+            className="group relative bg-zinc-900/40 hover:bg-zinc-900/80 border border-zinc-800 hover:border-cyan-500/50 rounded-2xl p-6 sm:p-7 transition-all cursor-pointer space-y-5 flex flex-col justify-between shadow-sm"
           >
-            <div className="space-y-2">
+            <div className="space-y-3">
               <div className="flex items-center justify-between">
-                <span className="text-[10px] font-mono font-bold text-cyan-400 bg-cyan-950/50 px-2 py-0.5 rounded border border-cyan-500/30">
+                <span className="text-xs font-mono font-bold text-cyan-400 bg-cyan-950/50 px-2.5 py-1 rounded-md border border-cyan-500/30">
                   STEP 01
                 </span>
-                <PlusCircle className="w-4 h-4 text-zinc-500 group-hover:text-cyan-400 transition-colors" />
+                <PlusCircle className="w-5 h-5 text-zinc-500 group-hover:text-cyan-400 transition-colors" />
               </div>
-              <h3 className="text-base font-bold text-white group-hover:text-cyan-300 transition-colors">
+              <h3 className="text-lg font-bold text-white group-hover:text-cyan-300 transition-colors">
                 1. Asset Management & Folders
               </h3>
-              <p className="text-xs text-zinc-400 font-light leading-relaxed">
+              <p className="text-xs sm:text-sm text-zinc-400 font-normal leading-relaxed">
                 Upload files, assign rich metadata &amp; tags, and organize your sovereign portfolio into custom folders.
               </p>
             </div>
-            <div className="pt-3 border-t border-zinc-800/80 flex items-center justify-between text-xs font-mono text-cyan-400 font-medium">
+            <div className="pt-4 border-t border-zinc-800/80 flex items-center justify-between text-xs font-mono text-cyan-400 font-semibold">
               <span>Launch Asset Manager</span>
-              <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-1.5 transition-transform" />
             </div>
           </div>
 
           {/* Step 2 */}
           <div 
             onClick={() => onNavigate && onNavigate(4)}
-            className="group relative bg-zinc-900/40 hover:bg-zinc-900/80 border border-zinc-800 hover:border-emerald-500/50 rounded-2xl p-5 transition-all cursor-pointer space-y-3 flex flex-col justify-between"
+            className="group relative bg-zinc-900/40 hover:bg-zinc-900/80 border border-zinc-800 hover:border-emerald-500/50 rounded-2xl p-6 sm:p-7 transition-all cursor-pointer space-y-5 flex flex-col justify-between shadow-sm"
           >
-            <div className="space-y-2">
+            <div className="space-y-3">
               <div className="flex items-center justify-between">
-                <span className="text-[10px] font-mono font-bold text-emerald-400 bg-emerald-950/50 px-2 py-0.5 rounded border border-emerald-500/30">
+                <span className="text-xs font-mono font-bold text-emerald-400 bg-emerald-950/50 px-2.5 py-1 rounded-md border border-emerald-500/30">
                   STEP 02
                 </span>
-                <Scale className="w-4 h-4 text-zinc-500 group-hover:text-emerald-400 transition-colors" />
+                <Scale className="w-5 h-5 text-zinc-500 group-hover:text-emerald-400 transition-colors" />
               </div>
-              <h3 className="text-base font-bold text-white group-hover:text-emerald-300 transition-colors">
+              <h3 className="text-lg font-bold text-white group-hover:text-emerald-300 transition-colors">
                 2. Define License & Royalties
               </h3>
-              <p className="text-xs text-zinc-400 font-light leading-relaxed">
+              <p className="text-xs sm:text-sm text-zinc-400 font-normal leading-relaxed">
                 Set duration, permitted usage rights, royalty splits, and associate terms with your registered IP works.
               </p>
             </div>
-            <div className="pt-3 border-t border-zinc-800/80 flex items-center justify-between text-xs font-mono text-emerald-400 font-medium">
+            <div className="pt-4 border-t border-zinc-800/80 flex items-center justify-between text-xs font-mono text-emerald-400 font-semibold">
               <span>Open Licensing Hub</span>
-              <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-1.5 transition-transform" />
             </div>
           </div>
 
           {/* Step 3 */}
           <div 
             onClick={() => onNavigate && onNavigate(5)}
-            className="group relative bg-zinc-900/40 hover:bg-zinc-900/80 border border-zinc-800 hover:border-violet-500/50 rounded-2xl p-5 transition-all cursor-pointer space-y-3 flex flex-col justify-between"
+            className="group relative bg-zinc-900/40 hover:bg-zinc-900/80 border border-zinc-800 hover:border-violet-500/50 rounded-2xl p-6 sm:p-7 transition-all cursor-pointer space-y-5 flex flex-col justify-between shadow-sm"
           >
-            <div className="space-y-2">
+            <div className="space-y-3">
               <div className="flex items-center justify-between">
-                <span className="text-[10px] font-mono font-bold text-violet-400 bg-violet-950/50 px-2 py-0.5 rounded border border-violet-500/30">
+                <span className="text-xs font-mono font-bold text-violet-400 bg-violet-950/50 px-2.5 py-1 rounded-md border border-violet-500/30">
                   STEP 03
                 </span>
-                <Sliders className="w-4 h-4 text-zinc-500 group-hover:text-violet-400 transition-colors" />
+                <Sliders className="w-5 h-5 text-zinc-500 group-hover:text-violet-400 transition-colors" />
               </div>
-              <h3 className="text-base font-bold text-white group-hover:text-violet-300 transition-colors">
+              <h3 className="text-lg font-bold text-white group-hover:text-violet-300 transition-colors">
                 3. Sandbox & Simulate Payouts
               </h3>
-              <p className="text-xs text-zinc-400 font-light leading-relaxed">
+              <p className="text-xs sm:text-sm text-zinc-400 font-normal leading-relaxed">
                 Simulate streaming payouts, AI scraping licensing revenue, and test on-chain automated payouts.
               </p>
             </div>
-            <div className="pt-3 border-t border-zinc-800/80 flex items-center justify-between text-xs font-mono text-violet-400 font-medium">
+            <div className="pt-4 border-t border-zinc-800/80 flex items-center justify-between text-xs font-mono text-violet-400 font-semibold">
               <span>Launch Simulator</span>
-              <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-1.5 transition-transform" />
             </div>
           </div>
         </div>
       </div>
 
       {/* Top 4 Stats Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 lg:gap-6">
         {cards.map((card, i) => (
-          <Card key={i} className="bg-zinc-900/40 border-zinc-800 text-white rounded-2xl overflow-hidden hover:border-zinc-700 transition-all">
-            <CardContent className="p-5 flex flex-col justify-between h-full space-y-2">
-              <span className="text-xs font-mono text-zinc-400 uppercase tracking-wider">{card.title}</span>
-              <div className="space-y-0.5">
-                <div className={`text-2xl font-extrabold tracking-tight font-mono ${card.color || 'text-white'}`}>
+          <Card key={i} className="bg-zinc-900/40 border-zinc-800 text-white rounded-2xl overflow-hidden hover:border-zinc-700 transition-all shadow-sm">
+            <CardContent className="p-6 sm:p-7 flex flex-col justify-between h-full space-y-3">
+              <span className="text-xs font-mono text-zinc-400 uppercase tracking-wider font-semibold">{card.title}</span>
+              <div className="space-y-1">
+                <div className={`text-2xl sm:text-3xl font-extrabold tracking-tight font-mono ${card.color || 'text-white'}`}>
                   {card.value}
                 </div>
-                <p className="text-[11px] text-zinc-500 font-light">{card.subtext}</p>
+                <p className="text-xs text-zinc-500 font-normal">{card.subtext}</p>
               </div>
             </CardContent>
           </Card>
@@ -256,31 +256,31 @@ export default function Overview({ onNavigate }: { onNavigate?: (pageId: number)
       </div>
 
       {/* Quick Tools Grid */}
-      <div className="space-y-3">
+      <div className="space-y-5">
         <div className="flex items-center justify-between">
-          <h2 className="text-xs font-mono uppercase tracking-widest text-zinc-400 font-bold">
+          <h2 className="text-xs sm:text-sm font-mono uppercase tracking-widest text-zinc-400 font-bold">
             Creator Utility Matrix
           </h2>
-          <span className="text-[10px] text-zinc-500 font-mono">Instant Access</span>
+          <span className="text-xs text-zinc-500 font-mono">Instant Access</span>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 lg:gap-6">
           {quickTools.map((tool) => {
             const Icon = tool.icon;
             return (
               <div
                 key={tool.id}
                 onClick={() => onNavigate && onNavigate(tool.id)}
-                className={`bg-zinc-900/30 hover:bg-zinc-900/70 border border-zinc-850 ${tool.border} p-4 rounded-2xl transition-all cursor-pointer group flex items-start gap-3.5`}
+                className={`bg-zinc-900/30 hover:bg-zinc-900/70 border border-zinc-850 ${tool.border} p-5 sm:p-6 rounded-2xl transition-all cursor-pointer group flex items-start gap-4 sm:gap-5 shadow-sm`}
               >
-                <div className={`p-2.5 rounded-xl bg-zinc-900 border border-zinc-800 ${tool.color} shrink-0 group-hover:scale-105 transition-transform`}>
-                  <Icon className="w-4 h-4" />
+                <div className={`p-3 rounded-xl bg-zinc-900 border border-zinc-800 ${tool.color} shrink-0 group-hover:scale-105 transition-transform`}>
+                  <Icon className="w-5 h-5" />
                 </div>
-                <div className="space-y-1 min-w-0">
-                  <h4 className="text-xs font-bold text-zinc-200 group-hover:text-white transition-colors truncate">
+                <div className="space-y-1.5 min-w-0">
+                  <h4 className="text-sm font-bold text-zinc-200 group-hover:text-white transition-colors truncate">
                     {tool.title}
                   </h4>
-                  <p className="text-[11px] text-zinc-400 font-light leading-snug line-clamp-2">
+                  <p className="text-xs text-zinc-400 font-normal leading-relaxed line-clamp-2">
                     {tool.desc}
                   </p>
                 </div>
@@ -291,7 +291,7 @@ export default function Overview({ onNavigate }: { onNavigate?: (pageId: number)
       </div>
 
       {/* Live System Log & API Latency */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 pt-2">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8 pt-4">
         <div className="lg:col-span-2">
           <ActivityLog />
         </div>

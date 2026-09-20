@@ -61,8 +61,21 @@ export default function RoyaltySandbox() {
   const [monetizationModel, setMonetizationModel] = useState<'hybrid' | 'pure-tx-flat' | 'pure-saas' | 'pure-overseas-d-flat'>('hybrid');
 
   // Input payments state
+  const [incomingCurrency, setIncomingCurrency] = useState<'ETH' | 'USD'>('ETH');
   const [incomingPayInput, setIncomingPayInput] = useState<string>('1.5');
-  const normalizedInput = Math.max(0, parseFloat(incomingPayInput) || 0);
+  const rawInput = Math.max(0, parseFloat(incomingPayInput) || 0);
+  const normalizedInput = incomingCurrency === 'USD' ? rawInput / 2855 : rawInput;
+
+  const handleToggleSandboxCurrency = (mode: 'ETH' | 'USD') => {
+    if (mode === incomingCurrency) return;
+    const current = parseFloat(incomingPayInput) || 0;
+    if (mode === 'USD') {
+      setIncomingPayInput(Math.round(current * 2855).toString());
+    } else {
+      setIncomingPayInput((current / 2855).toFixed(2));
+    }
+    setIncomingCurrency(mode);
+  };
 
   // Creative Sovereignty LLC Monetization Simulation Inputs
   const [subsCount, setSubsCount] = useState<number>(450);
@@ -557,12 +570,40 @@ export default function RoyaltySandbox() {
           
           {/* Target input payment card */}
           <Card className="bg-zinc-950 border border-zinc-900 rounded-[28px] overflow-hidden shadow-xl">
-            <CardHeader className="p-6">
-              <CardTitle className="text-lg font-bold text-white flex items-center gap-2">
-                <Coins className="w-5 h-5 text-teal-400" /> 1. Input Simulated Payment
-              </CardTitle>
-              <CardDescription className="text-zinc-500 text-xs">
-                Provide a sandbox payment value representing license revenues arriving from streaming broadcasters.
+            <CardHeader className="p-6 pb-4">
+              <div className="flex items-center justify-between gap-3">
+                <CardTitle className="text-lg font-bold text-white flex items-center gap-2">
+                  <Coins className="w-5 h-5 text-teal-400" /> 1. Input Simulated Payment
+                </CardTitle>
+
+                {/* Currency Toggle: ETH vs USD */}
+                <div className="flex items-center gap-1 bg-zinc-900/90 p-0.5 rounded-lg border border-zinc-800">
+                  <button
+                    type="button"
+                    onClick={() => handleToggleSandboxCurrency('USD')}
+                    className={`px-2.5 py-1 text-[11px] font-mono font-bold rounded-md transition-all cursor-pointer ${
+                      incomingCurrency === 'USD'
+                        ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 shadow-sm'
+                        : 'text-zinc-400 hover:text-zinc-200'
+                    }`}
+                  >
+                    USD ($)
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleToggleSandboxCurrency('ETH')}
+                    className={`px-2.5 py-1 text-[11px] font-mono font-bold rounded-md transition-all cursor-pointer ${
+                      incomingCurrency === 'ETH'
+                        ? 'bg-teal-500/20 text-teal-300 border border-teal-500/40 shadow-sm'
+                        : 'text-zinc-400 hover:text-zinc-200'
+                    }`}
+                  >
+                    ETH
+                  </button>
+                </div>
+              </div>
+              <CardDescription className="text-zinc-500 text-xs mt-1">
+                Provide a sandbox payment value representing license revenues arriving from streaming broadcasters in {incomingCurrency === 'USD' ? 'US Dollars ($ USD / USDC)' : 'Ethereum (ETH)'}.
               </CardDescription>
             </CardHeader>
             <CardContent className="p-6 pt-0 space-y-4">
@@ -570,16 +611,70 @@ export default function RoyaltySandbox() {
                 <div className="relative">
                   <Input 
                     type="number" 
-                    step="0.05"
+                    step={incomingCurrency === 'USD' ? '50' : '0.05'}
                     min="0.01"
                     value={incomingPayInput}
                     onChange={(e) => setIncomingPayInput(e.target.value)}
-                    className="bg-zinc-900 border-zinc-800 text-white font-mono text-lg py-7 pl-12 pr-4 focus-visible:ring-teal-500 rounded-xl"
+                    className="bg-zinc-900 border-zinc-800 text-white font-mono text-lg py-7 pl-12 pr-28 focus-visible:ring-teal-500 rounded-xl"
                   />
                   <Wallet className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-zinc-500" />
-                  <span className="absolute right-4 top-1/2 -translate-y-1/2 text-xs font-mono text-zinc-500">
-                    ≈ ${(normalizedInput * 2855).toLocaleString(undefined, { maximumFractionDigits: 1 })} USD
+                  <span className="absolute right-4 top-1/2 -translate-y-1/2 text-xs font-mono text-zinc-400">
+                    {incomingCurrency === 'USD' ? (
+                      <>≈ {normalizedInput.toFixed(4)} ETH</>
+                    ) : (
+                      <>≈ ${(normalizedInput * 2855).toLocaleString(undefined, { maximumFractionDigits: 1 })} USD</>
+                    )}
                   </span>
+                </div>
+
+                {/* Quick Presets */}
+                <div className="flex flex-wrap items-center gap-1.5 pt-1">
+                  <span className="text-[10px] font-mono text-zinc-500 mr-1">Quick Presets:</span>
+                  {incomingCurrency === 'USD' ? (
+                    <>
+                      {[
+                        { label: '$1,500', val: '1500' },
+                        { label: '$2,855 (1 ETH)', val: '2855' },
+                        { label: '$4,282 (1.5 ETH)', val: '4282' },
+                        { label: '$10,000', val: '10000' }
+                      ].map(p => (
+                        <button
+                          key={p.val}
+                          type="button"
+                          onClick={() => setIncomingPayInput(p.val)}
+                          className={`text-[10px] font-mono px-2 py-0.5 rounded-md border transition-all cursor-pointer ${
+                            incomingPayInput === p.val
+                              ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40 font-bold'
+                              : 'bg-zinc-900/80 text-zinc-400 border-zinc-800 hover:text-white'
+                          }`}
+                        >
+                          {p.label}
+                        </button>
+                      ))}
+                    </>
+                  ) : (
+                    <>
+                      {[
+                        { label: '0.5 ETH', val: '0.5' },
+                        { label: '1.0 ETH', val: '1.0' },
+                        { label: '1.5 ETH', val: '1.5' },
+                        { label: '3.0 ETH', val: '3.0' }
+                      ].map(p => (
+                        <button
+                          key={p.val}
+                          type="button"
+                          onClick={() => setIncomingPayInput(p.val)}
+                          className={`text-[10px] font-mono px-2 py-0.5 rounded-md border transition-all cursor-pointer ${
+                            incomingPayInput === p.val
+                              ? 'bg-teal-500/20 text-teal-300 border-teal-500/40 font-bold'
+                              : 'bg-zinc-900/80 text-zinc-400 border-zinc-800 hover:text-white'
+                          }`}
+                        >
+                          {p.label}
+                        </button>
+                      ))}
+                    </>
+                  )}
                 </div>
               </div>
             </CardContent>

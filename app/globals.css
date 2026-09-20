@@ -1,144 +1,617 @@
 @import "tailwindcss";
 
-/* Zero Trust Light Theme Overrides */
-html.light {
+/* ==========================================================================
+   SOVRANLY IP - SOVEREIGN TECH ROYALTY DESIGN SYSTEM
+   Light Mode & Dark Mode High-Contrast Architectural Styles
+   ========================================================================== */
+
+/* Zero Trust Light Theme - Executive Tech Royalty */
+html.light,
+[data-theme="light"],
+.light {
   color-scheme: light;
 }
 
-html.light body {
-  background-color: #f8fafc;
-  color: #0f172a;
+html.light body,
+[data-theme="light"] body,
+.light body {
+  background-color: #f8fafc !important;
+  color: #0f172a !important;
 }
 
-/* Base canvas and section backgrounds */
+/* Base Canvas & Section Backgrounds in Light Mode */
 html.light .bg-black,
-html.light .bg-zinc-950 {
-  background-color: #f8fafc;
+html.light .bg-zinc-950,
+html.light .bg-\[\#050505\],
+html.light .bg-\[\#09090b\],
+html.light [class*="bg-black/"],
+html.light [class*="bg-zinc-950/"],
+[data-theme="light"] .bg-black,
+[data-theme="light"] .bg-zinc-950,
+[data-theme="light"] [class*="bg-zinc-950/"] {
+  background-color: #ffffff !important;
+  border-color: #e2e8f0 !important;
 }
 
+/* Frosted Overlays & Navigation Bars */
+html.light header[class*="bg-"],
+html.light nav[class*="bg-"],
 html.light .bg-black\/80,
 html.light .bg-black\/90,
 html.light .bg-zinc-950\/50,
 html.light .bg-zinc-950\/80,
-html.light .bg-zinc-950\/90 {
-  background-color: rgba(255, 255, 255, 0.9);
+html.light .bg-zinc-950\/90,
+[data-theme="light"] .bg-black\/80,
+[data-theme="light"] .bg-black\/90 {
+  background-color: rgba(255, 255, 255, 0.95) !important;
+  backdrop-filter: blur(16px) !important;
+  border-color: #e2e8f0 !important;
+  box-shadow: 0 1px 3px 0 rgba(15, 23, 42, 0.05) !important;
 }
 
-/* Card and container surfaces */
+/* Pristine Royal Card Surfaces (Eliminates all dull muddy gray slabs) */
+html.light [class*="bg-zinc-900"],
 html.light .bg-zinc-900,
-html.light .bg-zinc-900\/90,
-html.light .bg-zinc-900\/80 {
-  background-color: #ffffff;
+html.light .bg-zinc-905,
+[data-theme="light"] [class*="bg-zinc-900"],
+[data-theme="light"] .bg-zinc-900 {
+  background-color: #ffffff !important;
+  border-color: #e2e8f0 !important;
+  box-shadow: 0 1px 3px 0 rgba(15, 23, 42, 0.04), 0 8px 16px -4px rgba(15, 23, 42, 0.03) !important;
 }
 
-html.light .bg-zinc-900\/60,
-html.light .bg-zinc-900\/50,
-html.light .bg-zinc-900\/40,
-html.light .bg-zinc-900\/30 {
-  background-color: #f1f5f9;
-}
-
+/* Inset Wells & Subtle Secondary Surface Backdrops */
+html.light [class*="bg-zinc-850"],
+html.light [class*="bg-zinc-800"],
+html.light .bg-zinc-850,
 html.light .bg-zinc-800,
-html.light .bg-zinc-800\/80,
-html.light .bg-zinc-800\/50 {
-  background-color: #e2e8f0;
+[data-theme="light"] [class*="bg-zinc-850"],
+[data-theme="light"] [class*="bg-zinc-800"] {
+  background-color: #f1f5f9 !important;
+  border-color: #cbd5e1 !important;
 }
 
-/* Typography contrast */
+/* ==========================================================================
+   HIGH-CONTRAST TYPOGRAPHY - ZERO "GRAY ON GRAY"
+   ========================================================================== */
+
+/* Primary Headings & Bold Text (Deep Obsidian / Slate-900, 15:1+ Contrast) */
 html.light .text-white,
 html.light .text-zinc-100,
-html.light .text-zinc-200 {
-  color: #0f172a;
+html.light .text-zinc-200,
+html.light .text-zinc-250,
+html.light h1,
+html.light h2,
+html.light h3,
+html.light h4,
+[data-theme="light"] .text-white,
+[data-theme="light"] .text-zinc-100,
+[data-theme="light"] .text-zinc-200 {
+  color: #0f172a !important;
 }
 
+/* Secondary Headings, Subtitles & Section Leads (Slate-800) */
 html.light .text-zinc-300,
-html.light .text-zinc-400 {
-  color: #334155;
+html.light .text-zinc-350,
+html.light [class*="text-zinc-300"],
+[data-theme="light"] .text-zinc-300 {
+  color: #1e293b !important;
 }
 
+/* Body Text, Descriptions & Field Labels (Slate-800 / Slate-700, 10:1+ Contrast) */
+html.light .text-zinc-400,
+html.light .text-zinc-420,
+html.light .text-zinc-450,
+html.light [class*="text-zinc-400"],
+[data-theme="light"] .text-zinc-400 {
+  color: #1e293b !important;
+}
+
+/* Subtext, Timestamps, Muted Info & Monospace (Crisp Slate-700, NEVER faint gray) */
 html.light .text-zinc-500,
+html.light .text-zinc-505,
+html.light .text-zinc-550,
 html.light .text-zinc-600,
-html.light .text-zinc-650 {
-  color: #64748b;
+html.light .text-zinc-650,
+html.light .text-zinc-700,
+html.light .text-zinc-705,
+html.light .text-zinc-750,
+html.light .text-zinc-800,
+html.light .text-muted-foreground,
+html.light [class*="text-zinc-500"],
+html.light [class*="text-zinc-600"],
+[data-theme="light"] .text-zinc-500,
+[data-theme="light"] .text-zinc-600 {
+  color: #334155 !important;
 }
 
-/* Ensure vibrant gradient buttons maintain white text */
-html.light button[class*="from-cyan-"],
-html.light a[class*="from-cyan-"],
-html.light [class*="from-cyan-"] > span,
-html.light [class*="from-cyan-"] > svg,
-html.light [class*="from-cyan-"],
-html.light .bg-gradient-to-r {
-  color: #ffffff !important;
+/* Monospace & Code Tags */
+html.light code,
+html.light pre,
+html.light .font-mono {
+  color: #0f172a !important;
 }
 
-/* Borders */
+/* Group & Element Hover State Typography */
+html.light .hover\:text-white:hover,
+html.light .group:hover .group-hover\:text-white {
+  color: #0f172a !important;
+}
+
+html.light .hover\:text-zinc-200:hover,
+html.light .hover\:text-zinc-100:hover,
+html.light .group:hover .group-hover\:text-zinc-200 {
+  color: #0f172a !important;
+}
+
+html.light .hover\:text-cyan-300:hover,
+html.light .group:hover .group-hover\:text-cyan-300,
+html.light .hover\:text-cyan-400:hover {
+  color: #0284c7 !important;
+}
+
+html.light .hover\:text-emerald-300:hover,
+html.light .group:hover .group-hover\:text-emerald-300,
+html.light .hover\:text-emerald-400:hover {
+  color: #047857 !important;
+}
+
+html.light .hover\:text-violet-300:hover,
+html.light .group:hover .group-hover\:text-violet-300 {
+  color: #6d28d9 !important;
+}
+
+/* ==========================================================================
+   SOVEREIGN ROYAL JEWEL ACCENTS IN LIGHT MODE
+   High-contrast, rich saturated tones calibrated for pure white canvas
+   Eliminates all washed-out pastel and faint gray-tinted text
+   ========================================================================== */
+
+/* Royal Raspberry / Deep Pink (SOLVES USER'S "LIGHT PINK FONT IS GRAY GRAY") */
+html.light .text-pink-300,
+html.light .text-pink-400,
+html.light .text-pink-500,
+html.light [class*="text-pink-"],
+[data-theme="light"] .text-pink-300,
+[data-theme="light"] .text-pink-400,
+[data-theme="light"] [class*="text-pink-"] {
+  color: #be185d !important;
+  font-weight: 700 !important;
+}
+
+/* Pink SVG icons and fills */
+html.light .fill-pink-400,
+html.light [class*="fill-pink-"],
+[data-theme="light"] .fill-pink-400 {
+  fill: #be185d !important;
+  color: #be185d !important;
+}
+
+/* Sovereign Crimson / Deep Rose */
+html.light .text-rose-200,
+html.light .text-rose-300,
+html.light .text-rose-400,
+html.light .text-rose-500,
+html.light [class*="text-rose-"],
+[data-theme="light"] .text-rose-300,
+[data-theme="light"] .text-rose-400,
+[data-theme="light"] [class*="text-rose-"] {
+  color: #be123c !important;
+  font-weight: 700 !important;
+}
+
+html.light .fill-rose-400,
+html.light [class*="fill-rose-"] {
+  fill: #be123c !important;
+  color: #be123c !important;
+}
+
+/* Royal Magenta / Fuchsia */
+html.light .text-fuchsia-300,
+html.light .text-fuchsia-400,
+html.light .text-fuchsia-500,
+html.light [class*="text-fuchsia-"],
+[data-theme="light"] .text-fuchsia-400 {
+  color: #a21caf !important;
+  font-weight: 700 !important;
+}
+
+/* Royal Sapphire / Vivid Ocean Cyan */
+html.light .text-cyan-200,
+html.light .text-cyan-300,
+html.light .text-cyan-400,
+html.light .text-cyan-450,
+html.light .text-cyan-500,
+html.light [class*="text-cyan-"],
+[data-theme="light"] .text-cyan-400 {
+  color: #0284c7 !important;
+  font-weight: 700 !important;
+}
+
+/* Botanical Deep Emerald */
+html.light .text-emerald-200,
+html.light .text-emerald-300,
+html.light .text-emerald-350,
+html.light .text-emerald-400,
+html.light .text-emerald-405,
+html.light .text-emerald-500,
+html.light [class*="text-emerald-"],
+[data-theme="light"] .text-emerald-400 {
+  color: #047857 !important;
+  font-weight: 700 !important;
+}
+
+/* Sovereign Gold / Warm Amber */
+html.light .text-amber-200,
+html.light .text-amber-300,
+html.light .text-amber-400,
+html.light .text-amber-500,
+html.light [class*="text-amber-"],
+[data-theme="light"] .text-amber-400 {
+  color: #b45309 !important;
+  font-weight: 700 !important;
+}
+
+/* Imperial Purple / Cryptographic Violet */
+html.light .text-violet-200,
+html.light .text-violet-300,
+html.light .text-violet-400,
+html.light .text-violet-500,
+html.light [class*="text-violet-"],
+[data-theme="light"] .text-violet-400 {
+  color: #6d28d9 !important;
+  font-weight: 700 !important;
+}
+
+html.light .text-purple-200,
+html.light .text-purple-300,
+html.light .text-purple-400,
+html.light [class*="text-purple-"],
+[data-theme="light"] .text-purple-400 {
+  color: #7e22ce !important;
+  font-weight: 700 !important;
+}
+
+/* Marine Deep Teal */
+html.light .text-teal-300,
+html.light .text-teal-400,
+html.light .text-teal-450,
+html.light [class*="text-teal-"],
+[data-theme="light"] .text-teal-400 {
+  color: #0f766e !important;
+  font-weight: 700 !important;
+}
+
+/* Sovereign Terracotta Orange */
+html.light .text-orange-300,
+html.light .text-orange-400,
+html.light [class*="text-orange-"] {
+  color: #c2410c !important;
+  font-weight: 700 !important;
+}
+
+/* Royal Indigo */
+html.light .text-indigo-300,
+html.light .text-indigo-400,
+html.light [class*="text-indigo-"] {
+  color: #4338ca !important;
+  font-weight: 700 !important;
+}
+
+/* Crimson Red */
+html.light .text-red-300,
+html.light .text-red-400,
+html.light .text-red-500,
+html.light [class*="text-red-"] {
+  color: #b91c1c !important;
+  font-weight: 700 !important;
+}
+
+/* ==========================================================================
+   STATUS CHIPS & CREDENTIAL PILLS IN LIGHT MODE
+   Crisp pastel containers with distinct saturated borders & high-contrast text
+   ========================================================================== */
+
+/* Pink / Favorites Status Pills */
+html.light [class*="bg-pink-950"],
+html.light .bg-pink-950,
+[data-theme="light"] [class*="bg-pink-950"] {
+  background-color: #fdf2f8 !important;
+  border-color: #f472b6 !important;
+  color: #be185d !important;
+  font-weight: 700 !important;
+}
+
+/* Rose / Security Status Pills */
+html.light [class*="bg-rose-950"],
+html.light .bg-rose-950,
+[data-theme="light"] [class*="bg-rose-950"] {
+  background-color: #fff1f2 !important;
+  border-color: #fb7185 !important;
+  color: #be123c !important;
+  font-weight: 700 !important;
+}
+
+/* Fuchsia Status Pills */
+html.light [class*="bg-fuchsia-950"],
+html.light .bg-fuchsia-950 {
+  background-color: #fdf4ff !important;
+  border-color: #e879f9 !important;
+  color: #a21caf !important;
+  font-weight: 700 !important;
+}
+
+/* Cyan Status Pills */
+html.light [class*="bg-cyan-950"],
+html.light .bg-cyan-950,
+[data-theme="light"] [class*="bg-cyan-950"] {
+  background-color: #f0f9ff !important;
+  border-color: #38bdf8 !important;
+  color: #0369a1 !important;
+  font-weight: 700 !important;
+}
+
+/* Emerald Status Pills */
+html.light [class*="bg-emerald-950"],
+html.light .bg-emerald-950,
+[data-theme="light"] [class*="bg-emerald-950"] {
+  background-color: #ecfdf5 !important;
+  border-color: #34d399 !important;
+  color: #047857 !important;
+  font-weight: 700 !important;
+}
+
+/* Amber / Gold Status Pills */
+html.light [class*="bg-amber-950"],
+html.light .bg-amber-950,
+[data-theme="light"] [class*="bg-amber-950"] {
+  background-color: #fffbeb !important;
+  border-color: #fbbf24 !important;
+  color: #b45309 !important;
+  font-weight: 700 !important;
+}
+
+/* Violet Status Pills */
+html.light [class*="bg-violet-950"],
+html.light .bg-violet-950,
+[data-theme="light"] [class*="bg-violet-950"] {
+  background-color: #f5f3ff !important;
+  border-color: #c084fc !important;
+  color: #6d28d9 !important;
+  font-weight: 700 !important;
+}
+
+/* Purple Status Pills */
+html.light [class*="bg-purple-950"],
+html.light .bg-purple-950 {
+  background-color: #faf5ff !important;
+  border-color: #c084fc !important;
+  color: #7e22ce !important;
+  font-weight: 700 !important;
+}
+
+/* Teal Status Pills */
+html.light [class*="bg-teal-950"],
+html.light .bg-teal-950 {
+  background-color: #f0fdfa !important;
+  border-color: #2dd4bf !important;
+  color: #0f766e !important;
+  font-weight: 700 !important;
+}
+
+/* ==========================================================================
+   BORDERS, TABLES & INTERACTIVE ELEMENTS
+   ========================================================================== */
+
+/* Architectural Clean Slate Borders */
+html.light [class*="border-zinc-"],
+html.light [class*="border-white/"],
 html.light .border-zinc-900,
 html.light .border-zinc-850,
 html.light .border-zinc-800,
-html.light .border-white\/10,
-html.light .border-white\/5 {
-  border-color: #e2e8f0;
+html.light .border-zinc-700,
+[data-theme="light"] [class*="border-zinc-"] {
+  border-color: #e2e8f0 !important;
 }
 
-/* Form input elements */
+html.light [class*="divide-zinc-"] > * + * {
+  border-color: #e2e8f0 !important;
+}
+
+/* Interactive Card & Button Hover Surfaces */
+html.light [class*="hover:bg-zinc-"]:hover,
+html.light .hover\:bg-zinc-900:hover,
+html.light .hover\:bg-zinc-800:hover,
+[data-theme="light"] [class*="hover:bg-zinc-"]:hover {
+  background-color: #f8fafc !important;
+}
+
+html.light [class*="hover:border-zinc-"]:hover {
+  border-color: #94a3b8 !important;
+}
+
+html.light .hover\:border-cyan-500\/50:hover {
+  border-color: #0284c7 !important;
+  box-shadow: 0 10px 25px -5px rgba(2, 132, 199, 0.12) !important;
+}
+
+html.light .hover\:border-emerald-500\/50:hover {
+  border-color: #059669 !important;
+  box-shadow: 0 10px 25px -5px rgba(5, 150, 105, 0.12) !important;
+}
+
+html.light .hover\:border-violet-500\/50:hover {
+  border-color: #7c3aed !important;
+  box-shadow: 0 10px 25px -5px rgba(124, 58, 237, 0.12) !important;
+}
+
+/* Form Inputs, Search Bars & Textareas */
 html.light input:not([type="checkbox"]):not([type="radio"]),
 html.light textarea,
-html.light select {
+html.light select,
+[data-theme="light"] input:not([type="checkbox"]):not([type="radio"]),
+[data-theme="light"] textarea,
+[data-theme="light"] select {
   background-color: #ffffff !important;
   color: #0f172a !important;
   border-color: #cbd5e1 !important;
 }
 
+html.light input:focus,
+html.light textarea:focus,
+html.light select:focus {
+  border-color: #0284c7 !important;
+  outline: none !important;
+  box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15) !important;
+}
+
 html.light input::placeholder,
 html.light textarea::placeholder {
-  color: #94a3b8 !important;
+  color: #64748b !important;
+  opacity: 1 !important;
+  font-weight: 500 !important;
 }
 
-/* Status chips & cyber pills in light mode */
-html.light .bg-cyan-950\/40,
-html.light .bg-cyan-950\/30,
-html.light .bg-cyan-950\/20,
-html.light .bg-cyan-950 {
-  background-color: #ecfeff;
-  border-color: #a5f3fc;
-  color: #0891b2;
+/* Tables in Light Mode */
+html.light table {
+  background-color: #ffffff !important;
 }
 
-html.light .bg-emerald-950\/40,
-html.light .bg-emerald-950\/30,
-html.light .bg-emerald-950\/20,
-html.light .bg-emerald-950 {
-  background-color: #ecfdf5;
-  border-color: #a7f3d0;
-  color: #059669;
+html.light thead tr {
+  background-color: #f8fafc !important;
+  border-bottom: 2px solid #e2e8f0 !important;
 }
 
-html.light .bg-amber-950\/40,
-html.light .bg-amber-950\/30,
-html.light .bg-amber-950\/20,
-html.light .bg-amber-950 {
-  background-color: #fffbeb;
-  border-color: #fde68a;
-  color: #d97706;
+html.light th {
+  color: #1e293b !important;
+  font-weight: 700 !important;
 }
 
-html.light .bg-violet-950\/40,
-html.light .bg-violet-950\/30,
-html.light .bg-violet-950\/20,
-html.light .bg-violet-950 {
-  background-color: #f5f3ff;
-  border-color: #ddd6fe;
-  color: #7c3aed;
+html.light tbody tr {
+  background-color: #ffffff !important;
+  border-bottom: 1px solid #f1f5f9 !important;
 }
 
-/* Hover surfaces */
-html.light .hover\:bg-zinc-900:hover,
-html.light .hover\:bg-zinc-900\/50:hover,
-html.light .hover\:bg-zinc-800:hover {
-  background-color: #f1f5f9;
+html.light tbody tr:hover {
+  background-color: #f8fafc !important;
 }
 
-html.light .hover\:text-white:hover {
-  color: #0f172a;
+html.light td {
+  color: #1e293b !important;
+}
+
+/* Action Gradients Maintain Pure White Text */
+html.light button[class*="from-cyan-"],
+html.light a[class*="from-cyan-"],
+html.light [class*="from-cyan-"] > span,
+html.light [class*="from-cyan-"] > svg,
+html.light button[class*="from-blue-"],
+html.light a[class*="from-blue-"],
+html.light button[class*="bg-cyan-500"],
+html.light button[class*="bg-emerald-500"] {
+  color: #ffffff !important;
+}
+
+/* Hardcoded Deep Dark Hex Background Overrides */
+html.light [class*="bg-[#020202]"],
+html.light [class*="bg-[#030303]"],
+html.light [class*="bg-[#030712]"],
+html.light [class*="bg-[#040406]"],
+html.light [class*="bg-[#050505]"],
+html.light [class*="bg-[#050507]"],
+html.light [class*="bg-[#050510]"],
+html.light [class*="bg-[#060608]"],
+html.light [class*="bg-[#07080a]"],
+html.light [class*="bg-[#08080d]"],
+html.light [class*="bg-[#09090b]"],
+html.light [class*="bg-[#090d16]"],
+html.light [class*="bg-[#0a0a0c]"],
+html.light [class*="bg-[#0a0a0d]"],
+html.light [class*="bg-[#0a0a10]"],
+html.light [class*="bg-[#0b0c10]"],
+html.light [class*="bg-[#0c0c14]"],
+html.light [class*="bg-[#0c0d12]"],
+html.light [class*="bg-[#0e0e12]"] {
+  background-color: #ffffff !important;
+  border-color: #e2e8f0 !important;
+}
+
+/* Active Navigation & Selected States */
+html.light button.bg-zinc-900,
+html.light nav button.bg-zinc-900,
+html.light [aria-selected="true"] {
+  background-color: #f1f5f9 !important;
+  border-color: #cbd5e1 !important;
+  color: #0f172a !important;
+  font-weight: 700 !important;
+}
+
+/* Modals, Overlays and Dialog Backdrops */
+html.light #wallet-modal-overlay,
+html.light [id*="modal-overlay"] {
+  background-color: rgba(15, 23, 42, 0.45) !important;
+  backdrop-filter: blur(8px) !important;
+}
+
+/* Select Dropdown Options */
+html.light select option {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+}
+
+/* Recharts Tooltip Styling */
+html.light .recharts-default-tooltip {
+  background-color: #ffffff !important;
+  border-color: #e2e8f0 !important;
+  color: #0f172a !important;
+  box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.12) !important;
+  border-radius: 12px !important;
+}
+
+html.light .recharts-tooltip-item,
+html.light .recharts-tooltip-label {
+  color: #0f172a !important;
+}
+
+html.light .recharts-cartesian-grid line {
+  stroke: #e2e8f0 !important;
+}
+
+html.light .recharts-cartesian-axis-line,
+html.light .recharts-cartesian-axis-tick-line {
+  stroke: #cbd5e1 !important;
+}
+
+html.light .recharts-text.recharts-cartesian-axis-tick-value {
+  fill: #64748b !important;
+  font-weight: 600 !important;
+}
+
+/* FAQ Custom Volatility Chart Tooltip in Light Mode */
+html.light .faq-chart-tooltip,
+[data-theme="light"] .faq-chart-tooltip {
+  background-color: #ffffff !important;
+  border-color: #cbd5e1 !important;
+  color: #0f172a !important;
+  box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.15) !important;
+}
+
+html.light .faq-chart-tooltip span,
+[data-theme="light"] .faq-chart-tooltip span {
+  color: #334155 !important;
+}
+
+html.light .faq-chart-tooltip .text-white,
+[data-theme="light"] .faq-chart-tooltip .text-white {
+  color: #0f172a !important;
+}
+
+html.light .faq-chart-tooltip .text-cyan-400,
+[data-theme="light"] .faq-chart-tooltip .text-cyan-400 {
+  color: #0284c7 !important;
+}
+
+html.light .faq-chart-tooltip .text-emerald-400,
+[data-theme="light"] .faq-chart-tooltip .text-emerald-400 {
+  color: #047857 !important;
 }

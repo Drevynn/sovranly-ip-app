@@ -240,15 +240,15 @@ export default function ActivityLog() {
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="bg-zinc-950 border-b border-zinc-900">
-                <th className="p-4 pl-6 md:pl-8 text-xs font-semibold uppercase tracking-wider text-zinc-500">Status & Type</th>
-                <th className="p-4 text-xs font-semibold uppercase tracking-wider text-zinc-500">Asset Context</th>
-                <th className="p-4 text-xs font-semibold uppercase tracking-wider text-zinc-500">Tx Hash</th>
-                <th className="p-4 text-xs font-semibold uppercase tracking-wider text-zinc-500">Ledger Value</th>
-                <th className="p-4 pr-6 md:pr-8 text-xs font-semibold uppercase tracking-wider text-zinc-500 text-right">Age</th>
+              <tr className="bg-zinc-950/80 border-b border-zinc-900">
+                <th className="py-4.5 px-5 pl-6 md:pl-8 text-xs font-semibold uppercase tracking-wider text-zinc-400">Status &amp; Type</th>
+                <th className="py-4.5 px-5 text-xs font-semibold uppercase tracking-wider text-zinc-400">Asset Context</th>
+                <th className="py-4.5 px-5 text-xs font-semibold uppercase tracking-wider text-zinc-400">Tx Hash</th>
+                <th className="py-4.5 px-5 text-xs font-semibold uppercase tracking-wider text-zinc-400">Ledger Value</th>
+                <th className="py-4.5 px-5 pr-6 md:pr-8 text-xs font-semibold uppercase tracking-wider text-zinc-400 text-right">Age</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-zinc-900/50">
+            <tbody className="divide-y divide-zinc-900/60">
               <AnimatePresence mode="popLayout">
                 {loading ? (
                   Array.from({ length: 5 }).map((_, idx) => (
@@ -272,8 +272,8 @@ export default function ActivityLog() {
                   ))
                 ) : transactions.length === 0 ? (
                   <tr>
-                    <td colSpan={5} className="p-12 text-center text-sm text-zinc-500">
-                      <ShieldAlert className="w-8 h-8 text-zinc-650 mx-auto mb-3" />
+                    <td colSpan={5} className="p-12 text-center text-sm text-zinc-400">
+                      <ShieldAlert className="w-8 h-8 text-zinc-500 mx-auto mb-3" />
                       No recent asset transactions found in the sovereign ledger.
                     </td>
                   </tr>
@@ -285,30 +285,30 @@ export default function ActivityLog() {
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: -8 }}
                       transition={{ duration: 0.15, delay: idx * 0.05 }}
-                      className="hover:bg-zinc-900/30 transition group font-sans"
+                      className="hover:bg-zinc-900/40 transition group font-sans"
                     >
-                      <td className="p-4 pl-6 md:pl-8 align-middle">
+                      <td className="py-4.5 px-5 pl-6 md:pl-8 align-middle">
                         {getTypeBadge(tx.type)}
                       </td>
 
-                      <td className="p-4 align-middle">
+                      <td className="py-4.5 px-5 align-middle">
                         <div className="font-medium text-white group-hover:text-cyan-400 transition text-sm">
                           {tx.assetTitle}
                         </div>
                       </td>
 
-                      <td className="p-4 align-middle font-mono text-xs text-zinc-500">
-                        <div className="flex items-center gap-1.5">
+                      <td className="py-4.5 px-5 align-middle font-mono text-xs text-zinc-400">
+                        <div className="flex items-center gap-2">
                           <span>{tx.hash ? `${tx.hash.slice(0, 6)}...${tx.hash.slice(-4)}` : '0x...'}</span>
                           <button
                             onClick={() => copyToClipboard(tx.hash, tx.id)}
-                            className="p-1 text-zinc-650 hover:text-zinc-300 rounded transition"
+                            className="p-1 text-zinc-400 hover:text-zinc-200 rounded transition"
                             title="Copy transaction hash"
                           >
                             {copiedId === tx.id ? (
-                              <Check className="w-3 h-3 text-emerald-400" />
+                              <Check className="w-3.5 h-3.5 text-emerald-400" />
                             ) : (
-                              <Copy className="w-3 h-3" />
+                              <Copy className="w-3.5 h-3.5" />
                             )}
                           </button>
                           {tx.hash && tx.hash !== '0x...' && (
@@ -316,25 +316,25 @@ export default function ActivityLog() {
                               href={`https://etherscan.io/tx/${tx.hash}`}
                               target="_blank"
                               rel="noreferrer"
-                              className="p-1 text-zinc-650 hover:text-cyan-400 rounded transition opacity-0 group-hover:opacity-100"
+                              className="p-1 text-zinc-400 hover:text-cyan-400 rounded transition opacity-0 group-hover:opacity-100"
                             >
-                              <ExternalLink className="w-3 h-3" />
+                              <ExternalLink className="w-3.5 h-3.5" />
                             </a>
                           )}
                         </div>
                       </td>
 
-                      <td className="p-4 align-middle font-mono text-sm text-zinc-300">
+                      <td className="py-4.5 px-5 align-middle font-mono text-sm text-zinc-300">
                         {tx.amount === '0.00 ETH' ? (
-                          <span className="text-xs text-zinc-500">Gas Only</span>
+                          <span className="text-xs text-zinc-400">Gas Only</span>
                         ) : (
-                          <span className="text-zinc-200 font-semibold">{tx.amount}</span>
+                          <span className="text-zinc-100 font-semibold">{tx.amount}</span>
                         )}
                       </td>
 
-                      <td className="p-4 pr-6 md:pr-8 text-right align-middle text-xs font-mono text-zinc-500">
+                      <td className="py-4.5 px-5 pr-6 md:pr-8 text-right align-middle text-xs font-mono text-zinc-400">
                         <div className="flex items-center justify-end gap-1.5">
-                          <Clock className="w-3-5 h-3-5 text-zinc-650" />
+                          <Clock className="w-3.5 h-3.5 text-zinc-500" />
                           <span>{formatTime(tx.timestamp)}</span>
                         </div>
                       </td>

@@ -17,7 +17,7 @@ const ThemeContext = createContext<ThemeContextType>({
 });
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [theme, setThemeState] = useState<Theme>('light');
+  const [theme, setThemeState] = useState<Theme>('dark');
 
   const applyTheme = (t: Theme) => {
     if (typeof document === 'undefined') return;
@@ -50,7 +50,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     } catch (e) {
       // ignore
     }
-    applyTheme('light');
+    applyTheme('dark');
   }, []);
 
   const setTheme = (t: Theme) => {

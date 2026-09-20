@@ -46,45 +46,45 @@ export default function Sidebar({
             animate={{ x: 0 }}
             exit={{ x: '-100%' }}
             transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-            className="fixed top-0 left-0 bottom-0 w-80 bg-zinc-950 border-r border-zinc-900 flex flex-col h-screen z-[100] shadow-2xl"
+            className="fixed top-0 left-0 bottom-0 w-84 sm:w-88 md:w-92 bg-zinc-950 border-r border-zinc-900 flex flex-col h-screen z-[100] shadow-2xl transition-colors"
           >
-            <div className="p-8 border-b border-zinc-900 flex items-center justify-between">
+            <div className="p-7 sm:p-8 border-b border-zinc-900 flex items-center justify-between">
               <div>
-                <div className="flex items-center gap-3 mb-2">
+                <div className="flex items-center gap-3 mb-1.5">
                   <SovranlyLogo size="sm" />
-                  <span className="font-bold tracking-tighter text-white text-xl uppercase">SOVRANLY IP</span>
+                  <span className="font-bold tracking-tighter text-white text-xl uppercase font-mono">SOVRANLY IP</span>
                 </div>
-                <p className="text-emerald-400 text-[9px] uppercase tracking-widest mt-1 font-mono">Sovereign IP Authority</p>
+                <p className="text-emerald-400 text-[10px] uppercase tracking-widest font-mono">Sovereign IP Authority</p>
               </div>
               <button 
                 onClick={onClose}
-                className="p-2 -mr-2 rounded-xl text-zinc-500 hover:text-white hover:bg-zinc-900 transition-all focus:outline-none cursor-pointer"
+                className="p-2.5 -mr-2 rounded-xl text-zinc-500 hover:text-white hover:bg-zinc-900 transition-all focus:outline-none cursor-pointer"
                 aria-label="Close menu"
               >
                 <X className="w-4 h-4 text-cyan-400" />
               </button>
             </div>
 
-            <div className="flex-1 px-4 py-5 space-y-6 overflow-y-auto custom-scrollbar">
+            <div className="flex-1 px-5 py-6 space-y-7 overflow-y-auto custom-scrollbar">
               {/* Public Pages & Pricing Quick Access Box */}
-              <div className="bg-gradient-to-r from-cyan-950/40 via-zinc-900/60 to-emerald-950/40 border border-cyan-500/30 rounded-2xl p-3.5 shadow-lg">
+              <div className="bg-gradient-to-r from-cyan-950/40 via-zinc-900/60 to-emerald-950/40 border border-cyan-500/30 rounded-2xl p-4 shadow-lg">
                 <button
                   onClick={() => setShowPublicDirectory(true)}
-                  className="w-full flex items-center justify-between px-3 py-2.5 bg-cyan-950/60 hover:bg-cyan-900/80 border border-cyan-500/40 rounded-xl text-cyan-300 font-mono text-xs font-bold transition-all shadow-sm cursor-pointer group"
+                  className="w-full flex items-center justify-between px-3.5 py-2.5 bg-cyan-950/60 hover:bg-cyan-900/80 border border-cyan-500/40 rounded-xl text-cyan-300 font-mono text-xs font-bold transition-all shadow-sm cursor-pointer group"
                 >
-                  <span className="flex items-center gap-2">
+                  <span className="flex items-center gap-2.5">
                     <Globe className="w-4 h-4 text-cyan-400 animate-pulse group-hover:rotate-45 transition-transform" />
                     Public Pages &amp; Pricing
                   </span>
                   <span className="text-[10px] bg-cyan-500/20 px-2 py-0.5 rounded text-cyan-200">Index</span>
                 </button>
-                <p className="text-[10px] text-zinc-400 font-mono mt-2 px-1 leading-relaxed">
+                <p className="text-[10px] text-zinc-400 font-mono mt-2.5 px-1 leading-relaxed">
                   Instant access to public pricing, Wiki, FAQ, legal terms, and compliance disclosures.
                 </p>
               </div>
 
               {/* Main Hub */}
-              <div className="space-y-1">
+              <div className="space-y-1.5">
                 <button 
                   onClick={() => { setActivePage(0); onClose(); }}
                   className={`w-full flex items-center gap-3.5 px-4 py-3 rounded-xl text-sm font-semibold transition-all cursor-pointer ${activePage === 0 ? 'bg-zinc-900 border border-zinc-800 text-white shadow-lg' : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900/40'}`}
@@ -94,150 +94,150 @@ export default function Sidebar({
               </div>
 
               {/* Category 1: Core Creator Workflow */}
-              <div className="space-y-1">
-                <div className="px-4 pb-1 text-[10px] font-mono font-bold tracking-wider text-zinc-500 uppercase flex items-center gap-1.5">
+              <div className="space-y-1.5">
+                <div className="px-4 pb-2 text-[10px] font-mono font-bold tracking-wider text-zinc-400 uppercase flex items-center gap-2">
                   <span className="w-1.5 h-1.5 rounded-full bg-cyan-400"></span>
                   Core Creator Workflow
                 </div>
                 <button 
                   onClick={() => { setActivePage(2); onClose(); }}
-                  className={`w-full flex items-center justify-between px-4 py-2.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${activePage === 2 ? 'bg-zinc-900 border border-zinc-800 text-white shadow-lg' : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900/40'}`}
+                  className={`w-full flex items-center justify-between px-4 py-3 rounded-xl text-xs sm:text-[13px] font-semibold transition-all cursor-pointer ${activePage === 2 ? 'bg-zinc-900 border border-zinc-800 text-white shadow-lg' : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900/40'}`}
                 >
                   <span className="flex items-center gap-3">
                     <FolderOpen className="w-4 h-4 text-emerald-400 shrink-0" />
                     1. Asset Management
                   </span>
-                  <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-emerald-950/60 text-emerald-400 border border-emerald-800/40">Hub</span>
+                  <span className="text-[9px] font-mono px-2 py-0.5 rounded bg-emerald-950/60 text-emerald-400 border border-emerald-800/40 font-bold">Hub</span>
                 </button>
                 <button 
                   onClick={() => { setActivePage(14); onClose(); }}
-                  className={`w-full flex items-center justify-between px-4 py-2.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${activePage === 14 ? 'bg-zinc-900 border border-zinc-800 text-white shadow-lg' : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900/40'}`}
+                  className={`w-full flex items-center justify-between px-4 py-3 rounded-xl text-xs sm:text-[13px] font-semibold transition-all cursor-pointer ${activePage === 14 ? 'bg-zinc-900 border border-zinc-800 text-white shadow-lg' : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900/40'}`}
                 >
                   <span className="flex items-center gap-3">
                     <Zap className="w-4 h-4 text-amber-400 shrink-0" />
                     2. Permissions Hub
                   </span>
-                  <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-amber-950/60 text-amber-400 border border-amber-800/40">Quick</span>
+                  <span className="text-[9px] font-mono px-2 py-0.5 rounded bg-amber-950/60 text-amber-400 border border-amber-800/40 font-bold">Quick</span>
                 </button>
                 <button 
                   onClick={() => { setActivePage(4); onClose(); }}
-                  className={`w-full flex items-center justify-between px-4 py-2.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${activePage === 4 ? 'bg-zinc-900 border border-zinc-800 text-white shadow-lg' : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900/40'}`}
+                  className={`w-full flex items-center justify-between px-4 py-3 rounded-xl text-xs sm:text-[13px] font-semibold transition-all cursor-pointer ${activePage === 4 ? 'bg-zinc-900 border border-zinc-800 text-white shadow-lg' : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900/40'}`}
                 >
                   <span className="flex items-center gap-3">
                     <Scale className="w-4 h-4 text-cyan-400 shrink-0" />
                     3. Licensing Compacts
                   </span>
-                  <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-cyan-950/60 text-cyan-400 border border-cyan-800/40">Terms</span>
+                  <span className="text-[9px] font-mono px-2 py-0.5 rounded bg-cyan-950/60 text-cyan-400 border border-cyan-800/40 font-bold">Terms</span>
                 </button>
                 <button 
                   onClick={() => { setActivePage(5); onClose(); }}
-                  className={`w-full flex items-center justify-between px-4 py-2.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${activePage === 5 ? 'bg-zinc-900 border border-zinc-800 text-white shadow-lg' : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900/40'}`}
+                  className={`w-full flex items-center justify-between px-4 py-3 rounded-xl text-xs sm:text-[13px] font-semibold transition-all cursor-pointer ${activePage === 5 ? 'bg-zinc-900 border border-zinc-800 text-white shadow-lg' : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900/40'}`}
                 >
                   <span className="flex items-center gap-3">
                     <Sliders className="w-4 h-4 text-teal-400 shrink-0" />
                     4. Royalty Sandbox
                   </span>
-                  <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-teal-950/60 text-teal-400 border border-teal-800/40">85/15</span>
+                  <span className="text-[9px] font-mono px-2 py-0.5 rounded bg-teal-950/60 text-teal-400 border border-teal-800/40 font-bold">85/15</span>
                 </button>
               </div>
 
               {/* Category 2: Protection & Distribution */}
-              <div className="space-y-1">
-                <div className="px-4 pb-1 text-[10px] font-mono font-bold tracking-wider text-zinc-500 uppercase flex items-center gap-1.5">
+              <div className="space-y-1.5">
+                <div className="px-4 pb-2 text-[10px] font-mono font-bold tracking-wider text-zinc-400 uppercase flex items-center gap-2">
                   <span className="w-1.5 h-1.5 rounded-full bg-violet-400"></span>
                   Protection &amp; Tokenization
                 </div>
                 <button 
                   onClick={() => { setActivePage(11); onClose(); }}
-                  className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${activePage === 11 ? 'bg-zinc-900 border border-zinc-800 text-white shadow-lg' : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900/40'}`}
+                  className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-xs sm:text-[13px] font-semibold transition-all cursor-pointer ${activePage === 11 ? 'bg-zinc-900 border border-zinc-800 text-white shadow-lg' : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900/40'}`}
                 >
                   <Brain className="w-4 h-4 text-violet-400 shrink-0" /> AI Training Vault
                 </button>
                 <button 
                   onClick={() => { setActivePage(12); onClose(); }}
-                  className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${activePage === 12 ? 'bg-zinc-900 border border-zinc-800 text-white shadow-lg' : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900/40'}`}
+                  className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-xs sm:text-[13px] font-semibold transition-all cursor-pointer ${activePage === 12 ? 'bg-zinc-900 border border-zinc-800 text-white shadow-lg' : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900/40'}`}
                 >
                   <Database className="w-4 h-4 text-cyan-400 shrink-0" /> Sovereign Tokenizer
                 </button>
                 <button 
                   onClick={() => { setActivePage(3); onClose(); }}
-                  className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${activePage === 3 ? 'bg-zinc-900 border border-zinc-800 text-white shadow-lg' : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900/40'}`}
+                  className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-xs sm:text-[13px] font-semibold transition-all cursor-pointer ${activePage === 3 ? 'bg-zinc-900 border border-zinc-800 text-white shadow-lg' : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900/40'}`}
                 >
                   <BarChart3 className="w-4 h-4 text-amber-400 shrink-0" /> Economics &amp; Analytics
                 </button>
               </div>
 
               {/* Category 3: Workspace & Collaboration */}
-              <div className="space-y-1">
-                <div className="px-4 pb-1 text-[10px] font-mono font-bold tracking-wider text-zinc-500 uppercase flex items-center gap-1.5">
+              <div className="space-y-1.5">
+                <div className="px-4 pb-2 text-[10px] font-mono font-bold tracking-wider text-zinc-400 uppercase flex items-center gap-2">
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
                   Workspace &amp; Outreach
                 </div>
                 <button 
                   onClick={() => { setActivePage(6); onClose(); }}
-                  className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${activePage === 6 ? 'bg-zinc-900 border border-zinc-800 text-white shadow-lg' : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900/40'}`}
+                  className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-xs sm:text-[13px] font-semibold transition-all cursor-pointer ${activePage === 6 ? 'bg-zinc-900 border border-zinc-800 text-white shadow-lg' : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900/40'}`}
                 >
                   <Mail className="w-4 h-4 text-purple-400 shrink-0" /> Creator Inbox
                 </button>
                 <button 
                   onClick={() => { setActivePage(13); onClose(); }}
-                  className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${activePage === 13 ? 'bg-zinc-900 border border-zinc-800 text-white shadow-lg' : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900/40'}`}
+                  className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-xs sm:text-[13px] font-semibold transition-all cursor-pointer ${activePage === 13 ? 'bg-zinc-900 border border-zinc-800 text-white shadow-lg' : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900/40'}`}
                 >
                   <Users className="w-4 h-4 text-indigo-400 shrink-0" /> Creator Network
                 </button>
                 <button 
                   onClick={() => { setActivePage(7); onClose(); }}
-                  className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${activePage === 7 ? 'bg-zinc-900 border border-zinc-800 text-white shadow-lg' : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900/40'}`}
+                  className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-xs sm:text-[13px] font-semibold transition-all cursor-pointer ${activePage === 7 ? 'bg-zinc-900 border border-zinc-800 text-white shadow-lg' : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900/40'}`}
                 >
                   <Presentation className="w-4 h-4 text-orange-400 shrink-0" /> Google Slides Gateway
                 </button>
                 <button 
                   onClick={() => { setActivePage(8); onClose(); }}
-                  className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${activePage === 8 ? 'bg-zinc-900 border border-zinc-800 text-white shadow-lg' : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900/40'}`}
+                  className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-xs sm:text-[13px] font-semibold transition-all cursor-pointer ${activePage === 8 ? 'bg-zinc-900 border border-zinc-800 text-white shadow-lg' : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900/40'}`}
                 >
                   <Rocket className="w-4 h-4 text-rose-400 shrink-0" /> Launch Planner
                 </button>
               </div>
 
               {/* Category 4: Account & Authority */}
-              <div className="space-y-1">
-                <div className="px-4 pb-1 text-[10px] font-mono font-bold tracking-wider text-zinc-500 uppercase flex items-center gap-1.5">
+              <div className="space-y-1.5">
+                <div className="px-4 pb-2 text-[10px] font-mono font-bold tracking-wider text-zinc-400 uppercase flex items-center gap-2">
                   <span className="w-1.5 h-1.5 rounded-full bg-zinc-400"></span>
                   Account &amp; Platform
                 </div>
                 <button 
                   onClick={() => { setActivePage(1); onClose(); }}
-                  className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${activePage === 1 ? 'bg-zinc-900 border border-zinc-800 text-white shadow-lg' : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900/40'}`}
+                  className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-xs sm:text-[13px] font-semibold transition-all cursor-pointer ${activePage === 1 ? 'bg-zinc-900 border border-zinc-800 text-white shadow-lg' : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900/40'}`}
                 >
                   <User className="w-4 h-4 text-zinc-300 shrink-0" /> Creator Profile
                 </button>
                 <button 
                   onClick={() => { setActivePage(9); onClose(); }}
-                  className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${activePage === 9 ? 'bg-zinc-900 border border-zinc-800 text-white shadow-lg' : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900/40'}`}
+                  className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-xs sm:text-[13px] font-semibold transition-all cursor-pointer ${activePage === 9 ? 'bg-zinc-900 border border-zinc-800 text-white shadow-lg' : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900/40'}`}
                 >
                   <ShieldCheck className="w-4 h-4 text-cyan-400 shrink-0" /> Tech Stack Ledger
                 </button>
                 <button 
                   onClick={() => { setActivePage(15); onClose(); }}
-                  className={`w-full flex items-center justify-between px-4 py-2.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${activePage === 15 ? 'bg-zinc-900 border border-zinc-800 text-white shadow-lg' : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900/40'}`}
+                  className={`w-full flex items-center justify-between px-4 py-3 rounded-xl text-xs sm:text-[13px] font-semibold transition-all cursor-pointer ${activePage === 15 ? 'bg-zinc-900 border border-zinc-800 text-white shadow-lg' : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900/40'}`}
                 >
                   <span className="flex items-center gap-3">
                     <Globe className="w-4 h-4 text-emerald-400 shrink-0" /> Cloudflare Handshake
                   </span>
-                  <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-emerald-950/60 text-emerald-400 border border-emerald-800/40">Fix</span>
+                  <span className="text-[9px] font-mono px-2 py-0.5 rounded bg-emerald-950/60 text-emerald-400 border border-emerald-800/40 font-bold">Fix</span>
                 </button>
                 <button 
                   onClick={() => { setActivePage(16); onClose(); }}
-                  className={`w-full flex items-center justify-between px-4 py-2.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${activePage === 16 ? 'bg-zinc-900 border border-zinc-800 text-white shadow-lg' : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900/40'}`}
+                  className={`w-full flex items-center justify-between px-4 py-3 rounded-xl text-xs sm:text-[13px] font-semibold transition-all cursor-pointer ${activePage === 16 ? 'bg-zinc-900 border border-zinc-800 text-white shadow-lg' : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900/40'}`}
                 >
                   <span className="flex items-center gap-3">
                     <Mail className="w-4 h-4 text-amber-400 shrink-0" /> Official IP Notices
                   </span>
-                  <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-amber-950/60 text-amber-400 border border-amber-800/40">Owner</span>
+                  <span className="text-[9px] font-mono px-2 py-0.5 rounded bg-amber-950/60 text-amber-400 border border-amber-800/40 font-bold">Owner</span>
                 </button>
                 <button 
                   onClick={() => { setActivePage(10); onClose(); }}
-                  className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${activePage === 10 ? 'bg-zinc-900 border border-zinc-800 text-white shadow-lg' : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900/40'}`}
+                  className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-xs sm:text-[13px] font-semibold transition-all cursor-pointer ${activePage === 10 ? 'bg-zinc-900 border border-zinc-800 text-white shadow-lg' : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900/40'}`}
                 >
                   <Building2 className="w-4 h-4 text-amber-400 shrink-0" /> About Platform
                 </button>

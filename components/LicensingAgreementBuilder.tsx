@@ -46,9 +46,14 @@ import {
   GraduationCap, 
   Layers,
   ArrowRightLeft,
-  Loader2
+  Loader2,
+  Archive,
+  Database,
+  Copy
 } from 'lucide-react';
 import NotarizationEmailModal from './NotarizationEmailModal';
+import AgreementExportModal from './AgreementExportModal';
+import VaultAgreementViewModal, { VaultRecord } from './VaultAgreementViewModal';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -167,7 +172,7 @@ export default function LicensingAgreementBuilder({ walletAddress, initialAsset 
   const { user, isSandboxMode } = useAuth();
   
   // Master Section Tab
-  const [activeTab, setActiveTab] = useState<'builder' | 'royalties' | 'registry'>('builder');
+  const [activeTab, setActiveTab] = useState<'builder' | 'royalties' | 'registry' | 'vault'>('builder');
 
   const [contractSeed] = useState(() => Math.floor(100000 + Math.random() * 900000));
   
@@ -253,6 +258,111 @@ export default function LicensingAgreementBuilder({ walletAddress, initialAsset 
   // Gmail Notarization Modal State
   const [isEmailModalOpen, setIsEmailModalOpen] = useState(false);
   const [emailTargetAgreement, setEmailTargetAgreement] = useState<Agreement | null>(null);
+
+  // Sovereign Agreement Vault & Email Export State
+  const [vaultAgreements, setVaultAgreements] = useState<VaultRecord[]>([]);
+  const [loadingVault, setLoadingVault] = useState(false);
+  const [vaultSearchQuery, setVaultSearchQuery] = useState('');
+  const [isExportModalOpen, setIsExportModalOpen] = useState(false);
+  const [exportTargetAgreement, setExportTargetAgreement] = useState<Agreement | null>(null);
+  const [selectedVaultRecord, setSelectedVaultRecord] = useState<VaultRecord | null>(null);
+  const [isVaultViewModalOpen, setIsVaultViewModalOpen] = useState(false);
+  const [copiedVaultHashId, setCopiedVaultHashId] = useState<string | null>(null);
+
+  // Fetch Vault Agreements held by the app
+  const fetchVaultAgreements = useCallback(async () => {
+    setLoadingVault(true);
+    try {
+      const headers = await getAuthHeaders(user, isSandboxMode);
+      const res = await fetch('/api/agreements/export', { headers: { ...headers } });
+      if (res.ok) {
+        const data = await res.json();
+        setVaultAgreements(Array.isArray(data) ? data : []);
+      }
+    } catch (err) {
+      console.error('Error loading vault agreements:', err);
+    } finally {
+      setLoadingVault(false);
+    }
+  }, [user, isSandboxMode]);
+
+  useEffect(() => {
+    let isMounted = true;
+    const loadVault = async () => {
+      setLoadingVault(true);
+      try {
+        const headers = await getAuthHeaders(user, isSandboxMode);
+        const res = await fetch('/api/agreements/export', { headers: { ...headers } });
+        if (res.ok) {
+          const data = await res.json();
+          if (isMounted) {
+            setVaultAgreements(Array.isArray(data) ? data : []);
+          }
+        }
+      } catch (err) {
+        console.error('Error loading vault agreements:', err);
+      } finally {
+        if (isMounted) {
+          setLoadingVault(false);
+        }
+      }
+    };
+    loadVault();
+    return () => {
+      isMounted = false;
+    };
+  }, [user, isSandboxMode]);
+
+  const filteredVaultRecords = useMemo(() => {
+    if (!vaultSearchQuery.trim()) return vaultAgreements;
+    const q = vaultSearchQuery.toLowerCase();
+    return vaultAgreements.filter(r => 
+      r.assetTitle?.toLowerCase().includes(q) ||
+      r.licensorEmail?.toLowerCase().includes(q) ||
+      r.vaultId?.toLowerCase().includes(q) ||
+      r.contractAddress?.toLowerCase().includes(q)
+    );
+  }, [vaultAgreements, vaultSearchQuery]);
+
+  const handleDownloadVaultJson = (record: VaultRecord) => {
+    const backupData = {
+      archiveHeader: 'SOVRANLY IP — IMMUTABLE SOVEREIGN VAULT COVENANT BACKUP',
+      vaultId: record.vaultId,
+      covenantHash: record.covenantHash,
+      exportDate: record.exportedAt,
+      licensorParticipant: {
+        email: record.licensorEmail,
+        name: record.licensorName,
+      },
+      creatorOwner: {
+        email: record.creatorEmail,
+      },
+      agreementTerms: {
+        assetTitle: record.assetTitle,
+        assetType: record.assetType,
+        royaltyRate: `${record.royaltyRate}% Creator Share`,
+        basePrice: `${record.basePrice} ETH`,
+        duration: record.duration,
+        permittedUsages: record.permittedUsages,
+        territory: record.territory,
+        exclusivity: record.exclusivity,
+      },
+      onChainProofs: {
+        smartContractAddress: record.contractAddress,
+        deployTxHash: record.deployTxHash,
+        ipfsCid: record.ipfsHash,
+      },
+      vaultPreservationNotice: 'This record was archived into the Sovranly IP internal vault upon email export to ensure perpetual retrieval in case of inbox data loss.',
+    };
+
+    const dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(backupData, null, 2));
+    const a = document.createElement('a');
+    a.setAttribute('href', dataStr);
+    a.setAttribute('download', `sovranly_vault_backup_${record.vaultId}.json`);
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+  };
 
   // Fetch Assets
   useEffect(() => {
@@ -669,6 +779,15 @@ export default function LicensingAgreementBuilder({ walletAddress, initialAsset 
           >
             <Activity className="w-3.5 h-3.5" /> Covenants ({agreements.length})
           </button>
+          <button
+            onClick={() => {
+              setActiveTab('vault');
+              fetchVaultAgreements();
+            }}
+            className={`px-4 py-2 rounded-xl text-xs font-mono font-bold transition-all flex items-center gap-1.5 ${activeTab === 'vault' ? 'bg-amber-600 text-white shadow-lg shadow-amber-950/50' : 'text-zinc-400 hover:text-white'}`}
+          >
+            <Lock className="w-3.5 h-3.5 text-amber-400" /> Sovereign Vault ({vaultAgreements.length})
+          </button>
         </div>
       </div>
 
@@ -1019,13 +1138,13 @@ export default function LicensingAgreementBuilder({ walletAddress, initialAsset 
                         </Button>
                         <Button
                           onClick={() => {
-                            setEmailTargetAgreement(successAgreement);
-                            setIsEmailModalOpen(true);
+                            setExportTargetAgreement(successAgreement);
+                            setIsExportModalOpen(true);
                           }}
                           type="button"
-                          className="flex-1 bg-violet-600 hover:bg-violet-500 text-white font-mono text-xs font-bold h-9 flex items-center justify-center gap-1.5"
+                          className="flex-1 bg-gradient-to-r from-amber-600 to-amber-500 hover:brightness-110 text-white font-mono text-xs font-bold h-9 flex items-center justify-center gap-1.5 shadow-lg shadow-amber-950/40"
                         >
-                          <Mail className="w-3.5 h-3.5" /> Email Client
+                          <Mail className="w-3.5 h-3.5" /> Export to Email
                         </Button>
                       </div>
                     </div>
@@ -1414,14 +1533,277 @@ export default function LicensingAgreementBuilder({ walletAddress, initialAsset 
                       
                       <button
                         onClick={() => {
-                          setEmailTargetAgreement(agr);
-                          setIsEmailModalOpen(true);
+                          setExportTargetAgreement(agr);
+                          setIsExportModalOpen(true);
                         }}
-                        className="py-2.5 px-3 bg-violet-950/40 hover:bg-violet-900/40 text-violet-300 rounded-xl text-xs font-bold transition-all border border-violet-500/30 flex items-center gap-1"
-                        title="Notify Client via Email"
+                        className="py-2.5 px-3 bg-amber-950/40 hover:bg-amber-900/40 text-amber-300 rounded-xl text-xs font-bold transition-all border border-amber-500/30 flex items-center gap-1.5 shadow-sm"
+                        title="Export to Licensor Email & Seal in App Vault"
                       >
-                        <Mail className="w-3.5 h-3.5" /> Email
+                        <Mail className="w-3.5 h-3.5" /> Export to Email
                       </button>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* ========================================================================= */}
+      {/* TAB 4: SOVEREIGN AGREEMENT VAULT (APP-HOSTED IMMUTABLE BACKUP)             */}
+      {/* ========================================================================= */}
+      {activeTab === 'vault' && (
+        <div className="space-y-8 animate-in fade-in duration-200">
+          
+          {/* Vault Security Banner */}
+          <div className="bg-gradient-to-r from-amber-950/40 via-zinc-950 to-zinc-950 p-6 sm:p-8 rounded-[28px] border border-amber-500/30 shadow-2xl relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-96 h-96 bg-amber-500/5 rounded-full blur-3xl pointer-events-none" />
+            <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+              <div className="space-y-2 max-w-2xl">
+                <div className="flex items-center gap-2">
+                  <span className="px-3 py-1 rounded-full text-[10px] font-mono font-bold bg-amber-500/20 text-amber-300 border border-amber-500/40 flex items-center gap-1.5">
+                    <Lock className="w-3 h-3 text-amber-400" />
+                    SOVEREIGN APP VAULT &amp; REDUNDANCY ARCHIVE
+                  </span>
+                  <span className="text-zinc-500 text-xs font-mono">• Permanent In-App Backup</span>
+                </div>
+                <h3 className="text-xl sm:text-2xl font-extrabold text-white tracking-tight flex items-center gap-2.5">
+                  App-Preserved Agreement &amp; Contract Vault
+                </h3>
+                <p className="text-xs sm:text-sm text-zinc-400 leading-relaxed font-light">
+                  Whenever a creative exports an agreement to a participant&apos;s inbox, Sovranly IP automatically seals an immutable cryptographic duplicate directly inside the application. Even if emails are lost, misfiled, deleted, or mail servers fail, your executed terms and cryptographic proof remain permanently held by the app.
+                </p>
+              </div>
+
+              {/* Vault Metric Counter Cards */}
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 shrink-0">
+                <div className="bg-zinc-900/80 p-3.5 rounded-2xl border border-zinc-800 text-center min-w-[100px]">
+                  <span className="text-[10px] uppercase font-mono text-zinc-500 block">Archived</span>
+                  <span className="text-xl font-mono font-black text-amber-400">{vaultAgreements.length}</span>
+                  <span className="text-[9px] text-zinc-400 block font-mono">Covenants</span>
+                </div>
+                <div className="bg-zinc-900/80 p-3.5 rounded-2xl border border-zinc-800 text-center min-w-[100px]">
+                  <span className="text-[10px] uppercase font-mono text-zinc-500 block">Integrity</span>
+                  <span className="text-xl font-mono font-black text-emerald-400">100%</span>
+                  <span className="text-[9px] text-zinc-400 block font-mono">SHA-256</span>
+                </div>
+                <div className="bg-zinc-900/80 p-3.5 rounded-2xl border border-zinc-800 text-center col-span-2 sm:col-span-1 min-w-[100px]">
+                  <span className="text-[10px] uppercase font-mono text-zinc-500 block">Redundancy</span>
+                  <span className="text-xl font-mono font-black text-cyan-400">Dual</span>
+                  <span className="text-[9px] text-zinc-400 block font-mono">App + Inbox</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Search, Filter & Action Toolbar */}
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 bg-zinc-950 p-4 rounded-2xl border border-zinc-850">
+            <div className="relative w-full sm:w-80">
+              <Search className="w-4 h-4 text-zinc-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
+              <Input
+                placeholder="Search by asset, licensor, or vault ID..."
+                value={vaultSearchQuery}
+                onChange={(e) => setVaultSearchQuery(e.target.value)}
+                className="bg-zinc-900/80 border-zinc-800 pl-10 text-xs font-mono text-white placeholder:text-zinc-600 focus:border-amber-500 h-9"
+              />
+            </div>
+
+            <div className="flex items-center gap-2 w-full sm:w-auto justify-end">
+              <Button
+                onClick={() => fetchVaultAgreements()}
+                variant="outline"
+                size="sm"
+                disabled={loadingVault}
+                className="bg-zinc-900 border-zinc-800 text-zinc-300 hover:text-white text-xs h-9 flex items-center gap-1.5"
+              >
+                <RefreshCw className={`w-3.5 h-3.5 text-zinc-400 ${loadingVault ? 'animate-spin' : ''}`} />
+                Refresh Vault
+              </Button>
+
+              <Button
+                onClick={() => setActiveTab('builder')}
+                size="sm"
+                className="bg-amber-600 hover:bg-amber-500 text-white font-mono text-xs font-bold h-9 flex items-center gap-1.5 shadow-md shadow-amber-950/40"
+              >
+                <FileSignature className="w-3.5 h-3.5" /> Define &amp; Export New
+              </Button>
+            </div>
+          </div>
+
+          {/* Vault Records Listing */}
+          {loadingVault ? (
+            <div className="p-16 text-center space-y-3 bg-zinc-950 rounded-3xl border border-zinc-900">
+              <Loader2 className="w-8 h-8 animate-spin text-amber-500 mx-auto" />
+              <p className="text-xs font-mono text-zinc-400 uppercase tracking-wider">Accessing Sovranly IP Sovereign Vault...</p>
+            </div>
+          ) : filteredVaultRecords.length === 0 ? (
+            <div className="p-16 text-center space-y-4 bg-zinc-950 rounded-3xl border border-zinc-900 border-dashed">
+              <div className="w-16 h-16 rounded-2xl bg-amber-950/20 border border-amber-500/30 flex items-center justify-center text-amber-400 mx-auto">
+                <Lock className="w-8 h-8" />
+              </div>
+              <div className="space-y-1 max-w-md mx-auto">
+                <h4 className="text-base font-bold text-white">No Sealed Agreements in Vault</h4>
+                <p className="text-xs text-zinc-400 leading-relaxed font-light">
+                  {vaultSearchQuery 
+                    ? `No vault records matched "${vaultSearchQuery}". Try clearing your search query.`
+                    : 'When you export an agreement to a licensor or participant, an authentic cryptographic duplicate is automatically archived in this vault for perpetual retrieval.'}
+                </p>
+              </div>
+              {!vaultSearchQuery && (
+                <Button
+                  onClick={() => setActiveTab('builder')}
+                  className="bg-gradient-to-r from-amber-600 to-cyan-600 hover:brightness-110 text-white font-mono text-xs font-bold"
+                >
+                  <FileSignature className="w-3.5 h-3.5 mr-1.5" /> Build &amp; Export First Agreement
+                </Button>
+              )}
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+              {filteredVaultRecords.map((record) => {
+                const isCopied = copiedVaultHashId === record.vaultId;
+                return (
+                  <div
+                    key={record.vaultId}
+                    className="bg-zinc-950/90 border border-zinc-850 hover:border-amber-500/40 rounded-3xl p-6 transition-all duration-200 space-y-4 shadow-xl relative overflow-hidden group"
+                  >
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-amber-500/5 rounded-full blur-2xl pointer-events-none group-hover:bg-amber-500/10 transition-colors" />
+
+                    {/* Top Tag & Status */}
+                    <div className="flex items-center justify-between border-b border-zinc-900 pb-3">
+                      <div className="flex items-center gap-2">
+                        <span className="px-2.5 py-1 rounded-lg text-[10px] font-mono font-bold bg-amber-950/50 text-amber-300 border border-amber-500/30 flex items-center gap-1.5">
+                          <Lock className="w-3 h-3 text-amber-400" />
+                          {record.vaultId}
+                        </span>
+                      </div>
+                      <span className="px-2.5 py-1 rounded-full text-[10px] font-mono font-bold bg-emerald-950/70 text-emerald-400 border border-emerald-500/30 flex items-center gap-1">
+                        <ShieldCheck className="w-3 h-3 text-emerald-400" />
+                        SEALED IN APP VAULT
+                      </span>
+                    </div>
+
+                    {/* Asset & Participant Details */}
+                    <div className="space-y-2">
+                      <div className="flex items-start justify-between gap-3">
+                        <div>
+                          <h4 className="text-base font-extrabold text-white group-hover:text-amber-300 transition-colors leading-snug">
+                            {record.assetTitle}
+                          </h4>
+                          <span className="text-[10px] font-mono text-cyan-400 uppercase tracking-wider block mt-0.5">
+                            {record.assetType || 'Intellectual Property'}
+                          </span>
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-2 text-[11px] font-mono pt-1">
+                        <div className="bg-zinc-900/60 p-2.5 rounded-xl border border-zinc-850">
+                          <span className="text-zinc-500 text-[10px] block uppercase">Participant / Licensor</span>
+                          <span className="text-zinc-200 font-bold block truncate" title={record.licensorEmail}>
+                            {record.licensorEmail}
+                          </span>
+                          {record.licensorName && (
+                            <span className="text-zinc-500 text-[9px] block truncate">{record.licensorName}</span>
+                          )}
+                        </div>
+                        <div className="bg-zinc-900/60 p-2.5 rounded-xl border border-zinc-850">
+                          <span className="text-zinc-500 text-[10px] block uppercase">Export Timestamp</span>
+                          <span className="text-zinc-300 block truncate">
+                            {new Date(record.exportedAt).toLocaleDateString()}
+                          </span>
+                          <span className="text-emerald-400 text-[9px] block">Dual-Inbox Archived</span>
+                        </div>
+                      </div>
+
+                      {/* Covenant Highlights */}
+                      <div className="grid grid-cols-3 gap-2 text-[11px] font-mono pt-1">
+                        <div className="bg-zinc-900/40 p-2 rounded-lg border border-zinc-850 text-center">
+                          <span className="text-zinc-500 text-[9px] block uppercase">Royalty</span>
+                          <span className="text-emerald-400 font-bold">{record.royaltyRate}%</span>
+                        </div>
+                        <div className="bg-zinc-900/40 p-2 rounded-lg border border-zinc-850 text-center">
+                          <span className="text-zinc-500 text-[9px] block uppercase">Base Fee</span>
+                          <span className="text-white font-bold">{record.basePrice} ETH</span>
+                        </div>
+                        <div className="bg-zinc-900/40 p-2 rounded-lg border border-zinc-850 text-center">
+                          <span className="text-zinc-500 text-[9px] block uppercase">Duration</span>
+                          <span className="text-cyan-400 font-bold">{record.duration}</span>
+                        </div>
+                      </div>
+
+                      {/* Cryptographic SHA-256 Proof */}
+                      <div className="p-2.5 bg-black/50 rounded-xl border border-zinc-900 flex items-center justify-between gap-2 font-mono text-[10px]">
+                        <span className="text-zinc-500 uppercase">SHA-256 Hash:</span>
+                        <span className="text-amber-400/90 truncate max-w-[200px]" title={record.covenantHash}>
+                          {record.covenantHash.slice(0, 16)}...{record.covenantHash.slice(-8)}
+                        </span>
+                        <button
+                          onClick={() => {
+                            navigator.clipboard.writeText(record.covenantHash);
+                            setCopiedVaultHashId(record.vaultId);
+                            setTimeout(() => setCopiedVaultHashId(null), 2000);
+                          }}
+                          className="text-zinc-400 hover:text-white p-1 rounded hover:bg-zinc-800 transition"
+                          title="Copy SHA-256 Hash"
+                        >
+                          {isCopied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* Card Actions */}
+                    <div className="pt-3 border-t border-zinc-900 flex items-center justify-between gap-2">
+                      <Button
+                        onClick={() => {
+                          setSelectedVaultRecord(record);
+                          setIsVaultViewModalOpen(true);
+                        }}
+                        variant="outline"
+                        size="sm"
+                        className="bg-zinc-900 hover:bg-zinc-800 border-zinc-800 text-zinc-200 text-xs h-9 flex-1"
+                      >
+                        <Eye className="w-3.5 h-3.5 mr-1 text-cyan-400" /> Inspect Sealed Terms
+                      </Button>
+
+                      <Button
+                        onClick={() => handleDownloadVaultJson(record)}
+                        variant="outline"
+                        size="sm"
+                        className="bg-zinc-900 hover:bg-zinc-800 border-zinc-800 text-zinc-200 text-xs h-9 px-3"
+                        title="Download Vault Backup JSON"
+                      >
+                        <Download className="w-3.5 h-3.5 text-amber-400" />
+                      </Button>
+
+                      <Button
+                        onClick={() => {
+                          setExportTargetAgreement({
+                            id: record.agreementId,
+                            assetId: record.assetId || '',
+                            assetTitle: record.assetTitle,
+                            royaltyRate: record.royaltyRate,
+                            basePrice: record.basePrice,
+                            duration: record.duration,
+                            permittedUsages: record.permittedUsages,
+                            continuousVerification: ['Cryptographic Digital Watermark', 'App Vault Backup Sealed'],
+                            status: 'ACTIVE',
+                            creatorEmail: record.creatorEmail,
+                            creatorWallet: walletAddress || user?.uid || '0x...',
+                            contractAddress: record.contractAddress,
+                            deployTxHash: record.deployTxHash,
+                            createdAt: record.exportedAt,
+                            territory: record.territory,
+                            exclusivity: record.exclusivity,
+                          });
+                          setIsExportModalOpen(true);
+                        }}
+                        size="sm"
+                        className="bg-amber-600/90 hover:bg-amber-600 text-white font-mono text-xs font-bold h-9 px-3"
+                        title="Re-Send to Email"
+                      >
+                        <Mail className="w-3.5 h-3.5 mr-1" /> Re-Send
+                      </Button>
                     </div>
                   </div>
                 );
@@ -1570,6 +1952,48 @@ export default function LicensingAgreementBuilder({ walletAddress, initialAsset 
         documentHash={emailTargetAgreement?.contractAddress || emailTargetAgreement?.id || '0x7a2f...e421'}
         txHash={emailTargetAgreement?.deployTxHash || '0x991f...3281'}
         defaultClientName={emailTargetAgreement?.creatorEmail || ''}
+      />
+
+      {/* Agreement Export to Email Modal with App Vault Archival */}
+      <AgreementExportModal
+        isOpen={isExportModalOpen}
+        onClose={() => setIsExportModalOpen(false)}
+        agreement={exportTargetAgreement}
+        onExportSuccess={(newRecord) => {
+          setVaultAgreements(prev => [newRecord, ...prev.filter(r => r.vaultId !== newRecord.vaultId)]);
+        }}
+        onOpenVault={() => {
+          setActiveTab('vault');
+          fetchVaultAgreements();
+        }}
+      />
+
+      {/* Sealed Vault Covenant Inspection Modal */}
+      <VaultAgreementViewModal
+        isOpen={isVaultViewModalOpen}
+        onClose={() => setIsVaultViewModalOpen(false)}
+        record={selectedVaultRecord}
+        onReExport={(record) => {
+          setExportTargetAgreement({
+            id: record.agreementId,
+            assetId: record.assetId || '',
+            assetTitle: record.assetTitle,
+            royaltyRate: record.royaltyRate,
+            basePrice: record.basePrice,
+            duration: record.duration,
+            permittedUsages: record.permittedUsages,
+            continuousVerification: ['Cryptographic Digital Watermark', 'App Vault Backup Sealed'],
+            status: 'ACTIVE',
+            creatorEmail: record.creatorEmail,
+            creatorWallet: walletAddress || user?.uid || '0x...',
+            contractAddress: record.contractAddress,
+            deployTxHash: record.deployTxHash,
+            createdAt: record.exportedAt,
+            territory: record.territory,
+            exclusivity: record.exclusivity,
+          });
+          setIsExportModalOpen(true);
+        }}
       />
     </div>
   );

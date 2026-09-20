@@ -91,7 +91,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className="light" suppressHydrationWarning>
+    <html lang="en" className="dark" suppressHydrationWarning>
       <body className="antialiased bg-zinc-950 text-zinc-100 min-h-screen font-sans" suppressHydrationWarning>
         {/* Google Analytics Tracking Tag */}
         <Script

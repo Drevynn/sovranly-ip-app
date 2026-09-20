@@ -84,7 +84,7 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="flex h-screen bg-[#050505] text-[#e0e0e0] font-sans relative">
+    <div className="flex h-screen bg-zinc-950 text-zinc-100 font-sans relative transition-colors">
       <Sidebar 
         activePage={activePage} 
         setActivePage={setActivePage} 
@@ -119,7 +119,7 @@ export default function DashboardPage() {
           onToggleSidebar={() => setSidebarOpen(!sidebarOpen)}
         />
 
-        <main className="flex-1 overflow-auto p-4 sm:p-6 md:p-8 pb-28 md:pb-8 bg-[#09090b]">
+        <main className="flex-1 overflow-auto p-6 sm:p-8 lg:p-10 pb-32 md:pb-12 bg-zinc-950 transition-colors">
           {activePage === 0 && <Overview onNavigate={setActivePage} />}
           {activePage === 1 && <Profile />}
           {activePage === 2 && (

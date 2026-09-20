@@ -37,21 +37,30 @@ export default function Header({
   };
 
   return (
-    <header className="h-20 border-b border-zinc-900 px-4 md:px-6 flex items-center justify-between bg-zinc-950/50 backdrop-blur-md relative z-30">
-      {/* Left: Hamburger menu + Public Directory + Page Title */}
-      <div className="flex items-center gap-3 z-40">
+    <header className="h-20 border-b border-zinc-900 px-5 sm:px-8 lg:px-10 flex items-center justify-between bg-zinc-950/80 backdrop-blur-md relative z-30 transition-colors">
+      {/* Left: Navigation toggle + Brand + Public Directory + Page Title */}
+      <div className="flex items-center gap-3 sm:gap-4 z-40">
         <button 
           onClick={onToggleSidebar}
-          className="p-2 -ml-2 rounded-xl text-zinc-400 hover:text-white hover:bg-zinc-900/50 transition-all focus:outline-none cursor-pointer"
+          className="p-2.5 -ml-2 rounded-xl text-zinc-400 hover:text-white hover:bg-zinc-900/60 transition-all focus:outline-none cursor-pointer"
           id="sidebar-toggle-btn"
           aria-label="Toggle Navigation"
         >
           <Menu className="w-5 h-5 text-cyan-400" />
         </button>
 
+        <div className="flex items-center gap-2.5">
+          <SovranlyLogo size="sm" />
+          <span className="font-bold tracking-widest text-white text-xs uppercase font-mono hidden sm:inline-block">
+            Sovranly IP
+          </span>
+        </div>
+
+        <div className="h-4 w-px bg-zinc-800 hidden sm:block" />
+
         <button
           onClick={() => setShowPublicMenu(true)}
-          className="px-3 py-1.5 bg-cyan-950/40 hover:bg-cyan-900/50 border border-cyan-500/30 text-cyan-300 text-xs font-mono font-bold rounded-xl flex items-center gap-1.5 transition-all shadow-sm cursor-pointer"
+          className="px-3.5 py-2 bg-cyan-950/40 hover:bg-cyan-900/50 border border-cyan-500/30 text-cyan-300 text-xs font-mono font-bold rounded-xl flex items-center gap-2 transition-all shadow-sm cursor-pointer"
           title="View all public pages, pricing, and documentation"
           id="public-pages-directory-btn"
         >
@@ -60,37 +69,32 @@ export default function Header({
           <span className="md:hidden">Public</span>
         </button>
 
-        <div className="hidden sm:block">
-          <h1 className="text-xs font-mono font-medium text-zinc-400 tracking-wider lg:tracking-[0.15em] uppercase">{pageTitle}</h1>
+        <div className="hidden lg:block">
+          <h1 className="text-xs font-mono font-medium text-zinc-400 tracking-wider uppercase pl-2 border-l border-zinc-800/60">{pageTitle}</h1>
         </div>
       </div>
 
       <PublicPagesHamburgerMenu isOpen={showPublicMenu} onClose={() => setShowPublicMenu(false)} />
 
-      {/* Center: Centered Logo and Brand */}
-      <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 flex items-center gap-2.5 z-10 pointer-events-none">
-        <SovranlyLogo size="sm" />
-        <span className="font-bold tracking-widest text-white text-xs uppercase font-mono hidden md:inline-block">
-          Sovranly IP
-        </span>
-      </div>
-
-      {/* Right: Founders Beta Badge + Google Sign In + Security Status + Wallet Connect + ThemeToggle */}
-      <div className="flex items-center gap-2.5 z-40">
+      {/* Right: ThemeToggle + Founders Beta Badge + Google Sign In + Security Status + Wallet Connect */}
+      <div className="flex items-center gap-3 sm:gap-4 lg:gap-5 z-40">
         <ThemeToggle />
-        <div className="px-2.5 py-1 bg-gradient-to-r from-amber-500/20 via-orange-500/20 to-yellow-500/20 border border-amber-500/40 text-amber-300 text-[10px] font-mono font-bold rounded-lg hidden sm:flex items-center gap-1.5 shadow-sm" title="Founders Beta Creator (Top 100 Early Adopters)">
+
+        <div className="h-5 w-px bg-zinc-800/80 hidden md:block" />
+
+        <div className="px-3 py-1.5 bg-gradient-to-r from-amber-500/20 via-orange-500/20 to-yellow-500/20 border border-amber-500/40 text-amber-300 text-[10px] font-mono font-bold rounded-lg hidden xl:flex items-center gap-1.5 shadow-sm" title="Founders Beta Creator (Top 100 Early Adopters)">
           <Sparkles className="w-3 h-3 text-amber-400 animate-pulse" />
           <span>FOUNDERS BETA #{founderNumber}</span>
         </div>
 
-        <div className="px-3 py-1.5 bg-emerald-950/30 border border-emerald-500/15 text-emerald-400 text-[9px] uppercase tracking-widest rounded-full items-center gap-2 hidden xl:flex">
+        <div className="px-3 py-1.5 bg-emerald-950/30 border border-emerald-500/20 text-emerald-400 text-[9px] uppercase tracking-widest rounded-full items-center gap-2 hidden 2xl:flex">
           <span className="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse"></span>
           {walletAddress || user ? 'Zero Trust Authed' : 'Network Secure'}
         </div>
 
         {/* Google Authentication Status / Button */}
         {user ? (
-          <div className="flex items-center gap-2 bg-zinc-900/80 border border-zinc-800 px-3 py-1.5 rounded-xl text-xs text-zinc-200 shadow-inner">
+          <div className="flex items-center gap-2.5 bg-zinc-900/80 border border-zinc-800 px-3.5 py-2 rounded-xl text-xs text-zinc-200 shadow-inner">
             <div className="w-6 h-6 rounded-full bg-cyan-500/20 border border-cyan-500/40 flex items-center justify-center text-cyan-400 font-bold overflow-hidden flex-shrink-0">
               {user.photoURL ? (
                 <Image src={user.photoURL} alt={user.displayName || 'User'} width={24} height={24} className="rounded-full" referrerPolicy="no-referrer" />
@@ -114,7 +118,7 @@ export default function Header({
           <button
             onClick={handleGoogleAuth}
             disabled={signingIn}
-            className="flex items-center gap-2 px-3.5 py-2 bg-gradient-to-r from-cyan-600/80 to-blue-600/80 hover:from-cyan-500 hover:to-blue-500 text-white font-medium text-xs rounded-xl border border-cyan-500/30 shadow-lg shadow-cyan-950/30 transition-all cursor-pointer disabled:opacity-50"
+            className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-medium text-xs rounded-xl border border-cyan-500/30 shadow-lg shadow-cyan-950/30 transition-all cursor-pointer disabled:opacity-50"
           >
             <svg className="w-4 h-4" viewBox="0 0 24 24">
               <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>

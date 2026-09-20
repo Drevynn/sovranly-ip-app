@@ -18,8 +18,8 @@ export default function ThemeToggle({ className = '', showLabel = false }: Theme
     setMounted(true);
   }, []);
 
-  // Use light theme as baseline during SSR/hydration to guarantee 100% HTML parity
-  const isLight = mounted ? theme === 'light' : true;
+  // Use dark theme as baseline during SSR/hydration to guarantee 100% HTML parity
+  const isLight = mounted ? theme === 'light' : false;
 
   return (
     <button
@@ -29,10 +29,10 @@ export default function ThemeToggle({ className = '', showLabel = false }: Theme
       suppressHydrationWarning
       aria-label={`Switch to ${isLight ? 'dark' : 'light'} mode`}
       title={`Currently in ${isLight ? 'Light' : 'Dark'} mode. Click to toggle ${isLight ? 'Dark' : 'Light'} mode.`}
-      className={`relative inline-flex items-center justify-center gap-2 px-3 py-2 rounded-xl border text-xs font-mono font-medium transition-all duration-200 cursor-pointer select-none focus:outline-none focus:ring-2 focus:ring-cyan-500/40 ${
+      className={`relative inline-flex items-center justify-center gap-2.5 px-3.5 py-2 rounded-xl border text-xs font-mono font-medium transition-all duration-200 cursor-pointer select-none focus:outline-none focus:ring-2 focus:ring-cyan-500/40 shadow-sm ${
         isLight
-          ? 'bg-slate-100 hover:bg-slate-200 text-slate-800 border-slate-300 shadow-sm'
-          : 'bg-zinc-900 hover:bg-zinc-800 text-zinc-200 border-zinc-700/80 shadow-inner'
+          ? 'bg-white hover:bg-slate-100 text-slate-800 border-slate-300/90 shadow-slate-200/50'
+          : 'bg-zinc-900/90 hover:bg-zinc-800 text-zinc-200 border-zinc-700/80 shadow-black/40'
       } ${className}`}
     >
       <div className="relative flex items-center justify-center w-4 h-4">

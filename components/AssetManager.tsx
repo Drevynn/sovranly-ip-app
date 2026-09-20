@@ -1363,9 +1363,9 @@ export default function AssetManager({ walletAddress, onNavigateToLicensing, onN
             </div>
 
             {/* Sort & View Toggle */}
-            <div className="flex items-center gap-2 shrink-0">
-              <div className="flex items-center gap-1 bg-zinc-900 border border-zinc-800 rounded-xl px-2.5 py-1.5">
-                <ArrowUpDown className="w-3.5 h-3.5 text-zinc-500" />
+            <div className="flex items-center gap-3 sm:gap-4 shrink-0">
+              <div className="flex items-center gap-2 bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2">
+                <ArrowUpDown className="w-3.5 h-3.5 text-zinc-400" />
                 <select
                   id="asset-sort-select"
                   value={sortBy}
@@ -1380,11 +1380,11 @@ export default function AssetManager({ walletAddress, onNavigateToLicensing, onN
                 </select>
               </div>
 
-              <div className="flex items-center bg-zinc-900 border border-zinc-800 rounded-xl p-1">
+              <div className="flex items-center gap-1 bg-zinc-900 border border-zinc-800 rounded-xl p-1.5">
                 <button
                   type="button"
                   onClick={() => setViewMode('grid')}
-                  className={`p-1.5 rounded-lg transition-colors ${viewMode === 'grid' ? 'bg-cyan-500/20 text-cyan-400' : 'text-zinc-500 hover:text-white'}`}
+                  className={`p-1.5 rounded-lg transition-colors cursor-pointer ${viewMode === 'grid' ? 'bg-cyan-500/20 text-cyan-400 font-bold' : 'text-zinc-400 hover:text-white'}`}
                   title="Grid Card View"
                 >
                   <LayoutGrid className="w-4 h-4" />
@@ -1392,7 +1392,7 @@ export default function AssetManager({ walletAddress, onNavigateToLicensing, onN
                 <button
                   type="button"
                   onClick={() => setViewMode('table')}
-                  className={`p-1.5 rounded-lg transition-colors ${viewMode === 'table' ? 'bg-cyan-500/20 text-cyan-400' : 'text-zinc-500 hover:text-white'}`}
+                  className={`p-1.5 rounded-lg transition-colors cursor-pointer ${viewMode === 'table' ? 'bg-cyan-500/20 text-cyan-400 font-bold' : 'text-zinc-400 hover:text-white'}`}
                   title="Table Ledger View"
                 >
                   <ListFilter className="w-4 h-4" />
@@ -1402,13 +1402,13 @@ export default function AssetManager({ walletAddress, onNavigateToLicensing, onN
           </div>
 
           {/* Category Filter Pills */}
-          <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none">
+          <div className="flex items-center gap-2.5 overflow-x-auto pb-1.5 scrollbar-none">
             {['All', ...CATEGORIES].map((cat) => (
               <button
                 key={cat}
                 type="button"
                 onClick={() => setFilterType(cat)}
-                className={`px-3 py-1.5 rounded-xl text-xs font-mono font-bold whitespace-nowrap transition-all border ${filterType === cat ? 'bg-cyan-950/40 text-cyan-400 border-cyan-500/50 shadow-sm' : 'bg-zinc-900/50 text-zinc-400 border-zinc-800 hover:text-white'}`}
+                className={`px-3.5 py-2 rounded-xl text-xs font-mono font-bold whitespace-nowrap transition-all border cursor-pointer ${filterType === cat ? 'bg-cyan-950/40 text-cyan-400 border-cyan-500/50 shadow-sm' : 'bg-zinc-900/50 text-zinc-400 border-zinc-800 hover:text-white'}`}
               >
                 {cat === 'All' ? 'All Categories' : cat.split(' / ')[0]}
               </button>
