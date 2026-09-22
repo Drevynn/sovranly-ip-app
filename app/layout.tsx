@@ -92,6 +92,15 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className="dark" suppressHydrationWarning>
+      <head>
+        {/* Mailchimp Connected Site Script */}
+        <script
+          id="mcjs"
+          dangerouslySetInnerHTML={{
+            __html: `!function(c,h,i,m,p){m=c.createElement(h),p=c.getElementsByTagName(h)[0],m.async=1,m.src=i,p.parentNode.insertBefore(m,p)}(document,"script","https://chimpstatic.com/mcjs-connected/js/users/3750e7ebac722f4741572b763/a210f51fac2488c5767bb4104.js");`,
+          }}
+        />
+      </head>
       <body className="antialiased bg-zinc-950 text-zinc-100 min-h-screen font-sans" suppressHydrationWarning>
         {/* Google Analytics Tracking Tag */}
         <Script
