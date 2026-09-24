@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import ActivityLog from '@/components/ActivityLog';
 import ApiLatencyMonitor from '@/components/ApiLatencyMonitor';
+import VoiceCommandCenter from '@/components/VoiceCommandCenter';
 import { useAuth } from '@/components/auth/FirebaseProvider';
 import { getAuthHeaders } from '@/lib/auth-client';
 import { 
@@ -149,6 +150,9 @@ export default function Overview({ onNavigate }: { onNavigate?: (pageId: number)
           </p>
         </div>
       </div>
+
+      {/* Voice Command Console */}
+      <VoiceCommandCenter onNavigate={onNavigate} />
 
       {/* The 3-Step Creator Flow */}
       <div className="space-y-5">

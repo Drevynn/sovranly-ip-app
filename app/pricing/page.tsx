@@ -20,6 +20,7 @@ import {
   ExternalLink
 } from 'lucide-react';
 import Link from 'next/link';
+import NonCustodialBadge from '@/components/NonCustodialBadge';
 
 export default function PricingPage() {
   const [billingPeriod, setBillingPeriod] = useState<'monthly' | 'annual'>('monthly');
@@ -332,6 +333,9 @@ export default function PricingPage() {
 
       {/* Public Page Footer */}
       <footer className="border-t border-white/5 py-12 bg-zinc-950/45 flex flex-col items-center justify-center gap-6 text-center text-zinc-500 text-xs">
+        <div className="w-full max-w-4xl px-4">
+          <NonCustodialBadge variant="card" />
+        </div>
         <div className="flex items-center gap-4 text-zinc-500">
           <Link href="/about" className="hover:text-cyan-400 transition-colors">About Us</Link>
           <span>•</span>

@@ -1,7 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import React, { useEffect } from 'react';
 import { ShieldAlert, RefreshCw, Home } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
@@ -12,15 +11,14 @@ export default function ErrorBoundary({
   error: Error & { digest?: string };
   reset: () => void;
 }) {
-  const router = useRouter();
-
   useEffect(() => {
-    // Log the error securely for telemetry & developer review
     console.error('Unhandled application exception captured by route boundary:', error);
   }, [error]);
 
   const handleReturnHome = () => {
-    router.push('/');
+    if (typeof window !== 'undefined') {
+      window.location.href = '/';
+    }
   };
 
   return (
@@ -64,7 +62,7 @@ export default function ErrorBoundary({
         <div className="flex flex-col sm:flex-row items-center gap-4">
           <Button
             onClick={() => reset()}
-            className="w-full sm:flex-1 bg-zinc-100 text-zinc-900 hover:bg-zinc-200 transition-colors font-medium py-6 rounded-xl flex items-center justify-center gap-2 border border-transparent shadow-md"
+            className="w-full sm:flex-1 bg-zinc-100 text-zinc-900 hover:bg-zinc-200 transition-colors font-medium py-6 rounded-xl flex items-center justify-center gap-2 border border-transparent shadow-md cursor-pointer"
           >
             <RefreshCw className="w-4 h-4" />
             Retry Transaction
@@ -73,7 +71,7 @@ export default function ErrorBoundary({
           <Button
             onClick={handleReturnHome}
             variant="outline"
-            className="w-full sm:flex-1 border-zinc-800 text-zinc-300 hover:bg-zinc-900 hover:text-white transition-all font-medium py-6 rounded-xl flex items-center justify-center gap-2"
+            className="w-full sm:flex-1 border-zinc-800 text-zinc-300 hover:bg-zinc-900 hover:text-white transition-all font-medium py-6 rounded-xl flex items-center justify-center gap-2 cursor-pointer"
           >
             <Home className="w-4 h-4" />
             Home Console

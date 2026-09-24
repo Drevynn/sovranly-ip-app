@@ -31,6 +31,7 @@ import SlideStack from '@/components/SlideStack';
 import NewsletterSignup from '@/components/NewsletterSignup';
 import AppOverviewShowcase from '@/components/AppOverviewShowcase';
 import ThemeToggle from '@/components/ThemeToggle';
+import NonCustodialBadge from '@/components/NonCustodialBadge';
 import { motion } from 'motion/react';
 
 
@@ -452,6 +453,11 @@ export default function HomePage() {
 
       {/* Footer */}
       <footer className="border-t border-white/5 py-16 bg-zinc-950/40 relative z-10 flex flex-col items-center justify-center gap-8 text-center">
+        {/* Payment & Custody Architecture Verification Badge */}
+        <div className="w-full max-w-7xl px-6">
+          <NonCustodialBadge variant="card" />
+        </div>
+
         {/* Newsletter Signup Form */}
         <div className="w-full max-w-7xl px-6">
           <NewsletterSignup />

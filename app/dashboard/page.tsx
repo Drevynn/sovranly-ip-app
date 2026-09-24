@@ -26,6 +26,7 @@ import { SignIn } from '@/components/auth/SignIn';
 import { SovranlyLogo } from '@/components/SovranlyLogo';
 import Link from 'next/link';
 import { ShieldCheck } from 'lucide-react';
+import NonCustodialBadge from '@/components/NonCustodialBadge';
 
 export default function DashboardPage() {
   const { user, loading } = useAuth();
@@ -77,6 +78,7 @@ export default function DashboardPage() {
 
         {/* Footer */}
         <footer className="border-t border-white/5 py-8 flex flex-col items-center justify-center gap-4 text-center text-zinc-700 text-[9px] font-mono">
+          <NonCustodialBadge variant="compact" />
           <span>Sovranly Continuous Verification Environment</span>
         </footer>
       </div>
@@ -160,6 +162,20 @@ export default function DashboardPage() {
           )}
           {activePage === 15 && <CloudflareHandshakeDiagnostics />}
           {activePage === 16 && <OfficialIpNotices walletAddress={currentAccount} />}
+
+          {/* Persistent Non-Custodial Architecture Footer */}
+          <footer className="mt-16 pt-8 border-t border-zinc-900 flex flex-col items-center justify-center gap-3 text-center">
+            <NonCustodialBadge variant="compact" />
+            <div className="flex flex-wrap items-center justify-center gap-2 text-[10px] text-zinc-600 font-mono">
+              <span>ZERO CUSTODY PROTOCOL</span>
+              <span>•</span>
+              <span>NON-INTERMEDIARY ROYALTY SPLITS</span>
+              <span>•</span>
+              <Link href="/terms" className="text-zinc-500 hover:text-cyan-400 underline transition-colors">
+                COMPLIANCE & TERMS
+              </Link>
+            </div>
+          </footer>
         </main>
 
         <MobileBottomNav 
