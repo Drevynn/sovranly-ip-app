@@ -51,9 +51,9 @@ export default function PrivacyPolicy() {
     'faq-metadata': true,
     'faq-wallets': true,
     'faq-blockchain-gdpr': true,
-    'faq-subprocessors': false,
-    'faq-anti-scraping': false,
-    'faq-exercise-rights': false,
+    'faq-subprocessors': true,
+    'faq-anti-scraping': true,
+    'faq-exercise-rights': true,
   });
 
   const toggleFaq = (id: string) => {
