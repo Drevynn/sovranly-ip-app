@@ -24,7 +24,11 @@ import {
   CheckCircle2,
   Share2,
   ListOrdered,
-  Layers
+  Layers,
+  Shield,
+  Key,
+  Globe,
+  Check
 } from 'lucide-react';
 import Link from 'next/link';
 import SlideStack from '@/components/SlideStack';
@@ -32,6 +36,7 @@ import NewsletterSignup from '@/components/NewsletterSignup';
 import AppOverviewShowcase from '@/components/AppOverviewShowcase';
 import ThemeToggle from '@/components/ThemeToggle';
 import NonCustodialBadge from '@/components/NonCustodialBadge';
+import { SovranlyLogo } from '@/components/SovranlyLogo';
 import { motion } from 'motion/react';
 
 
@@ -81,18 +86,17 @@ export default function HomePage() {
       {/* Navigation Header */}
       <header className="relative border-b border-white/10 bg-black/80 backdrop-blur-md sticky top-0 z-50">
         <div className="flex items-center justify-between p-6 max-w-7xl mx-auto">
-          <div className="flex items-center gap-3">
-            <div className="w-9 h-9 bg-zinc-950 border border-cyan-500/30 rounded-xl flex items-center justify-center shadow-lg shadow-cyan-950/20">
-              <ShieldCheck className="w-5 h-5 text-cyan-400 drop-shadow-[0_0_8px_rgba(34,211,238,0.4)]" />
-            </div>
-            <Link href="/" className="font-bold tracking-tighter text-white text-xl uppercase">Sovranly IP</Link>
-          </div>
+          <Link href="/" className="flex items-center gap-3 group">
+            <SovranlyLogo size="sm" />
+            <span className="font-bold tracking-tighter text-white text-xl uppercase group-hover:text-cyan-400 transition-colors">Sovranly IP</span>
+          </Link>
           <nav className="hidden md:flex items-center gap-6">
             <button onClick={scrollToWorkflow} className="text-sm text-zinc-400 hover:text-white transition-colors cursor-pointer">
               How it works
             </button>
             <Link href="/onboarding" className="text-sm text-zinc-400 hover:text-white transition-colors">For creators</Link>
             <Link href="/marketplace" className="text-sm text-zinc-400 hover:text-white transition-colors">Explore listings</Link>
+            <a href="#data-transparency" className="text-sm text-zinc-400 hover:text-white transition-colors">Data & Privacy</a>
             <Link href="/wiki" className="text-sm text-zinc-400 hover:text-white transition-colors">Wiki / Help</Link>
             <Link href="/faq" className="text-sm text-zinc-400 hover:text-white transition-colors">FAQ</Link>
           </nav>
@@ -109,8 +113,35 @@ export default function HomePage() {
       </header>
 
       {/* Hero Section */}
-      <main className="relative max-w-7xl mx-auto px-6 py-20 md:py-32 space-y-36">
+      <main className="relative max-w-7xl mx-auto px-6 py-16 md:py-24 space-y-36">
         <section className="relative text-center space-y-10 max-w-5xl mx-auto">
+          {/* Majestic Hero Shield Crest Centerpiece */}
+          <motion.div 
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, ease: 'easeOut' }}
+            className="relative mx-auto flex flex-col items-center justify-center pt-2 pb-2"
+          >
+            <div className="relative w-44 h-44 sm:w-56 sm:h-56 md:w-64 md:h-64 flex items-center justify-center group cursor-pointer">
+              {/* Pulsing Atmospheric Glow Halos */}
+              <div className="absolute inset-0 bg-gradient-to-tr from-cyan-500/25 via-violet-500/20 to-sky-400/20 rounded-full blur-3xl animate-pulse pointer-events-none group-hover:scale-125 transition-transform duration-700" />
+              <div className="absolute -inset-6 bg-cyan-500/10 rounded-full blur-2xl pointer-events-none" />
+              
+              {/* Zero Trust Circuit Rings */}
+              <div className="absolute inset-2 border border-cyan-500/20 rounded-full animate-[spin_40s_linear_infinite] pointer-events-none" />
+              <div className="absolute -inset-2 border border-violet-500/15 rounded-full animate-[spin_60s_linear_infinite_reverse] pointer-events-none" />
+
+              {/* Floating Shield Logo */}
+              <SovranlyLogo size="hero" variant="v3" glow={true} className="relative z-10 filter drop-shadow-[0_0_35px_rgba(6,182,212,0.6)]" />
+            </div>
+
+            {/* Zero Trust Live Protocol Status Seal */}
+            <div className="mt-5 inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-zinc-950/90 border border-cyan-500/30 text-[11px] font-mono text-cyan-300 shadow-xl shadow-cyan-950/50 backdrop-blur-md">
+              <span className="w-2 h-2 rounded-full bg-cyan-400 animate-ping" />
+              <span className="font-semibold tracking-wider uppercase">ZERO TRUST CONTINUOUS VERIFICATION // SHIELD ACTIVE</span>
+            </div>
+          </motion.div>
+
           <div className="inline-flex items-center gap-2.5 px-4 py-2 bg-zinc-950/60 backdrop-blur-md border border-zinc-800/80 rounded-full text-xs sm:text-sm text-zinc-400 mb-2 font-mono tracking-wider uppercase">
             <Sparkles className="w-4 h-4 text-cyan-400" />
             <span>CREATOR LICENSING PROTOCOL // v1.2 SECURE</span>
@@ -404,6 +435,87 @@ export default function HomePage() {
           </div>
         </section>
 
+        {/* Google OAuth & User Data Transparency Section */}
+        <section id="data-transparency" className="relative bg-zinc-900/40 rounded-3xl p-8 md:p-12 border border-zinc-800/80 backdrop-blur-sm space-y-8">
+          <div className="text-center space-y-4 max-w-3xl mx-auto">
+            <span className="text-xs font-mono uppercase tracking-widest text-cyan-400 px-3.5 py-1.5 bg-cyan-950/60 border border-cyan-800/40 rounded-full inline-flex items-center gap-2">
+              <ShieldCheck className="w-3.5 h-3.5 text-cyan-400" />
+              GOOGLE OAUTH &amp; USER DATA TRANSPARENCY
+            </span>
+            <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-white">
+              Public Platform Access &amp; Clear Data Safeguards
+            </h2>
+            <p className="text-zinc-400 text-sm sm:text-base leading-relaxed">
+              Sovranly IP is an open platform dedicated to creator rights and Zero Trust security. We believe in complete transparency regarding how our platform operates, why data is requested, and how your information is protected.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {/* Box 1: No Login Required for Public Content */}
+            <div className="bg-zinc-950/70 border border-zinc-800/80 rounded-2xl p-6 space-y-3">
+              <div className="w-10 h-10 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400">
+                <Globe className="w-5 h-5" />
+              </div>
+              <h3 className="text-lg font-bold text-white">100% Public Access</h3>
+              <p className="text-xs text-zinc-400 leading-relaxed">
+                All public platform features—including browsing catalog listings, reading license permissions, reviewing how-it-works guides, FAQs, and platform documentation—are <strong className="text-zinc-200">freely viewable without requiring an account or login</strong>.
+              </p>
+            </div>
+
+            {/* Box 2: Purpose of Google User Data */}
+            <div className="bg-zinc-950/70 border border-zinc-800/80 rounded-2xl p-6 space-y-3">
+              <div className="w-10 h-10 rounded-xl bg-violet-500/10 border border-violet-500/20 flex items-center justify-center text-violet-400">
+                <Key className="w-5 h-5" />
+              </div>
+              <h3 className="text-lg font-bold text-white">Google Sign-In Purpose</h3>
+              <p className="text-xs text-zinc-400 leading-relaxed">
+                When creators opt to log in with Google, we request basic profile information (<code className="text-cyan-300">openid</code>, <code className="text-cyan-300">profile</code>, <code className="text-cyan-300">email</code>) solely to authenticate creator identity, bind copyright certificates to verified owners, and send critical royalty notices.
+              </p>
+            </div>
+
+            {/* Box 3: Google Limited Use Compliance */}
+            <div className="bg-zinc-950/70 border border-zinc-800/80 rounded-2xl p-6 space-y-3">
+              <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400">
+                <Shield className="w-5 h-5" />
+              </div>
+              <h3 className="text-lg font-bold text-white">Google Limited Use</h3>
+              <p className="text-xs text-zinc-400 leading-relaxed">
+                We strictly comply with the <strong className="text-zinc-200">Google API Services User Data Policy</strong>. We do not sell user data, do not serve targeted advertisements, and do not use Google user data to train AI/ML models.
+              </p>
+            </div>
+          </div>
+
+          {/* Detailed Disclosure Banner */}
+          <div className="bg-zinc-950/90 border border-zinc-800 rounded-2xl p-6 space-y-4">
+            <h4 className="text-sm font-bold text-white uppercase tracking-wider font-mono flex items-center gap-2">
+              <Check className="w-4 h-4 text-emerald-400" />
+              Summary of Data Practices for Verification &amp; User Trust
+            </h4>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs text-zinc-400">
+              <div className="space-y-1.5">
+                <span className="font-bold text-zinc-200 block">Workspace API Integration (Optional)</span>
+                <p>Features that interface with Google Drive, Slides, or Gmail are strictly user-initiated inside the authenticated creator dashboard to export agreement pitch decks or dispatch license confirmation receipts.</p>
+              </div>
+              <div className="space-y-1.5">
+                <span className="font-bold text-zinc-200 block">User Control &amp; Data Deletion</span>
+                <p>You can revoke Sovranly IP&apos;s access at any time via your Google Account Security settings or request permanent erasure of your account and metadata by contacting our privacy desk.</p>
+              </div>
+            </div>
+
+            <div className="pt-3 border-t border-zinc-900 flex flex-wrap items-center justify-between gap-4 text-xs">
+              <div className="flex flex-wrap items-center gap-4 text-zinc-400">
+                <span>Direct Verification Links:</span>
+                <Link href="/privacy" className="text-cyan-400 hover:underline font-medium">Privacy Policy (Full Text)</Link>
+                <span>•</span>
+                <Link href="/terms" className="text-cyan-400 hover:underline font-medium">Terms of Service</Link>
+                <span>•</span>
+                <a href="mailto:create@sovranlyip.com" className="text-zinc-300 hover:text-white">create@sovranlyip.com</a>
+              </div>
+              <span className="text-[11px] font-mono text-zinc-400">Application ID: Sovranly IP // Creative Sovereignty LLC</span>
+            </div>
+          </div>
+        </section>
+
         {/* Contact/Support Form Section */}
         <section id="contact-section" className="relative bg-zinc-900/30 rounded-3xl p-8 md:p-12 border border-zinc-800/60 backdrop-blur-sm">
           <div className="absolute top-0 right-0 w-[300px] h-[300px] bg-violet-500/5 rounded-full blur-[100px] pointer-events-none" />
@@ -483,6 +595,8 @@ export default function HomePage() {
           <Link href="/terms" className="hover:text-cyan-400 transition-colors">Terms of Service</Link>
           <span>•</span>
           <Link href="/privacy" className="hover:text-cyan-400 transition-colors">Privacy Policy</Link>
+          <span>•</span>
+          <Link href="/sitemap" className="hover:text-cyan-400 transition-colors">Sitemap</Link>
         </div>
         <p className="text-zinc-600 text-xs">© 2026 Creative Sovereignty LLC. Sovereign Management and Zero Trust Blockchain Protection. All work protected on-chain.</p>
       </footer>

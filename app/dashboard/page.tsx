@@ -59,27 +59,68 @@ export default function DashboardPage() {
         <div className="absolute top-1/3 right-1/4 w-[600px] h-[600px] bg-violet-500/5 rounded-full blur-[140px] pointer-events-none" />
 
         {/* Minimal Header */}
-        <header className="border-b border-white/5 py-6 bg-transparent relative z-10">
+        <header className="border-b border-white/5 py-6 bg-zinc-950/80 backdrop-blur-md relative z-10">
           <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
-            <div className="flex items-center gap-3">
+            <Link href="/" className="flex items-center gap-3 group">
               <SovranlyLogo size="sm" />
-              <span className="font-bold tracking-tighter text-white uppercase text-lg">SOVRANLY IP</span>
-            </div>
-            <Link href="/" className="text-xs text-zinc-500 hover:text-white transition-colors uppercase tracking-wider font-extrabold flex items-center gap-2">
-              Return to Website
+              <span className="font-bold tracking-tighter text-white uppercase text-lg group-hover:text-cyan-400 transition-colors">SOVRANLY IP</span>
             </Link>
+            <div className="flex items-center gap-4">
+              <Link href="/marketplace" className="text-xs text-zinc-400 hover:text-white transition-colors hidden sm:inline-block">
+                Explore Marketplace
+              </Link>
+              <Link href="/" className="text-xs text-cyan-400 hover:text-cyan-300 transition-colors uppercase tracking-wider font-extrabold flex items-center gap-2">
+                Public Homepage →
+              </Link>
+            </div>
           </div>
         </header>
 
+        {/* Public Notice Banner for Google Reviewers & Guests */}
+        <div className="relative z-10 max-w-2xl mx-auto px-4 pt-6">
+          <div className="p-4 rounded-2xl bg-zinc-900/60 border border-cyan-500/20 text-xs text-zinc-300 space-y-2 backdrop-blur-md">
+            <div className="flex items-center gap-2 text-cyan-400 font-mono font-bold uppercase tracking-wider text-[11px]">
+              <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
+              <span>Public Platform Notice</span>
+            </div>
+            <p className="leading-relaxed">
+              You are viewing the authenticated Creator Portal. The entire Sovranly IP public platform—including digital asset listings, license term generator, licensing tutorials, documentation, and policies—is freely accessible <strong className="text-white">without requiring a login</strong>.
+            </p>
+            <div className="flex flex-wrap gap-2 pt-1 font-mono text-[10px]">
+              <Link href="/" className="px-2.5 py-1 rounded-md bg-cyan-950/40 text-cyan-400 border border-cyan-800/40 hover:bg-cyan-900/50 transition-colors">
+                Public Homepage
+              </Link>
+              <Link href="/marketplace" className="px-2.5 py-1 rounded-md bg-zinc-800 text-zinc-300 hover:bg-zinc-700 transition-colors">
+                Explore Listings
+              </Link>
+              <Link href="/privacy" className="px-2.5 py-1 rounded-md bg-zinc-800 text-zinc-300 hover:bg-zinc-700 transition-colors">
+                Privacy Policy
+              </Link>
+              <Link href="/terms" className="px-2.5 py-1 rounded-md bg-zinc-800 text-zinc-300 hover:bg-zinc-700 transition-colors">
+                Terms of Service
+              </Link>
+            </div>
+          </div>
+        </div>
+
         {/* Secure Sign In Portal */}
-        <div className="flex-1 flex items-center justify-center py-12 relative z-10">
+        <div className="flex-1 flex items-center justify-center py-10 relative z-10">
           <SignIn />
         </div>
 
         {/* Footer */}
-        <footer className="border-t border-white/5 py-8 flex flex-col items-center justify-center gap-4 text-center text-zinc-700 text-[9px] font-mono">
+        <footer className="border-t border-white/5 py-8 flex flex-col items-center justify-center gap-4 text-center text-zinc-600 text-xs">
+          <div className="flex flex-wrap items-center justify-center gap-4 text-zinc-500 text-xs px-4">
+            <Link href="/" className="hover:text-cyan-400 transition-colors">Public Homepage</Link>
+            <span>•</span>
+            <Link href="/marketplace" className="hover:text-cyan-400 transition-colors">Marketplace</Link>
+            <span>•</span>
+            <Link href="/terms" className="hover:text-cyan-400 transition-colors">Terms of Service</Link>
+            <span>•</span>
+            <Link href="/privacy" className="hover:text-cyan-400 transition-colors">Privacy Policy</Link>
+          </div>
           <NonCustodialBadge variant="compact" />
-          <span>Sovranly Continuous Verification Environment</span>
+          <span className="font-mono text-[10px]">Sovranly IP Continuous Verification Environment</span>
         </footer>
       </div>
     );

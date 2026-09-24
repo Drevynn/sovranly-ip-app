@@ -112,6 +112,8 @@ export default function AboutPage() {
           <Link href="/terms" className="hover:text-cyan-400 transition-colors">Terms of Service</Link>
           <span>•</span>
           <Link href="/privacy" className="hover:text-cyan-400 transition-colors">Privacy Policy</Link>
+          <span>•</span>
+          <Link href="/sitemap" className="hover:text-cyan-400 transition-colors">Sitemap</Link>
         </div>
         <p className="text-zinc-600 text-xs">© 2026 Sovranly IP. Sovereign intellectual property systems. Zero Trust Secured.</p>
       </footer>

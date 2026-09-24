@@ -2,7 +2,7 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
-import { Menu, X, Home, Info, HelpCircle, FileText, Shield, DollarSign, BookOpen, Compass } from 'lucide-react';
+import { Menu, X, Home, Info, HelpCircle, FileText, Shield, DollarSign, BookOpen, Compass, FolderTree } from 'lucide-react';
 import ThemeToggle from '@/components/ThemeToggle';
 
 export function PublicNavbarHamburger() {
@@ -28,6 +28,7 @@ export function PublicNavbarHamburger() {
     { name: 'Terms of Service', href: '/terms', icon: <FileText className="w-4 h-4 text-rose-400" /> },
     { name: 'Privacy Policy', href: '/privacy', icon: <Shield className="w-4 h-4 text-teal-400" /> },
     { name: 'Knowledge Wiki', href: '/wiki', icon: <BookOpen className="w-4 h-4 text-violet-400" /> },
+    { name: 'Sitemap', href: '/sitemap', icon: <FolderTree className="w-4 h-4 text-pink-400" /> },
   ];
 
   return (

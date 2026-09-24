@@ -31,6 +31,10 @@ export function SovranlyLogo({
     hero: 'w-full h-full max-w-[340px] max-h-[340px] sm:max-w-[420px] sm:max-h-[420px]'
   }[size];
 
+  const imageSrc = variant === 'v3' ? '/sovranly_shield_Logo.png' : '/sovranly-shield-transparent.png';
+  const imgWidth = variant === 'v3' ? 1024 : 1024;
+  const imgHeight = variant === 'v3' ? 1024 : 1310;
+
   return (
     <motion.div 
       id={id}
@@ -56,10 +60,10 @@ export function SovranlyLogo({
         {/* Shield and Crown only with 100% transparent background - No square, no black, no white, no checkerboard */}
         <div className="relative w-full h-full flex items-center justify-center">
           <Image
-            src="/sovranly-shield-transparent.png"
+            src={imageSrc}
             alt="Sovranly IP Shield and Crown Logo"
-            width={1024}
-            height={1310}
+            width={imgWidth}
+            height={imgHeight}
             priority
             unoptimized={true}
             className="w-full h-full object-contain filter drop-shadow-[0_0_25px_rgba(0,240,255,0.45)] group-hover/logo:drop-shadow-[0_0_45px_rgba(0,240,255,0.75)] select-none pointer-events-none transition-all duration-500"

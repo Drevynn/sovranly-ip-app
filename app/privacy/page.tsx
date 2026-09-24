@@ -2168,6 +2168,8 @@ export default function PrivacyPolicy() {
             <Link href="/wiki" className="hover:text-white transition-colors">Knowledge Wiki</Link>
             <span>•</span>
             <Link href="/faq" className="hover:text-white transition-colors">FAQ</Link>
+            <span>•</span>
+            <Link href="/sitemap" className="hover:text-white transition-colors">Sitemap</Link>
           </div>
           <p className="text-xs text-zinc-500">
             &copy; {new Date().getFullYear()} Sovranly IP. Sovereign Intellectual Property &amp; Zero Trust Architecture. All Rights Reserved.
