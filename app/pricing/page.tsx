@@ -127,14 +127,14 @@ export default function PricingPage() {
           <nav className="hidden md:flex items-center gap-8">
             <Link href="/dashboard" className="text-sm text-zinc-400 hover:text-white transition-colors">Command Center</Link>
             <Link href="/pricing" className="text-sm text-white font-bold transition-colors">Pricing</Link>
-            <Link href="/marketplace" className="text-sm text-zinc-400 hover:text-white transition-colors">Marketplace</Link>
+            <Link href="/about" className="text-sm text-zinc-400 hover:text-white transition-colors">Roadmap &amp; About</Link>
             <Link href="/onboarding" className="text-sm text-zinc-400 hover:text-white transition-colors">Chat Support</Link>
             <Link href="/wiki" className="text-sm text-zinc-400 hover:text-white transition-colors">Wiki / Help</Link>
             <Link href="/faq" className="text-sm text-zinc-400 hover:text-white transition-colors">FAQ</Link>
           </nav>
           <div className="flex items-center gap-3">
             <Button asChild variant="outline" className="border-zinc-800 bg-transparent text-white hover:bg-zinc-900 transition-all rounded-full hidden sm:inline-flex">
-              <Link href="/marketplace">Marketplace</Link>
+              <Link href="/about">About Us</Link>
             </Button>
             <Button asChild className="bg-gradient-to-r from-cyan-500 to-violet-500 hover:brightness-110 text-white font-medium shadow-lg shadow-cyan-950/40 rounded-full">
               <Link href="/dashboard">Launch Console</Link>

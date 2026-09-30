@@ -5,7 +5,11 @@ const nextConfig: NextConfig = {
   allowedDevOrigins: [
     'ais-dev-p6c6v5ndbtu2ax22nqbzvs-186944557149.us-west1.run.app',
     'sovranlyip.com',
-    'www.sovranlyip.com'
+    'www.sovranlyip.com',
+    'app.sovranlyip.com',
+    'savranlyip.com',
+    'www.savranlyip.com',
+    'app.savranlyip.com'
   ],
   typescript: {
     ignoreBuildErrors: false,

@@ -35,13 +35,7 @@ export function PublicPagesHamburgerMenu({ isOpen, onClose }: PublicPagesHamburg
       icon: <DollarSign className="w-5 h-5 text-emerald-400" />,
       tag: "Public Pricing"
     },
-    {
-      title: "Public IP Marketplace",
-      path: "/marketplace",
-      description: "Explore verified creator master recordings, digital artwork, and software licenses available for instant sync licensing.",
-      icon: <Layers className="w-5 h-5 text-cyan-400" />,
-      tag: "Marketplace"
-    },
+    /* Marketplace removed from public view for upcoming feature release */
     {
       title: "About Sovranly IP & Mission",
       path: "/about",

@@ -389,107 +389,245 @@ export default function PrivacyPolicy() {
 
         {/* SECTION 2: Information We Collect */}
         <section id="collection" className="space-y-6">
-          <div className="border-b border-zinc-900 pb-3">
-            <h2 className="text-xl sm:text-2xl font-black text-white uppercase tracking-tight flex items-center gap-2.5">
-              <span className="text-cyan-400 text-sm font-mono">[02]</span> Information We Collect (Detailed Taxonomy &amp; Vectors)
-            </h2>
-            <p className="text-xs text-zinc-500 font-mono mt-1">Granular classification of all active, passive, on-chain, and integrated data collection vectors.</p>
+          <div className="border-b border-zinc-900 pb-3 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+            <div>
+              <h2 className="text-xl sm:text-2xl font-black text-white uppercase tracking-tight flex items-center gap-2.5">
+                <span className="text-cyan-400 text-sm font-mono">[02]</span> Information We Collect (Detailed Taxonomy &amp; Vectors)
+              </h2>
+              <p className="text-xs text-zinc-500 font-mono mt-1">Comprehensive classification of all active, passive, on-chain, integrated, and telemetry data collection vectors.</p>
+            </div>
+            <div className="flex items-center gap-1.5 px-2.5 py-1 bg-cyan-950/40 border border-cyan-500/30 text-cyan-400 rounded-full text-[11px] font-mono whitespace-nowrap self-start sm:self-auto">
+              <Database className="w-3.5 h-3.5" />
+              <span>DATA COLLECTION VECTORS</span>
+            </div>
           </div>
 
-          <div className="space-y-4">
+          <div className="space-y-6">
             <p className="text-sm text-zinc-300 leading-relaxed">
-              Depending on how you interact with Sovranly IP (browsing public creative registries, authenticating an account, connecting an on-chain Web3 wallet, uploading audio masters, notarizing intellectual property, or executing automated license agreements), we collect and process the following specific classifications of information:
+              At Sovranly IP, our data architecture enforces strict <strong>Cryptographic Data Minimization</strong> and <strong>Zero Trust Authorization</strong>. We never harvest extraneous user data, engage in cross-context tracking, or monetize personal information. Depending on how you interact with Sovranly IP (browsing creative registries, authenticating an account, linking an on-chain Web3 wallet, uploading audio masters, notarizing intellectual property, or executing automated license agreements), we collect and process data through seven distinct, transparent collection vectors:
             </p>
 
-            {/* Category A */}
-            <div className="p-5 bg-zinc-950/60 border border-zinc-900 rounded-2xl space-y-3">
-              <h3 className="text-sm font-bold text-white flex items-center gap-2">
-                <UserCheck className="w-4 h-4 text-cyan-400" />
-                <span>A. Identity, Authentication &amp; Profile Data</span>
-              </h3>
-              <ul className="list-disc list-inside text-xs text-zinc-400 space-y-1.5 leading-relaxed pl-1">
-                <li><strong className="text-zinc-200">Google OAuth &amp; Firebase Authentication Profile:</strong> Verified primary email address, display name, user avatar picture URL, and immutable Firebase User Identifier (UID) received when signing in via Google.</li>
-                <li><strong className="text-zinc-200">Public Cryptographic Wallet Address:</strong> Public Ethereum/EVM hex address (e.g., <code>0x71C...a49B</code>) read through client-side browser wallet providers (MetaMask, Coinbase Wallet, WalletConnect). <em>Sovranly IP never receives, prompts for, or stores private keys or seed phrases.</em></li>
-                <li><strong className="text-zinc-200">Creator Profile &amp; Role Designations:</strong> User-customized creator moniker, bio, social media verification links, and platform membership tier (e.g., Founders Beta Creator, Standard Rights Holder, Enterprise Catalog Manager).</li>
-              </ul>
+            {/* Vector Breakdown Cards */}
+            <div className="space-y-4">
+              {/* Vector 1 */}
+              <div className="p-5 bg-zinc-950/60 border border-zinc-900 rounded-2xl space-y-3">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-sm font-bold text-white flex items-center gap-2">
+                    <UserCheck className="w-4 h-4 text-cyan-400" />
+                    <span>Vector 1: Direct Creator Submissions &amp; Profile Data</span>
+                  </h3>
+                  <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-cyan-950/50 text-cyan-400 border border-cyan-800/40">DIRECT ACTIVE</span>
+                </div>
+                <p className="text-xs text-zinc-300 leading-relaxed">
+                  Information provided directly by you when creating or customizing your creator profile on the Sovranly IP platform:
+                </p>
+                <ul className="list-disc list-inside text-xs text-zinc-400 space-y-1.5 leading-relaxed pl-1">
+                  <li><strong className="text-zinc-200">Creator Moniker &amp; Profile Bio:</strong> Public stage name, pseudonymous artist moniker, legal creator alias, professional biography, and designated creative genres.</li>
+                  <li><strong className="text-zinc-200">Social Verification Links:</strong> Optional external creator profile links (e.g., Spotify Artist URI, Apple Music ID, X/Twitter handle, Soundcloud profile, GitHub profile) used for provenance verification and anti-impersonation badge issuance.</li>
+                  <li><strong className="text-zinc-200">Contact &amp; Notification Preferences:</strong> Direct contact email address, SMS notification preferences (where opted in for instant royalty disbursement alerts), and membership tier designations (Founders Beta, Rights Holder, Enterprise Catalog Manager).</li>
+                  <li><strong className="text-zinc-200">Age &amp; Majority Attestation:</strong> Mandatory self-attestation confirming you are at least 18 years of age (or legal age of majority in your jurisdiction) in strict compliance with COPPA and global legal capacity requirements.</li>
+                </ul>
+              </div>
+
+              {/* Vector 2 */}
+              <div className="p-5 bg-zinc-950/60 border border-zinc-900 rounded-2xl space-y-3">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-sm font-bold text-white flex items-center gap-2">
+                    <Globe className="w-4 h-4 text-cyan-400" />
+                    <span>Vector 2: Google Identity &amp; OAuth 2.0 Integration Vectors</span>
+                  </h3>
+                  <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-cyan-950/50 text-cyan-400 border border-cyan-800/40">OAUTH 2.0 FEDERATED</span>
+                </div>
+                <p className="text-xs text-zinc-300 leading-relaxed">
+                  When you sign in to Sovranly IP using Google Identity Services (via Firebase Authentication), we receive and process standard OpenID Connect federated claims:
+                </p>
+                <ul className="list-disc list-inside text-xs text-zinc-400 space-y-1.5 leading-relaxed pl-1">
+                  <li><strong className="text-zinc-200">Google Primary Verified Email Address:</strong> Used as your unique sovereign creator identifier, preventing account hijacking and ensuring secure transactional notifications.</li>
+                  <li><strong className="text-zinc-200">Basic Profile Metadata:</strong> Full display name, given name, family name, and profile avatar URL used to render your creator dashboard interface.</li>
+                  <li><strong className="text-zinc-200">Google Unique Subject Identifier (UID / sub):</strong> Immutable federated identifier mapped cryptographically to your internal Firestore account ledger.</li>
+                  <li><strong className="text-zinc-200">Short-Lived Session Tokens:</strong> Cryptographically signed JWT access and refresh tokens used exclusively to validate active sessions under our Zero Trust security model.</li>
+                  <li><strong className="text-zinc-200">Limited Use Commitment:</strong> All data received through Google APIs strictly complies with the <a href="https://developers.google.com/terms/api-services-user-data-policy" target="_blank" rel="noopener noreferrer" className="text-cyan-400 underline hover:text-cyan-300">Google API Services User Data Policy</a>, including the Limited Use requirements. We never use Google user data to train AI/ML models or transfer it to data brokers.</li>
+                </ul>
+              </div>
+
+              {/* Vector 3 */}
+              <div className="p-5 bg-zinc-950/60 border border-zinc-900 rounded-2xl space-y-3">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-sm font-bold text-white flex items-center gap-2">
+                    <FileText className="w-4 h-4 text-violet-400" />
+                    <span>Vector 3: Intellectual Property Catalog, Master Audio &amp; Creative Assets</span>
+                  </h3>
+                  <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-violet-950/50 text-violet-400 border border-violet-800/40">MEDIA &amp; RIGHTS INGESTION</span>
+                </div>
+                <p className="text-xs text-zinc-300 leading-relaxed">
+                  Data ingested when you register, notarize, split, or license intellectual property assets through our smart contract infrastructure:
+                </p>
+                <ul className="list-disc list-inside text-xs text-zinc-400 space-y-1.5 leading-relaxed pl-1">
+                  <li><strong className="text-zinc-200">Master Audio Recordings &amp; Stems:</strong> High-resolution lossless audio masters (WAV 24-bit/48kHz/96kHz, FLAC, AIFF), MP3 reference previews, and individual multitrack stems (drums, bass, vocals, synths, instruments).</li>
+                  <li><strong className="text-zinc-200">Visual Artwork &amp; Documentation:</strong> High-resolution album/single cover art (PNG, JPG, SVG, WebP), music video clips, track liner notes, and legal contract attachments (PDF, DOCX).</li>
+                  <li><strong className="text-zinc-200">Standardized Statutory Rights Identifiers:</strong> International Standard Recording Codes (ISRC), International Standard Musical Work Codes (ISWC), Universal Product Codes (UPC), and Performing Rights Organization (PRO) affiliation records (ASCAP, BMI, SESAC, PRS, SACEM, GEMA).</li>
+                  <li><strong className="text-zinc-200">Split Sheet &amp; Publishing Terms:</strong> Co-creator legal names, pseudonym aliases, contributor email addresses, publisher designations, and mechanical/performance royalty distribution split percentages (e.g., 50% Producer / 50% Vocalist).</li>
+                  <li><strong className="text-zinc-200">Commercial Licensing Rules:</strong> Pricing terms, territory restrictions, synchronization usage parameters, broadcast streaming limits, non-exclusive / exclusive license tiers, and automated revocation conditions.</li>
+                </ul>
+              </div>
+
+              {/* Vector 4 */}
+              <div className="p-5 bg-zinc-950/60 border border-zinc-900 rounded-2xl space-y-3">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-sm font-bold text-white flex items-center gap-2">
+                    <Cpu className="w-4 h-4 text-emerald-400" />
+                    <span>Vector 4: Web3 Blockchain &amp; Cryptographic Signature Vectors</span>
+                  </h3>
+                  <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-emerald-950/50 text-emerald-400 border border-emerald-800/40">NON-CUSTODIAL WEB3</span>
+                </div>
+                <p className="text-xs text-zinc-300 leading-relaxed">
+                  Data generated during interaction with decentralized EVM networks (Ethereum, Arbitrum, Base, Optimism, Polygon):
+                </p>
+                <ul className="list-disc list-inside text-xs text-zinc-400 space-y-1.5 leading-relaxed pl-1">
+                  <li><strong className="text-zinc-200">Public EVM Wallet Addresses:</strong> Hexadecimal public wallet addresses (e.g., <code>0x71C...a49B</code>) read from client-side Web3 providers (MetaMask, Coinbase Wallet, WalletConnect). <em>Sovranly IP operates strictly non-custodially and never receives, requests, or stores private keys or seed phrases.</em></li>
+                  <li><strong className="text-zinc-200">Cryptographic Media Fingerprints (SHA-256 / keccak256):</strong> Deterministic cryptographic checksums computed directly in your browser prior to cloud upload, anchoring proof of prior art on-chain.</li>
+                  <li><strong className="text-zinc-200">InterPlanetary File System (IPFS) CIDs:</strong> Decentralized content identifiers generated when pinning encrypted metadata manifests and preview assets.</li>
+                  <li><strong className="text-zinc-200">EIP-712 &amp; EIP-191 Cryptographic Signatures:</strong> Off-chain typed structured data signatures signed by your Web3 wallet to authorize gasless permit approvals, license releases, and split modifications.</li>
+                  <li><strong className="text-zinc-200">On-Chain Transaction &amp; Event Logs:</strong> Smart contract deployment hashes, block numbers, gas fees, and automated royalty disbursement event emissions.</li>
+                </ul>
+              </div>
+
+              {/* Vector 5 */}
+              <div className="p-5 bg-zinc-950/60 border border-zinc-900 rounded-2xl space-y-3">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-sm font-bold text-white flex items-center gap-2">
+                    <Database className="w-4 h-4 text-amber-400" />
+                    <span>Vector 5: Financial, Payment &amp; Statutory Accounting Vectors</span>
+                  </h3>
+                  <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-amber-950/50 text-amber-400 border border-amber-800/40">PCI-DSS TOKENIZED</span>
+                </div>
+                <p className="text-xs text-zinc-300 leading-relaxed">
+                  Information processed when purchasing platform subscriptions, minting licenses, or receiving automated royalty payouts:
+                </p>
+                <ul className="list-disc list-inside text-xs text-zinc-400 space-y-1.5 leading-relaxed pl-1">
+                  <li><strong className="text-zinc-200">Tokenized Payment Gateways:</strong> All credit/debit card numbers are tokenized directly through certified PCI-DSS Level 1 payment processors. Sovranly IP stores only masked customer IDs, payment intent IDs, card brand, last four digits, billing postal codes, and invoice receipts. <em>Sovranly IP never sees, processes, or stores complete card numbers or CVV/CVC codes.</em></li>
+                  <li><strong className="text-zinc-200">Cryptocurrency Payment Transactions:</strong> Stablecoin (USDC, USDT) and native cryptocurrency (ETH) transfer hashes, sender/recipient addresses, and token settlement values.</li>
+                  <li><strong className="text-zinc-200">Tax &amp; Statutory Accounting Disclosures:</strong> VAT/sales tax identification numbers (for EU/UK creators), business registration numbers, and 1099/W-8BEN tax filing records required under IRC § 6050W.</li>
+                </ul>
+              </div>
+
+              {/* Vector 6 */}
+              <div className="p-5 bg-zinc-950/60 border border-zinc-900 rounded-2xl space-y-3">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-sm font-bold text-white flex items-center gap-2">
+                    <Server className="w-4 h-4 text-cyan-400" />
+                    <span>Vector 6: Automated Telemetry, Network Headers &amp; Security Diagnostics</span>
+                  </h3>
+                  <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-cyan-950/50 text-cyan-400 border border-cyan-800/40">PASSIVE LOGGING</span>
+                </div>
+                <p className="text-xs text-zinc-300 leading-relaxed">
+                  Technical telemetry automatically recorded by cloud infrastructure to maintain uptime, triage cyber threats, and optimize performance:
+                </p>
+                <ul className="list-disc list-inside text-xs text-zinc-400 space-y-1.5 leading-relaxed pl-1">
+                  <li><strong className="text-zinc-200">Server &amp; Gateway Logs:</strong> Truncated/masked IP addresses (preserving anonymity while preventing DDoS and brute-force attacks), browser user-agent strings, operating system, HTTP method, response codes, referrer URLs, and ISO-8601 timestamps.</li>
+                  <li><strong className="text-zinc-200">Google Analytics 4 Telemetry:</strong> Anonymized interaction events (page view sequences, button click interactions, session durations) collected via measurement ID <code>G-ZGGTSS0QFN</code> with IP anonymization enforced.</li>
+                  <li><strong className="text-zinc-200">Zero Trust Web3 Diagnostics:</strong> RPC node round-trip latency, gas estimation benchmarks, and Web3 connection reliability metrics used to ensure real-time transaction finality.</li>
+                </ul>
+              </div>
+
+              {/* Vector 7 */}
+              <div className="p-5 bg-zinc-950/60 border border-zinc-900 rounded-2xl space-y-3">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-sm font-bold text-white flex items-center gap-2">
+                    <Mail className="w-4 h-4 text-rose-400" />
+                    <span>Vector 7: Direct Inquiries, Support Tickets &amp; DMCA Copyright Claims</span>
+                  </h3>
+                  <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-rose-950/50 text-rose-400 border border-rose-800/40">INBOUND INQUIRIES</span>
+                </div>
+                <p className="text-xs text-zinc-300 leading-relaxed">
+                  Data collected during direct creator communications and legal rights administration:
+                </p>
+                <ul className="list-disc list-inside text-xs text-zinc-400 space-y-1.5 leading-relaxed pl-1">
+                  <li><strong className="text-zinc-200">Technical Support Communications:</strong> Inbound support emails, bug reports, feature requests, and feedback messages submitted to <code>create@sovranlyip.com</code> or in-app support modules.</li>
+                  <li><strong className="text-zinc-200">DMCA Copyright Infringement Notices:</strong> Formal statutory copyright infringement claims, counter-notices, rights holder legal names, contact information, and sworn affidavits submitted pursuant to 17 U.S.C. § 512.</li>
+                  <li><strong className="text-zinc-200">Data Subject Access Requests (SARs):</strong> Formal identity verification tokens, request types (Access, Rectification, Erasure, Portability), and correspondence records retained to fulfill statutory compliance obligations.</li>
+                </ul>
+              </div>
             </div>
 
-            {/* Category B */}
-            <div className="p-5 bg-zinc-950/60 border border-zinc-900 rounded-2xl space-y-3">
-              <h3 className="text-sm font-bold text-white flex items-center gap-2">
-                <FileText className="w-4 h-4 text-violet-400" />
-                <span>B. Intellectual Property Catalog, Audio Masters &amp; Creative Assets</span>
+            {/* Comprehensive Technical Specification Table */}
+            <div className="space-y-2 pt-2">
+              <h3 className="text-xs font-mono font-bold text-zinc-300 uppercase tracking-wider flex items-center gap-1.5">
+                <Database className="w-3.5 h-3.5 text-cyan-400" />
+                <span>Data Collection Vectors — Technical Ingestion &amp; Storage Specification Matrix</span>
               </h3>
-              <ul className="list-disc list-inside text-xs text-zinc-400 space-y-1.5 leading-relaxed pl-1">
-                <li><strong className="text-zinc-200">Creative Media Files:</strong> Full-resolution audio files (WAV, FLAC, MP3), multitrack audio stems, cover artwork (PNG, JPG, SVG), video trailers, and PDF contracts uploaded by the creator.</li>
-                <li><strong className="text-zinc-200">Track &amp; Catalog Metadata:</strong> Song titles, album/EP titles, release dates, genre, tempo (BPM), musical key, explicit content flags, lyrics, liner notes, and territory restrictions.</li>
-                <li><strong className="text-zinc-200">Statutory Rights Identifiers:</strong> International Standard Recording Codes (ISRC), International Standard Musical Work Codes (ISWC), Universal Product Codes (UPC), and Performing Rights Organization (PRO) affiliation records (ASCAP, BMI, SESAC, PRS).</li>
-                <li><strong className="text-zinc-200">Split Sheet &amp; Publishing Terms:</strong> Co-writer names, contributor email addresses, publisher designations, and mechanical/performance royalty distribution percentages (e.g., 50% Producer / 50% Vocalist).</li>
-                <li><strong className="text-zinc-200">Licensing Agreement Terms:</strong> Specified commercial parameters, including exclusivity tiers, synchronization usage scopes, streaming thresholds, territorial boundaries, and licensing durations.</li>
-              </ul>
-            </div>
-
-            {/* Category C */}
-            <div className="p-5 bg-zinc-950/60 border border-zinc-900 rounded-2xl space-y-3">
-              <h3 className="text-sm font-bold text-white flex items-center gap-2">
-                <Cpu className="w-4 h-4 text-emerald-400" />
-                <span>C. Cryptographic Proofs, Hashes &amp; Checksums</span>
-              </h3>
-              <ul className="list-disc list-inside text-xs text-zinc-400 space-y-1.5 leading-relaxed pl-1">
-                <li><strong className="text-zinc-200">Cryptographic Media Checksums:</strong> SHA-256 and keccak256 hash digests generated client-side from your uploaded audio masters and stems. These mathematical fingerprints establish indisputable proof of existence and prior art without exposing unencrypted media on centralized servers.</li>
-                <li><strong className="text-zinc-200">InterPlanetary File System (IPFS) CIDs:</strong> Decentralized content-addressed hashes generated when pinning encrypted creative assets for peer-to-peer distribution.</li>
-                <li><strong className="text-zinc-200">Merkle Root Trees:</strong> Cryptographic root hashes linking multi-asset catalogs and split distributions into unified, tamper-evident data structures.</li>
-              </ul>
-            </div>
-
-            {/* Category D */}
-            <div className="p-5 bg-zinc-950/60 border border-zinc-900 rounded-2xl space-y-3">
-              <h3 className="text-sm font-bold text-white flex items-center gap-2">
-                <Globe className="w-4 h-4 text-cyan-400" />
-                <span>D. Web3 On-Chain Consensus &amp; Smart Contract Data</span>
-              </h3>
-              <ul className="list-disc list-inside text-xs text-zinc-400 space-y-1.5 leading-relaxed pl-1">
-                <li><strong className="text-zinc-200">Smart Contract Event Logs:</strong> On-chain transaction hashes, block numbers, block timestamps, and event emission parameters across supported public networks (Ethereum, Arbitrum, Optimism, Base, Polygon).</li>
-                <li><strong className="text-zinc-200">Autonomous Royalty Settlements:</strong> Payout event logs, recipient wallet addresses, token contract addresses (USDC, USDT, ETH), and split ratios executed by our deployed smart contracts.</li>
-                <li><strong className="text-zinc-200">Cryptographic Digital Signatures:</strong> EIP-712 typed structured signatures or EIP-191 personal signatures provided by creators to authorize off-chain state updates and licensing permits.</li>
-              </ul>
-            </div>
-
-            {/* Category E */}
-            <div className="p-5 bg-zinc-950/60 border border-zinc-900 rounded-2xl space-y-3">
-              <h3 className="text-sm font-bold text-white flex items-center gap-2">
-                <Database className="w-4 h-4 text-emerald-400" />
-                <span>E. Payment, Billing &amp; Subscription Financial Data</span>
-              </h3>
-              <ul className="list-disc list-inside text-xs text-zinc-400 space-y-1.5 leading-relaxed pl-1">
-                <li><strong className="text-zinc-200">Fiat Payment Processing:</strong> If you purchase a subscription or license via credit/debit card, all card data is tokenized directly by authorized PCI-DSS Level 1 certified payment processors. Sovranly IP stores only masked customer IDs, payment intent IDs, billing postal codes, invoice history, and subscription expiration timestamps. <em>Sovranly IP never sees or stores complete credit card numbers, expiration months/years, or CVV/CVC security codes.</em></li>
-                <li><strong className="text-zinc-200">Tax &amp; Statutory Accounting Records:</strong> VAT/sales tax registration numbers (for EU/UK creators), corporate business names, and transaction invoices retained to satisfy legal reporting duties.</li>
-              </ul>
-            </div>
-
-            {/* Category F */}
-            <div className="p-5 bg-zinc-950/60 border border-zinc-900 rounded-2xl space-y-3">
-              <h3 className="text-sm font-bold text-white flex items-center gap-2">
-                <Server className="w-4 h-4 text-amber-400" />
-                <span>F. Technical, Network &amp; Telemetry Data</span>
-              </h3>
-              <ul className="list-disc list-inside text-xs text-zinc-400 space-y-1.5 leading-relaxed pl-1">
-                <li><strong className="text-zinc-200">Server &amp; Security Logs:</strong> Truncated IP addresses (masked to preserve anonymity while triaging threats), browser user-agent strings, operating system, referrer URLs, request headers, error stack traces, and date/time stamps.</li>
-                <li><strong className="text-zinc-200">Google Analytics 4 Telemetry:</strong> Anonymized interaction events (page view sequences, button click interactions, session durations) collected via measurement ID <code>G-ZGGTSS0QFN</code> to evaluate platform performance.</li>
-                <li><strong className="text-zinc-200">Zero-Trust Diagnostics:</strong> RPC endpoint latency, gas estimation benchmarks, and Web3 connection reliability metrics used to maintain high-availability platform infrastructure.</li>
-              </ul>
-            </div>
-
-            {/* Category G */}
-            <div className="p-5 bg-zinc-950/60 border border-zinc-900 rounded-2xl space-y-3">
-              <h3 className="text-sm font-bold text-white flex items-center gap-2">
-                <Mail className="w-4 h-4 text-rose-400" />
-                <span>G. Communications &amp; Direct Inquiries</span>
-              </h3>
-              <ul className="list-disc list-inside text-xs text-zinc-400 space-y-1.5 leading-relaxed pl-1">
-                <li><strong className="text-zinc-200">Direct Inquiries &amp; Customer Support:</strong> Inbound messages, bug reports, DMCA copyright notices, or subject access requests submitted to <code>create@sovranlyip.com</code> or via our in-app feedback modules.</li>
-                <li><strong className="text-zinc-200">Newsletter &amp; Creator Grant Registrations:</strong> Email addresses submitted specifically to receive technical product announcements, protocol updates, or creator incubator opportunities.</li>
-              </ul>
+              <div className="overflow-x-auto rounded-2xl border border-zinc-900 bg-zinc-950/60 shadow-lg">
+                <table className="w-full text-left border-collapse min-w-[760px] text-xs">
+                  <thead>
+                    <tr className="bg-zinc-900/60 border-b border-zinc-900 text-zinc-400 font-mono text-[11px] uppercase">
+                      <th className="p-4 font-bold">Vector Channel</th>
+                      <th className="p-4 font-bold">Ingestion Mechanism</th>
+                      <th className="p-4 font-bold">Data Payload Elements</th>
+                      <th className="p-4 font-bold">Transport Security</th>
+                      <th className="p-4 font-bold">Storage Destination</th>
+                      <th className="p-4 font-bold">Default Retention</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-zinc-900 text-zinc-400 leading-normal">
+                    <tr>
+                      <td className="p-4 font-mono font-bold text-white">V1: Creator Profile</td>
+                      <td className="p-4">Direct User Form Input</td>
+                      <td className="p-4">Moniker, bio, genres, social links, role designations</td>
+                      <td className="p-4 font-mono text-cyan-400">TLS 1.3 / HTTPS</td>
+                      <td className="p-4">Firestore (US-WEST1)</td>
+                      <td className="p-4">Duration of Account Tenure</td>
+                    </tr>
+                    <tr>
+                      <td className="p-4 font-mono font-bold text-white">V2: Google OAuth 2.0</td>
+                      <td className="p-4">Federated OIDC Flow</td>
+                      <td className="p-4">Primary email, name, avatar URL, Google UID (sub), JWT tokens</td>
+                      <td className="p-4 font-mono text-cyan-400">TLS 1.3 / mTLS</td>
+                      <td className="p-4">Firebase Auth / Firestore</td>
+                      <td className="p-4">Duration of Account Tenure</td>
+                    </tr>
+                    <tr>
+                      <td className="p-4 font-mono font-bold text-white">V3: Media Masters &amp; Splits</td>
+                      <td className="p-4">Direct Chunked Upload / Split Engine</td>
+                      <td className="p-4">Audio masters (WAV/FLAC), stems, artwork, ISRC, ISWC, split %s</td>
+                      <td className="p-4 font-mono text-cyan-400">TLS 1.3 / AES-256 CMEK</td>
+                      <td className="p-4">Cloud Storage Buckets &amp; IPFS</td>
+                      <td className="p-4">Until Asset De-Registration</td>
+                    </tr>
+                    <tr>
+                      <td className="p-4 font-mono font-bold text-white">V4: Web3 Wallet Signatures</td>
+                      <td className="p-4">EIP-1193 / EIP-712 Signatures</td>
+                      <td className="p-4">Public EVM address, keccak256 checksums, EIP-712 permits</td>
+                      <td className="p-4 font-mono text-cyan-400">Client-Side Web3 RPC</td>
+                      <td className="p-4">EVM Blockchains &amp; Firestore</td>
+                      <td className="p-4">On-Chain Immutable / Off-Chain 30d</td>
+                    </tr>
+                    <tr>
+                      <td className="p-4 font-mono font-bold text-white">V5: Payment &amp; Invoices</td>
+                      <td className="p-4">PCI-DSS Tokenized Gateway</td>
+                      <td className="p-4">Customer token ID, payment intent ID, last 4 digits, tax VAT IDs</td>
+                      <td className="p-4 font-mono text-cyan-400">TLS 1.3 / PCI Tokenization</td>
+                      <td className="p-4">Payment Processor / Encrypted DB</td>
+                      <td className="p-4">7 Years (Statutory Fiscal Laws)</td>
+                    </tr>
+                    <tr>
+                      <td className="p-4 font-mono font-bold text-white">V6: Server Telemetry &amp; GA4</td>
+                      <td className="p-4">Cloud Logging &amp; GA4 Stream</td>
+                      <td className="p-4">Truncated IP, User-Agent, referrer URL, error stacks, page views</td>
+                      <td className="p-4 font-mono text-cyan-400">TLS 1.3</td>
+                      <td className="p-4">Google Cloud Logging / GA4</td>
+                      <td className="p-4">90 Days to 14 Months</td>
+                    </tr>
+                    <tr>
+                      <td className="p-4 font-mono font-bold text-white">V7: Support &amp; DMCA</td>
+                      <td className="p-4">Direct Email &amp; In-App Forms</td>
+                      <td className="p-4">Email, ticket text, attachments, copyright ownership declarations</td>
+                      <td className="p-4 font-mono text-cyan-400">TLS 1.3 / S/MIME</td>
+                      <td className="p-4">Encrypted Support Repository</td>
+                      <td className="p-4">3 Years (Statute of Limitations)</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
         </section>
@@ -1083,7 +1221,7 @@ export default function PrivacyPolicy() {
               <h2 className="text-xl sm:text-2xl font-black text-white uppercase tracking-tight flex items-center gap-2.5">
                 <span className="text-cyan-400 text-sm font-mono">[10]</span> Data Storage Topology &amp; Technical and Organizational Security Measures (TOMs - GDPR Art. 32)
               </h2>
-              <p className="text-xs text-zinc-500 font-mono mt-1">Multi-tier zero-trust infrastructure, cryptographic key management, automated backup cycles, and media sanitization.</p>
+              <p className="text-xs text-zinc-500 font-mono mt-1">Multi-tier zero-trust infrastructure, cryptographic key management, automated backup cycles, media sanitization, and continuous audit protocols.</p>
             </div>
             <div className="flex items-center gap-1.5 px-2.5 py-1 bg-cyan-950/40 border border-cyan-500/30 text-cyan-400 rounded-full text-[11px] font-mono whitespace-nowrap self-start sm:self-auto">
               <HardDrive className="w-3.5 h-3.5" />
@@ -1091,94 +1229,205 @@ export default function PrivacyPolicy() {
             </div>
           </div>
 
-          {/* Storage Tiers Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs text-zinc-400 leading-relaxed">
-            <div className="p-5 bg-zinc-950/60 border border-zinc-900 rounded-2xl space-y-2.5">
-              <div className="flex items-center justify-between">
-                <h3 className="text-sm font-bold text-white flex items-center gap-2">
-                  <Database className="w-4 h-4 text-cyan-400" />
-                  <span>Tier 1: Operational NoSQL State Store (Firestore)</span>
-                </h3>
-                <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-cyan-950/50 text-cyan-400 border border-cyan-800/40">GCP US-WEST1</span>
-              </div>
-              <p>
-                Structured user records, authentication tokens, creator metadata profiles, and split sheet drafts reside in Google Cloud Firestore with multi-region replication. Every read and write operation is guarded by continuous Zero Trust server-side security rules, least-privilege IAM roles, and AES-256 server-side encryption with automated key rotation.
-              </p>
-            </div>
-
-            <div className="p-5 bg-zinc-950/60 border border-zinc-900 rounded-2xl space-y-2.5">
-              <div className="flex items-center justify-between">
-                <h3 className="text-sm font-bold text-white flex items-center gap-2">
-                  <Server className="w-4 h-4 text-emerald-400" />
-                  <span>Tier 2: Encrypted Binary Object Storage (Cloud Storage)</span>
-                </h3>
-                <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-emerald-950/50 text-emerald-400 border border-emerald-800/40">SIGNED URLS</span>
-              </div>
-              <p>
-                Audio master files (lossless WAV, 24-bit/48kHz or 96kHz), multitrack stems, and high-resolution cover artwork are stored in dedicated Google Cloud Storage buckets. Files are encrypted with customer-managed keys (CMEK) via Google Cloud KMS. Download and stream access is restricted exclusively through cryptographically signed URLs with strict time-to-live thresholds (TTL &le; 15 minutes).
-              </p>
-            </div>
-
-            <div className="p-5 bg-zinc-950/60 border border-zinc-900 rounded-2xl space-y-2.5">
-              <div className="flex items-center justify-between">
-                <h3 className="text-sm font-bold text-white flex items-center gap-2">
-                  <Globe className="w-4 h-4 text-violet-400" />
-                  <span>Tier 3: Distributed Content-Addressed Swarm (IPFS)</span>
-                </h3>
-                <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-violet-950/50 text-violet-400 border border-violet-800/40">CONTENT CIDs</span>
-              </div>
-              <p>
-                Immutable metadata manifests, licensing schemas, and public previews are pinned across decentralized IPFS clusters. Assets are addressed by cryptographic content identifiers (CIDs) computed via SHA-256 or keccak256 algorithms, ensuring complete tamper-evidence. Private stems and confidential creator documents are never broadcast unencrypted to the IPFS swarm.
-              </p>
-            </div>
-
-            <div className="p-5 bg-zinc-950/60 border border-zinc-900 rounded-2xl space-y-2.5">
-              <div className="flex items-center justify-between">
-                <h3 className="text-sm font-bold text-white flex items-center gap-2">
-                  <Layers className="w-4 h-4 text-amber-400" />
-                  <span>Tier 4: Public Consensus Ledger (EVM Blockchains)</span>
-                </h3>
-                <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-amber-950/50 text-amber-400 border border-amber-800/40">ON-CHAIN</span>
-              </div>
-              <p>
-                Smart contract logic, commercial license tokenization, and irreversible ownership claims are permanently recorded on public EVM networks (Ethereum, Arbitrum, Base, Optimism, Polygon). On-chain data is confined to non-invertible hashes, numeric split ratios, and cryptographic wallet addresses—no plaintext personally identifiable information is stored on-chain.
-              </p>
-            </div>
-          </div>
-
-          {/* Envelope Encryption & Key Management */}
-          <div className="p-5 bg-zinc-950/60 border border-zinc-900 rounded-2xl space-y-3 text-xs text-zinc-300 leading-relaxed">
-            <h3 className="text-sm font-bold text-white flex items-center gap-2">
-              <Lock className="w-4 h-4 text-cyan-400" />
-              <span>Envelope Encryption &amp; Cryptographic Key Lifecycle (FIPS 140-2 Level 3)</span>
-            </h3>
-            <p>
-              Sovranly IP employs a two-tier envelope encryption architecture. High-entropy Data Encryption Keys (DEKs) encrypt raw data records at rest using <strong>AES-256-GCM</strong> (Galois/Counter Mode), guaranteeing both confidentiality and cryptographic integrity. DEKs are themselves encrypted using Key Encryption Keys (KEKs) maintained within Google Cloud Key Management Service (Cloud KMS) backed by <strong>FIPS 140-2 Level 3 certified Hardware Security Modules (HSMs)</strong>. KEKs are configured with mandatory 365-day automated cryptographic rotation schedules.
+          <div className="space-y-6">
+            <p className="text-sm text-zinc-300 leading-relaxed">
+              Sovranly IP implements state-of-the-art <strong>Technical and Organizational Measures (TOMs)</strong> pursuant to <strong>GDPR Article 32</strong>, <strong>NIST SP 800-53 (Rev. 5)</strong>, and <strong>ISO/IEC 27001</strong> standards to ensure a level of cybersecurity appropriate to the risk of unauthorized access, accidental destruction, alteration, or disclosure of creator data and intellectual property.
             </p>
-          </div>
 
-          {/* Backup, Disaster Recovery & Sanitization */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs text-zinc-400 leading-relaxed">
-            <div className="p-5 bg-zinc-950/60 border border-zinc-900 rounded-2xl space-y-2">
-              <h3 className="text-sm font-bold text-white flex items-center gap-2">
-                <RefreshCw className="w-4 h-4 text-emerald-400" />
-                <span>Backup Cycles, PITR &amp; Deletion Propagation</span>
-              </h3>
-              <ul className="list-disc list-inside space-y-1.5 pl-1">
-                <li><strong>Continuous Point-in-Time Recovery (PITR):</strong> Firestore maintains a rolling 7-day PITR retention window enabling instantaneous state reconstruction during infrastructure anomalies.</li>
-                <li><strong>Encrypted Cold Snapshots:</strong> Daily differential snapshots are stored in air-gapped, cross-regional storage buckets encrypted with independent KMS keys, retained for a maximum of 30 days before automated cyclic overwriting.</li>
-                <li><strong>Tombstoned Deletion Cascades:</strong> When a data subject executes an erasure request, tombstone identifiers ensure that restored rollback backups purge previously deleted records before resuming write traffic.</li>
-              </ul>
+            {/* Storage Tiers Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs text-zinc-400 leading-relaxed">
+              <div className="p-5 bg-zinc-950/60 border border-zinc-900 rounded-2xl space-y-2.5">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-sm font-bold text-white flex items-center gap-2">
+                    <Database className="w-4 h-4 text-cyan-400" />
+                    <span>Tier 1: Operational NoSQL State Store (Cloud Firestore)</span>
+                  </h3>
+                  <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-cyan-950/50 text-cyan-400 border border-cyan-800/40">GCP US-WEST1</span>
+                </div>
+                <p>
+                  Structured creator accounts, authentication sessions, catalog metadata profiles, and digital split sheet drafts reside in Google Cloud Firestore with multi-region replication. Every read and write transaction is evaluated by continuous Zero Trust server-side security rules, least-privilege IAM roles, and AES-256 server-side encryption with automated cryptographic key rotation.
+                </p>
+                <div className="pt-1 text-[11px] font-mono text-zinc-500">
+                  <span className="text-cyan-400">Security Controls:</span> Granular collection security rules, caller UID token validation, rate limiting, and zero-implicit-trust request filters.
+                </div>
+              </div>
+
+              <div className="p-5 bg-zinc-950/60 border border-zinc-900 rounded-2xl space-y-2.5">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-sm font-bold text-white flex items-center gap-2">
+                    <Server className="w-4 h-4 text-emerald-400" />
+                    <span>Tier 2: Encrypted Binary Object Storage (Cloud Storage CMEK)</span>
+                  </h3>
+                  <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-emerald-950/50 text-emerald-400 border border-emerald-800/40">SIGNED URLS</span>
+                </div>
+                <p>
+                  Audio master recordings (lossless WAV, 24-bit/48kHz or 96kHz), multitrack stems, and high-resolution cover artwork are isolated in dedicated Google Cloud Storage buckets. Files are encrypted at rest with Customer-Managed Encryption Keys (CMEK) via Google Cloud KMS. Download and stream access is restricted exclusively through cryptographically signed URLs with strict time-to-live limits (TTL &le; 15 minutes).
+                </p>
+                <div className="pt-1 text-[11px] font-mono text-zinc-500">
+                  <span className="text-emerald-400">Security Controls:</span> Ephemeral HMAC-SHA256 signed tokens, origin validation, CORS lockdown, and anti-hotlinking headers.
+                </div>
+              </div>
+
+              <div className="p-5 bg-zinc-950/60 border border-zinc-900 rounded-2xl space-y-2.5">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-sm font-bold text-white flex items-center gap-2">
+                    <Globe className="w-4 h-4 text-violet-400" />
+                    <span>Tier 3: Distributed Content-Addressed Swarm (IPFS Pinning)</span>
+                  </h3>
+                  <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-violet-950/50 text-violet-400 border border-violet-800/40">CONTENT CIDs</span>
+                </div>
+                <p>
+                  Immutable metadata manifests, licensing schemas, and public previews are pinned across decentralized IPFS clusters. Assets are addressed by cryptographic content identifiers (CIDs) computed via SHA-256 or keccak256 algorithms, ensuring complete tamper-evidence. Private stems and confidential creator documents are never broadcast unencrypted to the IPFS swarm.
+                </p>
+                <div className="pt-1 text-[11px] font-mono text-zinc-500">
+                  <span className="text-violet-400">Security Controls:</span> Content-addressed immutability, cryptographic CID verification, peer-to-peer pinning redundancy.
+                </div>
+              </div>
+
+              <div className="p-5 bg-zinc-950/60 border border-zinc-900 rounded-2xl space-y-2.5">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-sm font-bold text-white flex items-center gap-2">
+                    <Layers className="w-4 h-4 text-amber-400" />
+                    <span>Tier 4: Public Consensus Ledger (EVM Smart Contracts)</span>
+                  </h3>
+                  <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-amber-950/50 text-amber-400 border border-amber-800/40">ON-CHAIN</span>
+                </div>
+                <p>
+                  Smart contract logic, commercial license tokenization, and irreversible ownership claims are permanently recorded on public EVM networks (Ethereum, Arbitrum, Base, Optimism, Polygon). On-chain data is confined to non-invertible hashes, numeric split ratios, and cryptographic wallet addresses—no plaintext personally identifiable information is stored on-chain.
+                </p>
+                <div className="pt-1 text-[11px] font-mono text-zinc-500">
+                  <span className="text-amber-400">Security Controls:</span> Formally verified bytecode, audited OpenZeppelin reentrancy guards, and cryptographic multisig governance.
+                </div>
+              </div>
             </div>
 
-            <div className="p-5 bg-zinc-950/60 border border-zinc-900 rounded-2xl space-y-2">
+            {/* Envelope Encryption & Key Management */}
+            <div className="p-5 bg-zinc-950/60 border border-zinc-900 rounded-2xl space-y-3 text-xs text-zinc-300 leading-relaxed">
               <h3 className="text-sm font-bold text-white flex items-center gap-2">
-                <ShieldCheck className="w-4 h-4 text-rose-400" />
-                <span>Media Sanitization &amp; Decommissioning Standards</span>
+                <Lock className="w-4 h-4 text-cyan-400" />
+                <span>Envelope Encryption &amp; Cryptographic Key Lifecycle (FIPS 140-2 / FIPS 140-3 Level 3)</span>
               </h3>
               <p>
-                In compliance with <strong>NIST SP 800-88 Revision 1</strong> (&apos;Guidelines for Media Sanitization&apos;) and <strong>DoD 5220.22-M</strong> standards, underlying storage hardware in Google Cloud facilities undergoes rigorous multi-pass cryptographic erasure prior to re-allocation, and physical magnetic or solid-state media slated for decommissioning is physically shredded or degaussed. Centralized software caches and temporary upload buffers are purged immediately upon session termination.
+                Sovranly IP employs a two-tier envelope encryption architecture. High-entropy Data Encryption Keys (DEKs) encrypt raw data records and binary blobs at rest using <strong>AES-256-GCM</strong> (Galois/Counter Mode), guaranteeing both cryptographic confidentiality and authenticated integrity against bit-flipping tampering.
               </p>
+              <p>
+                DEKs are themselves encrypted using Key Encryption Keys (KEKs) maintained within Google Cloud Key Management Service (Cloud KMS) backed by <strong>FIPS 140-2 / FIPS 140-3 Level 3 certified Hardware Security Modules (HSMs)</strong>. KEKs are configured with mandatory 365-day automated cryptographic rotation schedules. Plaintext cryptographic keys never enter server memory in unencrypted states and are never written to swap space or persistent disks.
+              </p>
+            </div>
+
+            {/* Zero Trust Network Security & Identity Boundary */}
+            <div className="p-5 bg-zinc-950/60 border border-zinc-900 rounded-2xl space-y-3 text-xs text-zinc-300 leading-relaxed">
+              <h3 className="text-sm font-bold text-white flex items-center gap-2">
+                <Shield className="w-4 h-4 text-violet-400" />
+                <span>Zero Trust Network Security &amp; Least Privilege Access Controls (PoLP)</span>
+              </h3>
+              <p>
+                Under our Zero Trust architecture, no entity—internal microservice, administrator workstation, or third-party client—is trusted implicitly by virtue of network locality:
+              </p>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1 text-zinc-400">
+                <div className="p-3 bg-zinc-900/50 rounded-xl border border-zinc-800 space-y-1">
+                  <strong className="text-white block font-mono text-[11px] text-cyan-400">1. Continuous Token Validation</strong>
+                  <p className="text-[11px]">Every API invocation validates short-lived signed JWTs, verifying caller UID, issuance timestamps, and cryptographic claim boundaries.</p>
+                </div>
+                <div className="p-3 bg-zinc-900/50 rounded-xl border border-zinc-800 space-y-1">
+                  <strong className="text-white block font-mono text-[11px] text-violet-400">2. Mutual TLS (mTLS) Mesh</strong>
+                  <p className="text-[11px]">All internal service-to-service communication is encrypted using ephemeral mTLS certificates with strict SPIFFE/SPIRE workload identities.</p>
+                </div>
+                <div className="p-3 bg-zinc-900/50 rounded-xl border border-zinc-800 space-y-1">
+                  <strong className="text-white block font-mono text-[11px] text-emerald-400">3. Role-Based Access (RBAC)</strong>
+                  <p className="text-[11px]">Strict Attribute &amp; Role-Based Access Controls enforce least privilege. Employees have zero access to production user keys or master audio vaults.</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Backup, Disaster Recovery & Sanitization */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs text-zinc-400 leading-relaxed">
+              <div className="p-5 bg-zinc-950/60 border border-zinc-900 rounded-2xl space-y-2">
+                <h3 className="text-sm font-bold text-white flex items-center gap-2">
+                  <RefreshCw className="w-4 h-4 text-emerald-400" />
+                  <span>Backup Cycles, PITR &amp; Deletion Propagation</span>
+                </h3>
+                <ul className="list-disc list-inside space-y-1.5 pl-1">
+                  <li><strong>Continuous Point-in-Time Recovery (PITR):</strong> Firestore maintains a rolling 7-day PITR retention window enabling instantaneous state reconstruction during infrastructure anomalies.</li>
+                  <li><strong>Encrypted Cold Snapshots:</strong> Daily differential snapshots are stored in air-gapped, cross-regional storage buckets encrypted with independent KMS keys, retained for a maximum of 30 days before automated cyclic overwriting.</li>
+                  <li><strong>Tombstoned Deletion Cascades:</strong> When a data subject executes an erasure request, tombstone identifiers ensure that restored rollback backups purge previously deleted records before resuming write traffic.</li>
+                </ul>
+              </div>
+
+              <div className="p-5 bg-zinc-950/60 border border-zinc-900 rounded-2xl space-y-2">
+                <h3 className="text-sm font-bold text-white flex items-center gap-2">
+                  <ShieldCheck className="w-4 h-4 text-rose-400" />
+                  <span>Media Sanitization &amp; Decommissioning Standards</span>
+                </h3>
+                <p>
+                  In compliance with <strong>NIST SP 800-88 Revision 1</strong> (&apos;Guidelines for Media Sanitization&apos;) and <strong>DoD 5220.22-M</strong> standards, underlying storage hardware in Google Cloud facilities undergoes rigorous multi-pass cryptographic erasure prior to re-allocation, and physical magnetic or solid-state media slated for decommissioning is physically shredded or degaussed. Centralized software caches and temporary upload buffers are purged immediately upon session termination.
+                </p>
+              </div>
+            </div>
+
+            {/* Technical Security Measures Specification Table */}
+            <div className="space-y-2 pt-2">
+              <h3 className="text-xs font-mono font-bold text-zinc-300 uppercase tracking-wider flex items-center gap-1.5">
+                <HardDrive className="w-3.5 h-3.5 text-cyan-400" />
+                <span>Storage Security Measures &amp; Technical TOMs Specification Matrix</span>
+              </h3>
+              <div className="overflow-x-auto rounded-2xl border border-zinc-900 bg-zinc-950/60 shadow-lg">
+                <table className="w-full text-left border-collapse min-w-[760px] text-xs">
+                  <thead>
+                    <tr className="bg-zinc-900/60 border-b border-zinc-900 text-zinc-400 font-mono text-[11px] uppercase">
+                      <th className="p-4 font-bold">Security Dimension</th>
+                      <th className="p-4 font-bold">Standard / Compliance Baseline</th>
+                      <th className="p-4 font-bold">Implementation Architecture</th>
+                      <th className="p-4 font-bold">Key Rotation / Expiry</th>
+                      <th className="p-4 font-bold">Verification &amp; Audit Method</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-zinc-900 text-zinc-400 leading-normal">
+                    <tr>
+                      <td className="p-4 font-mono font-bold text-white">Encryption at Rest</td>
+                      <td className="p-4">FIPS 140-2 / 140-3 Level 3</td>
+                      <td className="p-4">AES-256-GCM Envelope Encryption (DEK/KEK in Cloud KMS HSM)</td>
+                      <td className="p-4 font-mono text-cyan-400">365-Day Auto-Rotation</td>
+                      <td className="p-4">Cloud Audit Logs &amp; SOC 2 Type II</td>
+                    </tr>
+                    <tr>
+                      <td className="p-4 font-mono font-bold text-white">Encryption in Transit</td>
+                      <td className="p-4">TLS 1.3 / RFC 8446</td>
+                      <td className="p-4">ECDHE-ECDSA-AES256-GCM-SHA384 / ChaCha20-Poly1305 + HSTS Preload</td>
+                      <td className="p-4 font-mono text-cyan-400">90-Day Ephemeral Certs</td>
+                      <td className="p-4">Qualys SSL Labs A+ Verification</td>
+                    </tr>
+                    <tr>
+                      <td className="p-4 font-mono font-bold text-white">Access Authorization</td>
+                      <td className="p-4">Zero Trust / NIST SP 800-207</td>
+                      <td className="p-4">Short-Lived Signed JWTs, Firestore Security Rules, PoLP RBAC</td>
+                      <td className="p-4 font-mono text-cyan-400">1-Hour Token Expiry</td>
+                      <td className="p-4">Automated Security Assertion Rules</td>
+                    </tr>
+                    <tr>
+                      <td className="p-4 font-mono font-bold text-white">Media Master Delivery</td>
+                      <td className="p-4">CMEK Object Vaulting</td>
+                      <td className="p-4">Cloud Storage Buckets with Time-Limited Cryptographic Signed URLs</td>
+                      <td className="p-4 font-mono text-cyan-400">&le; 15-Minute URL TTL</td>
+                      <td className="p-4">HMAC-SHA256 Signature Checks</td>
+                    </tr>
+                    <tr>
+                      <td className="p-4 font-mono font-bold text-white">State Reconstruction</td>
+                      <td className="p-4">ISO 22301 Business Continuity</td>
+                      <td className="p-4">Rolling 7-day Firestore PITR + Air-Gapped Cross-Region Cold Backups</td>
+                      <td className="p-4 font-mono text-cyan-400">Daily Snapshots (30d purge)</td>
+                      <td className="p-4">Quarterly Disaster Recovery Drills</td>
+                    </tr>
+                    <tr>
+                      <td className="p-4 font-mono font-bold text-white">Hardware Erasure</td>
+                      <td className="p-4">NIST SP 800-88 Rev. 1</td>
+                      <td className="p-4">Multi-Pass Cryptographic Wipe + Physical Shredding on Decommission</td>
+                      <td className="p-4 font-mono text-cyan-400">Immediate on Hardware EOL</td>
+                      <td className="p-4">Google Cloud Data Center Certificates</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
         </section>
@@ -1363,9 +1612,9 @@ export default function PrivacyPolicy() {
           <div className="border-b border-zinc-900 pb-3 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
             <div>
               <h2 className="text-xl sm:text-2xl font-black text-white uppercase tracking-tight flex items-center gap-2.5">
-                <span className="text-cyan-400 text-sm font-mono">[13]</span> Your Statutory Rights &amp; Recourse (GDPR Arts. 15-22 &amp; CCPA/CPRA)
+                <span className="text-cyan-400 text-sm font-mono">[13]</span> Your Statutory Rights &amp; Recourse (GDPR Arts. 15-22, CCPA/CPRA &amp; Global Frameworks)
               </h2>
-              <p className="text-xs text-zinc-500 font-mono mt-1">Granular legal protections, statutory timelines, verification protocols, and supervisory authority recourse.</p>
+              <p className="text-xs text-zinc-500 font-mono mt-1">Comprehensive statutory protections, multi-channel verification protocols, technical fulfillment mechanics, and supervisory authority recourse.</p>
             </div>
             <div className="flex items-center gap-1.5 px-2.5 py-1 bg-cyan-950/40 border border-cyan-500/30 text-cyan-400 rounded-full text-[11px] font-mono whitespace-nowrap self-start sm:self-auto">
               <Scale className="w-3.5 h-3.5" />
@@ -1373,163 +1622,275 @@ export default function PrivacyPolicy() {
             </div>
           </div>
 
-          {/* Granular Rights Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-xs leading-relaxed text-zinc-400">
-            <div className="p-5 bg-zinc-950/60 border border-zinc-900 rounded-2xl space-y-2">
-              <h3 className="text-sm font-bold text-white flex items-center gap-2">
-                <Check className="w-4 h-4 text-cyan-400" /> Right of Access (Art. 15)
-              </h3>
-              <p>Receive confirmation as to whether your personal data is processed, copies of stored records, purposes of processing, categories, and recipients.</p>
-            </div>
-
-            <div className="p-5 bg-zinc-950/60 border border-zinc-900 rounded-2xl space-y-2">
-              <h3 className="text-sm font-bold text-white flex items-center gap-2">
-                <Check className="w-4 h-4 text-emerald-400" /> Rectification (Art. 16)
-              </h3>
-              <p>Demand the immediate correction of inaccurate personal records or completion of incomplete profiles without undue delay.</p>
-            </div>
-
-            <div className="p-5 bg-zinc-950/60 border border-zinc-900 rounded-2xl space-y-2">
-              <h3 className="text-sm font-bold text-white flex items-center gap-2">
-                <Check className="w-4 h-4 text-rose-400" /> Erasure / Forgotten (Art. 17)
-              </h3>
-              <p>Demand irreversible erasure of off-chain records where data is no longer necessary or consent has been withdrawn.</p>
-            </div>
-
-            <div className="p-5 bg-zinc-950/60 border border-zinc-900 rounded-2xl space-y-2">
-              <h3 className="text-sm font-bold text-white flex items-center gap-2">
-                <Check className="w-4 h-4 text-amber-400" /> Restrict Processing (Art. 18)
-              </h3>
-              <p>Require suspension of active processing during accuracy verification or while copyright ownership claims are formally arbitrated.</p>
-            </div>
-
-            <div className="p-5 bg-zinc-950/60 border border-zinc-900 rounded-2xl space-y-2">
-              <h3 className="text-sm font-bold text-white flex items-center gap-2">
-                <Check className="w-4 h-4 text-violet-400" /> Data Portability (Art. 20)
-              </h3>
-              <p>Obtain your registered catalog, metadata schemas, and contracts in a structured, commonly used, machine-readable JSON/CSV format.</p>
-            </div>
-
-            <div className="p-5 bg-zinc-950/60 border border-zinc-900 rounded-2xl space-y-2">
-              <h3 className="text-sm font-bold text-white flex items-center gap-2">
-                <Check className="w-4 h-4 text-indigo-400" /> Right to Object (Art. 21)
-              </h3>
-              <p>Object on grounds relating to your particular situation against processing based on legitimate interests, with an absolute right to halt marketing.</p>
-            </div>
-
-            <div className="p-5 bg-zinc-950/60 border border-zinc-900 rounded-2xl space-y-2">
-              <h3 className="text-sm font-bold text-white flex items-center gap-2">
-                <Check className="w-4 h-4 text-sky-400" /> Non-Profiling (Art. 22)
-              </h3>
-              <p>Protection from decisions based solely on automated processing producing legal or significant personal effects.</p>
-            </div>
-
-            <div className="p-5 bg-zinc-950/60 border border-zinc-900 rounded-2xl space-y-2">
-              <h3 className="text-sm font-bold text-white flex items-center gap-2">
-                <Check className="w-4 h-4 text-teal-400" /> Non-Discrimination (CCPA)
-              </h3>
-              <p>Never experience denial of goods, differential rates, or reduced service quality for exercising any California or international privacy rights.</p>
-            </div>
-          </div>
-
-          {/* Verification Protocol & Timeline */}
-          <div className="p-5 bg-zinc-900/40 border border-zinc-800 rounded-2xl space-y-3">
-            <h3 className="text-sm font-bold text-white flex items-center gap-2">
-              <ShieldCheck className="w-4 h-4 text-cyan-400" />
-              <span>Identity Verification Protocol &amp; Statutory Resolution Timelines</span>
-            </h3>
-            <p className="text-xs text-zinc-300 leading-relaxed">
-              To prevent unauthorized data exfiltration or fraudulent erasure, all requests must undergo cryptographic or out-of-band identity verification:
-            </p>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs text-zinc-400 font-mono">
-              <div className="p-3 bg-zinc-950/70 border border-zinc-800/80 rounded-xl space-y-1">
-                <span className="text-cyan-400 font-bold">1. OAuth Challenge</span>
-                <p className="text-[11px] font-sans">Verification dispatched directly to the active Google Account email registered to the creator profile.</p>
-              </div>
-              <div className="p-3 bg-zinc-950/70 border border-zinc-800/80 rounded-xl space-y-1">
-                <span className="text-cyan-400 font-bold">2. EIP-712 Signature</span>
-                <p className="text-[11px] font-sans">Cryptographic message signing using the private key corresponding to the public wallet address.</p>
-              </div>
-              <div className="p-3 bg-zinc-950/70 border border-zinc-800/80 rounded-xl space-y-1">
-                <span className="text-cyan-400 font-bold">3. 30-Day Resolution</span>
-                <p className="text-[11px] font-sans">Statutory resolution within 30 calendar days at zero cost (extendable by 60 days for complex requests with notice).</p>
-              </div>
-            </div>
-          </div>
-
-          {/* Supervisory Authority Recourse Table */}
-          <div className="space-y-3">
-            <h3 className="text-sm font-bold text-white flex items-center gap-2">
-              <Scale className="w-4 h-4 text-amber-400" />
-              <span>Right to Lodge a Formal Regulatory Complaint (GDPR Art. 77 &amp; CCPA Recourse)</span>
-            </h3>
-            <p className="text-xs text-zinc-400 leading-relaxed">
-              Pursuant to GDPR Article 77, if you reside in the European Economic Area or United Kingdom and consider our processing of your personal data to infringe statutory privacy regulations, you possess the unalienable right to lodge a formal complaint with a competent Supervisory Authority in your Member State of habitual residence, place of work, or place of the alleged infringement:
+          <div className="space-y-6">
+            <p className="text-sm text-zinc-300 leading-relaxed">
+              Sovranly IP guarantees sovereign data self-determination. Regardless of whether you reside in the <strong>European Economic Area (GDPR)</strong>, the <strong>United Kingdom (UK GDPR / DPA 2018)</strong>, <strong>California (CCPA/CPRA)</strong>, <strong>Brazil (LGPD)</strong>, <strong>Canada (PIPEDA)</strong>, or <strong>Switzerland (FADP)</strong>, we provide a unified, accessible suite of statutory rights without administrative fees or discriminatory consequences:
             </p>
 
-            <div className="overflow-x-auto rounded-2xl border border-zinc-900 bg-zinc-950/60">
-              <table className="w-full text-left border-collapse min-w-[640px] text-xs">
-                <thead>
-                  <tr className="bg-zinc-900/60 border-b border-zinc-900 text-zinc-400 font-mono text-[11px] uppercase">
-                    <th className="p-4 font-bold">Supervisory Authority</th>
-                    <th className="p-4 font-bold">Jurisdiction</th>
-                    <th className="p-4 font-bold">Statutory Competence</th>
-                    <th className="p-4 font-bold">Official Portal &amp; Recourse</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-zinc-900 text-zinc-400 leading-normal">
-                  <tr>
-                    <td className="p-4 font-mono font-bold text-white">Data Protection Commission (DPC)</td>
-                    <td className="p-4">Ireland / EU Lead Authority</td>
-                    <td className="p-4">General Data Protection Regulation (GDPR) oversight across EU cloud infrastructures.</td>
-                    <td className="p-4 font-mono text-cyan-400">
-                      <a href="https://www.dataprotection.ie" target="_blank" rel="noopener noreferrer" className="hover:underline flex items-center gap-1">
-                        dataprotection.ie <ExternalLink className="w-3 h-3" />
-                      </a>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td className="p-4 font-mono font-bold text-white">Information Commissioner&apos;s Office (ICO)</td>
-                    <td className="p-4">United Kingdom</td>
-                    <td className="p-4">UK GDPR and Data Protection Act 2018 enforcement.</td>
-                    <td className="p-4 font-mono text-cyan-400">
-                      <a href="https://ico.org.uk" target="_blank" rel="noopener noreferrer" className="hover:underline flex items-center gap-1">
-                        ico.org.uk <ExternalLink className="w-3 h-3" />
-                      </a>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td className="p-4 font-mono font-bold text-white">CNIL (Commission Nationale)</td>
-                    <td className="p-4">France</td>
-                    <td className="p-4">French Data Protection Act &amp; GDPR compliance enforcement.</td>
-                    <td className="p-4 font-mono text-cyan-400">
-                      <a href="https://www.cnil.fr" target="_blank" rel="noopener noreferrer" className="hover:underline flex items-center gap-1">
-                        cnil.fr <ExternalLink className="w-3 h-3" />
-                      </a>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td className="p-4 font-mono font-bold text-white">BfDI (Federal Commissioner)</td>
-                    <td className="p-4">Germany</td>
-                    <td className="p-4">Federal Data Protection Act (BDSG) &amp; European GDPR oversight.</td>
-                    <td className="p-4 font-mono text-cyan-400">
-                      <a href="https://www.bfdi.bund.de" target="_blank" rel="noopener noreferrer" className="hover:underline flex items-center gap-1">
-                        bfdi.bund.de <ExternalLink className="w-3 h-3" />
-                      </a>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td className="p-4 font-mono font-bold text-white">California Privacy Protection Agency (CPPA)</td>
-                    <td className="p-4">California, United States</td>
-                    <td className="p-4">California Consumer Privacy Act (CCPA) and California Privacy Rights Act (CPRA).</td>
-                    <td className="p-4 font-mono text-cyan-400">
-                      <a href="https://cppa.ca.gov" target="_blank" rel="noopener noreferrer" className="hover:underline flex items-center gap-1">
-                        cppa.ca.gov <ExternalLink className="w-3 h-3" />
-                      </a>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+            {/* Granular Rights Grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 text-xs leading-relaxed text-zinc-400">
+              <div className="p-5 bg-zinc-950/60 border border-zinc-900 rounded-2xl space-y-2">
+                <h3 className="text-sm font-bold text-white flex items-center gap-2">
+                  <Check className="w-4 h-4 text-cyan-400" /> Right of Access &amp; Right to Know (GDPR Art. 15 / CCPA § 1798.110)
+                </h3>
+                <p>Demand complete confirmation whether your data is being processed, full access to stored profile records, purposes of processing, categories of personal data collected, specific sources, third-party recipients, and statutory retention horizons.</p>
+              </div>
+
+              <div className="p-5 bg-zinc-950/60 border border-zinc-900 rounded-2xl space-y-2">
+                <h3 className="text-sm font-bold text-white flex items-center gap-2">
+                  <Check className="w-4 h-4 text-emerald-400" /> Right to Rectification &amp; Correction (GDPR Art. 16 / CCPA § 1798.106)
+                </h3>
+                <p>Demand the immediate correction of inaccurate creator attributes, updated ISNI/PRO registrations, corrected royalty split percentages, or completion of incomplete catalog records without undue delay.</p>
+              </div>
+
+              <div className="p-5 bg-zinc-950/60 border border-zinc-900 rounded-2xl space-y-2">
+                <h3 className="text-sm font-bold text-white flex items-center gap-2">
+                  <Check className="w-4 h-4 text-rose-400" /> Right to Erasure / &apos;Right to be Forgotten&apos; (GDPR Art. 17 / CCPA § 1798.105)
+                </h3>
+                <p>Demand permanent, irreversible erasure of all off-chain profile data, uploaded audio masters, stems, contact details, and database records from Google Cloud Firestore and Storage buckets within 30 days of verification.</p>
+              </div>
+
+              <div className="p-5 bg-zinc-950/60 border border-zinc-900 rounded-2xl space-y-2">
+                <h3 className="text-sm font-bold text-white flex items-center gap-2">
+                  <Check className="w-4 h-4 text-amber-400" /> Right to Restrict Processing (GDPR Art. 18)
+                </h3>
+                <p>Require suspension of active catalog dissemination, commercial licensing, or automated processing during accuracy verification, ownership dispute arbitration, or pending formal legal challenges.</p>
+              </div>
+
+              <div className="p-5 bg-zinc-950/60 border border-zinc-900 rounded-2xl space-y-2">
+                <h3 className="text-sm font-bold text-white flex items-center gap-2">
+                  <Check className="w-4 h-4 text-violet-400" /> Right to Data Portability (GDPR Art. 20 / CCPA § 1798.130)
+                </h3>
+                <p>Obtain your entire creator catalog, ISRC/ISWC manifests, split sheet agreements, and payment transaction logs in a structured, commonly used, machine-readable JSON and CSV format for frictionless migration to external systems.</p>
+              </div>
+
+              <div className="p-5 bg-zinc-950/60 border border-zinc-900 rounded-2xl space-y-2">
+                <h3 className="text-sm font-bold text-white flex items-center gap-2">
+                  <Check className="w-4 h-4 text-indigo-400" /> Right to Object to Processing (GDPR Art. 21)
+                </h3>
+                <p>Object on grounds relating to your particular situation against processing based on legitimate interests. Possess an absolute, unconditional right to immediately halt any direct marketing communications.</p>
+              </div>
+
+              <div className="p-5 bg-zinc-950/60 border border-zinc-900 rounded-2xl space-y-2">
+                <h3 className="text-sm font-bold text-white flex items-center gap-2">
+                  <Check className="w-4 h-4 text-sky-400" /> Rights Regarding Automated Decisions &amp; Non-Profiling (GDPR Art. 22)
+                </h3>
+                <p>Guaranteed protection from decisions based solely on automated processing or AI profiling that produce legal effects or significantly affect your licensing eligibility. All dispute resolutions feature human administrative oversight.</p>
+              </div>
+
+              <div className="p-5 bg-zinc-950/60 border border-zinc-900 rounded-2xl space-y-2">
+                <h3 className="text-sm font-bold text-white flex items-center gap-2">
+                  <Check className="w-4 h-4 text-teal-400" /> Right to Opt-Out of Sale or Sharing (CCPA § 1798.120)
+                </h3>
+                <p>Exercise your statutory right to prohibit the sale or sharing of your personal data. Sovranly IP enforces a zero-sale, zero-cross-context-tracking posture across all accounts by default.</p>
+              </div>
+
+              <div className="p-5 bg-zinc-950/60 border border-zinc-900 rounded-2xl space-y-2">
+                <h3 className="text-sm font-bold text-white flex items-center gap-2">
+                  <Check className="w-4 h-4 text-pink-400" /> Right to Non-Discrimination &amp; Equal Service (CCPA § 1798.125)
+                </h3>
+                <p>Never experience denial of platform services, altered pricing, degraded audio stream quality, or slower smart contract interactions as a result of exercising any California or international privacy rights.</p>
+              </div>
+            </div>
+
+            {/* Step-by-Step Exercise & Identity Verification Protocol */}
+            <div className="p-6 bg-zinc-950/80 border border-zinc-800 rounded-3xl space-y-4 shadow-xl">
+              <h3 className="text-sm font-bold text-white flex items-center gap-2">
+                <ShieldCheck className="w-4 h-4 text-cyan-400" />
+                <span>Step-by-Step Practical Rights Exercise &amp; Cryptographic Verification Protocol</span>
+              </h3>
+              <p className="text-xs text-zinc-300 leading-relaxed">
+                To safeguard creator catalogs against impersonation, unauthorized account takeover, or fraudulent data exfiltration, Sovranly IP executes a rigorous, multi-factor verification protocol:
+              </p>
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-3 text-xs text-zinc-400 font-mono pt-1">
+                <div className="p-4 bg-zinc-900/60 border border-zinc-800/80 rounded-2xl space-y-1.5">
+                  <span className="text-cyan-400 font-bold block text-xs">Step 1: Request Initiation</span>
+                  <p className="text-[11px] font-sans text-zinc-400">Transmit your request to <a href="mailto:create@sovranlyip.com" className="text-cyan-400 hover:underline">create@sovranlyip.com</a> with the subject line <em>&quot;Subject Access Request&quot;</em> or <em>&quot;Account Erasure Request&quot;</em>.</p>
+                </div>
+                <div className="p-4 bg-zinc-900/60 border border-zinc-800/80 rounded-2xl space-y-1.5">
+                  <span className="text-cyan-400 font-bold block text-xs">Step 2: OAuth Challenge</span>
+                  <p className="text-[11px] font-sans text-zinc-400">We send an encrypted verification nonce directly to the registered Google OAuth primary email address associated with your creator account.</p>
+                </div>
+                <div className="p-4 bg-zinc-900/60 border border-zinc-800/80 rounded-2xl space-y-1.5">
+                  <span className="text-cyan-400 font-bold block text-xs">Step 3: Web3 Signature</span>
+                  <p className="text-[11px] font-sans text-zinc-400">For requests involving on-chain wallet records, sign an EIP-712 structured cryptographic challenge via your linked Web3 wallet provider.</p>
+                </div>
+                <div className="p-4 bg-zinc-900/60 border border-zinc-800/80 rounded-2xl space-y-1.5">
+                  <span className="text-cyan-400 font-bold block text-xs">Step 4: 30-Day Fulfillment</span>
+                  <p className="text-[11px] font-sans text-zinc-400">Complete execution within 30 calendar days at zero cost, delivering structured JSON archives or cryptographic deletion certificates.</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Technical Rights Fulfillment Specification Matrix */}
+            <div className="space-y-2 pt-2">
+              <h3 className="text-xs font-mono font-bold text-zinc-300 uppercase tracking-wider flex items-center gap-1.5">
+                <Scale className="w-3.5 h-3.5 text-cyan-400" />
+                <span>Statutory Rights Technical Fulfillment Matrix</span>
+              </h3>
+              <div className="overflow-x-auto rounded-2xl border border-zinc-900 bg-zinc-950/60 shadow-lg">
+                <table className="w-full text-left border-collapse min-w-[760px] text-xs">
+                  <thead>
+                    <tr className="bg-zinc-900/60 border-b border-zinc-900 text-zinc-400 font-mono text-[11px] uppercase">
+                      <th className="p-4 font-bold">Statutory Right</th>
+                      <th className="p-4 font-bold">Applicable Laws</th>
+                      <th className="p-4 font-bold">Technical Fulfillment Action</th>
+                      <th className="p-4 font-bold">Verification Challenge</th>
+                      <th className="p-4 font-bold">Statutory Fulfillment Window</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-zinc-900 text-zinc-400 leading-normal">
+                    <tr>
+                      <td className="p-4 font-mono font-bold text-white">Right of Access / Know</td>
+                      <td className="p-4">GDPR Art. 15, CCPA § 1798.110, LGPD Art. 18(II)</td>
+                      <td className="p-4">Automated export of all Firestore profile documents and metadata schemas</td>
+                      <td className="p-4 font-mono text-cyan-400">OAuth Email + JWT Nonce</td>
+                      <td className="p-4 font-mono text-emerald-400">Within 30 Days</td>
+                    </tr>
+                    <tr>
+                      <td className="p-4 font-mono font-bold text-white">Right to Rectification</td>
+                      <td className="p-4">GDPR Art. 16, CCPA § 1798.106, LGPD Art. 18(III)</td>
+                      <td className="p-4">Direct database patch to creator profile, ISNI/PRO attributes, and split splits</td>
+                      <td className="p-4 font-mono text-cyan-400">In-App Authenticated Session</td>
+                      <td className="p-4 font-mono text-emerald-400">Immediate to 10 Days</td>
+                    </tr>
+                    <tr>
+                      <td className="p-4 font-mono font-bold text-white">Right to Erasure / Delete</td>
+                      <td className="p-4">GDPR Art. 17, CCPA § 1798.105, LGPD Art. 18(VI)</td>
+                      <td className="p-4">Cascading purge of Cloud Storage binaries, Firestore records, and tombstone propagation</td>
+                      <td className="p-4 font-mono text-cyan-400">OAuth Nonce + EIP-712 Signature</td>
+                      <td className="p-4 font-mono text-emerald-400">Within 30 Days</td>
+                    </tr>
+                    <tr>
+                      <td className="p-4 font-mono font-bold text-white">Right to Data Portability</td>
+                      <td className="p-4">GDPR Art. 20, CCPA § 1798.130, LGPD Art. 18(V)</td>
+                      <td className="p-4">Delivery of encrypted JSON archive containing track catalogs, split sheets, and receipts</td>
+                      <td className="p-4 font-mono text-cyan-400">OAuth Email Nonce</td>
+                      <td className="p-4 font-mono text-emerald-400">Within 30 Days</td>
+                    </tr>
+                    <tr>
+                      <td className="p-4 font-mono font-bold text-white">Right to Restrict / Object</td>
+                      <td className="p-4">GDPR Arts. 18 &amp; 21, LGPD Art. 18(IX)</td>
+                      <td className="p-4">State lock placed on public marketplace listings and immediate suppression from alerts</td>
+                      <td className="p-4 font-mono text-cyan-400">OAuth Email Challenge</td>
+                      <td className="p-4 font-mono text-emerald-400">Within 48 Hours</td>
+                    </tr>
+                    <tr>
+                      <td className="p-4 font-mono font-bold text-white">Opt-Out of Sale / Sharing</td>
+                      <td className="p-4">CCPA § 1798.120, CPRA 11 CCR § 7025 (GPC)</td>
+                      <td className="p-4">Global Privacy Control (GPC) automatic header detection and cookie suppression</td>
+                      <td className="p-4 font-mono text-cyan-400">Automated Browser Signal</td>
+                      <td className="p-4 font-mono text-emerald-400">Instantaneous</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* Supervisory Authority Recourse Table */}
+            <div className="space-y-3 pt-2">
+              <h3 className="text-sm font-bold text-white flex items-center gap-2">
+                <Scale className="w-4 h-4 text-amber-400" />
+                <span>Right to Lodge a Formal Regulatory Complaint (GDPR Art. 77 &amp; Global Recourse)</span>
+              </h3>
+              <p className="text-xs text-zinc-400 leading-relaxed">
+                Pursuant to GDPR Article 77 and equivalent global data protection frameworks, if you consider our processing of your personal data to infringe statutory privacy regulations, you possess the unalienable right to lodge a formal complaint with a competent Supervisory Authority in your country or region:
+              </p>
+
+              <div className="overflow-x-auto rounded-2xl border border-zinc-900 bg-zinc-950/60 shadow-lg">
+                <table className="w-full text-left border-collapse min-w-[700px] text-xs">
+                  <thead>
+                    <tr className="bg-zinc-900/60 border-b border-zinc-900 text-zinc-400 font-mono text-[11px] uppercase">
+                      <th className="p-4 font-bold">Supervisory Authority</th>
+                      <th className="p-4 font-bold">Jurisdiction</th>
+                      <th className="p-4 font-bold">Statutory Competence</th>
+                      <th className="p-4 font-bold">Official Portal &amp; Recourse</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-zinc-900 text-zinc-400 leading-normal">
+                    <tr>
+                      <td className="p-4 font-mono font-bold text-white">Data Protection Commission (DPC)</td>
+                      <td className="p-4">Ireland / EU Lead Authority</td>
+                      <td className="p-4">General Data Protection Regulation (GDPR) oversight across EU cloud infrastructures.</td>
+                      <td className="p-4 font-mono text-cyan-400">
+                        <a href="https://www.dataprotection.ie" target="_blank" rel="noopener noreferrer" className="hover:underline flex items-center gap-1">
+                          dataprotection.ie <ExternalLink className="w-3 h-3" />
+                        </a>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="p-4 font-mono font-bold text-white">Information Commissioner&apos;s Office (ICO)</td>
+                      <td className="p-4">United Kingdom</td>
+                      <td className="p-4">UK GDPR and Data Protection Act 2018 enforcement.</td>
+                      <td className="p-4 font-mono text-cyan-400">
+                        <a href="https://ico.org.uk" target="_blank" rel="noopener noreferrer" className="hover:underline flex items-center gap-1">
+                          ico.org.uk <ExternalLink className="w-3 h-3" />
+                        </a>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="p-4 font-mono font-bold text-white">CNIL (Commission Nationale)</td>
+                      <td className="p-4">France</td>
+                      <td className="p-4">French Data Protection Act &amp; GDPR compliance enforcement.</td>
+                      <td className="p-4 font-mono text-cyan-400">
+                        <a href="https://www.cnil.fr" target="_blank" rel="noopener noreferrer" className="hover:underline flex items-center gap-1">
+                          cnil.fr <ExternalLink className="w-3 h-3" />
+                        </a>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="p-4 font-mono font-bold text-white">BfDI (Federal Commissioner)</td>
+                      <td className="p-4">Germany</td>
+                      <td className="p-4">Federal Data Protection Act (BDSG) &amp; European GDPR oversight.</td>
+                      <td className="p-4 font-mono text-cyan-400">
+                        <a href="https://www.bfdi.bund.de" target="_blank" rel="noopener noreferrer" className="hover:underline flex items-center gap-1">
+                          bfdi.bund.de <ExternalLink className="w-3 h-3" />
+                        </a>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="p-4 font-mono font-bold text-white">California Privacy Protection Agency (CPPA)</td>
+                      <td className="p-4">California, United States</td>
+                      <td className="p-4">California Consumer Privacy Act (CCPA) and California Privacy Rights Act (CPRA).</td>
+                      <td className="p-4 font-mono text-cyan-400">
+                        <a href="https://cppa.ca.gov" target="_blank" rel="noopener noreferrer" className="hover:underline flex items-center gap-1">
+                          cppa.ca.gov <ExternalLink className="w-3 h-3" />
+                        </a>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="p-4 font-mono font-bold text-white">Federal Data Protection &amp; Information Commissioner (FDPIC)</td>
+                      <td className="p-4">Switzerland</td>
+                      <td className="p-4">Swiss Federal Act on Data Protection (revFADP).</td>
+                      <td className="p-4 font-mono text-cyan-400">
+                        <a href="https://www.edoeb.admin.ch" target="_blank" rel="noopener noreferrer" className="hover:underline flex items-center gap-1">
+                          edoeb.admin.ch <ExternalLink className="w-3 h-3" />
+                        </a>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="p-4 font-mono font-bold text-white">Office of the Privacy Commissioner of Canada (OPC)</td>
+                      <td className="p-4">Canada</td>
+                      <td className="p-4">Personal Information Protection and Electronic Documents Act (PIPEDA).</td>
+                      <td className="p-4 font-mono text-cyan-400">
+                        <a href="https://www.priv.gc.ca" target="_blank" rel="noopener noreferrer" className="hover:underline flex items-center gap-1">
+                          priv.gc.ca <ExternalLink className="w-3 h-3" />
+                        </a>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="p-4 font-mono font-bold text-white">Autoridade Nacional de Proteção de Dados (ANPD)</td>
+                      <td className="p-4">Brazil</td>
+                      <td className="p-4">Lei Geral de Proteção de Dados Pessoais (LGPD).</td>
+                      <td className="p-4 font-mono text-cyan-400">
+                        <a href="https://www.gov.br/anpd" target="_blank" rel="noopener noreferrer" className="hover:underline flex items-center gap-1">
+                          gov.br/anpd <ExternalLink className="w-3 h-3" />
+                        </a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
         </section>

@@ -369,7 +369,7 @@ export default function PitchDeckPage() {
               <Link href="/dashboard">Launch Sovereign Console <ArrowRight className="ml-2 w-4 h-4" /></Link>
             </Button>
             <Button asChild size="lg" variant="outline" className="rounded-full border-zinc-800 bg-zinc-950 text-white hover:bg-zinc-900 font-bold text-xs uppercase px-8 py-6">
-              <Link href="/marketplace">Explore Marketplace</Link>
+              <Link href="/pricing">View Pricing &amp; Splits</Link>
             </Button>
           </div>
         </section>

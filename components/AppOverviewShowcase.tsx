@@ -731,11 +731,11 @@ export default function AppOverviewShowcase() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {[
             {
-              title: 'Public IP Marketplace',
-              desc: 'Browse verified creative audio stems, software utilities, and artwork available for commercial sync.',
-              href: '/marketplace',
-              badge: 'Open Marketplace',
-              icon: Globe
+              title: 'Transparent Pricing & Tiers',
+              desc: 'Public disclosure of creator royalty splits (85/15), subscription tiers, and zero-trust verification fees.',
+              href: '/pricing',
+              badge: 'Public Pricing',
+              icon: DollarSign
             },
             {
               title: 'Knowledge Wiki & Docs',

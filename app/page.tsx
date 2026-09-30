@@ -95,7 +95,7 @@ export default function HomePage() {
               How it works
             </button>
             <Link href="/onboarding" className="text-sm text-zinc-400 hover:text-white transition-colors">For creators</Link>
-            <Link href="/marketplace" className="text-sm text-zinc-400 hover:text-white transition-colors">Explore listings</Link>
+            <Link href="/pricing" className="text-sm text-zinc-400 hover:text-white transition-colors">Pricing</Link>
             <a href="#data-transparency" className="text-sm text-zinc-400 hover:text-white transition-colors">Data & Privacy</a>
             <Link href="/wiki" className="text-sm text-zinc-400 hover:text-white transition-colors">Wiki / Help</Link>
             <Link href="/faq" className="text-sm text-zinc-400 hover:text-white transition-colors">FAQ</Link>
@@ -103,7 +103,7 @@ export default function HomePage() {
           <div className="flex items-center gap-3 sm:gap-4">
             <ThemeToggle showLabel={false} />
             <Button asChild variant="outline" className="border-zinc-800 bg-transparent text-white hover:bg-zinc-900 transition-all rounded-full hidden sm:inline-flex">
-              <Link href="/marketplace">Explore listings</Link>
+              <Link href="/pricing">View Pricing</Link>
             </Button>
             <Button asChild className="bg-gradient-to-r from-cyan-500 to-violet-500 hover:brightness-110 text-white font-medium shadow-lg shadow-cyan-950/40 rounded-full">
               <Link href="/dashboard">Sign in</Link>

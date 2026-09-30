@@ -87,16 +87,7 @@ const SITEMAP_ENTRIES: SitemapEntry[] = [
     badge: 'Authenticated Portal'
   },
 
-  // Marketplace & Verification
-  {
-    title: 'IP Rights Marketplace',
-    path: '/marketplace',
-    category: 'marketplace',
-    description: 'Decentralized public directory to discover, preview, and license authenticated intellectual property assets with instant on-chain splits.',
-    priority: '0.9',
-    changeFreq: 'Daily',
-    badge: 'Public Marketplace'
-  },
+  // Verification & Registry
   {
     title: 'Public IP Verification Registry',
     path: '/verify',
@@ -561,7 +552,7 @@ export default function SitemapContent() {
           <span>•</span>
           <Link href="/about" className="hover:text-cyan-400 transition-colors">About</Link>
           <span>•</span>
-          <Link href="/marketplace" className="hover:text-cyan-400 transition-colors">Marketplace</Link>
+          <Link href="/faq" className="hover:text-cyan-400 transition-colors">FAQ</Link>
           <span>•</span>
           <Link href="/verify" className="hover:text-cyan-400 transition-colors">Public Verify</Link>
           <span>•</span>

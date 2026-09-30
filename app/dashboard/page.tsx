@@ -66,8 +66,8 @@ export default function DashboardPage() {
               <span className="font-bold tracking-tighter text-white uppercase text-lg group-hover:text-cyan-400 transition-colors">SOVRANLY IP</span>
             </Link>
             <div className="flex items-center gap-4">
-              <Link href="/marketplace" className="text-xs text-zinc-400 hover:text-white transition-colors hidden sm:inline-block">
-                Explore Marketplace
+              <Link href="/pricing" className="text-xs text-zinc-400 hover:text-white transition-colors hidden sm:inline-block">
+                Pricing &amp; Splits
               </Link>
               <Link href="/" className="text-xs text-cyan-400 hover:text-cyan-300 transition-colors uppercase tracking-wider font-extrabold flex items-center gap-2">
                 Public Homepage →
@@ -84,14 +84,14 @@ export default function DashboardPage() {
               <span>Public Platform Notice</span>
             </div>
             <p className="leading-relaxed">
-              You are viewing the authenticated Creator Portal. The entire Sovranly IP public platform—including digital asset listings, license term generator, licensing tutorials, documentation, and policies—is freely accessible <strong className="text-white">without requiring a login</strong>.
+              You are viewing the authenticated Creator Portal. The entire Sovranly IP public platform—including license term generator, transparent pricing tiers, licensing tutorials, documentation, and policies—is freely accessible <strong className="text-white">without requiring a login</strong>.
             </p>
             <div className="flex flex-wrap gap-2 pt-1 font-mono text-[10px]">
               <Link href="/" className="px-2.5 py-1 rounded-md bg-cyan-950/40 text-cyan-400 border border-cyan-800/40 hover:bg-cyan-900/50 transition-colors">
                 Public Homepage
               </Link>
-              <Link href="/marketplace" className="px-2.5 py-1 rounded-md bg-zinc-800 text-zinc-300 hover:bg-zinc-700 transition-colors">
-                Explore Listings
+              <Link href="/pricing" className="px-2.5 py-1 rounded-md bg-zinc-800 text-zinc-300 hover:bg-zinc-700 transition-colors">
+                Pricing &amp; Splits
               </Link>
               <Link href="/privacy" className="px-2.5 py-1 rounded-md bg-zinc-800 text-zinc-300 hover:bg-zinc-700 transition-colors">
                 Privacy Policy
@@ -113,7 +113,7 @@ export default function DashboardPage() {
           <div className="flex flex-wrap items-center justify-center gap-4 text-zinc-500 text-xs px-4">
             <Link href="/" className="hover:text-cyan-400 transition-colors">Public Homepage</Link>
             <span>•</span>
-            <Link href="/marketplace" className="hover:text-cyan-400 transition-colors">Marketplace</Link>
+            <Link href="/pricing" className="hover:text-cyan-400 transition-colors">Pricing</Link>
             <span>•</span>
             <Link href="/terms" className="hover:text-cyan-400 transition-colors">Terms of Service</Link>
             <span>•</span>
