@@ -1,13 +1,31 @@
 import type { Metadata } from 'next';
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://savranlyip.com';
+/**
+ * Safely parse a URL string, returning a fallback URL if the string is invalid.
+ */
+function resolveSafeUrl(rawUrl: string | undefined, fallback: string): URL {
+  if (rawUrl && typeof rawUrl === 'string') {
+    const trimmed = rawUrl.trim();
+    if (trimmed.startsWith('http://') || trimmed.startsWith('https://')) {
+      try {
+        return new URL(trimmed);
+      } catch {
+        // invalid URL, proceed to fallback
+      }
+    }
+  }
+  return new URL(fallback);
+}
+
+const safeSiteUrlObj = resolveSafeUrl(process.env.NEXT_PUBLIC_SITE_URL, 'https://sovranlyip.com');
+const siteUrl = safeSiteUrlObj.origin;
 
 /**
  * Metadata configuration for Sovranly IP landing page,
  * highly optimized for "decentralized IP licensing", OpenGraph tags, and Twitter cards.
  */
 export const landingMetadata: Metadata = {
-  metadataBase: new URL(siteUrl),
+  metadataBase: safeSiteUrlObj,
   applicationName: 'Sovranly IP',
   title: {
     default: 'Sovranly IP | Decentralized IP Licensing & Sovereign Royalty Automation',

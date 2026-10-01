@@ -29,25 +29,15 @@ export function middleware(request: NextRequest) {
     return response;
   }
 
-  // 2. Intelligent Subdomain Routing (Production only)
-  // When accessed via app.sovranlyip.com or app.savranlyip.com:
-  // Visiting root '/' on the app subdomain seamlessly opens the Dashboard
-  const isAppSubdomain =
-    host.startsWith('app.sovranlyip.com') ||
-    host.startsWith('app.savranlyip.com');
-
-  if (isAppSubdomain && pathname === '/') {
-    const url = request.nextUrl.clone();
-    url.pathname = '/dashboard';
-    return NextResponse.redirect(url);
-  }
-
+  // 2. Open Access Compliance & Routing
+  // The home page '/' is always 100% public across all domains and subdomains
+  // without requiring authentication, allowing Google verification and users
+  // to review full platform information without a login wall.
   return NextResponse.next();
 }
 
 export const config = {
   matcher: [
     '/api/:path*',
-    '/',
   ],
 };

@@ -96,15 +96,13 @@ export default function HomePage() {
             </button>
             <Link href="/onboarding" className="text-sm text-zinc-400 hover:text-white transition-colors">For creators</Link>
             <Link href="/pricing" className="text-sm text-zinc-400 hover:text-white transition-colors">Pricing</Link>
-            <a href="#data-transparency" className="text-sm text-zinc-400 hover:text-white transition-colors">Data & Privacy</a>
+            <Link href="/privacy" className="text-sm text-cyan-400 hover:text-white transition-colors font-medium">Privacy Policy</Link>
+            <a href="#data-transparency" className="text-sm text-zinc-400 hover:text-white transition-colors">Google Compliance</a>
             <Link href="/wiki" className="text-sm text-zinc-400 hover:text-white transition-colors">Wiki / Help</Link>
             <Link href="/faq" className="text-sm text-zinc-400 hover:text-white transition-colors">FAQ</Link>
           </nav>
           <div className="flex items-center gap-3 sm:gap-4">
             <ThemeToggle showLabel={false} />
-            <Button asChild variant="outline" className="border-zinc-800 bg-transparent text-white hover:bg-zinc-900 transition-all rounded-full hidden sm:inline-flex">
-              <Link href="/pricing">View Pricing</Link>
-            </Button>
             <Button asChild className="bg-gradient-to-r from-cyan-500 to-violet-500 hover:brightness-110 text-white font-medium shadow-lg shadow-cyan-950/40 rounded-full">
               <Link href="/dashboard">Sign in</Link>
             </Button>
@@ -193,6 +191,18 @@ export default function HomePage() {
             </span>
             <span className="px-3 py-1.5 rounded-lg bg-zinc-900/80 border border-zinc-800 flex items-center gap-2">
               <span className="text-emerald-400 font-bold">[SHAREABLE]</span> One link for every licensing conversation
+            </span>
+          </div>
+
+          {/* Public Access & Verified Domain Compliance Seal */}
+          <div className="pt-2 flex flex-wrap justify-center items-center gap-2.5">
+            <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-950/40 border border-emerald-500/30 text-emerald-300 text-xs font-mono">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+              100% Public Access: Browse features, licensing terms, and documentation freely without logging in
+            </span>
+            <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-cyan-950/40 border border-cyan-500/30 text-cyan-300 text-xs font-mono">
+              <Globe className="w-3 h-3 text-cyan-400" />
+              Verified Custom Domain: sovranlyip.com
             </span>
           </div>
 
@@ -436,82 +446,143 @@ export default function HomePage() {
         </section>
 
         {/* Google OAuth & User Data Transparency Section */}
-        <section id="data-transparency" className="relative bg-zinc-900/40 rounded-3xl p-8 md:p-12 border border-zinc-800/80 backdrop-blur-sm space-y-8">
+        <section id="data-transparency" className="relative bg-zinc-900/40 rounded-3xl p-8 md:p-12 border border-zinc-800/80 backdrop-blur-sm space-y-10">
           <div className="text-center space-y-4 max-w-3xl mx-auto">
             <span className="text-xs font-mono uppercase tracking-widest text-cyan-400 px-3.5 py-1.5 bg-cyan-950/60 border border-cyan-800/40 rounded-full inline-flex items-center gap-2">
               <ShieldCheck className="w-3.5 h-3.5 text-cyan-400" />
-              GOOGLE OAUTH &amp; USER DATA TRANSPARENCY
+              GOOGLE OAUTH &amp; APP VERIFICATION CHARTER
             </span>
-            <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-white">
-              Public Platform Access &amp; Clear Data Safeguards
+            <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-white">
+              Application Transparency &amp; Google Policy Compliance
             </h2>
             <p className="text-zinc-400 text-sm sm:text-base leading-relaxed">
-              Sovranly IP is an open platform dedicated to creator rights and Zero Trust security. We believe in complete transparency regarding how our platform operates, why data is requested, and how your information is protected.
+              Sovranly IP is an open platform dedicated to creator sovereignty, copyright protection, and Zero Trust security. Below is our formal compliance audit against Google API Services User Data Policies, Brand Representation, and Open Access Standards.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {/* Box 1: No Login Required for Public Content */}
-            <div className="bg-zinc-950/70 border border-zinc-800/80 rounded-2xl p-6 space-y-3">
-              <div className="w-10 h-10 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400">
-                <Globe className="w-5 h-5" />
+          {/* 6-Pillar Google Verification Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {/* Rule 1: Accurately Represent and Identify Your App or Brand */}
+            <div className="bg-zinc-950/80 border border-zinc-800/80 rounded-2xl p-6 space-y-3.5 hover:border-cyan-500/40 transition-colors">
+              <div className="w-10 h-10 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400 font-mono text-xs font-bold">
+                01
               </div>
-              <h3 className="text-lg font-bold text-white">100% Public Access</h3>
-              <p className="text-xs text-zinc-400 leading-relaxed">
-                All public platform features—including browsing catalog listings, reading license permissions, reviewing how-it-works guides, FAQs, and platform documentation—are <strong className="text-zinc-200">freely viewable without requiring an account or login</strong>.
+              <h3 className="text-base font-bold text-white uppercase tracking-tight font-mono">
+                1. Accurate Brand &amp; App Identity
+              </h3>
+              <p className="text-xs text-zinc-400 leading-relaxed space-y-1">
+                <span className="block"><strong className="text-zinc-200">Official App Name:</strong> Sovranly IP</span>
+                <span className="block"><strong className="text-zinc-200">Operating Entity:</strong> Creative Sovereignty LLC</span>
+                <span className="block"><strong className="text-zinc-200">Primary Contact:</strong> <a href="mailto:create@sovranlyip.com" className="text-cyan-400 hover:underline">create@sovranlyip.com</a></span>
+                <span className="block"><strong className="text-zinc-200">Platform Scope:</strong> Non-custodial intellectual property management, decentralized licensing terms, and sovereign rights automation for independent digital creators.</span>
               </p>
             </div>
 
-            {/* Box 2: Purpose of Google User Data */}
-            <div className="bg-zinc-950/70 border border-zinc-800/80 rounded-2xl p-6 space-y-3">
-              <div className="w-10 h-10 rounded-xl bg-violet-500/10 border border-violet-500/20 flex items-center justify-center text-violet-400">
-                <Key className="w-5 h-5" />
+            {/* Rule 2: Fully Describe Your App's Functionality to Users */}
+            <div className="bg-zinc-950/80 border border-zinc-800/80 rounded-2xl p-6 space-y-3.5 hover:border-violet-500/40 transition-colors">
+              <div className="w-10 h-10 rounded-xl bg-violet-500/10 border border-violet-500/30 flex items-center justify-center text-violet-400 font-mono text-xs font-bold">
+                02
               </div>
-              <h3 className="text-lg font-bold text-white">Google Sign-In Purpose</h3>
+              <h3 className="text-base font-bold text-white uppercase tracking-tight font-mono">
+                2. Full App Functionality
+              </h3>
               <p className="text-xs text-zinc-400 leading-relaxed">
-                When creators opt to log in with Google, we request basic profile information (<code className="text-cyan-300">openid</code>, <code className="text-cyan-300">profile</code>, <code className="text-cyan-300">email</code>) solely to authenticate creator identity, bind copyright certificates to verified owners, and send critical royalty notices.
+                Sovranly IP empowers creators to: (1) Register creative assets (beats, stems, sample packs, audio, visual art, software code) with cryptographic timestamps; (2) Configure plain-language smart-licensing terms (commercial use, attribution, exclusivity, royalties); (3) Publish one shareable licensing offer link for buyers; and (4) Negotiate direct inquiries without third-party commission deductions.
               </p>
             </div>
 
-            {/* Box 3: Google Limited Use Compliance */}
-            <div className="bg-zinc-950/70 border border-zinc-800/80 rounded-2xl p-6 space-y-3">
-              <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400">
-                <Shield className="w-5 h-5" />
+            {/* Rule 3: Explain with Transparency the Purpose for Which Your App Requests User Data */}
+            <div className="bg-zinc-950/80 border border-zinc-800/80 rounded-2xl p-6 space-y-3.5 hover:border-emerald-500/40 transition-colors">
+              <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 font-mono text-xs font-bold">
+                03
               </div>
-              <h3 className="text-lg font-bold text-white">Google Limited Use</h3>
+              <h3 className="text-base font-bold text-white uppercase tracking-tight font-mono">
+                3. Purpose of User Data &amp; Limited Use
+              </h3>
               <p className="text-xs text-zinc-400 leading-relaxed">
-                We strictly comply with the <strong className="text-zinc-200">Google API Services User Data Policy</strong>. We do not sell user data, do not serve targeted advertisements, and do not use Google user data to train AI/ML models.
+                We request Google Sign-In (<code className="text-cyan-300">openid</code>, <code className="text-cyan-300">profile</code>, <code className="text-cyan-300">email</code>) strictly to verify creator identity, link copyright ownership records to the verified creator, and send critical license receipts. In strict compliance with <strong className="text-zinc-200">Google Limited Use policies</strong>, data is never sold, never shared with advertisers, and never used to train machine learning models.
+              </p>
+            </div>
+
+            {/* Rule 4 & 5: Hosted on a Verified Domain You Own (Not Third-Party Platforms) */}
+            <div className="bg-zinc-950/80 border border-zinc-800/80 rounded-2xl p-6 space-y-3.5 hover:border-amber-500/40 transition-colors">
+              <div className="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 font-mono text-xs font-bold">
+                04
+              </div>
+              <h3 className="text-base font-bold text-white uppercase tracking-tight font-mono">
+                4. Verified Domain (No 3rd-Party Hosts)
+              </h3>
+              <p className="text-xs text-zinc-400 leading-relaxed">
+                Sovranly IP and all associated legal documentation are hosted exclusively on our verified custom domain: <code className="text-cyan-300">https://sovranlyip.com</code> (and application console at <code className="text-cyan-300">https://app.sovranlyip.com</code>). We do <strong>not</strong> host our homepage, policies, or application on third-party platforms where subdomain ownership cannot be verified (e.g., NOT on Google Sites, Facebook, Instagram, or Twitter).
+              </p>
+            </div>
+
+            {/* Rule 6: Include a Link to Your Privacy Policy Matching Consent Screen */}
+            <div className="bg-zinc-950/80 border border-zinc-800/80 rounded-2xl p-6 space-y-3.5 hover:border-sky-500/40 transition-colors">
+              <div className="w-10 h-10 rounded-xl bg-sky-500/10 border border-sky-500/30 flex items-center justify-center text-sky-400 font-mono text-xs font-bold">
+                05
+              </div>
+              <h3 className="text-base font-bold text-white uppercase tracking-tight font-mono">
+                5. Privacy Policy &amp; Consent Screen Match
+              </h3>
+              <p className="text-xs text-zinc-400 leading-relaxed">
+                Our official Privacy Policy is linked directly on the homepage and matches the exact URL configured in the Google Cloud OAuth Consent Screen: <Link href="/privacy" className="text-cyan-400 hover:underline font-semibold block mt-1">https://sovranlyip.com/privacy</Link>
+                Together with our Terms of Service: <Link href="/terms" className="text-cyan-400 hover:underline font-semibold block mt-1">https://sovranlyip.com/terms</Link>
+              </p>
+            </div>
+
+            {/* Rule 7: Visible to Users Without Requiring Them to Log In */}
+            <div className="bg-zinc-950/80 border border-zinc-800/80 rounded-2xl p-6 space-y-3.5 hover:border-pink-500/40 transition-colors">
+              <div className="w-10 h-10 rounded-xl bg-pink-500/10 border border-pink-500/30 flex items-center justify-center text-pink-400 font-mono text-xs font-bold">
+                06
+              </div>
+              <h3 className="text-base font-bold text-white uppercase tracking-tight font-mono">
+                6. 100% Visible Without Login
+              </h3>
+              <p className="text-xs text-zinc-400 leading-relaxed">
+                Full platform documentation, workflow walk-throughs, sample licensing listings, pricing tiers, and legal policies are freely accessible to any visitor without logging in or signing up. Reviewers and prospective creators can freely audit all features and even test the interactive dashboard via <strong className="text-zinc-200">Guest Preview Mode</strong> with zero authentication barrier.
               </p>
             </div>
           </div>
 
-          {/* Detailed Disclosure Banner */}
+          {/* Direct Controls & Data Revocation Instructions */}
           <div className="bg-zinc-950/90 border border-zinc-800 rounded-2xl p-6 space-y-4">
             <h4 className="text-sm font-bold text-white uppercase tracking-wider font-mono flex items-center gap-2">
               <Check className="w-4 h-4 text-emerald-400" />
-              Summary of Data Practices for Verification &amp; User Trust
+              Creator Data Rights &amp; Google Account Control Instructions
             </h4>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs text-zinc-400">
-              <div className="space-y-1.5">
-                <span className="font-bold text-zinc-200 block">Workspace API Integration (Optional)</span>
-                <p>Features that interface with Google Drive, Slides, or Gmail are strictly user-initiated inside the authenticated creator dashboard to export agreement pitch decks or dispatch license confirmation receipts.</p>
+            
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs text-zinc-400">
+              <div className="space-y-1.5 bg-zinc-900/60 p-4 rounded-xl border border-zinc-800/60">
+                <span className="font-bold text-zinc-200 block text-xs uppercase tracking-wider font-mono">Instant OAuth Revocation</span>
+                <p>You can revoke Sovranly IP&apos;s access to your Google Account at any time via the official Google Security dashboard: <a href="https://myaccount.google.com/connections" target="_blank" rel="noopener noreferrer" className="text-cyan-400 underline inline-flex items-center gap-1">Google Third-Party Permissions <ExternalLink className="w-3 h-3 inline" /></a>.</p>
               </div>
-              <div className="space-y-1.5">
-                <span className="font-bold text-zinc-200 block">User Control &amp; Data Deletion</span>
-                <p>You can revoke Sovranly IP&apos;s access at any time via your Google Account Security settings or request permanent erasure of your account and metadata by contacting our privacy desk.</p>
+
+              <div className="space-y-1.5 bg-zinc-900/60 p-4 rounded-xl border border-zinc-800/60">
+                <span className="font-bold text-zinc-200 block text-xs uppercase tracking-wider font-mono">Strictly Non-Custodial</span>
+                <p>Sovranly IP never takes custody of your original media master files, copyright ownership, or private wallet keys. All smart contracts and licensing records are sovereign and user-controlled.</p>
+              </div>
+
+              <div className="space-y-1.5 bg-zinc-900/60 p-4 rounded-xl border border-zinc-800/60">
+                <span className="font-bold text-zinc-200 block text-xs uppercase tracking-wider font-mono">Data Deletion &amp; Export</span>
+                <p>Under GDPR and CCPA, creators can download their full JSON compliance archive or request permanent account erasure via our compliance module or by emailing <a href="mailto:create@sovranlyip.com" className="text-cyan-400 underline">create@sovranlyip.com</a>.</p>
               </div>
             </div>
 
-            <div className="pt-3 border-t border-zinc-900 flex flex-wrap items-center justify-between gap-4 text-xs">
-              <div className="flex flex-wrap items-center gap-4 text-zinc-400">
-                <span>Direct Verification Links:</span>
-                <Link href="/privacy" className="text-cyan-400 hover:underline font-medium">Privacy Policy (Full Text)</Link>
+            <div className="pt-4 border-t border-zinc-900 flex flex-wrap items-center justify-between gap-4 text-xs">
+              <div className="flex flex-wrap items-center gap-4 text-zinc-300">
+                <span className="font-mono text-zinc-500 uppercase tracking-wider text-[11px]">Consent Screen Verified Links:</span>
+                <Link href="/privacy" className="text-cyan-400 hover:underline font-semibold flex items-center gap-1">
+                  Privacy Policy: https://sovranlyip.com/privacy <ExternalLink className="w-3 h-3" />
+                </Link>
                 <span>•</span>
-                <Link href="/terms" className="text-cyan-400 hover:underline font-medium">Terms of Service</Link>
+                <Link href="/terms" className="text-cyan-400 hover:underline font-semibold flex items-center gap-1">
+                  Terms of Service: https://sovranlyip.com/terms <ExternalLink className="w-3 h-3" />
+                </Link>
                 <span>•</span>
                 <a href="mailto:create@sovranlyip.com" className="text-zinc-300 hover:text-white">create@sovranlyip.com</a>
               </div>
-              <span className="text-[11px] font-mono text-zinc-400">Application ID: Sovranly IP // Creative Sovereignty LLC</span>
+              <span className="text-[11px] font-mono text-zinc-500">Domain: sovranlyip.com // Entity: Creative Sovereignty LLC</span>
             </div>
           </div>
         </section>

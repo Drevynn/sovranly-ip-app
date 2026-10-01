@@ -42,6 +42,10 @@ export interface AuthenticatedUser {
   email?: string;
   name?: string;
   emailVerified?: boolean;
+  firebase?: {
+    sign_in_provider?: string;
+    [key: string]: any;
+  };
 }
 
 function isSandboxAllowed(): boolean {

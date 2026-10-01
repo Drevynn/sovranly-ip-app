@@ -3,11 +3,26 @@
  * Handles routing between public marketing pages and the web app subdomain.
  */
 
+function sanitizeDomainUrl(rawUrl: string | undefined, fallback: string): string {
+  if (rawUrl && typeof rawUrl === 'string') {
+    const trimmed = rawUrl.trim();
+    if (trimmed.startsWith('http://') || trimmed.startsWith('https://')) {
+      try {
+        const parsed = new URL(trimmed);
+        return parsed.origin;
+      } catch {
+        // invalid URL format
+      }
+    }
+  }
+  return fallback;
+}
+
 export const DOMAIN_CONFIG = {
   // Public Marketing Site (Landing, About, Wiki, Privacy, Pricing)
-  publicUrl: process.env.NEXT_PUBLIC_SITE_URL || 'https://savranlyip.com',
+  publicUrl: sanitizeDomainUrl(process.env.NEXT_PUBLIC_SITE_URL, 'https://sovranlyip.com'),
   // Sovereign App / Console (Dashboard, Licenses, Onboarding, Developer)
-  appUrl: process.env.NEXT_PUBLIC_APP_URL || 'https://app.sovranlyip.com',
+  appUrl: sanitizeDomainUrl(process.env.NEXT_PUBLIC_APP_URL, 'https://app.sovranlyip.com'),
   // Whitelisted origins for CORS and multi-tenant security
   allowedOrigins: [
     'https://savranlyip.com',
@@ -53,8 +68,8 @@ export function getAppRoute(path: string): string {
     }
   }
   // When running across separate subdomains in production
-  if (process.env.NODE_ENV === 'production' && process.env.NEXT_PUBLIC_APP_URL) {
-    return `${process.env.NEXT_PUBLIC_APP_URL.replace(/\/$/, '')}${cleanPath}`;
+  if (process.env.NODE_ENV === 'production' && DOMAIN_CONFIG.appUrl) {
+    return `${DOMAIN_CONFIG.appUrl.replace(/\/$/, '')}${cleanPath}`;
   }
   return cleanPath;
 }
@@ -70,8 +85,8 @@ export function getPublicRoute(path: string): string {
       return cleanPath;
     }
   }
-  if (process.env.NODE_ENV === 'production' && process.env.NEXT_PUBLIC_SITE_URL) {
-    return `${process.env.NEXT_PUBLIC_SITE_URL.replace(/\/$/, '')}${cleanPath}`;
+  if (process.env.NODE_ENV === 'production' && DOMAIN_CONFIG.publicUrl) {
+    return `${DOMAIN_CONFIG.publicUrl.replace(/\/$/, '')}${cleanPath}`;
   }
   return cleanPath;
 }

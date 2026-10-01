@@ -37,7 +37,8 @@ import {
   where,
   orderBy,
   limit,
-  Timestamp
+  Timestamp,
+  writeBatch
 } from 'firebase/firestore';
 import { getDb } from './firebase';
 
@@ -48,6 +49,9 @@ class DocumentSnapshotCompat {
   }
   get id(): string {
     return this._snap.id;
+  }
+  get ref(): any {
+    return this._snap.ref;
   }
   data(): any {
     return this._snap.data();
@@ -76,10 +80,14 @@ class DocCompat {
     return new DocumentSnapshotCompat(snap);
   }
 
-  async set(data: any) {
+  async set(data: any, options?: any) {
     const d = doc(getDb(), this._collectionName, this._docId);
     const processedData = this._processData(data);
-    await setDoc(d, processedData);
+    if (options) {
+      await setDoc(d, processedData, options);
+    } else {
+      await setDoc(d, processedData);
+    }
     return { success: true };
   }
 
@@ -199,6 +207,26 @@ class CollectionCompat {
 export const db = {
   collection(name: string) {
     return new CollectionCompat(name);
+  },
+  batch() {
+    const b = writeBatch(getDb());
+    return {
+      update(ref: any, data: any) {
+        b.update(ref, data);
+        return this;
+      },
+      set(ref: any, data: any) {
+        b.set(ref, data);
+        return this;
+      },
+      delete(ref: any) {
+        b.delete(ref);
+        return this;
+      },
+      commit() {
+        return b.commit();
+      }
+    };
   }
 };
 

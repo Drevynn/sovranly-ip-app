@@ -66,7 +66,7 @@ export default function Sidebar({
             </div>
 
             <div className="flex-1 px-5 py-6 space-y-7 overflow-y-auto custom-scrollbar">
-              {/* Public Pages & Pricing Quick Access Box */}
+              {/* Public Directory Quick Access Box */}
               <div className="bg-gradient-to-r from-cyan-950/40 via-zinc-900/60 to-emerald-950/40 border border-cyan-500/30 rounded-2xl p-4 shadow-lg">
                 <button
                   onClick={() => setShowPublicDirectory(true)}
@@ -74,12 +74,12 @@ export default function Sidebar({
                 >
                   <span className="flex items-center gap-2.5">
                     <Globe className="w-4 h-4 text-cyan-400 animate-pulse group-hover:rotate-45 transition-transform" />
-                    Public Pages &amp; Pricing
+                    Public Directory
                   </span>
                   <span className="text-[10px] bg-cyan-500/20 px-2 py-0.5 rounded text-cyan-200">Index</span>
                 </button>
                 <p className="text-[10px] text-zinc-400 font-mono mt-2.5 px-1 leading-relaxed">
-                  Instant access to public pricing, Wiki, FAQ, legal terms, and compliance disclosures.
+                  Instant access to public documentation, Wiki, FAQ, legal terms, and compliance disclosures.
                 </p>
               </div>
 
@@ -234,6 +234,15 @@ export default function Sidebar({
                     <Mail className="w-4 h-4 text-amber-400 shrink-0" /> Official IP Notices
                   </span>
                   <span className="text-[9px] font-mono px-2 py-0.5 rounded bg-amber-950/60 text-amber-400 border border-amber-800/40 font-bold">Owner</span>
+                </button>
+                <button 
+                  onClick={() => { setActivePage(17); onClose(); }}
+                  className={`w-full flex items-center justify-between px-4 py-3 rounded-xl text-xs sm:text-[13px] font-semibold transition-all cursor-pointer ${activePage === 17 ? 'bg-zinc-900 border border-zinc-800 text-white shadow-lg' : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900/40'}`}
+                >
+                  <span className="flex items-center gap-3">
+                    <Scale className="w-4 h-4 text-cyan-400 shrink-0" /> Compliance Center
+                  </span>
+                  <span className="text-[9px] font-mono px-2 py-0.5 rounded bg-cyan-950/60 text-cyan-400 border border-cyan-800/40 font-bold">GDPR</span>
                 </button>
                 <button 
                   onClick={() => { setActivePage(10); onClose(); }}

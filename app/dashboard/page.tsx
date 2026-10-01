@@ -20,13 +20,16 @@ import AiLicensingCenter from '@/components/AiLicensingCenter';
 import DataTokenizationHub from '@/components/DataTokenizationHub';
 import CreatorNetwork from '@/components/CreatorNetwork';
 import Permissions from '@/components/Permissions';
+import ComplianceCenter from '@/components/ComplianceCenter';
 import MobileBottomNav from '@/components/MobileBottomNav';
+import { motion, AnimatePresence } from 'motion/react';
 import { useAuth } from '@/components/auth/FirebaseProvider';
 import { SignIn } from '@/components/auth/SignIn';
 import { SovranlyLogo } from '@/components/SovranlyLogo';
 import Link from 'next/link';
-import { ShieldCheck } from 'lucide-react';
+import { ShieldCheck, Eye, Sparkles, ArrowRight } from 'lucide-react';
 import NonCustodialBadge from '@/components/NonCustodialBadge';
+import { Button } from '@/components/ui/button';
 
 export default function DashboardPage() {
   const { user, loading } = useAuth();
@@ -34,6 +37,7 @@ export default function DashboardPage() {
   const [currentAccount, setCurrentAccount] = useState<string | null>(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [selectedAssetForLicensing, setSelectedAssetForLicensing] = useState<any>(null);
+  const [guestPreview, setGuestPreview] = useState(false);
 
   const walletStatus = currentAccount 
     ? `${currentAccount.slice(0, 6)}...${currentAccount.slice(-4)}` 
@@ -51,7 +55,7 @@ export default function DashboardPage() {
     );
   }
 
-  if (!user) {
+  if (!user && !guestPreview) {
     return (
       <div className="min-h-screen bg-black text-zinc-100 flex flex-col font-sans selection:bg-cyan-500/20 selection:text-cyan-300 relative overflow-hidden">
         {/* Glow Effects */}
@@ -66,8 +70,11 @@ export default function DashboardPage() {
               <span className="font-bold tracking-tighter text-white uppercase text-lg group-hover:text-cyan-400 transition-colors">SOVRANLY IP</span>
             </Link>
             <div className="flex items-center gap-4">
+              <Link href="/wiki" className="text-xs text-zinc-400 hover:text-white transition-colors hidden sm:inline-block">
+                Documentation &amp; Wiki
+              </Link>
               <Link href="/pricing" className="text-xs text-zinc-400 hover:text-white transition-colors hidden sm:inline-block">
-                Pricing &amp; Splits
+                Pricing
               </Link>
               <Link href="/" className="text-xs text-cyan-400 hover:text-cyan-300 transition-colors uppercase tracking-wider font-extrabold flex items-center gap-2">
                 Public Homepage →
@@ -76,22 +83,54 @@ export default function DashboardPage() {
           </div>
         </header>
 
-        {/* Public Notice Banner for Google Reviewers & Guests */}
-        <div className="relative z-10 max-w-2xl mx-auto px-4 pt-6">
-          <div className="p-4 rounded-2xl bg-zinc-900/60 border border-cyan-500/20 text-xs text-zinc-300 space-y-2 backdrop-blur-md">
-            <div className="flex items-center gap-2 text-cyan-400 font-mono font-bold uppercase tracking-wider text-[11px]">
-              <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
-              <span>Public Platform Notice</span>
+        {/* Public Notice Banner & Instant Demo Explorer for Guests & Google Reviewers */}
+        <div className="relative z-10 max-w-3xl mx-auto px-4 pt-8 space-y-6">
+          <div className="p-6 rounded-3xl bg-zinc-900/80 border border-cyan-500/30 text-xs text-zinc-300 space-y-4 backdrop-blur-md shadow-2xl shadow-cyan-950/40">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-zinc-800 pb-4">
+              <div className="flex items-center gap-2 text-cyan-400 font-mono font-bold uppercase tracking-wider text-xs">
+                <span className="w-2.5 h-2.5 rounded-full bg-cyan-400 animate-ping" />
+                <span>Zero Friction Access &amp; Compliance Disclosure</span>
+              </div>
+              <span className="px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 font-mono text-[10px] w-fit">
+                No Login Required to View App
+              </span>
             </div>
-            <p className="leading-relaxed">
-              You are viewing the authenticated Creator Portal. The entire Sovranly IP public platform—including license term generator, transparent pricing tiers, licensing tutorials, documentation, and policies—is freely accessible <strong className="text-white">without requiring a login</strong>.
+            
+            <p className="text-sm text-zinc-200 leading-relaxed">
+              Sovranly IP is designed for radical transparency. You do not need an account or login to inspect our platform, test features, or learn how decentralized creator licensing works.
             </p>
-            <div className="flex flex-wrap gap-2 pt-1 font-mono text-[10px]">
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+              <Button 
+                onClick={() => setGuestPreview(true)}
+                className="w-full py-6 rounded-2xl bg-gradient-to-r from-cyan-500 to-violet-600 hover:brightness-110 text-white font-bold text-sm shadow-lg shadow-cyan-950/50 flex items-center justify-center gap-2 cursor-pointer"
+              >
+                <Eye className="w-4 h-4" />
+                Explore Live Demo (No Login Required)
+              </Button>
+              <Button 
+                asChild
+                variant="outline"
+                className="w-full py-6 rounded-2xl border-zinc-700 bg-zinc-950/80 hover:bg-zinc-800 text-zinc-200 font-semibold text-sm flex items-center justify-center gap-2"
+              >
+                <Link href="/">
+                  Return to Public Homepage <ArrowRight className="w-4 h-4" />
+                </Link>
+              </Button>
+            </div>
+
+            <div className="flex flex-wrap gap-2 pt-2 font-mono text-[10px] border-t border-zinc-800/80">
               <Link href="/" className="px-2.5 py-1 rounded-md bg-cyan-950/40 text-cyan-400 border border-cyan-800/40 hover:bg-cyan-900/50 transition-colors">
                 Public Homepage
               </Link>
+              <Link href="/about" className="px-2.5 py-1 rounded-md bg-zinc-800 text-zinc-300 hover:bg-zinc-700 transition-colors">
+                About Us
+              </Link>
               <Link href="/pricing" className="px-2.5 py-1 rounded-md bg-zinc-800 text-zinc-300 hover:bg-zinc-700 transition-colors">
                 Pricing &amp; Splits
+              </Link>
+              <Link href="/wiki" className="px-2.5 py-1 rounded-md bg-zinc-800 text-zinc-300 hover:bg-zinc-700 transition-colors">
+                Wiki &amp; Help Center
               </Link>
               <Link href="/privacy" className="px-2.5 py-1 rounded-md bg-zinc-800 text-zinc-300 hover:bg-zinc-700 transition-colors">
                 Privacy Policy
@@ -103,8 +142,12 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        {/* Secure Sign In Portal */}
-        <div className="flex-1 flex items-center justify-center py-10 relative z-10">
+        {/* Creator Sign In Portal */}
+        <div className="flex-1 flex flex-col items-center justify-center py-8 relative z-10">
+          <div className="text-center mb-4 space-y-1">
+            <span className="text-xs font-mono text-zinc-500 uppercase tracking-widest">Creator Identity &amp; Key Management</span>
+            <h3 className="text-xl font-bold text-white">Sign In to Save Certificates</h3>
+          </div>
           <SignIn />
         </div>
 
@@ -155,6 +198,7 @@ export default function DashboardPage() {
             activePage === 14 ? 'Permissions Hub (Instant Video Rights)' :
             activePage === 15 ? 'Cloudflare Handshake & Tunnel Diagnostics' :
             activePage === 16 ? 'Official IP Communications & Legal Notices' :
+            activePage === 17 ? 'Compliance Center (Data Retention & GDPR/CCPA Rights)' :
             'Permissions Hub'
           } 
           setWalletAddress={setCurrentAccount} 
@@ -162,47 +206,73 @@ export default function DashboardPage() {
           onToggleSidebar={() => setSidebarOpen(!sidebarOpen)}
         />
 
+        {guestPreview && !user && (
+          <div className="bg-gradient-to-r from-cyan-950/90 via-zinc-900/90 to-violet-950/90 border-b border-cyan-500/30 px-6 py-2.5 flex flex-wrap items-center justify-between gap-3 text-xs">
+            <div className="flex items-center gap-2 text-cyan-300 font-mono">
+              <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
+              <span>GUEST PREVIEW ACTIVE — Exploring Sovranly IP without login. All tabs and features are open for inspection.</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Button size="sm" variant="outline" onClick={() => setGuestPreview(false)} className="h-7 text-[11px] rounded-lg border-zinc-700 bg-zinc-900 text-zinc-300 hover:text-white">
+                Exit Preview / Sign In
+              </Button>
+            </div>
+          </div>
+        )}
+
         <main className="flex-1 overflow-auto p-6 sm:p-8 lg:p-10 pb-32 md:pb-12 bg-zinc-950 transition-colors">
-          {activePage === 0 && <Overview onNavigate={setActivePage} />}
-          {activePage === 1 && <Profile />}
-          {activePage === 2 && (
-            <AssetManager 
-              walletAddress={currentAccount} 
-              onNavigateToLicensing={(asset) => {
-                setSelectedAssetForLicensing(asset);
-                setActivePage(4);
-              }}
-              onNavigateToPermissions={(asset) => {
-                setSelectedAssetForLicensing(asset);
-                setActivePage(14);
-              }}
-            />
-          )}
-          {activePage === 3 && <Analytics />}
-          {activePage === 4 && (
-            <LicensingAgreementBuilder 
-              walletAddress={currentAccount} 
-              initialAsset={selectedAssetForLicensing} 
-            />
-          )}
-          {activePage === 5 && <RoyaltySandbox />}
-          {activePage === 6 && <Inbox walletAddress={currentAccount} />}
-          {activePage === 7 && <GoogleSlidesManager />}
-          {activePage === 8 && <LaunchPlanner />}
-          {activePage === 9 && <TechStackLedger />}
-          {activePage === 10 && <AboutUs />}
-          {activePage === 11 && <AiLicensingCenter />}
-          {activePage === 12 && <DataTokenizationHub />}
-          {activePage === 13 && <CreatorNetwork />}
-          {activePage === 14 && (
-            <Permissions 
-              initialAsset={selectedAssetForLicensing}
-              walletAddress={currentAccount}
-              onNavigate={setActivePage}
-            />
-          )}
-          {activePage === 15 && <CloudflareHandshakeDiagnostics />}
-          {activePage === 16 && <OfficialIpNotices walletAddress={currentAccount} />}
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={activePage}
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -6 }}
+              transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
+              className="w-full"
+            >
+              {activePage === 0 && <Overview onNavigate={setActivePage} />}
+              {activePage === 1 && <Profile />}
+              {activePage === 2 && (
+                <AssetManager 
+                  walletAddress={currentAccount} 
+                  onNavigateToLicensing={(asset) => {
+                    setSelectedAssetForLicensing(asset);
+                    setActivePage(4);
+                  }}
+                  onNavigateToPermissions={(asset) => {
+                    setSelectedAssetForLicensing(asset);
+                    setActivePage(14);
+                  }}
+                />
+              )}
+              {activePage === 3 && <Analytics />}
+              {activePage === 4 && (
+                <LicensingAgreementBuilder 
+                  walletAddress={currentAccount} 
+                  initialAsset={selectedAssetForLicensing} 
+                />
+              )}
+              {activePage === 5 && <RoyaltySandbox />}
+              {activePage === 6 && <Inbox walletAddress={currentAccount} />}
+              {activePage === 7 && <GoogleSlidesManager />}
+              {activePage === 8 && <LaunchPlanner />}
+              {activePage === 9 && <TechStackLedger />}
+              {activePage === 10 && <AboutUs />}
+              {activePage === 11 && <AiLicensingCenter />}
+              {activePage === 12 && <DataTokenizationHub />}
+              {activePage === 13 && <CreatorNetwork />}
+              {activePage === 14 && (
+                <Permissions 
+                  initialAsset={selectedAssetForLicensing}
+                  walletAddress={currentAccount}
+                  onNavigate={setActivePage}
+                />
+              )}
+              {activePage === 15 && <CloudflareHandshakeDiagnostics />}
+              {activePage === 16 && <OfficialIpNotices walletAddress={currentAccount} />}
+              {activePage === 17 && <ComplianceCenter />}
+            </motion.div>
+          </AnimatePresence>
 
           {/* Persistent Non-Custodial Architecture Footer */}
           <footer className="mt-16 pt-8 border-t border-zinc-900 flex flex-col items-center justify-center gap-3 text-center">

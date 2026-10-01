@@ -975,7 +975,7 @@ export default function AboutUs() {
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     {[
                       { 
-                        name: "Pulse IP / Sovranly", 
+                        name: "Sovranly IP", 
                         desc: "Blockchain-based IP registry enabling artists, musicians, and writers to securely register works, manage rights, and automate royalty splits.",
                         stage: "Live Functional Prototype",
                         badge: "MVP STAGE",
@@ -1759,7 +1759,7 @@ export default function AboutUs() {
                 <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" /> Sovranly Smart Contracts
               </h4>
               <p className="text-xs text-zinc-300 leading-relaxed font-sans">
-                Smart contracts on the Pulse platform do not rely on universal statutory lifespans. Instead, they enforce whatever duration, milestones, or conditions you choose to hardcode into them. Your digital licensing parameters can be set for a specific number of years, tied to unique external conditions, or programmed to execute exactly for the lifetime of a companion asset. <strong>You govern the code; the code governs the asset.</strong>
+                Smart contracts on the Sovranly IP platform do not rely on universal statutory lifespans. Instead, they enforce whatever duration, milestones, or conditions you choose to hardcode into them. Your digital licensing parameters can be set for a specific number of years, tied to unique external conditions, or programmed to execute exactly for the lifetime of a companion asset. <strong>You govern the code; the code governs the asset.</strong>
               </p>
             </div>
           </div>

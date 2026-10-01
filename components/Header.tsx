@@ -65,7 +65,7 @@ export default function Header({
           id="public-pages-directory-btn"
         >
           <Globe className="w-3.5 h-3.5 text-cyan-400 animate-pulse" />
-          <span className="hidden md:inline">Public Pages &amp; Pricing</span>
+          <span className="hidden md:inline">Public Directory</span>
           <span className="md:hidden">Public</span>
         </button>
 
