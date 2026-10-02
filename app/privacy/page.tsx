@@ -1026,10 +1026,10 @@ export default function PrivacyPolicy() {
 
               <div className="p-5 bg-zinc-950/60 border border-zinc-900 rounded-2xl space-y-2">
                 <h3 className="text-sm font-bold text-white flex items-center gap-2">
-                  <Terminal className="w-4 h-4 text-amber-400" /> 4. Anti-Scraping Defenses
+                  <Terminal className="w-4 h-4 text-emerald-400" /> 4. Search Engine &amp; Google Verification Bot Access
                 </h3>
                 <p className="text-zinc-400">
-                  We implement automated rate-limiting, bot verification, and web-crawler defenses to actively prevent unauthorized AI web scrapers from harvesting creator catalogs hosted on Sovranly IP.
+                  All verified search engine crawlers, platform verification bots, and indexers (including Googlebot and Google-InspectionTool) are explicitly whitelisted and granted uninterrupted, challenge-free access to all public pages, legal notices, and documentation. Sovranly IP does not serve bot challenges, captchas, rate limits, or login walls to verified search and verification services.
                 </p>
               </div>
             </div>
@@ -2401,7 +2401,7 @@ export default function PrivacyPolicy() {
               )}
             </div>
 
-            {/* FAQ 5: Zero Data Monetization & Anti-Scraping */}
+            {/* FAQ 5: Zero Data Monetization & Search / Verification Bot Access */}
             <div className="border border-zinc-900 bg-zinc-950/70 rounded-2xl overflow-hidden transition-all">
               <button
                 onClick={() => toggleFaq('faq-anti-scraping')}
@@ -2412,12 +2412,12 @@ export default function PrivacyPolicy() {
                     <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-rose-950/60 text-rose-400 border border-rose-800/40">
                       ZERO DATA MONETIZATION
                     </span>
-                    <span className="px-2 py-0.5 rounded text-[10px] font-mono text-zinc-500 border border-zinc-800">
-                      AI SCRAPING PROHIBITION
+                    <span className="px-2 py-0.5 rounded text-[10px] font-mono text-emerald-400 border border-emerald-800/50 bg-emerald-950/40">
+                      VERIFIED BOTS WHITELISTED
                     </span>
                   </div>
                   <h3 className="text-sm sm:text-base font-bold text-white">
-                    Does Sovranly sell creator data, or allow third-party AI companies to scrape my creative work for model training?
+                    Does Sovranly sell creator data, or block search engines and Google verification crawlers?
                   </h3>
                 </div>
                 <div className="p-1 rounded-lg bg-zinc-900 text-zinc-400 mt-1 flex-shrink-0">
@@ -2434,7 +2434,7 @@ export default function PrivacyPolicy() {
                     In accordance with CCPA/CPRA regulations granting California consumers the right to opt out of the sale or sharing of personal information, Sovranly IP maintains a zero-sale posture across the entire platform by default.
                   </p>
                   <p>
-                    Furthermore, Sovranly IP implements automated anti-crawling headers (including <code>X-Robots-Tag: noai, noimageai</code>), rate limiting, and cryptographic asset watermarking to actively prevent unauthorized AI web scrapers from ingesting your creative works into foundational training sets.
+                    <strong className="text-emerald-400">Search Engine &amp; Google Verification Bot Whitelisting:</strong> While private asset repositories are protected by cryptographic token authentication, all public pages, legal notices, terms, and metadata are 100% open and crawlable. Verified search engine crawlers, platform verification bots, and Google review crawlers (such as <code>Googlebot</code> and <code>Google-InspectionTool</code>) are explicitly whitelisted and permanently exempted from any bot challenges, rate limiting, or WAF verification checks. We never serve interstitial challenge pages, captchas, or login walls to verified inspection bots.
                   </p>
                 </div>
               )}

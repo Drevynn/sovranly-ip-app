@@ -246,8 +246,8 @@ export const ROADMAP_MILESTONES: RoadmapMilestone[] = [
     id: 'm-08',
     quarter: 'Q4 2026',
     quarterKey: 'Q4-2026',
-    title: 'AI Anti-Scraping Shield 2.0 & Spectral Watermarking',
-    tagline: 'Imperceptible cryptographic audio watermarking & automated crawler suppression',
+    title: 'AI Protection Shield 2.0 & Spectral Watermarking',
+    tagline: 'Imperceptible cryptographic audio watermarking & verified crawler compatibility',
     track: 'AI Defense',
     trackKey: 'AI',
     status: 'IN PROGRESS',
@@ -255,8 +255,8 @@ export const ROADMAP_MILESTONES: RoadmapMilestone[] = [
     targetDate: 'October 2026 (Target)',
     keyDeliverables: [
       'Spectral psychoacoustic watermarking embedding tamper-evident cryptographic author IDs',
-      'Automated X-Robots-Tag: noai, noimageai crawler header suppression',
-      'AI scraping honeypot traps detecting unauthorized LLM and voice-clone training crawlers'
+      'Verified search and inspection bot compatibility with challenge-free bypass for Googlebot & Google-InspectionTool',
+      'AI scraping honeypot traps detecting unauthorized commercial dataset extraction without blocking verified search crawlers'
     ],
     techStack: ['WebAudio API', 'Spectral DSP', 'Rust WebAssembly', 'Cloudflare Workers'],
     smartContractInvariants: [

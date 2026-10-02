@@ -17,7 +17,7 @@ function resolveSafeUrl(rawUrl: string | undefined, fallback: string): URL {
   return new URL(fallback);
 }
 
-const safeSiteUrlObj = resolveSafeUrl(process.env.NEXT_PUBLIC_SITE_URL, 'https://sovranlyip.com');
+const safeSiteUrlObj = resolveSafeUrl(process.env.NEXT_PUBLIC_SITE_URL, 'https://www.sovranlyip.com');
 const siteUrl = safeSiteUrlObj.origin;
 
 /**

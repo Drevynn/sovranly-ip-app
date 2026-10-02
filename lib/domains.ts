@@ -20,16 +20,13 @@ function sanitizeDomainUrl(rawUrl: string | undefined, fallback: string): string
 
 export const DOMAIN_CONFIG = {
   // Public Marketing Site (Landing, About, Wiki, Privacy, Pricing)
-  publicUrl: sanitizeDomainUrl(process.env.NEXT_PUBLIC_SITE_URL, 'https://sovranlyip.com'),
+  publicUrl: sanitizeDomainUrl(process.env.NEXT_PUBLIC_SITE_URL, 'https://www.sovranlyip.com'),
   // Sovereign App / Console (Dashboard, Licenses, Onboarding, Developer)
   appUrl: sanitizeDomainUrl(process.env.NEXT_PUBLIC_APP_URL, 'https://app.sovranlyip.com'),
   // Whitelisted origins for CORS and multi-tenant security
   allowedOrigins: [
-    'https://savranlyip.com',
-    'https://www.savranlyip.com',
-    'https://app.savranlyip.com',
-    'https://sovranlyip.com',
     'https://www.sovranlyip.com',
+    'https://sovranlyip.com',
     'https://app.sovranlyip.com',
     'http://localhost:3000',
     'http://127.0.0.1:3000',

@@ -513,7 +513,7 @@ export default function HomePage() {
                 4. Verified Domain (No 3rd-Party Hosts)
               </h3>
               <p className="text-xs text-zinc-400 leading-relaxed">
-                Sovranly IP and all associated legal documentation are hosted exclusively on our verified custom domain: <code className="text-cyan-300">https://sovranlyip.com</code> (and application console at <code className="text-cyan-300">https://app.sovranlyip.com</code>). We do <strong>not</strong> host our homepage, policies, or application on third-party platforms where subdomain ownership cannot be verified (e.g., NOT on Google Sites, Facebook, Instagram, or Twitter).
+                Sovranly IP and all associated legal documentation are hosted exclusively on our verified custom domain: <code className="text-cyan-300">https://www.sovranlyip.com</code> (and application console at <code className="text-cyan-300">https://app.sovranlyip.com</code>). We do <strong>not</strong> host our homepage, policies, or application on third-party platforms where subdomain ownership cannot be verified (e.g., NOT on Google Sites, Facebook, Instagram, or Twitter).
               </p>
             </div>
 
@@ -526,8 +526,8 @@ export default function HomePage() {
                 5. Privacy Policy &amp; Consent Screen Match
               </h3>
               <p className="text-xs text-zinc-400 leading-relaxed">
-                Our official Privacy Policy is linked directly on the homepage and matches the exact URL configured in the Google Cloud OAuth Consent Screen: <Link href="/privacy" className="text-cyan-400 hover:underline font-semibold block mt-1">https://sovranlyip.com/privacy</Link>
-                Together with our Terms of Service: <Link href="/terms" className="text-cyan-400 hover:underline font-semibold block mt-1">https://sovranlyip.com/terms</Link>
+                Our official Privacy Policy is linked directly on the homepage and matches the exact URL configured in the Google Cloud OAuth Consent Screen: <Link href="/privacy" className="text-cyan-400 hover:underline font-semibold block mt-1">https://www.sovranlyip.com/privacy</Link>
+                Together with our Terms of Service: <Link href="/terms" className="text-cyan-400 hover:underline font-semibold block mt-1">https://www.sovranlyip.com/terms</Link>
               </p>
             </div>
 
@@ -569,20 +569,31 @@ export default function HomePage() {
               </div>
             </div>
 
+            {/* Bot Protection & Verified Crawler Assurance */}
+            <div className="p-4 bg-emerald-950/20 border border-emerald-800/40 rounded-xl flex items-start gap-3 text-xs text-zinc-300">
+              <ShieldCheck className="w-5 h-5 text-emerald-400 flex-shrink-0 mt-0.5" />
+              <div>
+                <strong className="text-emerald-400 font-mono uppercase block mb-1">
+                  Bot Protection &amp; Verified Crawler Transparency:
+                </strong>
+                Sovranly IP does NOT block Google review bots or search indexers. Next.js middleware and edge routing explicitly whitelist Google verification user-agents (<code className="text-emerald-300 font-mono">Googlebot</code>, <code className="text-emerald-300 font-mono">Google-InspectionTool</code>) and Cloudflare verified bots, bypassing any challenge interstitials, Bot Fight Mode, rate limiting, or CAPTCHA walls so that reviewers and crawlers always receive clean, complete page content without any login requirement.
+              </div>
+            </div>
+
             <div className="pt-4 border-t border-zinc-900 flex flex-wrap items-center justify-between gap-4 text-xs">
               <div className="flex flex-wrap items-center gap-4 text-zinc-300">
                 <span className="font-mono text-zinc-500 uppercase tracking-wider text-[11px]">Consent Screen Verified Links:</span>
                 <Link href="/privacy" className="text-cyan-400 hover:underline font-semibold flex items-center gap-1">
-                  Privacy Policy: https://sovranlyip.com/privacy <ExternalLink className="w-3 h-3" />
+                  Privacy Policy: https://www.sovranlyip.com/privacy <ExternalLink className="w-3 h-3" />
                 </Link>
                 <span>•</span>
                 <Link href="/terms" className="text-cyan-400 hover:underline font-semibold flex items-center gap-1">
-                  Terms of Service: https://sovranlyip.com/terms <ExternalLink className="w-3 h-3" />
+                  Terms of Service: https://www.sovranlyip.com/terms <ExternalLink className="w-3 h-3" />
                 </Link>
                 <span>•</span>
                 <a href="mailto:create@sovranlyip.com" className="text-zinc-300 hover:text-white">create@sovranlyip.com</a>
               </div>
-              <span className="text-[11px] font-mono text-zinc-500">Domain: sovranlyip.com // Entity: Creative Sovereignty LLC</span>
+              <span className="text-[11px] font-mono text-zinc-500">Domain: www.sovranlyip.com // Entity: Creative Sovereignty LLC</span>
             </div>
           </div>
         </section>

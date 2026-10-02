@@ -44,7 +44,7 @@ export async function POST(req: NextRequest) {
     docPdf.moveDown();
 
     // QR Code
-    const qrCodeUrl = await QRCode.toDataURL(`https://sovranlyip.com/assets/${assetId}`);
+    const qrCodeUrl = await QRCode.toDataURL(`https://www.sovranlyip.com/assets/${assetId}`);
     docPdf.image(Buffer.from(qrCodeUrl.split(',')[1], 'base64'), { fit: [100, 100], align: 'center' });
     docPdf.moveDown();
 
