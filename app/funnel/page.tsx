@@ -16,6 +16,7 @@ import {
   ChevronRight
 } from 'lucide-react';
 import Link from 'next/link';
+import { motion } from 'motion/react';
 
 interface Requirement {
   id: string;
@@ -34,6 +35,7 @@ interface FeatureCardData {
   borderColor: string;
   bgColor: string;
   badgeColor: string;
+  glowShadow: string;
   requirements: Requirement[];
   actionLabel: string;
   actionHref: string;
@@ -47,9 +49,10 @@ const FEATURE_CARDS: FeatureCardData[] = [
     title: 'Zero Trust Security',
     desc: 'Continuous multi-factor identity attestation and cryptographic access barriers for digital masters.',
     color: 'text-emerald-400',
-    borderColor: 'hover:border-emerald-500/40',
+    borderColor: 'hover:border-emerald-500/50',
     bgColor: 'bg-emerald-500/10 border-emerald-500/20',
     badgeColor: 'text-emerald-400 border-emerald-500/30 bg-emerald-950/40',
+    glowShadow: '0 20px 40px -12px rgba(16, 185, 129, 0.25), 0 0 24px 2px rgba(16, 185, 129, 0.16)',
     actionLabel: 'Verify Identity & Hashes',
     actionHref: '/dashboard?tab=security',
     requirements: [
@@ -80,9 +83,10 @@ const FEATURE_CARDS: FeatureCardData[] = [
     title: 'Automated Royalties',
     desc: 'Deterministic smart contracts triggering atomic payouts directly to collaborators upon license execution.',
     color: 'text-amber-400',
-    borderColor: 'hover:border-amber-500/40',
+    borderColor: 'hover:border-amber-500/50',
     bgColor: 'bg-amber-500/10 border-amber-500/20',
     badgeColor: 'text-amber-400 border-amber-500/30 bg-amber-950/40',
+    glowShadow: '0 20px 40px -12px rgba(245, 158, 11, 0.25), 0 0 24px 2px rgba(245, 158, 11, 0.16)',
     actionLabel: 'Configure Split Agreement',
     actionHref: '/dashboard?tab=splits',
     requirements: [
@@ -113,9 +117,10 @@ const FEATURE_CARDS: FeatureCardData[] = [
     title: 'Immutable Ownership',
     desc: 'Decentralized copyright registration establishing permanent, tamper-proof provenance on-chain.',
     color: 'text-sky-400',
-    borderColor: 'hover:border-sky-500/40',
+    borderColor: 'hover:border-sky-500/50',
     bgColor: 'bg-sky-500/10 border-sky-500/20',
     badgeColor: 'text-sky-400 border-sky-500/30 bg-sky-950/40',
+    glowShadow: '0 20px 40px -12px rgba(14, 165, 233, 0.25), 0 0 24px 2px rgba(14, 165, 233, 0.16)',
     actionLabel: 'Mint Ledger Notarization',
     actionHref: '/dashboard?tab=register',
     requirements: [
@@ -240,8 +245,35 @@ export default function LandingPage() {
           </p>
         </div>
 
+        {/* Feature Cards Header with Primary 'Launch Console' CTA */}
+        <div className="mt-16 flex flex-col sm:flex-row sm:items-center justify-between gap-6 text-left border-b border-zinc-800/80 pb-6">
+          <div className="space-y-1.5">
+            <div className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full bg-cyan-950/60 border border-cyan-800/40 text-[10px] font-mono text-cyan-400 font-bold uppercase tracking-wider">
+              <span>CORE ARCHITECTURE</span>
+              <span>·</span>
+              <span>3 EXECUTION PHASES</span>
+            </div>
+            <h3 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+              Launch Phase Feature Cards
+            </h3>
+            <p className="text-xs sm:text-sm text-zinc-400 max-w-xl leading-relaxed">
+              Explore the three foundational security and monetization pillars. Complete the checklist items and jump straight into the production environment.
+            </p>
+          </div>
+
+          <Link href="/dashboard" className="flex-shrink-0">
+            <Button 
+              size="lg" 
+              className="rounded-full bg-cyan-500 hover:bg-cyan-400 text-black font-bold text-sm px-7 py-6 shadow-xl shadow-cyan-950/60 flex items-center gap-2.5 group cursor-pointer"
+            >
+              Launch Console
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            </Button>
+          </Link>
+        </div>
+
         {/* Feature Cards with Launch Phase Checklists */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-12 text-left">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-10 text-left">
           {loading ? (
             Array.from({ length: 3 }).map((_, i) => (
               <div
@@ -268,11 +300,20 @@ export default function LandingPage() {
               const isAllDone = cardDone === cardReqs.length;
 
               return (
-                <div
+                <motion.div
                   key={feature.id}
                   id={`funnel-feature-card-${i}`}
-                  className={`relative p-7 sm:p-8 bg-zinc-900/60 rounded-3xl border border-zinc-800/90 flex flex-col justify-between transition-all duration-300 ease-out hover:shadow-2xl hover:shadow-black/70 ${feature.borderColor} group`}
+                  initial={{ y: 0 }}
+                  whileHover={{ 
+                    y: -6, 
+                    boxShadow: feature.glowShadow,
+                    transition: { duration: 0.25, ease: 'easeOut' }
+                  }}
+                  className={`relative p-7 sm:p-8 bg-zinc-900/60 rounded-3xl border border-zinc-800/90 flex flex-col justify-between transition-colors duration-300 ${feature.borderColor} group overflow-hidden`}
                 >
+                  {/* Subtle hover specular glow highlight */}
+                  <div className="absolute inset-0 rounded-3xl bg-gradient-to-b from-white/[0.04] to-transparent pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+
                   <div>
                     {/* Top Row: Icon & Phase Tag */}
                     <div className="flex items-center justify-between mb-5">
@@ -356,7 +397,7 @@ export default function LandingPage() {
                       </span>
                     </Link>
                   </div>
-                </div>
+                </motion.div>
               );
             })
           )}
